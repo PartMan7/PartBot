@@ -1,5 +1,5 @@
 import type { Perms } from 'types/perms';
-import type { Message as PSMessage } from 'types/ps-client';
+import type { Message as PSMessage } from 'types/ps';
 import type { Message as DiscMessage } from 'discord.js';
 
 export type PSCommand = {
