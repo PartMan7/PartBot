@@ -4,6 +4,7 @@ import type { Message as DiscMessage } from 'discord.js';
 
 export type PSCommand = {
 	name: string,
+	help?: string,
 	aliases?: { [key: string]: string },
 	perms?: Perms,
 	rooms?: string[],
@@ -11,6 +12,7 @@ export type PSCommand = {
 	run(message: PSMessage, context: { [key: string]: unknown }): Promise<void>
 }
 
+// Will need to update this to work with slash commands
 export type DiscCommand = {
 	name: string,
 	aliases?: { [key: string]: string },
