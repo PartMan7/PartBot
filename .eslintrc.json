@@ -32,7 +32,11 @@
 		}],
 		"key-spacing": "error",
 		"keyword-spacing": "error",
-		"max-len": ["error", 135],
+		"max-len": ["error", {
+			"code": 135,
+			"tabWidth": 0,
+			"ignorePattern": "(?:^\\t*(?:let|const) [a-zA-Z]*(?:HTML|[mM]essage) \\+?= (['\"`])[^\\n]*?\\1;$|^\\t*help: (['\"`])[^\\n]*?\\2[;,]$)"
+		}],
 		"no-extra-semi": "error",
 		"no-extra-parens": "error",
 		"no-mixed-spaces-and-tabs": "error",

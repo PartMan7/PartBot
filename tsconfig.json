@@ -4,7 +4,8 @@
 		"module": "commonjs",
 		"lib": ["es6"],
 		"outDir": "./dist",
-		"baseUrl": "src"
+		"baseUrl": "src",
+		"allowUmdGlobalAccess": true
 	},
 	"include": ["src/globals/*.d.ts", "src/**/*"],
 	"exclude": ["node_modules", "dist"]
