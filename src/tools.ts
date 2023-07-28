@@ -63,13 +63,14 @@ export function toHumanTime (timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' 
 	}, { entries: [], scale: 1 });
 	if (format === 'hhmmss') timeEntries.splice(-3);
 	let timeLeft = timeInMs;
-	timeEntries.forEach(entry => {
-		if (timeLeft > entry.time) {
+	timeEntries.reverse().forEach(entry => {
+		if (timeLeft >= entry.time) {
 			const count = Math.floor(timeLeft / entry.time);
 			entry.count = count;
 			timeLeft -= count * entry.time;
 		} else entry.count = 0;
 	});
+	timeEntries.reverse();
 	switch (format) {
 		case 'abs': {
 			const firstIndex = timeEntries.findIndex(entry => entry.count > 0);
@@ -87,6 +88,7 @@ export function toHumanTime (timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' 
 		case 'f2s': default: {
 			return timeEntries
 				.filter(entry => entry.count)
+				.reverse()
 				.slice(0, 2)
 				.map(entry => `${entry.count} ${entry.count === 1 ? entry.name : entry.plur}`)
 				.join(' and ') || '0 ms';

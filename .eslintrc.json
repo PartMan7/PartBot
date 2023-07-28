@@ -5,7 +5,6 @@
 		"@typescript-eslint"
 	],
 	"extends": [
-		"eslint:recommended",
 		"plugin:@typescript-eslint/eslint-recommended",
 		"plugin:@typescript-eslint/recommended"
 	],
@@ -37,6 +36,7 @@
 			"tabWidth": 0,
 			"ignorePattern": "(?:^\\t*(?:let|const) [a-zA-Z]*(?:HTML|[mM]essage) \\+?= (['\"`])[^\\n]*?\\1;$|^\\t*help: (['\"`])[^\\n]*?\\2[;,]$)"
 		}],
+		"no-console": "error",
 		"no-extra-semi": "error",
 		"no-extra-parens": "error",
 		"no-mixed-spaces-and-tabs": "error",

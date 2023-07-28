@@ -11,3 +11,8 @@ global.Tools = Tools;
 
 import fsPath from 'utils/fs-path';
 global.fsPath = fsPath;
+import { log } from 'utils/logger';
+global.log = log;
+
+import ChatError from 'utils/chat-error';
+global.ChatError = ChatError;

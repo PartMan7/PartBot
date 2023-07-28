@@ -3,7 +3,7 @@ import { username, password, rooms } from 'config/ps';
 
 const PS = new PSClient({ username, password, rooms });
 PS.connect();
-PS.on('login', () => console.log('Connected to PS!'));
+PS.on('login', () => log('Connected to PS!'));
 
 import loadPS from 'ps/loaders';
 loadPS();
@@ -16,5 +16,8 @@ PS.on('message', interfaceHandler);
 
 import autoResHandler from 'ps/handlers/autores';
 PS.on('message', autoResHandler);
+
+import pageHandler from 'ps/handlers/page';
+PS.on('message', pageHandler);
 
 export default PS;

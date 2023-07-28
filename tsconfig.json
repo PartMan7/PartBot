@@ -3,9 +3,10 @@
 		"target": "esnext",
 		"module": "commonjs",
 		"lib": ["es6"],
-		"outDir": "./dist",
+		"outDir": "dist",
 		"baseUrl": "src",
-		"allowUmdGlobalAccess": true
+		"allowUmdGlobalAccess": true,
+		"sourceMap": true
 	},
 	"include": ["src/globals/*.d.ts", "src/**/*"],
 	"exclude": ["node_modules", "dist"]
