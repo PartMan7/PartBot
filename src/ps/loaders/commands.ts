@@ -1,6 +1,5 @@
 import type { PSCommand } from 'types/chat';
 
-// import dynamicImport from 'utils/dynamic-import';
 import emptyObject from 'utils/empty-object';
 import { PSAliases, PSCommands } from 'cache';
 
@@ -15,7 +14,7 @@ export function loadCommands (): void {
 		const [commandName, ...commandFlags] = commandFileName.split('.')[0].split('-');
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const { default: command }: { default: PSCommand } = require(fsPath('ps', 'commands', `${commandName}`));
-		// const command = await dynamicImport(`ps/commands/${commandName}`);
+		// Yes that might have been a bit hacky but it's way easier, sue me
 		commandFlags.forEach(flag => commandFlagMaps[flag]?.(command));
 		PSCommands[commandName] = command;
 
