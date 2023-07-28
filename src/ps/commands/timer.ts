@@ -28,7 +28,7 @@ export default {
 			name: 'cancel',
 			aliases: ['terminate', 'yeet', 'stop', 'end', 'kill'],
 			help: 'Cancels the ongoing timer',
-			async run(message) {
+			async run (message) {
 				const id = $.messageToId(message);
 				const timer = Timers[id];
 				if (!timer) throw new ChatError('You don\'t have a timer running!');
@@ -36,13 +36,13 @@ export default {
 				timer.cancel();
 				const timeLeftText = Tools.toHumanTime(timer.endTime - Date.now());
 				return message.reply(`Your timer${timer.comment ? ` (${timer.comment})` : ''} was cancelled with ${timeLeftText} left.`);
-			},
+			}
 		},
 		run: {
 			name: 'run',
 			aliases: ['runearly', 'execute'],
 			help: 'Makes the ongoing timer execute immediately',
-			async run(message) {
+			async run (message) {
 				const id = $.messageToId(message);
 				const timer = Timers[id];
 				if (!timer) throw new ChatError('You don\'t have a timer running!');
@@ -50,7 +50,7 @@ export default {
 				timer.run();
 				const timeLeftText = Tools.toHumanTime(timer.endTime - Date.now());
 				return message.reply(`(The timer would have ended in ${timeLeftText}.)`);
-			},
+			}
 		}
 	},
 	async run (message, { args, run }) {

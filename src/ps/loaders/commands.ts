@@ -5,6 +5,10 @@ import emptyObject from 'utils/empty-object';
 import { PSAliases, PSCommands } from 'cache';
 
 export function loadCommands (): void {
+	const commandFlagMaps = {
+		hidden: command => command,
+		nodisplay: command => command // TODO
+	};
 	// Load command data
 	const commands = fsSync.readdirSync(fsPath('ps', 'commands'));
 	commands.map(commandFileName => {
@@ -12,20 +16,18 @@ export function loadCommands (): void {
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const { default: command }: { default: PSCommand } = require(fsPath('ps', 'commands', `${commandName}`));
 		// const command = await dynamicImport(`ps/commands/${commandName}`);
+		commandFlags.forEach(flag => commandFlagMaps[flag]?.(command));
 		PSCommands[commandName] = command;
 
 		// Generate aliases
-		const aliasEntries = Object.entries(command.children || {}).map(([key, value]) => {
-			return key.split(',').map(k => [k, value]);
-		}).flat();
 		function addAlias (command: PSCommand, stack: string[]) {
 			if (command.children) Object.entries(command.children).forEach(([defaultName, subCommand]) => {
-				const names = [defaultName, ...(subCommand.aliases || [])];
+				const names = [defaultName, ...subCommand.aliases || []];
 				names.forEach(name => addAlias(subCommand, [...stack, name]));
 			});
 			PSAliases[stack.join(' ')] = [...stack.slice(0, -1), command.name].join(' ');
 		}
-		[commandName, ...(command.aliases || [])].forEach(name => addAlias(command, [name]));
+		[commandName, ...command.aliases || []].forEach(name => addAlias(command, [name]));
 		// And now for extended aliases
 		Object.assign(PSAliases, command.extendedAliases || {});
 	});
