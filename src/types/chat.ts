@@ -8,7 +8,7 @@ export type PSCommandContext = {
 	originalCommand: string[],
 	command: string[],
 	args: string[],
-	run(args: string[], ctxOverride?: Record<string, any>): Promise<any>,
+	run(args: string, ctxOverride?: Record<string, any>): Promise<any>,
 	[key: string]: any
 }
 

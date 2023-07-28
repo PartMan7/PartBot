@@ -55,7 +55,7 @@ export default {
 	},
 	async run (message, { args, run }) {
 		const id = $.messageToId(message);
-		if (Timers[id]) return run(['status']);
+		if (Timers[id]) return run('timer status');
 		const [timeText, ...commentLines] = args.join(' ').split('//');
 		const comment = commentLines.join('//').trim();
 		const timeToSet = Tools.fromHumanTime(timeText);
