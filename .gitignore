@@ -1,4 +1,7 @@
+commands/**/*-hidden.ts
+
 /node_modules
-.env
-/commands/**/*-hidden.ts
 /dist
+.env
+
+/.git-deploy
