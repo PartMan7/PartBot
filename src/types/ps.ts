@@ -2,10 +2,12 @@ import { Perms } from 'types/perms';
 type authKey = Perms & string;
 
 export type PSRoomConfig = {
-	auth?: {
-		[key in authKey]: string[]
+	roomId: string;
+	roomName: string;
+	auth?: { [key in authKey]: string[] };
+	tour?: {
+		timer?: boolean | [autoStart: number, autoDQ: number];
 	};
-	tourTimer?: boolean | [autoStart: number, autoDQ: number];
 	whitelist?: RegExp[];
 	blacklist?: RegExp[];
 	aliases?: string[];
@@ -15,7 +17,7 @@ export type PSRoomConfig = {
 		[key: string]: Perms;
 	};
 	points?: {
-		type: {
+		types: {
 			name: string;
 			plur: string;
 			symbol: {
@@ -27,10 +29,15 @@ export type PSRoomConfig = {
 			template?: string;
 			override?: string[];
 		};
-		roomid: string;
+		roomId: string;
 	};
 	_assign?: {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		[key: string]: any;
 	};
+}
+
+export type UnparsedPSRoomConfig = Omit<PSRoomConfig, 'whitelist' | 'blacklist'> & {
+	whitelist?: string[];
+	blacklist?: string[];
 }

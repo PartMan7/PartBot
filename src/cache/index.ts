@@ -1,5 +1,5 @@
 import type { PSCommand } from 'types/chat';
-import { PSRoomConfig } from 'types/ps';
+import type { PSRoomConfig } from 'types/ps';
 import type { Timer } from 'utils/timer';
 
 // Global cache

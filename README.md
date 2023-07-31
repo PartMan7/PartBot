@@ -13,6 +13,8 @@ Hiya! This is an ongoing effort to rewrite [PartBot](https://github.com/PartMan7
 * Preference of database collections over dynamic datafiles for everything except PS datasources.
 * Proper, up-to-date, and fleshed-out Discord command handler (this sadly extends to slash commands).
 * Centralized and documented configuration files (`src/config` and `.env`).
+* Add flags to commands, for functions like segregating in lists, whitelisting/blacklisting from usage, and managing permissions.
+
 
 This might take ages, but it'll be worth it!
 
