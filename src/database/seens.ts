@@ -23,9 +23,9 @@ const schema = new mongoose.Schema({
 
 schema.index({ id: 1 });
 interface model {
-	id: string,
-	at: Date,
-	in: string[]
+	id: string;
+	at: Date;
+	in: string[];
 }
 const model = mongoose.model('seen', schema, 'seens');
 

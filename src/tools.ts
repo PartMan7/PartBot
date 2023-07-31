@@ -9,9 +9,9 @@ export async function uploadToPastie (text: string): Promise<string> {
 
 export function toHumanTime (timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' = 'f2s'): string {
 	const timeList: ({
-		abbr: string,
-		name: string,
-		plur: string
+		abbr: string;
+		name: string;
+		plur: string;
 	} | [number, number?])[] = [{
 		abbr: 'ms',
 		name: 'millisecond',
@@ -46,14 +46,14 @@ export function toHumanTime (timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' 
 		plur: 'decades'
 	}];
 	const { entries: timeEntries }: {
-		scale: number,
+		scale: number;
 		entries: {
-			abbr: string,
-			name: string,
-			plur: string,
-			time: number,
-			count?: number
-		}[]
+			abbr: string;
+			name: string;
+			plur: string;
+			time: number;
+			count?: number;
+		}[];
 	} = timeList.reduce((acc, current) => {
 		if (Array.isArray(current)) {
 			const [mult, div = 1] = current;

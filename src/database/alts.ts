@@ -23,10 +23,10 @@ const schema = new mongoose.Schema({
 
 schema.index({ id: 1 });
 interface model {
-	id: string,
-	from: string,
-	to: string,
-	at: Date
+	id: string;
+	from: string;
+	to: string;
+	at: Date;
 }
 const model = mongoose.model('alt', schema, 'alts');
 

@@ -1,4 +1,4 @@
-import type { Message } from 'types/ps';
+import type { Message } from 'ps-client';
 
 import { owner, prefix, username } from 'config/ps';
 import { PSNoPrefixHelp } from 'cache';

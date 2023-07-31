@@ -1,4 +1,4 @@
-import type { Message } from 'types/ps';
+import type { Message } from 'ps-client';
 import type { PSCommand, PSCommandContext } from 'types/chat';
 
 import { prefix } from 'config/ps';

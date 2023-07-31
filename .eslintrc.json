@@ -37,6 +37,17 @@
 			"tabWidth": 0,
 			"ignorePattern": "(?:^\\t*(?:let|const) [a-zA-Z]*(?:HTML|[mM]essage) \\+?= (['\"`])[^\\n]*?\\1;$|^\\t*help: (['\"`])[^\\n]*?\\2[;,]$)"
 		}],
+		"@typescript-eslint/member-delimiter-style": ["error", {
+			"multiline": {
+				"delimiter": "semi",
+				"requireLast": true
+			},
+			"singleline": {
+				"delimiter": "comma",
+				"requireLast": false
+			},
+			"multilineDetection": "brackets"
+		  }],
 		"no-console": "error",
 		"no-extra-semi": "error",
 		"no-extra-parens": "error",

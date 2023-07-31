@@ -8,6 +8,7 @@
 		"build:watch": "concurrently --kill-others \"tsc -w\" \"tsc-alias -w\"",
 		"deploy": "npm run test && ./deploy.sh",
 		"lint": "eslint src --ext .ts",
+		"lint:fix": "eslint src --ext .ts --fix",
 		"start": "npm run build && node dist/index.js",
 		"start:watch": "concurrently --kill-others \"tsc -w\" \"tsc-alias -w\" \"nodemon dist/index.js\"",
 		"start:prod": "concurrently \"tsc -w --preserveWatchOutput\" \"tsc-alias -w\" \"node dist/index.js\"",
