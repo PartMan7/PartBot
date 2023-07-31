@@ -1,6 +1,9 @@
 /* eslint-disable no-console */
 import * as util from 'util';
-import * as chalk from 'chalk';
+
+function dim (str: string): string {
+	return `\x1B[2m${str}\x1B[22m`;
+}
 
 const logStream = fsSync.createWriteStream(fsPath('..', 'logs', 'logs.txt'));
 const errLogStream = fsSync.createWriteStream(fsPath('..', 'logs', 'err-logs.txt'));
@@ -11,7 +14,7 @@ export function log (...args): void {
 		const logStr = util.inspect(arg, { depth: 3 });
 		logStream.write(`${timestamp} ${logStr}\n`);
 	});
-	console.log(chalk.dim(timestamp), ...args);
+	console.log(dim(timestamp), ...args);
 }
 
 export function deepLog (...args): void {
@@ -20,14 +23,14 @@ export function deepLog (...args): void {
 		const logStr = util.inspect(arg, { depth: null });
 		logStream.write(`${timestamp} ${logStr}\n`);
 	});
-	console.log(chalk.dim(timestamp));
+	console.log(dim(timestamp));
 	args.forEach(arg => console.dir(arg, { depth: null }));
 }
 
 export function errorLog (error: Error) {
 	const timestamp = `[${new Date().toISOString()}]`;
 	errLogStream.write(`${timestamp} ${error.toString()}\n${error.stack || '[no stack]'}\n`);
-	console.error(chalk.dim(timestamp), error);
+	console.error(dim(timestamp), error);
 }
 
 export function closeStreams (): void {
