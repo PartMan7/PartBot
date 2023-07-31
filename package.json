@@ -10,9 +10,8 @@
 		"lint": "eslint src --ext .ts",
 		"start": "npm run build && node dist/index.js",
 		"start:watch": "concurrently --kill-others \"tsc -w\" \"tsc-alias -w\" \"nodemon dist/index.js\"",
-		"start:prod": "concurrently \"tsc -w --preserveWatchOutput\" \"tsc-alias -w -v\" \"node dist/index.js\"",
-		"test": "echo Done with tests",
-		"testa": "npm run lint && npm run build"
+		"start:prod": "concurrently \"tsc -w --preserveWatchOutput\" \"tsc-alias -w\" \"node dist/index.js\"",
+		"test": "npm run lint && npm run build"
 	},
 	"keywords": [],
 	"author": "PartMan7",
