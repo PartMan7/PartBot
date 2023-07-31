@@ -6,7 +6,7 @@ git push origin main
 
 # Deploy to deployment repository
 
-# Get number of lines to modify in .gitignore
+# Get number of lines to comment out in .gitignore
 gitlines=$(grep -nm 1 ^$ .gitignore | cut -c1 | tr -d $'\n')
 gitlines=$((gitlines-1))
 # Modify .gitignore
