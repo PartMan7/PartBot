@@ -4,9 +4,13 @@ import type { PSRoomConfig, UnparsedPSRoomConfig } from 'types/ps';
 const schema = new mongoose.Schema({
 	roomId: {
 		type: String,
+		required: true,
 		unique: true
 	},
-	roomName: String,
+	roomName: {
+		type: String,
+		required: true
+	},
 	auth: Object,
 	tour: {
 		timer: {
