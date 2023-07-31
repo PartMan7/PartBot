@@ -6,7 +6,7 @@
 	"scripts": {
 		"build": "tsc && tsc-alias",
 		"build:watch": "concurrently --kill-others \"tsc -w\" \"tsc-alias -w\"",
-		"deploy": "./deploy.sh && ./deploy-prod.sh",
+		"deploy": "npm run test && ./deploy.sh",
 		"lint": "eslint src --ext .ts",
 		"start": "npm run build && node dist/index.js",
 		"start:watch": "concurrently --kill-others \"tsc -w\" \"tsc-alias -w\" \"nodemon dist/index.js\"",
