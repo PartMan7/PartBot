@@ -6,7 +6,7 @@ sed -i "1,$gitlines s/^/# /1" .gitignore
 
 # Deploy
 git --git-dir=.git-deploy add .
-git --git-dir=.git-deploy commit -m $@
+git --git-dir=.git-deploy commit -m "${*}"
 git --git-dir=.git-deploy push origin main
 
 # Restore .gitignore

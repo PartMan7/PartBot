@@ -15,3 +15,5 @@ global.Web = Web;
 
 import * as DB from 'database';
 DB.connect().then(() => log('Connected to the database!'));
+
+import 'sentinel';
