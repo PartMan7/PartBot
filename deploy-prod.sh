@@ -1,7 +1,8 @@
 # Get number of lines to modify in .gitignore
 gitlines=$(grep -nm 1 ^$ .gitignore | cut -c1 | tr -d $'\n')
+gitlines=$((gitlines-1))
 # Modify .gitignore
-sed -i "1,$gitlines s/\b/# /1" .gitignore
+sed -i "1,$gitlines s/^/# /1" .gitignore
 
 # Deploy
 git --git-dir=.git-deploy add .
