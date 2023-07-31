@@ -1,7 +1,7 @@
 import type { Message } from 'types/ps';
 
 import { owner, prefix, username } from 'config/ps';
-import { NoPrefixHelp } from 'cache';
+import { PSNoPrefixHelp } from 'cache';
 
 export default function interfaceHandler (message: Message) {
 	// Ignore & messages
@@ -20,8 +20,8 @@ export default function interfaceHandler (message: Message) {
 		if (message.content.startsWith(prefix)) return;
 		const { userid } = message.author;
 		// Don't send the help message if sent in the last 5 minutes
-		if (Date.now() - (NoPrefixHelp[userid]?.getTime() ?? 0) < Tools.fromHumanTime('5 minutes')) return;
-		NoPrefixHelp[userid] = new Date();
+		if (Date.now() - (PSNoPrefixHelp[userid]?.getTime() ?? 0) < Tools.fromHumanTime('5 minutes')) return;
+		PSNoPrefixHelp[userid] = new Date();
 		const helpMessage = `Hi, I'm ${username}, a chatbot by ${owner}! My prefix is \`\`${prefix}\`\` - try \`\`${prefix}help\`\` or \`\`${prefix}commands!\`\``;
 		message.reply(helpMessage);
 	}
