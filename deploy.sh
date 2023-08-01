@@ -1,3 +1,5 @@
+set -e
+
 # Deploy to public repository
 git add .
 git commit -m "${*}"
