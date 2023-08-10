@@ -7,7 +7,8 @@ export const Timers: { [key: string]: Timer } = {};
 
 // Showdown cache
 export const PSRoomConfigs: { [key: string]: PSRoomConfig } = {};
-export const PSCommands: { [key: string]: PSCommand } = {};
+export const PSCommands: { [key: string]: PSCommand & { path: string }} = {};
+export const PSCommandFiles: { [key: string]: string } = {}; // The lengths I go to...
 export const PSAliases: { [key: string]: string } = {};
 export const PSNoPrefixHelp: { [key: string]: Date } = {};
 export const PSAltCache: { [key: string]: { from: string, to: string, at: Date } } = {};

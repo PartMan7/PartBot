@@ -48,9 +48,9 @@ export function parseRoomConfig (config: UnparsedPSRoomConfig): PSRoomConfig {
 	const newConfig: UnparsedPSRoomConfig = config;
 	return {
 		...newConfig,
-		...newConfig.whitelist ? { whitelist: newConfig.whitelist.map(str => new RegExp(str)) } : {},
-		...newConfig.blacklist ? { blacklist: newConfig.whitelist.map(str => new RegExp(str)) } : {}
-	} as PSRoomConfig;
+		whitelist: newConfig.whitelist.map(str => new RegExp(str)),
+		blacklist: newConfig.whitelist.map(str => new RegExp(str))
+	};
 }
 
 export async function getRoomConfig (roomId: string): Promise<PSRoomConfig> {
@@ -58,7 +58,7 @@ export async function getRoomConfig (roomId: string): Promise<PSRoomConfig> {
 	return parseRoomConfig(res);
 }
 
-export async function getRoomConfigs (): Promise<PSRoomConfig[]> {
+export async function fetchRoomConfigs (): Promise<PSRoomConfig[]> {
 	const res: UnparsedPSRoomConfig[] = await model.find({}).lean();
 	return res.map(parseRoomConfig);
 }

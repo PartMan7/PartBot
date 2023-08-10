@@ -2,11 +2,10 @@ import { Client as PSClient } from 'ps-client';
 import { username, password, rooms } from 'config/ps';
 
 const PS = new PSClient({ username, password, rooms });
-PS.connect();
 PS.on('login', () => log('Connected to PS!'));
 
 import loadPS from 'ps/loaders';
-loadPS();
+loadPS().then(() => PS.connect());
 
 import chatHandler from 'ps/handlers/chat';
 PS.on('message', chatHandler);

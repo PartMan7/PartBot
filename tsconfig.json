@@ -6,8 +6,11 @@
 		"outDir": "dist",
 		"baseUrl": "src",
 		"allowUmdGlobalAccess": true,
-		"sourceMap": true
+		"sourceMap": true,
+		"esModuleInterop": true,
+		"incremental": true,
+		"moduleResolution": "nodenext"
 	},
-	"include": ["src/globals/*.d.ts", "src/**/*"],
+	"include": ["src/globals/*.d.ts", "src/**/*", "start.js"],
 	"exclude": ["node_modules", "dist"]
 }

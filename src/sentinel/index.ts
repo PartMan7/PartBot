@@ -1,2 +1,2 @@
 import createSentinel from 'sentinel/sentinel';
-export default createSentinel();
+export const { emitter, sentinel } = createSentinel();

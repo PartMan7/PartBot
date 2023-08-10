@@ -4,10 +4,6 @@
 	"plugins": [
 		"@typescript-eslint"
 	],
-	"extends": [
-		"plugin:@typescript-eslint/eslint-recommended",
-		"plugin:@typescript-eslint/recommended"
-	],
 	"env": {
 		"node": true,
 		"es6": true
@@ -16,6 +12,27 @@
 		"ecmaVersion": "latest"
 	},
 	"ignorePatterns": ["node_modules", "dist"],
+	"overrides": [{
+		"files": ["**/*.ts", "**/*.tsx"],
+		"extends": [
+			"plugin:@typescript-eslint/eslint-recommended",
+			"plugin:@typescript-eslint/recommended"
+		],
+		"rules": {
+			"@typescript-eslint/member-delimiter-style": ["error", {
+				"multiline": {
+					"delimiter": "semi",
+					"requireLast": true
+				},
+				"singleline": {
+					"delimiter": "comma",
+					"requireLast": false
+				},
+				"multilineDetection": "brackets"
+			}],
+			"@typescript-eslint/no-unused-vars": 1
+		}
+	}],
 	"rules": {
 		"arrow-spacing": "error",
 		"block-spacing": "error",
@@ -37,17 +54,6 @@
 			"tabWidth": 0,
 			"ignorePattern": "(?:^\\t*(?:let|const) [a-zA-Z]*(?:HTML|[mM]essage) \\+?= (['\"`])[^\\n]*?\\1;$|^\\t*help: (['\"`])[^\\n]*?\\2[;,]$)"
 		}],
-		"@typescript-eslint/member-delimiter-style": ["error", {
-			"multiline": {
-				"delimiter": "semi",
-				"requireLast": true
-			},
-			"singleline": {
-				"delimiter": "comma",
-				"requireLast": false
-			},
-			"multilineDetection": "brackets"
-		  }],
 		"no-console": "error",
 		"no-extra-semi": "error",
 		"no-extra-parens": "error",
@@ -57,7 +63,6 @@
 		"no-unreachable": 2,
 		"no-unused-expressions": "error",
 		"no-unused-vars": 0,
-		"@typescript-eslint/no-unused-vars": 1,
 		"no-var": "error",
 		"object-curly-spacing": ["error", "always"],
 		"prefer-const": ["error", {
@@ -75,7 +80,8 @@
 		"space-in-parens": "error",
 		"space-infix-ops": "error",
 		"spaced-comment": ["error", "always", {
-			"exceptions": ["*", "open", "close"]
+			"exceptions": ["*", "open", "close"],
+			"markers": ["/"]
 		}],
 		"yoda": ["error", "never"]
 	}

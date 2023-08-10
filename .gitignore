@@ -1,7 +1,10 @@
-**/*-hidden.ts
+**/*-hidden.*
+
 
 /node_modules
 /dist
+
+
 .env
 
 /logs/*logs.txt
