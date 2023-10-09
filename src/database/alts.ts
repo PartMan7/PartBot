@@ -22,7 +22,7 @@ const schema = new mongoose.Schema({
 });
 
 schema.index({ id: 1 });
-interface model {
+interface Model {
 	id: string;
 	from: string;
 	to: string;
@@ -30,13 +30,14 @@ interface model {
 }
 const model = mongoose.model('alt', schema, 'alts');
 
-export async function alt (from: string, to: string): Promise<model> {
+const DEFAULT_ALTS_CAP = 50;
+export async function rename (from: string, to: string): Promise<Model> {
 	const fromId = Tools.toId(from), toId = Tools.toId(to), id = `${fromId}-${toId}`;
 	const entry = { id, from: fromId, to: toId, at: Date.now() };
 	return model.findOneAndUpdate(entry, entry, { upsert: true, new: true });
 }
 
-export async function getAlts (user: string, limit: number = 50): Promise<string[]> {
+export async function getAlts (user: string, limit: number = DEFAULT_ALTS_CAP): Promise<string[]> {
 	const userId = Tools.toId(user);
 	const altsList = await model.find({ $or: [{ from: userId }, { to: userId }] }, null, limit ? { limit } : {});
 	return altsList.map(doc => {
@@ -44,6 +45,6 @@ export async function getAlts (user: string, limit: number = 50): Promise<string
 	});
 }
 
-export async function fetchAllAlts (): Promise<model[]> {
+export async function fetchAllAlts (): Promise<Model[]> {
 	return model.find({}).lean();
 }

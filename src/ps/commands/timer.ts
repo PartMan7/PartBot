@@ -47,7 +47,7 @@ export default {
 				const timer = Timers[id];
 				if (!timer) throw new ChatError('You don\'t have a timer running!');
 				delete Timers[id];
-				timer.run();
+				timer.execute();
 				const timeLeftText = Tools.toHumanTime(timer.endTime - Date.now());
 				return message.reply(`(The timer would have ended in ${timeLeftText}.)`);
 			}
@@ -61,11 +61,10 @@ export default {
 		const timeToSet = Tools.fromHumanTime(timeText);
 		if (!timeToSet) throw new ChatError('Please specify a time for the timer! (Remember to include units)');
 		if (timeToSet > Tools.fromHumanTime('7 days')) throw new ChatError('Timers can be set for a maximum of one week.');
-		const timer = new Timer(() => {
+		Timers[id] = new Timer(() => {
 			delete Timers[id];
 			message.reply(`${message.author.name}, your timer is up!${comment ? ` Reason: ${comment}` : ''}`);
 		}, timeToSet, comment);
-		Timers[id] = timer;
 		const humanFormat = Tools.toHumanTime(timeToSet);
 		message.reply(`Your timer has been set for ${humanFormat} from now.`);
 	}

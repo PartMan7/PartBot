@@ -13,7 +13,10 @@ watch.on('first_success', async () => {
 });
 
 watch.on('success', () => {
-	if (isFirstSuccess) return isFirstSuccess = false;
+	if (isFirstSuccess) {
+		isFirstSuccess = false;
+		return;
+	}
 	execSync('npm run alias');
 	mainProcess?.emit('code-compile', 'Fire!');
 });

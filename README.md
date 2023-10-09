@@ -18,7 +18,7 @@ Hiya! This is an ongoing effort to rewrite [PartBot](https://github.com/PartMan7
 
 This might take ages, but it'll be worth it!
 
-Also I wholeheartedly welcome contributors (as opposed to the original PartBot, where the source was private and only had a public mirror). If you'd like to contribute to this repository but don't know where to start or what's currently in-progress, hit me up on any platform!
+Also, I wholeheartedly welcome contributors (as opposed to the original PartBot, where the source was private and only had a public mirror). If you'd like to contribute to this repository but don't know where to start or what's currently in-progress, hit me up on any platform!
 
 
 ### RegEx sources

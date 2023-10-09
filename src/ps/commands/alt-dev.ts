@@ -1,4 +1,4 @@
-import { alt, getAlts } from 'database/alts';
+import { rename, getAlts } from 'database/alts';
 
 export default {
 	name: 'alt',
@@ -10,7 +10,7 @@ export default {
 			return message.reply(`Alts: ${altsList.join(', ')}`);
 		}
 		const [from, to] = args;
-		await alt(from, to).then(log);
+		await rename(from, to).then(log);
 		message.reply(`Alt added`);
 	}
 } as PSCommand;

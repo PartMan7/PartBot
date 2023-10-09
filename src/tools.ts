@@ -96,16 +96,22 @@ export function toHumanTime (timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' 
 	}
 }
 
-export function fromHumanTime (text: string): number {
-	text = text.replace(/(?:^| )an? /ig, '1');
-	text = text.toLowerCase().replace(/[^a-z0-9.:]/g, '');
+export function fromHumanTime (srcText: string): number {
+	let text = srcText
+		.toLowerCase()
+		.replace(/(?:^| )an? /ig, '1')
+		.replace(/[^a-z0-9.:]/g, '');
+	const SEC_LENGTH = 1000;
+	const MIN_LENGTH = 60 * SEC_LENGTH;
+	const HOUR_LENGTH = 60 * MIN_LENGTH;
+	const DAY_LENGTH = 24 * HOUR_LENGTH;
 	const digital = text.match(/^(?:(\d+):)?(\d+):(\d+):(\d+)$/);
 	if (digital) {
 		const [, day, hrs, min, sec]: string[] = digital;
-		return (parseInt(day) || 0) * 24 * 60 * 60 * 1000 +
-			(parseInt(hrs) || 0) * 60 * 60 * 1000 +
-			(parseInt(min) || 0) * 60 * 1000 +
-			(parseInt(sec) || 0)  * 1000;
+		return ~~day * DAY_LENGTH +
+			~~hrs * HOUR_LENGTH +
+			~~min * MIN_LENGTH +
+			~~sec  * SEC_LENGTH;
 	} else text = text.replace(/:/g, '');
 	let time = 0;
 	const units = {
@@ -114,31 +120,31 @@ export function fromHumanTime (text: string): number {
 			length: 1
 		},
 		sec: {
-			regex: /\d+(?:\.\d+)?(?:s(?:ec(?:onds?)?)?)/,
-			length: 1000
+			regex: /\d+(?:\.\d+)?s(?:ec(?:onds?)?)?/,
+			length: SEC_LENGTH
 		},
 		min: {
 			regex: /\d+(?:\.\d+)?m(?:in(?:ute?)?s?)?/,
-			length: 60 * 1000
+			length: MIN_LENGTH
 		},
 		hrs: {
-			regex: /\d+(?:\.\d+)?(?:h(?:(?:ou)?r)?)s?/,
-			length: 60 * 60 * 1000
+			regex: /\d+(?:\.\d+)?:h(?:(?:ou)?r)?s?/,
+			length: HOUR_LENGTH
 		},
 		day: {
 			regex: /\d+(?:\.\d+)?d(?:ays?)?/,
-			length: 24 * 60 * 60 * 1000
+			length: DAY_LENGTH
 		},
 		wks: {
-			regex: /\d+(?:\.\d+)?(?:w(?:(?:ee)?k)?)s?/,
-			length: 7 * 24 * 60 * 60 * 1000
+			regex: /\d+(?:\.\d+)?w(?:(?:ee)?k)?s?/,
+			length: 7 * DAY_LENGTH
 		}
 	};
-	Object.values(units).forEach(unit => {
-		const match = text.match(unit.regex);
+	Object.values(units).forEach(({ regex, length }) => {
+		const match = text.match(regex);
 		if (!match) return;
 		text = text.replace(match[0], '');
-		time += parseFloat(match[0]) * unit.length;
+		time += parseFloat(match[0]) * length;
 	});
 	return time;
 }
