@@ -1,5 +1,3 @@
-// noinspection SpellCheckingInspection
-
 import type { Message } from 'ps-client';
 
 import { owner, prefix, username } from 'config/ps';

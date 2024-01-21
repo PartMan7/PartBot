@@ -1,16 +1,31 @@
 {
-	"compilerOptions": {
-		"target": "esnext",
-		"module": "commonjs",
-		"lib": ["es6"],
-		"outDir": "dist",
-		"baseUrl": "src",
-		"allowUmdGlobalAccess": true,
-		"sourceMap": true,
-		"esModuleInterop": true,
-		"incremental": true,
-		"moduleResolution": "nodenext"
-	},
-	"include": ["src/globals/*.d.ts", "src/**/*", "start.js"],
-	"exclude": ["node_modules", "dist"]
+  "compilerOptions": {
+    "baseUrl": "src",
+    "target": "es2020",
+    "noEmit": true,
+    "jsx": "react-jsx", // So we can use JSX as syntactic sugar for HTML
+    "incremental": true,
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "allowUmdGlobalAccess": true,
+    "noImplicitUseStrict": true, // Enable 'with' syntax in eval
+    "ignoreDeprecations": "5.0", // Enable noImplicitUseStrict
+    "paths": {
+      "config": ["config"],
+      "types": ["types"],
+      "eval": ["eval"],
+      "discord": ["discord"],
+      "ps": ["ps"],
+      "sentinel": ["sentinel"],
+      "utils": ["utils"],
+      "web": ["web"]
+    }
+  },
+  "include": ["src/globals/*.d.ts", "src/**/*"],
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"], // For path aliases
+    "esm": true, // Enable *.ts files in ts-node
+    "files": true // Load all files (including for global definitions)
+  }
 }

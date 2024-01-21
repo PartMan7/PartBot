@@ -1,5 +1,6 @@
 import { Timers } from 'cache';
 import { Timer } from 'utils/timer';
+import { PSCommand } from '../../types/chat';
 
 const $ = {
 	messageToId (message: PSMessage) {
@@ -7,15 +8,17 @@ const $ = {
 	}
 };
 
-export default {
+export const command: PSCommand = {
 	name: 'timer',
-	help: 'Sets a timer for the given interval (in human units!) Syntax: ``PREFIXtimer`` 5 minutes // (optional reason)',
+	help: 'Sets a timer for the given interval (in human units!)',
+	syntax: 'CMD (time, written out) (// reason)?',
 	static: $,
 	children: {
 		status: {
 			name: 'status',
 			aliases: ['left', 'count', 'togo', 'longer', 'howmuchlonger', 'ongoing', 'current'],
 			help: 'Displays the current timer status',
+			syntax: 'CMD',
 			async run (message) {
 				const id = $.messageToId(message);
 				const timer = Timers[id];
@@ -28,6 +31,7 @@ export default {
 			name: 'cancel',
 			aliases: ['terminate', 'yeet', 'stop', 'end', 'kill'],
 			help: 'Cancels the ongoing timer',
+			syntax: 'CMD',
 			async run (message) {
 				const id = $.messageToId(message);
 				const timer = Timers[id];
@@ -42,6 +46,7 @@ export default {
 			name: 'run',
 			aliases: ['runearly', 'execute'],
 			help: 'Makes the ongoing timer execute immediately',
+			syntax: 'CMD',
 			async run (message) {
 				const id = $.messageToId(message);
 				const timer = Timers[id];
@@ -68,4 +73,4 @@ export default {
 		const humanFormat = Tools.toHumanTime(timeToSet);
 		message.reply(`Your timer has been set for ${humanFormat} from now.`);
 	}
-} as PSCommand;
+};

@@ -107,11 +107,11 @@ export function fromHumanTime (srcText: string): number {
 	const DAY_LENGTH = 24 * HOUR_LENGTH;
 	const digital = text.match(/^(?:(\d+):)?(\d+):(\d+):(\d+)$/);
 	if (digital) {
-		const [, day, hrs, min, sec]: string[] = digital;
-		return ~~day * DAY_LENGTH +
-			~~hrs * HOUR_LENGTH +
-			~~min * MIN_LENGTH +
-			~~sec  * SEC_LENGTH;
+		const [, day, hrs, min, sec]: number[] = digital.map(str => parseInt(str));
+		return day * DAY_LENGTH +
+			hrs * HOUR_LENGTH +
+			min * MIN_LENGTH +
+			sec  * SEC_LENGTH;
 	} else text = text.replace(/:/g, '');
 	let time = 0;
 	const units = {

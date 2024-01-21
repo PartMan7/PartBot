@@ -2,7 +2,7 @@
 import * as util from 'util';
 
 function dimText (str: string): string {
-	return `\x1B[2m${str}\x1B[22m`;
+	return `\x1b[2m${str}\x1b[22m`;
 }
 
 const logStream = fsSync.createWriteStream(fsPath('..', 'logs', 'logs.txt'));
