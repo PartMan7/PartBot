@@ -8,7 +8,8 @@
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "start": "ts-node src/index.ts",
-    "test": "npm run lint && tsc"
+    "test": "npm run lint && tsc",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "PartMan7",
@@ -20,6 +21,7 @@
     "@typescript-eslint/eslint-plugin": "^6.2.0",
     "@typescript-eslint/parser": "^6.2.0",
     "eslint": "^8.45.0",
+    "husky": "^8.0.3",
     "nodemon": "^3.0.1"
   },
   "dependencies": {
