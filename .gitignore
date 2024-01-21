@@ -1,12 +1,7 @@
-**/*-hidden.*
-
-
 /node_modules
-/dist
-
 .idea
+
 .env
 
+/tsconfig.tsbuildinfo
 /logs/*logs.txt
-
-/.git-deploy

@@ -1,14 +1,14 @@
-import React = require('react');
-import { renderToStaticMarkup } from 'react-dom/server';
+function Unsafe ({ children }) {
+	return <div>{children}</div>;
+}
 
-export default {
+export const command: PSCommand = {
 	name: 'quotes',
 	aliases: ['q'],
-	help: 'Quotes! ',
+	help: 'Quotes!',
+	syntax: 'CMD',
 	async run (message) {
 		message.reply('Test');
-		// message.reply(renderToStaticMarkup(<b>Test</b>));
-		// message.sendHTML(renderToStaticMarkup(<b>Test</b>));
-		// log(message.parent.rooms, message.parent);
+		// console.log(<Unsafe>Test</Unsafe>);
 	}
-} as PSCommand;
+};

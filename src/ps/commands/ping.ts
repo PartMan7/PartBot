@@ -1,6 +1,8 @@
-export default {
+export const command: PSCommand = {
 	name: 'ping',
 	help: 'You\'re asking help on... how to use ping?',
+	syntax: 'CMD',
+	perms: ['room', 'voice'],
 	aliases: ['echo'],
 	async run (message, { originalCommand, args }) {
 		if (originalCommand[0] === 'echo') {
@@ -9,4 +11,4 @@ export default {
 		}
 		return message.reply('Pong!');
 	}
-} as PSCommand;
+};

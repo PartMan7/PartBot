@@ -1,6 +1,4 @@
 import * as chokidar from 'chokidar';
-/* /// <reference types="achrinza__node-ipc" /> */
-// import ipc from 'node-ipc';
 
 import EventEmitter from 'events';
 

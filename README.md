@@ -3,7 +3,7 @@
 Hiya! This is an ongoing effort to rewrite [PartBot](https://github.com/PartMan7/PartBot) from the bottom-up, with better practices than the steaming pile of bamboo sticks that supports PartBot. Goals for this rewrite are:
 
 * Use properly-laid-out methods for keeping the codebase public and secure while maintaining the ability to have hidden components (for security and staff purposes).
-* Have an extensible, reusible, (cross-platform, maybe?), robust command structure that allows for maximum enforcement of DRY principles.
+* Have an extensible, reusable, (cross-platform, maybe?), robust command structure that allows for maximum enforcement of DRY principles.
 * Abstract out the most common utilities into simple-to-access mechanisms (see: PS-Client's message replying, subcommands, easily-accessible utilities with a lot less global pollution).
 * Keep the codebase as stable and typesafe as possible.
 * Retain the ability to have dynamic hotpatches using a Sentinel-like system (see [PartBot](https://github.com/PartMan7/PartBot/blob/master/handlers/watcher.js) for reference).
@@ -18,7 +18,7 @@ Hiya! This is an ongoing effort to rewrite [PartBot](https://github.com/PartMan7
 
 This might take ages, but it'll be worth it!
 
-Also I wholeheartedly welcome contributors (as opposed to the original PartBot, where the source was private and only had a public mirror). If you'd like to contribute to this repository but don't know where to start or what's currently in-progress, hit me up on any platform!
+Also, I wholeheartedly welcome contributors (as opposed to the original PartBot, where the source was private and only had a public mirror). If you'd like to contribute to this repository but don't know where to start or what's currently in-progress, hit me up on any platform!
 
 
 ### RegEx sources

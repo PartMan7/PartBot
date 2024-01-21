@@ -1,47 +1,40 @@
 {
-	"name": "partbot",
-	"version": "3.0.0",
-	"description": "",
-	"main": "src/index.js",
-	"scripts": {
-		"alias": "tsc-alias",
-		"build": "tsc && tsc-alias",
-		"build:flat": "tsc",
-		"build:watch": "concurrently --kill-others \"tsc -w\" \"tsc-alias -w\"",
-		"deploy": "npm run test && ./deploy.sh",
-		"lint": "eslint src --ext .ts",
-		"lint:fix": "eslint src --ext .ts --fix",
-		"start": "npm run build && node dist/index.js",
-		"start:watch": "rm -rf dist/** && concurrently --kill-others \"tsc-watch\" \"tsc-alias -w\" \"nodemon dist/index.js\"",
-		"start:prod": "rm -rf dist/** && concurrently \"NODE_PATH=. node start.js\" \"tsc-alias -w\" ",
-		"test": "npm run lint && npm run build"
-	},
-	"keywords": [],
-	"author": "PartMan7",
-	"license": "ISC",
-	"devDependencies": {
-		"@types/node": "^20.4.4",
-		"@types/node-ipc": "^9.2.0",
-		"@types/nunjucks": "^3.2.3",
-		"@types/react-dom": "^18.2.7",
-		"@typescript-eslint/eslint-plugin": "^6.2.0",
-		"@typescript-eslint/parser": "^6.2.0",
-		"concurrently": "^8.2.0",
-		"eslint": "^8.45.0",
-		"nodemon": "^3.0.1",
-		"tsc-alias": "^1.8.7",
-		"tsc-watch": "^6.0.4",
-		"typescript": "^5.1.6"
-	},
-	"dependencies": {
-		"axios": "^1.4.0",
-		"chokidar": "^3.5.3",
-		"discord.js": "^14.11.0",
-		"dotenv": "^16.3.1",
-		"mongoose": "^7.4.1",
-		"node-ipc": "npm:@achrinza/node-ipc@^10.1.9",
-		"nunjucks": "^3.2.4",
-		"ps-client": "^3.3.2",
-		"react-dom": "^18.2.0"
-	}
+  "name": "partbot",
+  "version": "3.0.0",
+  "description": "A chatbot for Pokémon Showdown",
+  "main": "src/index.js",
+  "scripts": {
+    "deploy": "npm run test && ./deploy.sh",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "start": "ts-node src/index.ts",
+    "test": "npm run lint && tsc"
+  },
+  "keywords": [],
+  "author": "PartMan7",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.4.4",
+    "@types/nunjucks": "^3.2.3",
+    "@types/react": "^18.2.48",
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
+    "eslint": "^8.45.0",
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "chokidar": "^3.5.3",
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.3.1",
+    "mongoose": "^7.4.1",
+    "nunjucks": "^3.2.4",
+    "ps-client": "^3.4.3",
+    "react": "^18.2.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.1.6"
+  },
+  "optionalDependencies": {
+    "ansi-to-html": "^0.7.2"
+  }
 }
