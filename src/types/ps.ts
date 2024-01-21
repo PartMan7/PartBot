@@ -1,10 +1,10 @@
 import { Perms } from 'types/perms';
-type authKey = Perms & string;
+type AuthKey = Perms & string;
 
 export type PSRoomConfig = {
 	roomId: string;
 	roomName: string;
-	auth?: { [key in authKey]: string[] };
+	auth?: { [key in AuthKey]: string[] };
 	tour?: {
 		timer?: boolean | [autoStart: number, autoDQ: number];
 	};

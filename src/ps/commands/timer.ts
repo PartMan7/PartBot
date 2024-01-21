@@ -52,7 +52,7 @@ export const command: PSCommand = {
 				const timer = Timers[id];
 				if (!timer) throw new ChatError('You don\'t have a timer running!');
 				delete Timers[id];
-				timer.run();
+				timer.execute();
 				const timeLeftText = Tools.toHumanTime(timer.endTime - Date.now());
 				return message.reply(`(The timer would have ended in ${timeLeftText}.)`);
 			}

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 // We don't really care about storing joins (since we can just use their 'online' status)
-// Instead, we store the last time they were seen online; ie. their leave time, not join
+// Instead, we store the last time they were seen online; i.e. their leave time, not join
 
 const schema = new mongoose.Schema({
 	id: {
@@ -22,23 +22,23 @@ const schema = new mongoose.Schema({
 });
 
 schema.index({ id: 1 });
-interface model {
+interface Model {
 	id: string;
 	at: Date;
 	in: string[];
 }
 const model = mongoose.model('seen', schema, 'seens');
 
-export function see (user: string, rooms: string[] = []): Promise<model> {
+export function seeUser (user: string, rooms: string[] = []): Promise<Model> {
 	const userId = Tools.toId(user);
 	return model.findOneAndUpdate({ id: userId }, { id: userId, in: rooms }, { upsert: true, new: true });
 }
 
-export function lastSeen (user: string): Promise<model | null> {
+export function lastSeen (user: string): Promise<Model | null> {
 	const userId = Tools.toId(user);
 	return model.findOne({ id: userId });
 }
 
-export function fetchAllSeens (): Promise<model[]> {
+export function fetchAllSeens (): Promise<Model[]> {
 	return model.find({}).lean();
 }

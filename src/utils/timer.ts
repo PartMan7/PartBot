@@ -17,7 +17,7 @@ export class Timer {
 	cancel () {
 		clearTimeout(this._node);
 	}
-	run () {
+	execute () {
 		this._callback();
 		this.cancel();
 	}

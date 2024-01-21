@@ -23,4 +23,4 @@ git --git-dir=.git-deploy push origin HEAD
 sed -i "1,$gitlines s/# //1" .gitignore
 
 
-# Windows people SHOOO this file isn't for you
+# Windows people SHOO this file isn't for you

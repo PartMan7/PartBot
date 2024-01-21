@@ -3,6 +3,15 @@ import type { PSCommand } from 'types/chat';
 import emptyObject from 'utils/empty-object';
 import { PSAliases, PSCommands } from 'cache';
 
+// Generate aliases
+function addAlias (command: PSCommand, stack: string[]) {
+	if (command.children) Object.entries(command.children).forEach(([defaultName, subCommand]) => {
+		const names = [defaultName, ...subCommand.aliases || []];
+		names.forEach(name => addAlias(subCommand, [...stack, name]));
+	});
+	PSAliases[stack.join(' ')] = [...stack.slice(0, -1), command.name].join(' ');
+}
+
 export function loadCommands (): Promise<void[]> {
 	// Load command data
 	const commands = fsSync.readdirSync(fsPath('ps', 'commands'));
@@ -19,15 +28,6 @@ export function loadCommands (): Promise<void[]> {
 		commands.forEach(command => {
 			PSCommands[command.name] = { ...command, path: requirePath };
 		});
-
-		// Generate aliases
-		function addAlias (command: PSCommand, stack: string[]) {
-			if (command.children) Object.entries(command.children).forEach(([defaultName, subCommand]) => {
-				const names = [defaultName, ...subCommand.aliases || []];
-				names.forEach(name => addAlias(subCommand, [...stack, name]));
-			});
-			PSAliases[stack.join(' ')] = [...stack.slice(0, -1), command.name].join(' ');
-		}
 		commands.forEach(command => [command.name, ...command.aliases || []].forEach(name => addAlias(command, [name])));
 		// And now for extended aliases
 		commands.forEach(command => {

@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import * as util from 'util';
 
-function dim (str: string): string {
-	return `\x1B[2m${str}\x1B[22m`;
+function dimText (str: string): string {
+	return `\x1b[2m${str}\x1b[22m`;
 }
 
 const logStream = fsSync.createWriteStream(fsPath('..', 'logs', 'logs.txt'));
@@ -14,7 +14,7 @@ export function log (...args): void {
 		const logStr = util.inspect(arg, { depth: 3 });
 		logStream.write(`${timestamp} ${logStr}\n`);
 	});
-	console.log(dim(timestamp), ...args);
+	console.log(dimText(timestamp), ...args);
 }
 
 export function deepLog (...args): void {
@@ -23,14 +23,14 @@ export function deepLog (...args): void {
 		const logStr = util.inspect(arg, { depth: null });
 		logStream.write(`${timestamp} ${logStr}\n`);
 	});
-	console.log(dim(timestamp));
+	console.log(dimText(timestamp));
 	args.forEach(arg => console.dir(arg, { depth: null }));
 }
 
 export function errorLog (error: Error) {
 	const timestamp = `[${new Date().toISOString()}]`;
 	errLogStream.write(`${timestamp} ${error.toString()}\n${error.stack || '[no stack]'}\n`);
-	console.error(dim(timestamp), error);
+	console.error(dimText(timestamp), error);
 }
 
 export function closeStreams (): void {
