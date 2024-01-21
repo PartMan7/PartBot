@@ -12,8 +12,7 @@
 		"ecmaVersion": "latest"
 	},
 	"ignorePatterns": [
-		"node_modules",
-		"dist"
+		"node_modules"
 	],
 	"overrides": [
 		{

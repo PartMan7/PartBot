@@ -31,7 +31,7 @@ Lint:
 (?:
   # HTML lines
   ^\t*(?:let|const)\ 
-  # Variable name must end with HTML
+  # Variable name must end with HTML or Message
   [a-zA-Z]*(?:HTML|[mM]essage)\ \+?=\ 
   # The actual string:
   (['"`])[^\n]*?\1

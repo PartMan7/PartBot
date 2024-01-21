@@ -64,7 +64,7 @@ export default async function evaluate (code: string, mode: EvalModes, context: 
 	let success: boolean, value: unknown;
 	try {
 		const res = await (() => {
-			// @ts-expect-error -- Allow with to forward context
+			// @ts-expect-error -- Allow 'with' to forward context
 			with (context) {
 				return eval(code);
 			}
