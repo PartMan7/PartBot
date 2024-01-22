@@ -60,7 +60,7 @@ export function formatValue (value: unknown, mode: EvalModes): string {
 }
 
 // eslint-disable-next-line -- Allow context to use 'any'
-export default async function evaluate (code: string, mode: EvalModes, context: Record<string, any> = {}): Promise<EvalOutput> {
+export async function evaluate (code: string, mode: EvalModes, context: Record<string, any> = {}): Promise<EvalOutput> {
 	let success: boolean, value: unknown;
 	try {
 		const res = await (() => {

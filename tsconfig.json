@@ -13,7 +13,6 @@
     "paths": {
       "config": ["config"],
       "types": ["types"],
-      "eval": ["eval"],
       "discord": ["discord"],
       "ps": ["ps"],
       "sentinel": ["sentinel"],

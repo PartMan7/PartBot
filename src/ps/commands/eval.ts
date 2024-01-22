@@ -1,4 +1,4 @@
-import evaluate from 'eval';
+import { evaluate } from 'utils/eval';
 
 export const command: PSCommand = {
 	name: 'eval',
