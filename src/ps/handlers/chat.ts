@@ -86,7 +86,7 @@ export default async function chatHandler (message: Message) {
 			// TODO Clone message and assign from overrides
 			Object.assign(context, ctx);
 			const requiredPerms = getPerms(commandSteps.slice(1), sourceCommand);
-			if (!checkPermissions(requiredPerms, message)) throw new ChatError(sourceCommand.flags.conceal ? CMD_NOT_FOUND : ACCESS_DENIED);
+			if (!checkPermissions(requiredPerms, message)) throw new ChatError(sourceCommand.flags?.conceal ? CMD_NOT_FOUND : ACCESS_DENIED);
 			return command.run(message, context);
 		};
 		context.unsafeRun = function (altCommand: string, ctx: Record<string, unknown> = {}) {
