@@ -83,7 +83,6 @@ export default async function chatHandler (message: Message) {
 			const { command, sourceCommand, commandSteps, context } = parseArgs(altArgs, spacedArgs);
 			context.calledFrom = message;
 			Object.assign(context, ctx);
-			context.args.unshift(...altArgs);
 			const requiredPerms = getPerms(commandSteps.slice(1), sourceCommand);
 			if (!checkPermissions(requiredPerms, message)) throw new ChatError(sourceCommand.flags.conceal ? CMD_NOT_FOUND : ACCESS_DENIED);
 			return command.run(message, context);
@@ -94,7 +93,6 @@ export default async function chatHandler (message: Message) {
 			const { command, context } = parseArgs(altArgs, spacedArgs);
 			context.calledFrom = message;
 			Object.assign(context, ctx);
-			context.args.unshift(...altArgs);
 			return command.run(message, context);
 		};
 		await commandObj.run(message, context);
