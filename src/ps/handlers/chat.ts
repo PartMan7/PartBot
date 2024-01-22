@@ -77,11 +77,13 @@ export default async function chatHandler (message: Message) {
 		const { command: commandObj, sourceCommand, commandSteps, context } = parseArgs(args, spacedArgs);
 		const requiredPerms = getPerms(commandSteps.slice(1), sourceCommand);
 		if (!checkPermissions(requiredPerms, message)) throw new ChatError(sourceCommand.flags?.conceal ? CMD_NOT_FOUND : ACCESS_DENIED);
-		context.run = function (altCommand: string, ctx: Record<string, unknown> = {}) {
+		context.run = function (altCommand: string, ctx: Record<string, unknown> = {}, messageOverrides: Partial<Message> = {}) {
 			const altArgs = altCommand.split(/ +/);
 			const spacedArgs = altCommand.split(/( +)/);
 			const { command, sourceCommand, commandSteps, context } = parseArgs(altArgs, spacedArgs);
-			context.calledFrom = message;
+			context.calledFrom = commandSteps.join('.');
+			context.calledFromMsg = message;
+			// TODO Clone message and assign from overrides
 			Object.assign(context, ctx);
 			const requiredPerms = getPerms(commandSteps.slice(1), sourceCommand);
 			if (!checkPermissions(requiredPerms, message)) throw new ChatError(sourceCommand.flags.conceal ? CMD_NOT_FOUND : ACCESS_DENIED);
@@ -91,7 +93,9 @@ export default async function chatHandler (message: Message) {
 			const altArgs = altCommand.split(/ +/);
 			const spacedArgs = altCommand.split(/( +)/);
 			const { command, context } = parseArgs(altArgs, spacedArgs);
-			context.calledFrom = message;
+			context.calledFrom = commandSteps.join('.');
+			context.calledFromMsg = message;
+			// TODO Clone message and assign from overrides
 			Object.assign(context, ctx);
 			return command.run(message, context);
 		};

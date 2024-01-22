@@ -22,19 +22,30 @@ export type PSCommandContext = {
 	 */
 	arg: string;
 	/**
+	 * (Only on forwarded messages) The original command this command was called from, delimited by '.'
+	 * @example calledFrom: 'quote.add'
+	 */
+	calledFrom?: string;
+	/**
+	 * (Only on forwarded messages) The message the original command was called with
+	 */
+	calledFromMsg?: PSMessage;
+	/**
 	 * Executor function for command
 	 * Allows commands to run other commands
 	 * @param cmd Command to run (including arguments)
 	 * @param ctxOverride Context to be passed to the called command function
+	 * @param msgOverride Overrides to be passed on the message
 	 */
-	run(cmd: string, ctxOverride?: Record<string, any>): Promise<any>;
+	run(cmd: string, ctxOverride?: Record<string, any>, msgOverride?: Partial<PSMessage>): Promise<any>;
 	/**
 	 * Function that executes when the command is run.
 	 * Same as run, but WILL BYPASS PERMISSION CHECKS.
 	 * @param cmd Command to run (including arguments)
 	 * @param ctxOverride Context to be passed to the called command function
+	 * @param msgOverride Overrides to be passed on the message
 	 */
-	unsafeRun(cmd: string, ctxOverride?: Record<string, any>): Promise<any>;
+	unsafeRun(cmd: string, ctxOverride?: Record<string, any>, msgOverride?: Partial<PSMessage>): Promise<any>;
 	[key: string]: any;
 }
 
