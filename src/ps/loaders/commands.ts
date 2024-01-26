@@ -1,8 +1,8 @@
 import type { PSCommand } from 'types/chat';
 
 import cacheBuster from 'utils/cachebuster';
-import emptyObject from 'utils/empty-object';
 import { PSAliases, PSCommands } from 'cache';
+import resetCache from 'cache/reset';
 
 // Generate aliases
 function addAlias (command: PSCommand, stack: string[]) {
@@ -43,10 +43,8 @@ export function loadCommands (): Promise<void> {
 export function unloadCommands (): void {
 	// Delete cached commands
 	Object.values(PSCommands).forEach(({ path }) => cacheBuster(path));
-	// Delete command data
-	emptyObject(PSCommands);
-	// Delete aliases
-	emptyObject(PSAliases);
+	// Delete command data and aliases
+	resetCache(['PSCommands', 'PSAliases']);
 }
 
 export async function reloadCommands (): Promise<void> {
