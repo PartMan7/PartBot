@@ -5,7 +5,7 @@ import { checkPermissions } from 'ps/handlers/permissions';
 import type { Message } from 'ps-client';
 import type { PSCommand, PSCommandContext } from 'types/chat';
 import type { Perms } from 'types/perms';
-import ChatError from '../../utils/chat-error';
+import ChatError from 'utils/chat-error';
 
 const ACCESS_DENIED = 'Access denied.';
 const CMD_NOT_FOUND = 'Command not found.';

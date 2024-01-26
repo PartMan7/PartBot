@@ -83,6 +83,9 @@
 			"error",
 			"smart-tabs"
 		],
+		"no-restricted-imports": ["error", {
+			"patterns": [".*"]
+		}],
 		"no-tabs": 0,
 		"no-trailing-spaces": "error",
 		"no-unreachable": 2,
