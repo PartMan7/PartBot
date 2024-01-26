@@ -7,8 +7,7 @@ import type { PSCommand, PSCommandContext } from 'types/chat';
 import type { Perms } from 'types/perms';
 import ChatError from 'utils/chat-error';
 
-const ACCESS_DENIED = 'Access denied.';
-const CMD_NOT_FOUND = 'Command not found.';
+import { ACCESS_DENIED, CMD_NOT_FOUND, INVALID_ALIAS } from 'messages';
 
 
 export function getPerms (args: string[], sourceCommand: PSCommand): Perms {
@@ -52,7 +51,7 @@ export function parseArgs (aliasArgs: string[], spaceCapturedArgs: string[]): {
 	const sourceCommand = PSCommands[command.shift()];
 	spaceCapturedArgs.splice(0, 2);
 	let commandObj: PSCommand = sourceCommand;
-	if (!commandObj) throw new Error(`Had an invalid alias for ${context.command[0]}`);
+	if (!commandObj) throw new Error(INVALID_ALIAS(context.command[0]));
 
 	while (command.length && commandObj) {
 		const next: PSCommand = commandObj.children?.[command[0]];

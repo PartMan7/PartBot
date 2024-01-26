@@ -2,17 +2,18 @@
   "compilerOptions": {
     "baseUrl": "src",
     "target": "es2020",
-    "noEmit": true,
+    "noEmit": true, // We run PartBot with ts-node instead of a two-step process
     "jsx": "react-jsx", // So we can use JSX as syntactic sugar for HTML
     "incremental": true,
-    "module": "commonjs",
+    "module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
     "esModuleInterop": true,
-    "allowUmdGlobalAccess": true,
+    "allowUmdGlobalAccess": true, // Enable globals (albeit treated as UMD globals)
     "noImplicitUseStrict": true, // Enable 'with' syntax in eval
     "ignoreDeprecations": "5.0", // Enable noImplicitUseStrict
     "paths": {
       "config": ["config"],
       "types": ["types"],
+      "messages": ["messages"],
       "discord": ["discord"],
       "ps": ["ps"],
       "sentinel": ["sentinel"],
@@ -20,7 +21,7 @@
       "web": ["web"]
     }
   },
-  "include": ["src/globals/*.d.ts", "src/**/*"],
+  "include": ["src/globals/*.d.ts", "src/**/*"], // Import global types before the rest of the code
   "exclude": ["node_modules"],
   "ts-node": {
     "require": ["tsconfig-paths/register"], // For path aliases

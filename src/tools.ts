@@ -108,10 +108,11 @@ export function fromHumanTime (srcText: string): number {
 	const digital = text.match(/^(?:(\d+):)?(\d+):(\d+):(\d+)$/);
 	if (digital) {
 		const [, day, hrs, min, sec]: number[] = digital.map(str => parseInt(str));
-		return day * DAY_LENGTH +
-			hrs * HOUR_LENGTH +
-			min * MIN_LENGTH +
-			sec  * SEC_LENGTH;
+		const dayTime = day * DAY_LENGTH;
+		const hourTime = hrs * HOUR_LENGTH;
+		const minTime = min * MIN_LENGTH;
+		const secTime = sec * SEC_LENGTH;
+		return dayTime + hourTime + minTime + secTime;
 	} else text = text.replace(/:/g, '');
 	let time = 0;
 	const units = {
