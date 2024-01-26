@@ -14,6 +14,7 @@ export function formatValue (value: unknown, mode: EvalModes): string {
 	switch (mode) {
 		case 'COLOR_OUTPUT': case 'FULL_OUTPUT': {
 			const color = mode === 'COLOR_OUTPUT' && !!ANSIConverter; // Cannot color without ANSIConverter
+			// TODO Stringify functions and render with syntax highlighting
 			const inspection = inspect(value, { depth: 2, colors: color, numericSeparator: true });
 			return color
 				? convertANSI.toHtml(inspection)
