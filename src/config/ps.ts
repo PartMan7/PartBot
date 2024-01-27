@@ -7,4 +7,4 @@ export const admins = _admins.map(Tools.toID);
 export const username = process.env.PS_USERNAME ?? 'PartBot';
 export const password = process.env.PS_PASSWORD ?? 'password';
 export const rooms = process.env.PS_ROOMS?.split(',') ?? ['botdevelopment'];
-export const prefix = process.env.PS_PREFIX ?? process.env.PREFIX ?? ',';
+export const prefix = process.env.PREFIX ?? ',';

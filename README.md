@@ -11,7 +11,7 @@ This might take a while...
 * Developing 
 * [Planned Features](https://github.com/PartMan7/PartBotter/labels/enhancement)
 * [Known Issues](https://github.com/PartMan7/PartBotter/labels/bug)
-* Suggestions, Bug Reports, and Feedback
+* [Suggestions, Bug Reports, and Feedback](https://github.com/PartMan7/PartBotter/tree/main/docs/SUGGESTIONS.md)
 * [Credits](#Credits)
 
 ## Credits
