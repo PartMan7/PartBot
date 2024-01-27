@@ -1,3 +1,5 @@
+// See: https://github.com/nonara/ts-patch/discussions/29#discussioncomment-325979
+
 import ts, { CompilerHost, CompilerOptions, Program, TransformationContext, SourceFile, Node } from 'typescript';
 import { PluginConfig, ProgramTransformerExtras } from 'ts-patch';
 
@@ -13,7 +15,7 @@ function getPatchedHost (
 	return Object.assign(compilerHost, {
 		getSourceFile (_fileName: string, languageVersion: ts.ScriptTarget, ...args) {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore -- FIXME
+			// @ts-ignore -- Types are missing normalizePath
 			const fileName = tsInstance.normalizePath(_fileName);
 			if (fileCache.has(fileName)) return fileCache.get(fileName);
 
@@ -35,7 +37,7 @@ export default function transformProgram (
 	const compilerOptions = program.getCompilerOptions();
 	const compilerHost = getPatchedHost(host, tsInstance, compilerOptions);
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore -- FIXME
+	// @ts-ignore -- Types are missing normalizePath
 	const rootFileNames: string[] = program.getRootFileNames().map(tsInstance.normalizePath);
 
 	/* Transform AST */
@@ -64,7 +66,6 @@ function transformAst (context: TransformationContext) {
 			if (ts.isFunctionDeclaration(node) && /^[A-Z]/.test(node.name.text)) {
 				return node; // Don't touch JSX inside a function with a capitalized name
 			} else if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node)) {
-				// TODO Exit early if node is in a named function that starts with a capital letter
 				// Wrap the topmost JSX with jsxToHTML
 				return context.factory.createCallExpression(
 					context.factory.createIdentifier('jsxToHTML'),
