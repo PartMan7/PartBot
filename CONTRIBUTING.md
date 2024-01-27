@@ -32,6 +32,11 @@ the environment variable. The full list of supported env variables is below:
 * `MONGO_URL`: The MongoDB connection URL. Leave blank to disable database access/usage.
 
 
+## Running
+
+You can start the chatbot using `npm start`.
+
+
 ## Testing
 Currently, PartBot's tests are only a lint test (`npm run lint`) and TypeScript validity (`npm exec tsc`). These will
 automatically run on every pull request.
