@@ -2,7 +2,8 @@
 *but better*
 
 ---
-Hiya! This is an ongoing effort to rewrite [PartBot](https://github.com/PartMan7/PartBot) from the bottom-up, with better practices than the steaming pile of bamboo sticks that supports it.
+Hiya! This is an ongoing effort to rewrite [PartBot](https://github.com/PartMan7/PartBot) from the bottom-up, with
+better practices than the steaming pile of bamboo sticks that currently supports it.
 
 This might take a while...
 
