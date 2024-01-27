@@ -8,7 +8,7 @@
     "lint:fix": "eslint src --ext .ts --fix",
     "start": "ts-node src/index.ts",
     "test": "npm run lint && tsc",
-    "prepare": "husky install"
+    "prepare": "husky install && ts-patch install -s"
   },
   "keywords": [],
   "author": "PartMan7",
@@ -23,6 +23,7 @@
     "husky": "^8.0.3"
   },
   "dependencies": {
+    "@types/react-dom": "^18.2.18",
     "axios": "^1.6.0",
     "chokidar": "^3.5.3",
     "discord.js": "^14.11.0",
@@ -31,7 +32,9 @@
     "nunjucks": "^3.2.4",
     "ps-client": "^3.4.3",
     "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "ts-node": "^10.9.2",
+    "ts-patch": "^3.1.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.6"
   },

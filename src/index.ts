@@ -1,8 +1,6 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import 'config/env';
-
 import 'globals';
 
 import PS from 'ps';

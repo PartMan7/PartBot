@@ -1,14 +1,20 @@
-function Unsafe ({ children }) {
-	return <div>{children}</div>;
+function Test ({ children }) {
+	return <div>
+		<h3>Header</h3>
+		<span>
+			{'<b>This should not be bold</b>'}
+			<br/>
+			{children}
+		</span>
+	</div>;
 }
 
 export const command: PSCommand = {
 	name: 'quotes',
-	aliases: ['q'],
+	aliases: ['q', 'quote'],
 	help: 'Quotes!',
 	syntax: 'CMD',
 	async run (message) {
-		message.reply('Test');
-		// console.log(<Unsafe>Test</Unsafe>);
+		message.sendHTML(<Test>This is in JSX</Test>);
 	}
 };

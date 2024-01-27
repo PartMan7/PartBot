@@ -3,13 +3,15 @@
     "baseUrl": "src",
     "target": "es2020",
     "noEmit": true, // We run PartBot with ts-node instead of a two-step process
-    "jsx": "react-jsx", // So we can use JSX as syntactic sugar for HTML
-    "incremental": true,
+    "jsx": "react",
     "module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
     "esModuleInterop": true,
     "allowUmdGlobalAccess": true, // Enable globals (albeit treated as UMD globals)
     "noImplicitUseStrict": true, // Enable 'with' syntax in eval
     "ignoreDeprecations": "5.0", // Enable noImplicitUseStrict
+    "plugins": [
+      { "transform": "./src/ps/loaders/jsx-to-html.ts", "transformProgram": true }, // Internally call jsxToHTML in ps
+    ],
     "paths": {
       "config": ["config"],
       "types": ["types"],
