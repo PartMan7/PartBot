@@ -2,6 +2,7 @@
 
 import type { Perms } from 'types/perms';
 import type { Message as PSMessage } from 'ps-client';
+import { HTMLopts } from 'ps-client/classes/common';
 import type { Message as DiscMessage } from 'discord.js';
 
 export type PSCommandContext = {
@@ -46,7 +47,20 @@ export type PSCommandContext = {
 	 * @param msgOverride Overrides to be passed on the message
 	 */
 	unsafeRun(cmd: string, ctxOverride?: Record<string, any>, msgOverride?: Partial<PSMessage>): Promise<any>;
-	[key: string]: any;
+	/**
+	 * Conditionally broadcast a message based on the given permissions
+	 * @param message The message to broadcast
+	 * @param perm The required permission to broadcast instead of privateReply. Defaults to 'voice'
+	 */
+	broadcast(message: string, perm?: Perms): void;
+	/**
+	 * Conditionally broadcast HTML output based on the given permissions
+	 * @param html The HTML to broadcast
+	 * @param perm The required permission to broadcast instead of privateReply. Defaults to 'voice'
+	 * @param opts The options to forward to the HTML call
+	 */
+	broadcastHTML(html: string, perm?: Perms, opts?: HTMLopts): void;
+	[key: string]: unknown;
 }
 
 export type PSCommand = {
