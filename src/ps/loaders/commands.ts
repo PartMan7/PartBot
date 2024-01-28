@@ -5,12 +5,12 @@ import { PSAliases, PSCommands } from 'cache';
 import resetCache from 'cache/reset';
 
 // Generate aliases
-function addAlias (command: PSCommand, stack: string[]) {
+function addAlias (command: PSCommand, stack: string[], aliasAs: string[]) {
 	if (command.children) Object.entries(command.children).forEach(([defaultName, subCommand]) => {
 		const names = [defaultName, ...subCommand.aliases || []];
-		names.forEach(name => addAlias(subCommand, [...stack, name]));
+		names.forEach(name => addAlias(subCommand, [...stack, name], [...aliasAs, defaultName]));
 	});
-	PSAliases[stack.join(' ')] = [...stack.slice(0, -1), command.name].join(' ');
+	PSAliases[stack.join(' ')] = [...aliasAs.slice(0, -1), command.name].join(' ');
 }
 
 export function loadCommands (): Promise<void> {
@@ -27,7 +27,7 @@ export function loadCommands (): Promise<void> {
 				commands.forEach(command => {
 					PSCommands[command.name] = { ...command, path: requirePath };
 				});
-				commands.forEach(command => [command.name, ...command.aliases || []].forEach(name => addAlias(command, [name])));
+				commands.forEach(command => [command.name, ...command.aliases || []].forEach(name => addAlias(command, [name], [command.name])));
 				// And now for extended aliases
 				commands.forEach(command => {
 					if (command.extendedAliases) {
