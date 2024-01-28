@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import 'globals/prototypes';
 import 'globals';
 
 import PS from 'ps';
