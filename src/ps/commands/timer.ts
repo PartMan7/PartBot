@@ -19,7 +19,7 @@ export const command: PSCommand = {
 			aliases: ['left', 'count', 'togo', 'longer', 'howmuchlonger', 'ongoing', 'current'],
 			help: 'Displays the current timer status',
 			syntax: 'CMD',
-			async run (message) {
+			async run ({ message }) {
 				const id = $.messageToId(message);
 				const timer = Timers[id];
 				if (!timer) throw new ChatError('You don\'t have a timer running!');
@@ -32,7 +32,7 @@ export const command: PSCommand = {
 			aliases: ['terminate', 'yeet', 'stop', 'end', 'kill'],
 			help: 'Cancels the ongoing timer',
 			syntax: 'CMD',
-			async run (message) {
+			async run ({ message }) {
 				const id = $.messageToId(message);
 				const timer = Timers[id];
 				if (!timer) throw new ChatError('You don\'t have a timer running!');
@@ -47,7 +47,7 @@ export const command: PSCommand = {
 			aliases: ['runearly', 'execute'],
 			help: 'Makes the ongoing timer execute immediately',
 			syntax: 'CMD',
-			async run (message) {
+			async run ({ message }) {
 				const id = $.messageToId(message);
 				const timer = Timers[id];
 				if (!timer) throw new ChatError('You don\'t have a timer running!');
@@ -58,7 +58,7 @@ export const command: PSCommand = {
 			}
 		}
 	},
-	async run (message, { args, run }) {
+	async run ({ message, args, run }) {
 		const id = $.messageToId(message);
 		if (Timers[id]) return run('timer status');
 		const [timeText, ...commentLines] = args.join(' ').split('//');

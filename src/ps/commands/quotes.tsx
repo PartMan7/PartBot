@@ -15,7 +15,7 @@ export const command: PSCommand = {
 			aliases: ['h'],
 			help: 'Remove the extra \'help\'...',
 			syntax: 'CMD',
-			async run (message, { broadcastHTML }) {
+			async run ({ broadcastHTML }) {
 				broadcastHTML(<ul>
 					<Entry name="(term / index)">
 						Displays a random quote with the specified search term / at the given index.
@@ -60,7 +60,7 @@ export const command: PSCommand = {
 			}
 		}
 	},
-	async run (message, { run }) {
+	async run ({ run }) {
 		return run('quote random');
 	}
 };

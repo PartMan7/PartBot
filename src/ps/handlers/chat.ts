@@ -46,6 +46,7 @@ export function parseArgs (aliasArgs: string[], spaceCapturedArgs: string[]): {
 		command: command.slice(),
 		args: [],
 		arg: '',
+		message: undefined,
 		run: undefined,
 		unsafeRun: undefined,
 		broadcast: undefined,
@@ -108,7 +109,7 @@ export default async function chatHandler (message: Message) {
 			};
 			const requiredPerms = getPerms(commandSteps.slice(1), sourceCommand);
 			if (!checkPermissions(requiredPerms, newMessage)) throw new ChatError(sourceCommand.flags?.conceal ? CMD_NOT_FOUND : ACCESS_DENIED);
-			return command.run(newMessage, ctx as PSCommandContext);
+			return command.run({ ...ctx, message: newMessage } as PSCommandContext);
 		};
 		context.unsafeRun = function (altCommand: string, ctx: Partial<PSCommandContext> = {}) {
 			const altArgs = altCommand.split(/ +/);
@@ -127,9 +128,9 @@ export default async function chatHandler (message: Message) {
 			ctx.broadcastHTML = function (html: string, perm: Perms = 'voice', opts: HTMLopts) {
 				return newMessage.sendHTML(html, opts);
 			};
-			return command.run(newMessage, ctx as PSCommandContext);
+			return command.run({ ...ctx, message: newMessage } as PSCommandContext);
 		};
-		await commandObj.run(message, context);
+		await commandObj.run({ ...context, message });
 	} catch (err) {
 		message.privateReply(err.message);
 		if (err.name !== 'ChatError') log(err);

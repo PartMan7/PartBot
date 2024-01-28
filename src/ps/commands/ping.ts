@@ -4,7 +4,7 @@ export const command: PSCommand = {
 	syntax: 'CMD',
 	perms: ['room', 'voice'],
 	aliases: ['echo'],
-	async run (message, { originalCommand, arg }) {
+	async run ({ message, originalCommand, arg }) {
 		if (originalCommand[0] === 'echo') {
 			if (arg) return message.reply(` [[]]${arg}`);
 			else return message.reply('ECHO!');

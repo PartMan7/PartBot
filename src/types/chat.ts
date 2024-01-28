@@ -7,6 +7,10 @@ import type { Message as DiscMessage } from 'discord.js';
 
 export type PSCommandContext = {
 	/**
+	 * The message this command is acting on
+	 */
+	message: PSMessage;
+	/**
 	 * Name and args of the original command being passed
 	 */
 	originalCommand: string[];
@@ -123,10 +127,9 @@ export type PSCommand = {
 	children?: { [key: string]: Omit<PSCommand, 'extendedAliases' | 'static'> };
 	/**
 	 * Function that executes when the command is run.
-	 * @param message The input message
 	 * @param context Relevant context for the command
 	 */
-	run(message: PSMessage, context: PSCommandContext): Promise<any>;
+	run(context: PSCommandContext): Promise<any>;
 }
 
 // Will need to update this to work with slash commands
