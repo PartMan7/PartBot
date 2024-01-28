@@ -10,7 +10,7 @@
     "noImplicitUseStrict": true, // Enable 'with' syntax in eval
     "ignoreDeprecations": "5.0", // Enable noImplicitUseStrict
     "plugins": [
-      { "transform": "./src/ps/loaders/jsx-to-html.ts", "transformProgram": true }, // Internally call jsxToHTML in ps
+      { "transform": "./src/typescript/jsx-to-html.ts", "transformProgram": true }, // Internally call jsxToHTML in ps
     ],
     "paths": {
       "config": ["config"],
