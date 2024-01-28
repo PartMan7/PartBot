@@ -1,5 +1,9 @@
 import { prefix } from 'config/ps';
 
+function Entry ({ name, children }) {
+	return <li><b>{name}</b>: {children}</li>;
+}
+
 export const command: PSCommand = {
 	name: 'quotes',
 	aliases: ['q', 'quote'],
@@ -13,57 +17,45 @@ export const command: PSCommand = {
 			syntax: 'CMD',
 			async run (message, { broadcastHTML }) {
 				broadcastHTML(<ul>
-					<li>
-						<b>(term / index)</b>:
+					<Entry name="(term / index)">
 						Displays a random quote with the specified search term / at the given index.
-					</li>
-					<li>
-						<b>help [h]</b>:
+					</Entry>
+					<Entry name="help [h]">
 						Displays this message.
-					</li>
-					<li>
-						<b>random [r]</b>:
+					</Entry>
+					<Entry name="random [r]">
 						Displays a random quote.
-					</li>
-					<li>
-						<b>find [f]</b>:
+					</Entry>
+					<Entry name="find [f]">
 						Displays all quotes with the specified search term.
-					</li>
-					<li>
-						<b>last [z]</b>:
+					</Entry>
+					<Entry name="last [z]">
 						Displays the latest quote added.
-					</li>
-					<li>
-						<b>list [l]</b>:
+					</Entry>
+					<Entry name="list [l]">
 						Displays a list (up to 50 quotes per list). If given a number, specifically looks up that list.
-					</li>
-					<li>
-						<b>page [g]</b>:
+					</Entry>
+					<Entry name="page [g]">
 						Sends the user an HTML page (up to 50 quotes per page).
-					</li>
-					<li>
-						<b>number [n]</b>:
+					</Entry>
+					<Entry name="number [n]">
 						Displays the number of quotes in the room.
-					</li>
-					<li>
-						<b>preview [p]</b>:
+					</Entry>
+					<Entry name="preview [p]">
 						Displays a preview of the given quote (without actually adding it)
-					</li>
-					<li>
-						<b>add [a]</b>:
+					</Entry>
+					<Entry name="add [a]">
 						Adds the given quote. <code>\n</code> works as a newline, and <code>/me</code> syntax can be
 						formatted via wrapping the username in <code>[]</code> (eg: <code>[14:20:21] • #PartMan hugs
 						Hydro</code> would be formatted as <code>[14:20:21] • #[PartMan] hugs Hydro</code>) (staff-only)
-					</li>
-					<li>
-						<b>delete [d/x]</b>:
+					</Entry>
+					<Entry name="delete [d/x]">
 						Deletes the given quote. Accepts either an index or a lookup term (<code>z</code> deletes the last)
-					</li>
-					<li>
-						<b>room [m]</b>:
+					</Entry>
+					<Entry name="room [m]">
 						Runs the command in the context of the given room. Eg: <code>{prefix}quote room Bot Development
 						| list</code>
-					</li>
+					</Entry>
 				</ul>);
 			}
 		}
