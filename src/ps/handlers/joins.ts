@@ -12,6 +12,7 @@ export function joinHandler (room: string, user: string, isIntro: boolean): void
 export function nickHandler (room: string, newName: string, oldName: string, isIntro: boolean): void {
 	if (isIntro) return;
 	const from = Tools.toId(oldName), to = Tools.toId(newName), id = `${from}-${to}`;
+	if (from === to) return;
 	// Throttling cache updates at once per 5s per rename (A-B)
 	if (Date.now() - PSAltCache[id]?.at.getTime() < Tools.fromHumanTime('5 seconds')) return;
 	PSAltCache[id] = { from, to, at: new Date() };
