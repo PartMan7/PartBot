@@ -92,7 +92,7 @@ const $ = {
 		message.reply(`Which room are you looking for a quote in?`);
 		const answer = await message.target.waitFor(msg => {
 			return msg.content.length > 0;
-		}, 60_000).catch(() => {
+		}).catch(() => {
 			throw new ChatError('Did not receive a room within a minute');
 		});
 		const _room = Tools.toId(answer.content);
