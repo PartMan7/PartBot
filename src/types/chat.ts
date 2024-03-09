@@ -60,10 +60,10 @@ export type PSCommandContext = {
 	/**
 	 * Conditionally broadcast HTML output based on the given permissions
 	 * @param html The HTML to broadcast
-	 * @param perm The required permission to broadcast instead of privateReply. Defaults to 'voice'
 	 * @param opts The options to forward to the HTML call
+	 * @param opts.perm The required permission to broadcast instead of privateReply. Defaults to 'voice'
 	 */
-	broadcastHTML(html: string, perm?: Perms, opts?: HTMLopts): void;
+	broadcastHTML(html: string, opts?: HTMLopts & { perm?: Perms }): void;
 	[key: string]: unknown;
 }
 
@@ -80,6 +80,10 @@ export type PSCommand = {
 		noDisplay?: true;
 		// If enabled, replaces 'access denied' errors with 'command not found'
 		conceal?: true;
+		// Ensures a command can only be run from a room
+		roomOnly?: true;
+		// Ensures a command can only be run from a PM
+		pmOnly?: true;
 	};
 	/**
 	 * Command help message to be shown if executor function rejects without a message.
@@ -111,7 +115,7 @@ export type PSCommand = {
 	 */
 	perms?: Perms;
 	/**
-	 * If specified, restricts the command to only be used in those rooms.
+	 * If specified, restricts the command to only be used in these rooms.
 	 */
 	rooms?: string[];
 	/**

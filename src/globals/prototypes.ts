@@ -7,6 +7,7 @@ declare global {
 		remove (...toRemove: T[]): T[];
 		shuffle (): T[];
 		filterMap<X> (cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
+		unique (): T[];
 	}
 
 	interface String {
@@ -20,7 +21,7 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function<T, X> (callback: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined {
+		value: function<T, X> (this: T[], callback: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined {
 			for (let i = 0; i < this.length; i++) {
 				const result = callback(this[i], i, this);
 				if (result === undefined) continue;
@@ -32,7 +33,7 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function  (...terms) {
+		value: function  (this: unknown[], ...terms) {
 			let out = true;
 			terms.forEach(term => {
 				if (this.indexOf(term) >= 0) this.splice(this.indexOf(term), 1);
@@ -45,7 +46,7 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function (amount: number) {
+		value: function (this: unknown[], amount: number) {
 			if (amount === undefined) return this[Math.floor(Math.random() * this.length)];
 			const sample = Array.from(this), out = [];
 			let i = 0;
@@ -61,12 +62,28 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function () {
+		value: function (this: unknown[]) {
 			for (let i = this.length - 1; i > 0; i--) {
 				const j = Math.floor(Math.random() * (i + 1));
 				[this[i], this[j]] = [this[j], this[i]];
 			}
 			return Array.from(this);
+		}
+	},
+	unique: {
+		enumerable: false,
+		writable: false,
+		configurable: false,
+		value: function (this: unknown[]) {
+			const output = [];
+			const cache = new Set();
+			for (let i = 0; i < this.length; i++) {
+				if (!cache.has(this[i])) {
+					cache.add(this[i]);
+					output.push(this[i]);
+				}
+			}
+			return output;
 		}
 	}
 });
@@ -76,7 +93,7 @@ Object.defineProperties(String.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function (delim: string | RegExp, amount?: number): string[] {
+		value: function (this: string, delim: string | RegExp, amount?: number): string[] {
 			if (typeof amount !== 'number') amount = 1;
 			const out: string[] = [];
 			let input = this.toString();
@@ -104,7 +121,7 @@ Object.defineProperties(String.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function (match: RegExp, replace: string | ((arg: string) => string)): string {
+		value: function (this: string, match: RegExp, replace: string | ((arg: string) => string)): string {
 			// let latestMatch: RegExpExecArray;
 			// do {
 			// 	latestMatch = match.exec()

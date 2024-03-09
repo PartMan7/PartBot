@@ -13,3 +13,4 @@ export const PSNoPrefixHelp: { [key: string]: Date } = {};
 export const PSAltCache: { [key: string]: { from: string, to: string, at: Date } } = {};
 export const PSSeenCache: { [key: string]: { at: Date, in: string[] } } = {};
 
+export const PSQuoteRoomPrefs: { [key: string]: { room: string, at: Date } } = {};

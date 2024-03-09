@@ -8,7 +8,7 @@ import type { PSCommand, PSCommandContext } from 'types/chat';
 import type { Perms } from 'types/perms';
 import ChatError from 'utils/chat-error';
 
-import { ACCESS_DENIED, CMD_NOT_FOUND, INVALID_ALIAS } from 'messages';
+import { ACCESS_DENIED, CMD_NOT_FOUND, INVALID_ALIAS, PM_ONLY_COMMAND, ROOM_ONLY_COMMAND } from 'messages';
 
 
 export function getPerms (args: string[], sourceCommand: PSCommand): Perms {
@@ -79,12 +79,16 @@ export default async function chatHandler (message: Message) {
 		const spacedArgs = argData.split(/( +)/);
 		const { command: commandObj, sourceCommand, commandSteps, context } = parseArgs(args, spacedArgs);
 		const requiredPerms = getPerms(commandSteps.slice(1), sourceCommand);
-		if (!checkPermissions(requiredPerms, message)) throw new ChatError(sourceCommand.flags?.conceal ? CMD_NOT_FOUND : ACCESS_DENIED);
+		const conceal = sourceCommand.flags?.conceal ? CMD_NOT_FOUND : null;
+		if (!checkPermissions(requiredPerms, message)) throw new ChatError(conceal ?? ACCESS_DENIED);
+		if (sourceCommand?.flags?.roomOnly && message.type !== 'chat') throw new ChatError(conceal ?? ROOM_ONLY_COMMAND);
+		if (sourceCommand?.flags?.pmOnly && message.type !== 'pm') throw new ChatError(conceal ?? PM_ONLY_COMMAND);
 		context.broadcast = function (msg, perm = 'voice') {
 			if (checkPermissions(perm, message)) return message.reply(msg);
 			else return message.privateReply(msg);
 		};
-		context.broadcastHTML = function (html, perm = 'voice', opts) {
+		context.broadcastHTML = function (html, opts = {}) {
+			const { perm = 'voice' } = opts;
 			if (message.type === 'pm') return message.replyHTML(html, opts);
 			if (checkPermissions(perm, message)) return message.sendHTML(html, opts);
 			else return message.target.privateHTML(message.author, html, opts);
@@ -98,11 +102,12 @@ export default async function chatHandler (message: Message) {
 			// TODO Clone message and assign from overrides
 			const newMessage = message;
 			Object.assign(context, ctx);
-			ctx.broadcast = function (msg: string, perm: Perms = 'voice') {
+			ctx.broadcast = function (msg, perm = 'voice') {
 				if (checkPermissions(perm, newMessage)) return newMessage.reply(msg);
 				else return newMessage.privateReply(msg);
 			};
-			ctx.broadcastHTML = function (html: string, perm: Perms = 'voice', opts: HTMLopts) {
+			ctx.broadcastHTML = function (html, opts = {}) {
+				const { perm = 'voice' } = opts;
 				if (newMessage.type === 'pm') return newMessage.replyHTML(html, opts);
 				if (checkPermissions(perm, newMessage)) return newMessage.sendHTML(html, opts);
 				else return newMessage.target.privateHTML(newMessage.author, html, opts);
@@ -120,12 +125,10 @@ export default async function chatHandler (message: Message) {
 			// TODO Clone message and assign from overrides
 			const newMessage = message;
 			Object.assign(context, ctx);
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars -- unsafeRun bypasses the perms check
-			ctx.broadcast = function (msg: string, perm: Perms = 'voice') {
+			ctx.broadcast = function (msg) {
 				return newMessage.reply(msg);
 			};
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars -- unsafeRun bypasses the perms check
-			ctx.broadcastHTML = function (html: string, perm: Perms = 'voice', opts: HTMLopts) {
+			ctx.broadcastHTML = function (html, opts) {
 				return newMessage.sendHTML(html, opts);
 			};
 			return command.run({ ...ctx, message: newMessage } as PSCommandContext);
