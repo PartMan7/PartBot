@@ -63,9 +63,12 @@ export default function transformProgram (
 function transformAst (context: TransformationContext) {
 	return (sourceFile: ts.SourceFile) => {
 		function visit (node: Node): Node {
-			if (ts.isFunctionDeclaration(node) && /^[A-Z]/.test(node.name.text)) {
+			if (
+				ts.isFunctionDeclaration(node) && /^[A-Z]/.test(node.name.text) ||
+				ts.isMethodDeclaration(node) && ts.isIdentifier(node.name) && /^[A-Z]/.test(node.name.text)
+			) {
 				return node; // Don't touch JSX inside a function with a capitalized name
-			} else if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node)) {
+			} else if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node) || ts.isJsxFragment(node)) {
 				// Wrap the topmost JSX with jsxToHTML
 				return context.factory.createCallExpression(
 					context.factory.createIdentifier('jsxToHTML'),
