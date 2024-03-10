@@ -11,6 +11,7 @@
     "ignoreDeprecations": "5.0", // Enable noImplicitUseStrict
     "plugins": [
       { "transform": "./src/typescript/jsx-to-html.ts", "transformProgram": true }, // Internally call jsxToHTML in ps
+      { "name": "partbot-language-service-plugin" } // Language Service Plugin for a better IDE experience
     ],
     "paths": {
       "config": ["config"],

@@ -8,7 +8,7 @@
     "lint:fix": "eslint src --ext .ts --fix",
     "start": "ts-node src/index.ts",
     "test": "npm run lint && tsc",
-    "prepare": "husky install && ts-patch install -s"
+    "prepare": "husky install && ts-patch install -s && cp -r src/typescript/language-service-plugin node_modules/partbot-language-service-plugin"
   },
   "keywords": [],
   "author": "PartMan7",
