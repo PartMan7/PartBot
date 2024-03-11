@@ -6,8 +6,12 @@ import { QUOTES } from 'messages';
 import { Username as UsernameCustom } from 'utils/components';
 import { Username as UsernamePS } from 'utils/components/ps';
 import { escapeRegEx } from 'utils/regex-escape';
+import { MAX_CHAT_HTML_LENGTH, MAX_PAGE_HTML_LENGTH } from 'ps/constants';
 
 import type { ReactElement, ReactNode } from 'react';
+import { jsxToHTML } from '../../utils/jsx-to-html';
+
+type QuoteCollection = [index: number, quote: string][];
 
 function Entry ({ name, children }) {
 	return <li><b>{name}</b>: {children}</li>;
@@ -20,6 +24,36 @@ const meRegEx = new RegExp(`^(\\[(?:\\d{2}:){1,2}\\d{2}] )?• ([${ranks}]?)(\\[
 const rawMeRegEx = new RegExp(`^((?:\\[(?:\\d{2}:){1,2}\\d{2}] )?• [${ranks}]?)([a-zA-Z0-9]\\S{0,25})( .*)$`);
 const jnlRegEx = /^(?:.*? (?:joined|left)(?:; )?){1,2}$/;
 const rawRegEx = /^(\[(?:\d{2}:){1,2}\d{2}] )?(.*)$/;
+
+
+async function getRoom (message: PSMessage): Promise<string> {
+	if (message.type === 'chat') return message.target.roomid;
+	const prefs = PSQuoteRoomPrefs[message.author.userid];
+	if (prefs && message.time - prefs.at.getTime() < Tools.fromHumanTime('1 hour')) return prefs.room;
+	message.reply(`Which room are you looking for a quote in?`);
+	const answer = await message.target.waitFor(msg => {
+		return msg.content.length > 0;
+	}).catch(() => {
+		throw new ChatError('Did not receive a room within a minute');
+	});
+	const _room = Tools.toId(answer.content);
+	PSQuoteRoomPrefs[message.author.userid] = { room: _room, at: new Date() };
+	return _room;
+}
+
+function parseQuote (quote: string): string {
+	const lines = quote.trim().split(/ {3}|\\n|\n/);
+	const foundNames = lines.map(line => line.match(chatRegEx)?.[3]).filter(Boolean).unique();
+	const reformatRegExes = foundNames.map(name => {
+		return new RegExp(`^((?:\\[(?:\\d{2}:){1,2}\\d{2}] )?• [${ranks}]?)(${escapeRegEx(name)})( .*)$`, 'i');
+	});
+	return lines.map(line => {
+		// Wrap unspecified /me syntax with a [] if the same username is found elsewhere
+		return reformatRegExes
+			.reduce((acc, regEx) => acc.replace(regEx, `$1[$2]$3`), line)
+			.replace(rawMeRegEx, '$1[$2]$3');
+	}).join('\n');
+}
 
 function FormatQuoteLine ({
 	line,
@@ -78,78 +112,75 @@ function FormatQuoteLine ({
 	return undefined;
 }
 
-const $ = {
-	ranks,
-	chatRegEx,
-	meRegEx,
-	rawMeRegEx,
-	jnlRegEx,
-	rawRegEx,
-	async getRoom (message: PSMessage): Promise<string> {
-		if (message.type === 'chat') return message.target.roomid;
-		const prefs = PSQuoteRoomPrefs[message.author.userid];
-		if (prefs && message.time - prefs.at.getTime() < Tools.fromHumanTime('1 hour')) return prefs.room;
-		message.reply(`Which room are you looking for a quote in?`);
-		const answer = await message.target.waitFor(msg => {
-			return msg.content.length > 0;
-		}).catch(() => {
-			throw new ChatError('Did not receive a room within a minute');
-		});
-		const _room = Tools.toId(answer.content);
-		PSQuoteRoomPrefs[message.author.userid] = { room: _room, at: new Date() };
-		return _room;
-	},
-	parseQuote (quote: string): string {
-		const lines = quote.trim().split(/ {3}|\\n|\n/);
-		const foundNames = lines.map(line => line.match($.chatRegEx)?.[3]).filter(Boolean).unique();
-		const reformatRegExes = foundNames.map(name => {
-			return new RegExp(`^((?:\\[(?:\\d{2}:){1,2}\\d{2}] )?• [${ranks}]?)(${escapeRegEx(name)})( .*)$`, 'i');
-		});
-		return lines.map(line => {
-			// Wrap unspecified /me syntax with a [] if the same username is found elsewhere
-			return reformatRegExes
-				.reduce((acc, regEx) => acc.replace(regEx, `$1[$2]$3`), line)
-				.replace(rawMeRegEx, '$1[$2]$3');
-		}).join('\n');
-	},
-	FormatQuote ({
-		quote,
-		psUsernameTag = true,
-		header,
-		children
-	}: {
+function FormatQuote ({
+	quote,
+	psUsernameTag = true,
+	header,
+	children
+}: {
 		quote: string;
 		psUsernameTag?: boolean;
 		header?: ReactNode;
 		children?: ReactElement[];
 	}): ReactElement {
-		const quoteLines = quote.split('\n');
-		return <>
-			{header}
-			{quoteLines.length > 5 ? <details className="readmore">
-				<summary>
-					{quoteLines.slice(0, 2).map(line => <FormatQuoteLine line={line} psUsernameTag={psUsernameTag} />)}
-					<FormatQuoteLine line={quoteLines[2]} psUsernameTag={psUsernameTag} style={{
-						padding: '3px 0',
-						display: 'inline-block'
-					}}/>
-				</summary>
-				{
-					quoteLines.slice(3).map(line => <FormatQuoteLine line={line} psUsernameTag={psUsernameTag} />)
-				}
-			</details> : quoteLines.map(line => <FormatQuoteLine line={line} psUsernameTag={psUsernameTag} />)}
-		</>;
-	},
-	FormatSmogQuote (quote: string): string {
-		return quote.split('\n').map(line => {
-			switch (true) {
-				case chatRegEx.test(line): {
-					//
-				}
+	const quoteLines = quote.split('\n');
+	return <>
+		{header}
+		{quoteLines.length > 5 ? <details className="readmore">
+			<summary>
+				{quoteLines.slice(0, 2).map(line => <FormatQuoteLine line={line} psUsernameTag={psUsernameTag} />)}
+				<FormatQuoteLine line={quoteLines[2]} psUsernameTag={psUsernameTag} style={{
+					padding: '3px 0',
+					display: 'inline-block'
+				}}/>
+			</summary>
+			{
+				quoteLines.slice(3).map(line => <FormatQuoteLine line={line} psUsernameTag={psUsernameTag} />)
 			}
-		}).join('\n');
+		</details> : quoteLines.map(line => <FormatQuoteLine line={line} psUsernameTag={psUsernameTag} />)}
+	</>;
+}
+
+function FormatSmogQuote (quote: string): string {
+	return quote.split('\n').map(line => {
+		switch (true) {
+			case chatRegEx.test(line): {
+				//
+			}
+		}
+	}).join('\n');
+}
+
+function MultiQuotes ({ list, paginate, buffer }: {
+	list: QuoteCollection;
+	paginate?: boolean;
+	buffer?: number;
+}): {
+	component: string;
+	remaining: QuoteCollection;
+} {
+	const quoteList = list.slice();
+	const cap = (paginate ? MAX_PAGE_HTML_LENGTH : MAX_CHAT_HTML_LENGTH) - buffer;
+
+	const renderedQuotes: QuoteCollection = [];
+	let component = '';
+
+	while (quoteList.length) {
+		const next = quoteList.shift();
+		const newComponent = jsxToHTML(<>
+			<hr/>
+			{[...renderedQuotes, next].map(([header, quote]) => <>
+				<FormatQuote quote={quote} header={`#${header}`} />
+				<hr/>
+			</>)}
+		</>);
+		if (newComponent.length > cap) break;
+		component = newComponent;
+		renderedQuotes.push(next);
 	}
-};
+	return { component, remaining: quoteList };
+}
+
 
 export const command: PSCommand = {
 	name: 'quotes',
@@ -212,12 +243,12 @@ export const command: PSCommand = {
 			help: 'Displays a random quote',
 			syntax: 'CMD',
 			async run ({ message, broadcast, broadcastHTML, room: _room }) {
-				const room: string = _room as string ?? await $.getRoom(message);
+				const room: string = _room as string ?? await getRoom(message);
 				const [index, randQuote] = Object.entries(await getAllQuotes(room)).random();
 				if (!randQuote) return broadcast(QUOTES.NO_QUOTES_FOUND);
 				broadcastHTML(<>
 					<hr/>
-					<$.FormatQuote quote={randQuote.quote} header={`#${~~index + 1}`} />
+					<FormatQuote quote={randQuote.quote} header={`#${~~index + 1}`} />
 					<hr/>
 				</>, { name: 'viewquote-partbot' });
 			}
@@ -234,12 +265,12 @@ export const command: PSCommand = {
 				roomOnly: true
 			},
 			async run ({ message, arg, broadcastHTML }) {
-				const parsedQuote = $.parseQuote(arg);
+				const parsedQuote = parseQuote(arg);
 				await addQuote(parsedQuote, message.target.id, message.author.name);
 				const { length } = await getAllQuotes(message.target.id);
 				broadcastHTML(<>
 					<hr/>
-					<$.FormatQuote quote={parsedQuote} header={`#${length}`} />
+					<FormatQuote quote={parsedQuote} header={`#${length}`} />
 					<hr/>
 				</>, { name: 'viewquote-partbot' });
 			}
@@ -254,11 +285,11 @@ export const command: PSCommand = {
 				roomOnly: true
 			},
 			async run ({ message, arg, broadcastHTML }) {
-				const parsedQuote = $.parseQuote(arg);
+				const parsedQuote = parseQuote(arg);
 				const { length } = await getAllQuotes(message.target.id);
 				broadcastHTML(<>
 					<hr/>
-					<$.FormatQuote quote={parsedQuote} header={`#${length} [preview]`} />
+					<FormatQuote quote={parsedQuote} header={`#${length} [preview]`} />
 					<hr/>
 				</>, { name: 'previewquote-partbot' });
 			}
