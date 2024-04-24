@@ -29,8 +29,7 @@ Commands may be either `.ts` or `.tsx` files - the `.tsx` extension is required 
 
 Please note that **JSX syntax that is not inside another JSX function/call will be converted to a string**. This is
 applicable to all `tsx` files inside the `ps` folder - so patterns like `message.replyHTML(<b>Access denied.</b>)` can
-be used. This is reflected in both `tsc` checks as well as the actual chatbot with `npm start`, but _not_ in most IDEs
-(like WebStorm or VS Code).
+be used. This is reflected in both `tsc` checks as well as the actual chatbot with `npm start`, but IDEs like WebStorm and Visual Studio Code have slight differencess due to needing a custom Language Service Plugin.
 
 
 ### Handlers
