@@ -30,7 +30,7 @@
     "dotenv": "^16.3.1",
     "mongoose": "^7.4.1",
     "nunjucks": "^3.2.4",
-    "ps-client": "^3.4.3",
+    "ps-client": "^3.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "ts-node": "^10.9.2",
