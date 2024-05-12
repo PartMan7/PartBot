@@ -2,6 +2,7 @@
 .idea
 
 .env
+.gitmodules
 
 /tsconfig.tsbuildinfo
 /logs/*logs.txt
