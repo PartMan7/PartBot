@@ -1,6 +1,6 @@
 # PartBot's Structure
 
-PartBot's layout can be broadly broken down into three 'core' modules and five 'helper' modules.
+PartBot's layout can be broadly broken down into three 'core' modules and six 'helper' modules.
 
 * PS
 * Discord
@@ -12,6 +12,7 @@ and
 * Globals
 * Cache
 * Database
+* Secrets
 * Sentinel
 
 ---
@@ -29,7 +30,8 @@ Commands may be either `.ts` or `.tsx` files - the `.tsx` extension is required 
 
 Please note that **JSX syntax that is not inside another JSX function/call will be converted to a string**. This is
 applicable to all `tsx` files inside the `ps` folder - so patterns like `message.replyHTML(<b>Access denied.</b>)` can
-be used. This is reflected in both `tsc` checks as well as the actual chatbot with `npm start`, but IDEs like WebStorm and Visual Studio Code have slight differencess due to needing a custom Language Service Plugin.
+be used. This is reflected in both `tsc` checks as well as the actual chatbot with `npm start`, but IDEs like WebStorm
+and Visual Studio Code have slight differencess due to needing a custom Language Service Plugin.
 
 
 ### Handlers
@@ -45,3 +47,11 @@ a `jsxToHTML` call.
 
 
 ---
+
+## SECRETS
+
+The secrets submodule is handled by either of two linked repositories as submodules - PartBot itself uses
+https://github.com/PartMan7/PartBot-secrets, but owing to the need to keep private information, public sources instead
+use a public mirror of the same without private information, on https://github.com/PartMan7/PartBot-spoof. If you plan
+on contributing to the secrets repository, please check [the docs](https://github.com/PartMan7/PartBot-spoof/blob/main/README.md)
+for information on how to set this up.

@@ -8,7 +8,7 @@ better practices than the steaming pile of bamboo sticks that currently supports
 This might take a while...
 
 * Cloning and Installing
-* Developing 
+* Developing
 * [Planned Features](https://github.com/PartMan7/PartBotter/labels/enhancement)
 * [Known Issues](https://github.com/PartMan7/PartBotter/labels/bug)
 * [Suggestions, Bug Reports, and Feedback](https://github.com/PartMan7/PartBotter/tree/main/docs/SUGGESTIONS.md)
