@@ -9,7 +9,7 @@ import { escapeRegEx } from 'utils/regex-escape';
 import { MAX_CHAT_HTML_LENGTH, MAX_PAGE_HTML_LENGTH } from 'ps/constants';
 
 import type { ReactElement, ReactNode } from 'react';
-import { jsxToHTML } from '../../utils/jsx-to-html';
+import { jsxToHTML } from 'utils/jsx-to-html';
 
 type QuoteCollection = [index: number, quote: string][];
 
