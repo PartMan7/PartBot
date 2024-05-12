@@ -15,11 +15,12 @@
     ],
     "paths": {
       "config": ["config"],
-      "types": ["types"],
-      "messages": ["messages"],
       "discord": ["discord"],
+      "messages": ["messages"],
       "ps": ["ps"],
+      "secrets/*": ["secrets/src/*"],
       "sentinel": ["sentinel"],
+      "types": ["types"],
       "utils": ["utils"],
       "web": ["web"]
     }

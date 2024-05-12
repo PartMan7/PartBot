@@ -1,5 +1,7 @@
 import type { PSCommand } from 'types/chat';
 
+import getSecretCommands from 'secrets/commands/ps';
+
 import cacheBuster from 'utils/cachebuster';
 import { PSAliases, PSCommands } from 'cache';
 import resetCache from 'cache/reset';
@@ -15,10 +17,9 @@ function addAlias (command: PSCommand, stack: string[], aliasAs: string[]) {
 
 export function loadCommands (): Promise<void> {
 	// Load command data
-	return fs.readdir(fsPath('ps', 'commands')).then(async commands => {
+	return fs.readdir(fsPath('ps', 'commands')).then(commands => [...commands, ...getSecretCommands()]).then(async commands => {
 		await Promise.all(
 			commands.map(async commandFileName => {
-				if (commandFileName.endsWith('.map')) return; // Ignore mapFiles
 				const requirePath = fsPath('ps', 'commands', commandFileName);
 
 				const { command }: { command: PSCommand | PSCommand[] } = await import(requirePath);
