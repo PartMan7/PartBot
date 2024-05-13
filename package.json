@@ -6,10 +6,8 @@
   "scripts": {
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
-    "postinstall": "npm run setup-env",
-    "prepare": "husky install && ts-patch install -s && cp -r src/typescript/language-service-plugin node_modules/partbot-language-service-plugin",
+    "prepare": "./scripts/setup.sh",
     "start": "ts-node src/index.ts",
-    "setup-env": "test -f .env || cp .env.example .env; test -f .gitmodules || cp .gitmodules.example .gitmodules",
     "test": "npm run lint && tsc"
   },
   "keywords": [],
