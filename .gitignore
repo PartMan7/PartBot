@@ -1,7 +1,9 @@
-/node_modules
-.idea
+node_modules
+
+src/secrets
 
 .env
 
-/tsconfig.tsbuildinfo
-/logs/*logs.txt
+.idea
+tsconfig.tsbuildinfo
+logs/*logs.txt

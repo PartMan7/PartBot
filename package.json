@@ -6,9 +6,9 @@
   "scripts": {
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
+    "prepare": "sh ./scripts/setup.sh",
     "start": "ts-node src/index.ts",
-    "test": "npm run lint && tsc",
-    "prepare": "husky install && ts-patch install -s && cp -r src/typescript/language-service-plugin node_modules/partbot-language-service-plugin"
+    "test": "npm run lint && tsc"
   },
   "keywords": [],
   "author": "PartMan7",
@@ -30,7 +30,7 @@
     "dotenv": "^16.3.1",
     "mongoose": "^7.4.1",
     "nunjucks": "^3.2.4",
-    "ps-client": "^3.5.2",
+    "ps-client": "^3.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "ts-node": "^10.9.2",
