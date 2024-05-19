@@ -1,3 +1,0 @@
-[submodule "src/secrets"]
-	path = src/secrets
-	url = https://github.com/PartMan7/PartBot-spoof.git
