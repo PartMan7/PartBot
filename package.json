@@ -9,7 +9,8 @@
     "notify-unpushed": "sh ./scripts/notify-unpushed.sh",
     "prepare": "sh ./scripts/setup.sh",
     "start": "ts-node src/index.ts",
-    "test": "npm run lint && tsc"
+    "test": "npm run lint && npm run tsc",
+    "tsc": "tsc"
   },
   "keywords": [],
   "author": "PartMan7",
