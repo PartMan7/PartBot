@@ -14,21 +14,12 @@
       { "name": "partbot-language-service-plugin" } // Language Service Plugin for a better IDE experience
     ],
     "paths": {
-      "config": ["config"],
-      "discord": ["discord"],
-      "messages": ["messages"],
-      "ps": ["ps"],
-      "secrets/*": ["secrets/src/*"],
-      "sentinel": ["sentinel"],
-      "types": ["types"],
-      "utils": ["utils"],
-      "web": ["web"]
+      "@/*": ["./*"]
     }
   },
   "include": ["src/globals/*.d.ts", "src/**/*"], // Import global types before the rest of the code
   "exclude": ["node_modules"],
   "ts-node": {
-    "require": ["tsconfig-paths/register"], // For path aliases
     "esm": true, // Enable *.ts files in ts-node
     "files": true // Load all files (including for global definitions)
   }
