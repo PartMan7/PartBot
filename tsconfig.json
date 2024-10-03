@@ -14,6 +14,7 @@
       { "name": "partbot-language-service-plugin" } // Language Service Plugin for a better IDE experience
     ],
     "paths": {
+      "@/secrets/*": ["./secrets/src/*"],
       "@/*": ["./*"]
     }
   },
