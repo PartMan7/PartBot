@@ -1,4 +1,4 @@
-import { fetchAllAlts } from 'database/alts';
+import { fetchAllAlts } from '@/database/alts';
 import { PSAltCache } from 'cache';
 
 export async function loadAlts (): Promise<void> {

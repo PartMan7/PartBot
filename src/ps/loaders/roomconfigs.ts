@@ -1,5 +1,5 @@
-import { fetchRoomConfigs } from 'database/psrooms';
-import { PSRoomConfigs as RoomConfigCache } from 'cache';
+import { fetchRoomConfigs } from '@/database/psrooms';
+import { PSRoomConfigs as RoomConfigCache } from '@/cache';
 
 export async function loadRoomConfigs (): Promise<void> {
 	const fetched = await fetchRoomConfigs();

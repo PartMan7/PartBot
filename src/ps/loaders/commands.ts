@@ -1,10 +1,10 @@
-import type { PSCommand } from 'types/chat';
+import type { PSCommand } from '@/types/chat';
 
-import getSecretCommands from 'secrets/commands/ps';
+import getSecretCommands from '@/secrets/commands/ps';
 
-import cacheBuster from 'utils/cachebuster';
-import { PSAliases, PSCommands } from 'cache';
-import resetCache from 'cache/reset';
+import cacheBuster from '@/utils/cachebuster';
+import { PSAliases, PSCommands } from '@/cache';
+import resetCache from '@/cache/reset';
 
 // Generate aliases
 function addAlias (command: PSCommand, stack: string[], aliasAs: string[]) {

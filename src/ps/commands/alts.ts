@@ -1,4 +1,4 @@
-import { getAlts } from 'database/alts';
+import { getAlts } from '@/database/alts';
 
 export const command: PSCommand = {
 	name: 'alts',

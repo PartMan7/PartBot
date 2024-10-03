@@ -1,4 +1,4 @@
-import type { Perms } from 'types/perms';
+import type { Perms } from '@/types/perms';
 
 export default Object.fromEntries(Object.entries({
 	'games.create': 'voice'

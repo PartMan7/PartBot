@@ -1,6 +1,6 @@
-import { rename } from 'database/alts';
-import { seeUser } from 'database/seens';
-import { PSAltCache, PSSeenCache } from 'cache';
+import { rename } from '@/database/alts';
+import { seeUser } from '@/database/seens';
+import { PSAltCache, PSSeenCache } from '@/cache';
 
 export function joinHandler (room: string, user: string, isIntro: boolean): void {
 	if (isIntro) return;

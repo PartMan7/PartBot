@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { Perms } from 'types/perms';
+import type { Perms } from '@/types/perms';
 import type { Message as PSMessage } from 'ps-client';
 import { HTMLopts } from 'ps-client/classes/common';
 import type { Message as DiscMessage } from 'discord.js';

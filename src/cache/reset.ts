@@ -1,4 +1,4 @@
-import * as cache from 'cache';
+import * as cache from '@/cache';
 
 type CacheKeys = (keyof typeof cache)[];
 

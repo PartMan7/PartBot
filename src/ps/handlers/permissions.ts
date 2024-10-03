@@ -1,7 +1,7 @@
-import { Perms } from 'types/perms';
-import customPerms from 'ps/handlers/custom-perms';
+import { Perms } from '@/types/perms';
+import customPerms from '@/ps/handlers/custom-perms';
 
-import { admins } from 'config/ps';
+import { admins } from '@/config/ps';
 
 const knownRankMappings: Record<string, Perms & string> = {
 	'‽': 'locked',

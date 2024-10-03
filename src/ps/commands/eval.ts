@@ -1,5 +1,5 @@
-import { evaluate } from 'utils/eval';
-import * as cache from 'cache';
+import { evaluate } from '@/utils/eval';
+import * as cache from '@/cache';
 
 export const command: PSCommand = {
 	name: 'eval',
