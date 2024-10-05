@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
-    "prepare": "sh ./scripts/setup.sh",
+    "notify-unpushed": "./scripts/notify-unpushed.sh src/secrets",
+    "prepare": "./scripts/setup.sh",
     "start": "ts-node src/index.ts",
     "test": "npm run lint && tsc"
   },
