@@ -2,3 +2,4 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npm test
+FAIL_ON_PENDING=true npm run notify-unpushed -- src/secrets
