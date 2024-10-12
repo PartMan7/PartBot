@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import * as util from 'util';
+import { inspect } from 'util';
 
 function dimText (str: string): string {
 	return `\x1b[2m${str}\x1b[22m`;
@@ -11,7 +11,7 @@ const errLogStream = fsSync.createWriteStream(fsPath('..', 'logs', 'err-logs.txt
 export function log (...args): void {
 	const timestamp = `[${new Date().toISOString()}]`;
 	args.forEach(arg => {
-		const logStr = util.inspect(arg, { depth: 3 });
+		const logStr = inspect(arg, { depth: 3 });
 		logStream.write(`${timestamp} ${logStr}\n`);
 	});
 	console.log(dimText(timestamp), ...args);
@@ -20,7 +20,7 @@ export function log (...args): void {
 export function deepLog (...args): void {
 	const timestamp = `[${new Date().toISOString()}]`;
 	args.forEach(arg => {
-		const logStr = util.inspect(arg, { depth: null });
+		const logStr = inspect(arg, { depth: null });
 		logStream.write(`${timestamp} ${logStr}\n`);
 	});
 	console.log(dimText(timestamp));

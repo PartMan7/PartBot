@@ -17,7 +17,7 @@ import EventEmitter from 'events';
 // });
 // ipc.server.start();
 
-import { reloadCommands } from 'ps/loaders/commands';
+import { reloadCommands } from '@/ps/loaders/commands';
 
 export default function createSentinel () {
 	const eyesOn: string[] = [];

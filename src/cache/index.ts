@@ -1,6 +1,6 @@
-import type { PSCommand } from 'types/chat';
-import type { PSRoomConfig } from 'types/ps';
-import type { Timer } from 'utils/timer';
+import type { PSCommand } from '@/types/chat';
+import type { PSRoomConfig } from '@/types/ps';
+import type { Timer } from '@/utils/timer';
 
 // Global cache
 export const Timers: { [key: string]: Timer } = {};

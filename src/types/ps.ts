@@ -1,4 +1,4 @@
-import { Perms } from 'types/perms';
+import { Perms } from '@/types/perms';
 type AuthKey = Perms & string;
 
 export type PSRoomConfig = {
