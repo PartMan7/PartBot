@@ -1,0 +1,12 @@
+server {
+	listen 80;
+	server_name cdn.partman.dev;
+	root {{PWD}}/src/web/cdn
+	index index.html
+
+	location /partbotter {
+		try_files $uri $uri.html =404
+	}
+
+	try_files $uri =404
+}

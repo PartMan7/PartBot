@@ -4,6 +4,7 @@
   "description": "A chatbot for Pokémon Showdown",
   "main": "src/index.js",
   "scripts": {
+    "build-configs": "sh ./scripts/build_nginx_confs.sh",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "notify-unpushed": "sh ./scripts/notify-unpushed.sh",
