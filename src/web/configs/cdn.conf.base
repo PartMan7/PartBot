@@ -5,8 +5,8 @@ server {
 	index /index.html;
 	error_page 404 /not_found.html;
 
-	location /partbotter$ {
-		try_files /index.html;
+	location = /partbotter {
+		try_files /index.html =404;
 	}
 
 	location /partbotter/ {
