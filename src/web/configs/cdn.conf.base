@@ -2,11 +2,15 @@ server {
 	listen 80;
 	server_name cdn.partman.dev;
 	root {{PWD}}/src/web/cdn;
-	index index.html;
-	error_page 404 not_found.html
+	index /index.html;
+	error_page 404 /not_found.html;
 
-	location /partbotter {
-		rewrite ^/partbotter(.*)$ $1 last;
+	location /partbotter$ {
+		try_files /index.html;
+	}
+
+	location /partbotter/ {
+		rewrite ^/partbotter/(.*)$ /$1 break;
 		try_files $uri $uri.html =404;
 	}
 
