@@ -5,6 +5,10 @@ server {
 	index /index.html;
 	error_page 404 /not_found.html;
 
+	location ~* \.txt {
+		add_header Content-Type "charset=utf-8";
+	}
+
 	location = /partbotter {
 		try_files /index.html =404;
 	}
