@@ -4,8 +4,7 @@ server {
 	root {{PWD}}/src/web/cdn;
 	index /index.html;
 	error_page 404 /not_found.html;
-
-	add_header Content-Type "charset=utf-8";
+	charset utf-8;
 
 	location = /partbotter {
 		try_files /index.html =404;
