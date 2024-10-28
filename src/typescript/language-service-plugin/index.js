@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires -- This is for the LSP and uses CJS
 const path = require('path');
 
 const TYPE_ERROR_MESSAGE = "Argument of type 'Element' is not assignable to parameter of type 'string'.";
