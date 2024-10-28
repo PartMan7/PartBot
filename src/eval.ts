@@ -1,9 +1,11 @@
 import ANSIConverter from 'ansi-to-html';
 import { inspect } from 'util';
 
-import * as cache from '@/cache';
+import * as _cache from '@/cache';
 import { Message as PSMessage } from 'ps-client';
 import { PSCommandContext } from '@/types/chat';
+
+const cache = _cache; // Exporting into side variable for eval lookup
 
 const convertANSI = ANSIConverter ? new ANSIConverter() : null;
 
