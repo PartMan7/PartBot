@@ -7,8 +7,8 @@ function dimText(str: string): string {
 	return `\x1b[2m${str}\x1b[22m`;
 }
 
-const logStream = fsSync.createWriteStream(fsPath('..', 'logs', 'logs.txt'));
-const errLogStream = fsSync.createWriteStream(fsPath('..', 'logs', 'err-logs.txt'));
+const logStream = fsSync.createWriteStream(fsPath('..', 'logs', 'logs.txt'), { flags: 'a' });
+const errLogStream = fsSync.createWriteStream(fsPath('..', 'logs', 'err-logs.txt'), { flags: 'a' });
 
 export function log(...args): void {
 	const timestamp = `[${new Date().toISOString()}]`;
