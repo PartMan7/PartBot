@@ -1,46 +1,28 @@
 import chokidar from 'chokidar';
-
 import EventEmitter from 'events';
-
-// const IPC_ID = process.env.IPC_ID || 'partbot_sentinel';
-// ipc.config.id = IPC_ID;
-// ipc.config.retry = 1500;
-
-// log('Hit 0');
-// ipc.serve(() => {
-// 	log('Hit 1');
-// 	ipc.server.on('message', data => {
-// 		log('Hit 2');
-// 		log(data, eyesOn);
-// 		eyesOn.forEach(file => listeners.find(({ pattern }) => pattern.test(file))?.reload(file));
-// 	});
-// });
-// ipc.server.start();
+import { debounce } from '@/utils/debounce';
 
 import { reloadCommands } from '@/ps/loaders/commands';
 
+type Listener = { pattern: RegExp; reload: (filepath: string) => void };
+
 export default function createSentinel() {
-	const eyesOn: string[] = [];
-	const listeners: { pattern: RegExp; reload: (filepath) => Promise<void> }[] = [
+	const listeners: Listener[] = [
 		{
 			pattern: /ps\/commands\//,
-			reload: async filepath => {
-				log('Reloading commands...', filepath);
+			reload: async () => {
+				log('Reloading commands...');
 				await reloadCommands();
 				log('Reloaded commands');
 			},
+			debounce: 1000,
 		},
-	];
+	].map(listener => ({ pattern: listener.pattern, reload: debounce(listener.reload, listener.debounce) }));
 
 	const emitter = new EventEmitter();
 	const sentinel = chokidar.watch(fsPath('..', 'src'), { ignoreInitial: true });
 	sentinel.on('all', async (event, filepath) => {
-		log(event, filepath);
-		eyesOn.push(filepath);
-		// listeners.find(({ pattern }) => pattern.test(filepath))?.reload(filepath);
-	});
-	emitter.on('code-compile', () => {
-		eyesOn.forEach(file => listeners.find(({ pattern }) => pattern.test(file))?.reload(file));
+		listeners.find(({ pattern }) => pattern.test(filepath))?.reload(filepath);
 	});
 	return { emitter, sentinel };
 }

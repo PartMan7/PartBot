@@ -5,7 +5,7 @@ import * as cache from '@/cache';
 import { Message as PSMessage } from 'ps-client';
 import { PSCommandContext } from '@/types/chat';
 
-export const convertANSI = ANSIConverter ? new ANSIConverter() : null;
+const convertANSI = ANSIConverter ? new ANSIConverter() : null;
 
 export type EvalModes = 'COLOR_OUTPUT' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
 export type EvalOutput = {
