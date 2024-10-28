@@ -65,7 +65,7 @@ export type PSCommandContext = {
 	 */
 	broadcastHTML(html: string, opts?: HTMLopts & { perm?: Perms }): void;
 	[key: string]: unknown;
-}
+};
 
 export type PSCommand = {
 	/**
@@ -134,7 +134,7 @@ export type PSCommand = {
 	 * @param context Relevant context for the command
 	 */
 	run(context: PSCommandContext): Promise<any>;
-}
+};
 
 // Will need to update this to work with slash commands
 export type DiscCommand = {
@@ -145,4 +145,4 @@ export type DiscCommand = {
 	channels?: string[];
 	children?: { [key: string]: DiscCommand };
 	run(message: DiscMessage, context: { [key: string]: unknown }): Promise<void>;
-}
+};

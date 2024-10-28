@@ -2,17 +2,17 @@ import { sample, useRNG, RNGSource } from 'utils/random';
 
 declare global {
 	interface Array<T> {
-		random (rng?: RNGSource): T;
-		sample (amount: number, rng?: RNGSource): T[];
-		remove (...toRemove: T[]): T[];
-		shuffle (rng?: RNGSource): T[];
-		filterMap<X> (cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
-		unique (): T[];
+		random(rng?: RNGSource): T;
+		sample(amount: number, rng?: RNGSource): T[];
+		remove(...toRemove: T[]): T[];
+		shuffle(rng?: RNGSource): T[];
+		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
+		unique(): T[];
 	}
 
 	interface String {
-		lazySplit (match: string | RegExp, cases: number): string[];
-		gsub (match: RegExp, replace: string | ((arg: string, ...captures: string[]) => string)): string;
+		lazySplit(match: string | RegExp, cases: number): string[];
+		gsub(match: RegExp, replace: string | ((arg: string, ...captures: string[]) => string)): string;
 	}
 }
 
@@ -21,42 +21,46 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function<X, T = unknown> (this: T[], callback: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined {
+		value: function <X, T = unknown>(
+			this: T[],
+			callback: (element: T, index: number, thisArray: T[]) => X | undefined
+		): X | undefined {
 			for (let i = 0; i < this.length; i++) {
 				const result = callback(this[i], i, this);
 				if (result === undefined) continue;
 				return result;
 			}
-		}
+		},
 	},
 	remove: {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function <T = unknown> (this: T[], ...terms: T[]): boolean {
+		value: function <T = unknown>(this: T[], ...terms: T[]): boolean {
 			let out = true;
 			terms.forEach(term => {
 				if (this.indexOf(term) >= 0) this.splice(this.indexOf(term), 1);
 				else out = false;
 			});
 			return out;
-		}
+		},
 	},
 	random: {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function <T = unknown> (this: T[], rng?: RNGSource): T {
+		value: function <T = unknown>(this: T[], rng?: RNGSource): T {
 			return this[sample(this.length, useRNG(rng))];
-		}
+		},
 	},
 	sample: {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function T<T = unknown> (this: T[], amount: number, rng?: RNGSource): T[] {
+		value: function T<T = unknown>(this: T[], amount: number, rng?: RNGSource): T[] {
 			const RNG = useRNG(rng);
-			const sample = Array.from(this), out: T[] = [];
+			const sample = Array.from(this),
+				out: T[] = [];
 			let i = 0;
 			while (sample.length && i++ < amount) {
 				const term = sample[Math.floor(RNG() * sample.length)];
@@ -64,26 +68,26 @@ Object.defineProperties(Array.prototype, {
 				sample.remove(term);
 			}
 			return out;
-		}
+		},
 	},
 	shuffle: {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function <T = unknown> (this: T[], rng?: RNGSource): T[] {
+		value: function <T = unknown>(this: T[], rng?: RNGSource): T[] {
 			const RNG = useRNG(rng);
 			for (let i = this.length - 1; i > 0; i--) {
 				const j = Math.floor(RNG() * (i + 1));
 				[this[i], this[j]] = [this[j], this[i]];
 			}
 			return Array.from(this);
-		}
+		},
 	},
 	unique: {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function <T = unknown> (this: T[]): T[] {
+		value: function <T = unknown>(this: T[]): T[] {
 			const output = [];
 			const cache = new Set();
 			for (let i = 0; i < this.length; i++) {
@@ -93,8 +97,8 @@ Object.defineProperties(Array.prototype, {
 				}
 			}
 			return output;
-		}
-	}
+		},
+	},
 });
 
 Object.defineProperties(String.prototype, {
@@ -124,7 +128,7 @@ Object.defineProperties(String.prototype, {
 			}
 			out.push(input);
 			return out;
-		}
+		},
 	},
 	gsub: {
 		enumerable: false,
@@ -137,6 +141,6 @@ Object.defineProperties(String.prototype, {
 			// } while (latestMatch);
 			// TODO
 			return 'FIXME';
-		}
+		},
 	},
 });

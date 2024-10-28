@@ -10,8 +10,7 @@ import ChatError from '@/utils/chat-error';
 
 import { ACCESS_DENIED, CMD_NOT_FOUND, INVALID_ALIAS, PM_ONLY_COMMAND, ROOM_ONLY_COMMAND } from '@/text';
 
-
-export function getPerms (args: string[], sourceCommand: PSCommand): Perms {
+export function getPerms(args: string[], sourceCommand: PSCommand): Perms {
 	for (let i = args.length; i >= 0; i--) {
 		const subCommand = args.slice(0, i).reduce((cmd, arg) => cmd.children![arg], sourceCommand);
 		if (subCommand.perms) return subCommand.perms;
@@ -19,7 +18,10 @@ export function getPerms (args: string[], sourceCommand: PSCommand): Perms {
 	return 'regular';
 }
 
-export function parseArgs (aliasArgs: string[], spaceCapturedArgs: string[]): {
+export function parseArgs(
+	aliasArgs: string[],
+	spaceCapturedArgs: string[]
+): {
 	command: PSCommand;
 	sourceCommand: PSCommand;
 	commandSteps: string[];
@@ -50,7 +52,7 @@ export function parseArgs (aliasArgs: string[], spaceCapturedArgs: string[]): {
 		run: undefined,
 		unsafeRun: undefined,
 		broadcast: undefined,
-		broadcastHTML: undefined
+		broadcastHTML: undefined,
 	};
 	const sourceCommand = PSCommands[command.shift()];
 	spaceCapturedArgs.splice(0, 2);
@@ -69,7 +71,7 @@ export function parseArgs (aliasArgs: string[], spaceCapturedArgs: string[]): {
 	return { command: commandObj, sourceCommand, commandSteps, context };
 }
 
-export default async function chatHandler (message: Message) {
+export default async function chatHandler(message: Message) {
 	if (message.isIntro || !message.author.userid || !message.target) return;
 	if (message.author.userid === message.parent.status.userid) return; // Botception!
 	if (!message.content.startsWith(prefix)) return;
@@ -113,7 +115,8 @@ export default async function chatHandler (message: Message) {
 				else return newMessage.target.privateHTML(newMessage.author, html, opts);
 			};
 			const requiredPerms = getPerms(commandSteps.slice(1), sourceCommand);
-			if (!checkPermissions(requiredPerms, newMessage)) throw new ChatError(sourceCommand.flags?.conceal ? CMD_NOT_FOUND : ACCESS_DENIED);
+			if (!checkPermissions(requiredPerms, newMessage))
+				throw new ChatError(sourceCommand.flags?.conceal ? CMD_NOT_FOUND : ACCESS_DENIED);
 			return command.run({ ...ctx, message: newMessage } as PSCommandContext);
 		};
 		context.unsafeRun = function (altCommand: string, ctx: Partial<PSCommandContext> = {}) {

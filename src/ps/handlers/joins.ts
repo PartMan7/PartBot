@@ -2,16 +2,18 @@ import { rename } from '@/database/alts';
 import { seeUser } from '@/database/seens';
 import { PSAltCache, PSSeenCache } from '@/cache';
 
-export function joinHandler (room: string, user: string, isIntro: boolean): void {
+export function joinHandler(room: string, user: string, isIntro: boolean): void {
 	if (isIntro) return;
 	// Joinphrases
 	// 'Stalking'
 	// (Kinda creepy name for the feature, but it CAN be used in creepy ways so make sure it's regulated!)
 }
 
-export function nickHandler (room: string, newName: string, oldName: string, isIntro: boolean): void {
+export function nickHandler(room: string, newName: string, oldName: string, isIntro: boolean): void {
 	if (isIntro) return;
-	const from = Tools.toId(oldName), to = Tools.toId(newName), id = `${from}-${to}`;
+	const from = Tools.toId(oldName),
+		to = Tools.toId(newName),
+		id = `${from}-${to}`;
 	if (from === to) return;
 	// Throttling cache updates at once per 5s per rename (A-B)
 	if (Date.now() - PSAltCache[id]?.at.getTime() < Tools.fromHumanTime('5 seconds')) return;
@@ -19,7 +21,7 @@ export function nickHandler (room: string, newName: string, oldName: string, isI
 	rename(oldName, newName);
 }
 
-export function leaveHandler (room: string, user: string, isIntro: boolean): void {
+export function leaveHandler(room: string, user: string, isIntro: boolean): void {
 	if (isIntro) return;
 	const userId = Tools.toId(user);
 	// Throttling cache updates at once per 5s per leave

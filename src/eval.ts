@@ -9,25 +9,32 @@ export type EvalOutput = {
 	output: string;
 };
 
-
-export function formatValue (value: unknown, mode: EvalModes): string {
+export function formatValue(value: unknown, mode: EvalModes): string {
 	switch (mode) {
-		case 'COLOR_OUTPUT': case 'FULL_OUTPUT': {
+		case 'COLOR_OUTPUT':
+		case 'FULL_OUTPUT': {
 			const color = mode === 'COLOR_OUTPUT' && !!ANSIConverter; // Cannot color without ANSIConverter
 			// TODO Stringify functions and render with syntax highlighting
 			const inspection = inspect(value, { depth: 2, colors: color, numericSeparator: true });
 			return color
-				? convertANSI.toHtml(inspection)
-					.replace(/\t/g, '&nbsp;'.repeat(4)) // Fill out tabs
-					.replace(/ (?= |$)/g, '&nbsp;') // Fill out multi-spaces
-					.replace(/\n/g, '<br/>') // Fill out newlines
+				? convertANSI
+						.toHtml(inspection)
+						.replace(/\t/g, '&nbsp;'.repeat(4)) // Fill out tabs
+						.replace(/ (?= |$)/g, '&nbsp;') // Fill out multi-spaces
+						.replace(/\n/g, '<br/>') // Fill out newlines
 				: inspection;
 		}
 		case 'ABBR_OUTPUT': {
 			if (value instanceof Error) return value.message;
 			switch (typeof value) {
-				case 'string': return value;
-				case 'number': case 'bigint': case 'boolean': case 'symbol': case 'undefined': return value.toString();
+				case 'string':
+					return value;
+				case 'number':
+				case 'bigint':
+				case 'boolean':
+				case 'symbol':
+				case 'undefined':
+					return value.toString();
 				case 'function': {
 					const funcStr = value.toString();
 					const isAsync = funcStr.startsWith('async');
@@ -60,7 +67,7 @@ export function formatValue (value: unknown, mode: EvalModes): string {
 	}
 }
 
-export async function evaluate (code: string, mode: EvalModes, context: Record<string, unknown> = {}): Promise<EvalOutput> {
+export async function evaluate(code: string, mode: EvalModes, context: Record<string, unknown> = {}): Promise<EvalOutput> {
 	let success: boolean, value: unknown;
 	try {
 		const res = await (() => {
@@ -77,6 +84,6 @@ export async function evaluate (code: string, mode: EvalModes, context: Record<s
 	}
 	return {
 		success: success,
-		output: formatValue(value!, mode)
+		output: formatValue(value!, mode),
 	};
 }

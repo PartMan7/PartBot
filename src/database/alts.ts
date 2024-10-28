@@ -4,21 +4,21 @@ const schema = new mongoose.Schema({
 	id: {
 		type: String,
 		required: true,
-		unique: true
+		unique: true,
 	},
 	from: {
 		type: String,
-		required: true
+		required: true,
 	},
 	to: {
 		type: String,
-		required: true
+		required: true,
 	},
 	at: {
 		type: Date,
 		required: true,
-		default: Date.now
-	}
+		default: Date.now,
+	},
 });
 
 schema.index({ id: 1 });
@@ -32,21 +32,25 @@ const model = mongoose.model('alt', schema, 'alts');
 
 const DEFAULT_ALTS_CAP = 50;
 
-export async function rename (from: string, to: string): Promise<Model> {
-	const fromId = Tools.toId(from), toId = Tools.toId(to), id = `${fromId}-${toId}`;
+export async function rename(from: string, to: string): Promise<Model> {
+	const fromId = Tools.toId(from),
+		toId = Tools.toId(to),
+		id = `${fromId}-${toId}`;
 	if (fromId === toId) return;
 	const entry = { id, from: fromId, to: toId, at: Date.now() };
 	return model.findOneAndUpdate({ id }, entry, { upsert: true, new: true });
 }
 
-export async function getAlts (user: string, limit: number = DEFAULT_ALTS_CAP): Promise<string[]> {
+export async function getAlts(user: string, limit: number = DEFAULT_ALTS_CAP): Promise<string[]> {
 	const userId = Tools.toId(user);
 	const altsList = await model.find({ $or: [{ from: userId }, { to: userId }] }, null, limit ? { limit } : {});
-	return altsList.map(doc => {
-		return doc.from === userId ? doc.to : doc.from;
-	}).unique();
+	return altsList
+		.map(doc => {
+			return doc.from === userId ? doc.to : doc.from;
+		})
+		.unique();
 }
 
-export async function fetchAllAlts (): Promise<Model[]> {
+export async function fetchAllAlts(): Promise<Model[]> {
 	return model.find({}).lean();
 }

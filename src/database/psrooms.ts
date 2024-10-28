@@ -5,17 +5,17 @@ const schema = new mongoose.Schema({
 	roomId: {
 		type: String,
 		required: true,
-		unique: true
+		unique: true,
 	},
 	roomName: {
 		type: String,
-		required: true
+		required: true,
 	},
 	auth: Object,
 	tour: {
 		timer: {
-			type: [Boolean, [Number]]
-		}
+			type: [Boolean, [Number]],
+		},
 	},
 	whitelist: [String],
 	blacklist: [String],
@@ -24,41 +24,43 @@ const schema = new mongoose.Schema({
 	ignore: Boolean,
 	permissions: Object,
 	points: {
-		types: [{
-			name: String,
-			plur: String,
-			symbol: {
-				value: String,
-				ascii: String
-			}
-		}],
+		types: [
+			{
+				name: String,
+				plur: String,
+				symbol: {
+					value: String,
+					ascii: String,
+				},
+			},
+		],
 		render: {
 			template: String,
-			override: [String]
+			override: [String],
 		},
-		roomId: String
+		roomId: String,
 	},
-	_assign: Object
+	_assign: Object,
 });
 
 schema.index({ roomId: 1 });
 const model = mongoose.model('psroom', schema, 'psrooms');
 
-export function parseRoomConfig (config: UnparsedPSRoomConfig): PSRoomConfig {
+export function parseRoomConfig(config: UnparsedPSRoomConfig): PSRoomConfig {
 	const newConfig: UnparsedPSRoomConfig = config;
 	return {
 		...newConfig,
 		whitelist: newConfig.whitelist.map(str => new RegExp(str)),
-		blacklist: newConfig.whitelist.map(str => new RegExp(str))
+		blacklist: newConfig.whitelist.map(str => new RegExp(str)),
 	};
 }
 
-export async function getRoomConfig (roomId: string): Promise<PSRoomConfig> {
+export async function getRoomConfig(roomId: string): Promise<PSRoomConfig> {
 	const res: UnparsedPSRoomConfig = await model.findOne({ roomId }).lean();
 	return parseRoomConfig(res);
 }
 
-export async function fetchRoomConfigs (): Promise<PSRoomConfig[]> {
+export async function fetchRoomConfigs(): Promise<PSRoomConfig[]> {
 	const res: UnparsedPSRoomConfig[] = await model.find({}).lean();
 	return res.map(parseRoomConfig);
 }

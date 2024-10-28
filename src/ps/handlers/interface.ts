@@ -3,7 +3,7 @@ import type { Message } from 'ps-client';
 import { owner, prefix, username } from '@/config/ps';
 import { PSNoPrefixHelp } from '@/cache';
 
-export default function interfaceHandler (message: Message) {
+export default function interfaceHandler(message: Message) {
 	// Ignore & messages
 	if (message.isIntro || !message.author.userid || !message.target) return;
 	if (message.author.userid === message.parent.status.userid) return;

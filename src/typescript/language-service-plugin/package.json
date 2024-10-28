@@ -1,8 +1,8 @@
 {
-  "name": "partbot-language-service-plugin",
-  "version": "1.0.0",
-  "author": "PartMan7",
-  "main": "index.js",
-  "keywords": [],
-  "license": "ISC"
+	"name": "partbot-language-service-plugin",
+	"version": "1.0.0",
+	"author": "PartMan7",
+	"main": "index.js",
+	"keywords": [],
+	"license": "ISC"
 }

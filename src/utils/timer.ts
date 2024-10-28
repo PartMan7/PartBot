@@ -6,7 +6,7 @@ export class Timer {
 	_node: NodeJS.Timeout;
 	_callback: () => void;
 
-	constructor (callback: () => void, time: number, comment?: string) {
+	constructor(callback: () => void, time: number, comment?: string) {
 		this._node = setTimeout(callback, time);
 		this.startTime = Date.now();
 		this.endTime = this.startTime + time;
@@ -14,10 +14,10 @@ export class Timer {
 
 		this._callback = callback;
 	}
-	cancel () {
+	cancel() {
 		clearTimeout(this._node);
 	}
-	execute () {
+	execute() {
 		this._callback();
 		this.cancel();
 	}

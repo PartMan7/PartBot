@@ -3,35 +3,38 @@ import mongoose from 'mongoose';
 const schema = new mongoose.Schema({
 	quote: {
 		type: String,
-		required: true
+		required: true,
 	},
 	rawText: {
 		type: String,
 		required: true,
 		default: function () {
-			return (this.quote as string).toLowerCase().replace(/[^a-zA-Z0-9]+/g, ' ').trim();
-		}
+			return (this.quote as string)
+				.toLowerCase()
+				.replace(/[^a-zA-Z0-9]+/g, ' ')
+				.trim();
+		},
 	},
 	room: {
 		type: String,
-		required: true
+		required: true,
 	},
 	addedBy: {
 		type: String,
-		required: true
+		required: true,
 	},
 	addedById: {
 		type: String,
 		required: true,
 		default: function () {
 			return Tools.toId(this.addedBy);
-		}
+		},
 	},
 	at: {
 		type: Date,
 		required: true,
-		default: Date.now
-	}
+		default: Date.now,
+	},
 });
 
 interface Model {
@@ -44,21 +47,27 @@ interface Model {
 }
 const model = mongoose.model('quote', schema, 'quotes');
 
-export function addQuote (quote: string, room: string, by: string): Promise<Model> {
+export function addQuote(quote: string, room: string, by: string): Promise<Model> {
 	return model.create({ quote, room, addedBy: by });
 }
 
-export function getAllQuotes (room: string): Promise<Model[]> {
+export function getAllQuotes(room: string): Promise<Model[]> {
 	return model.find({ room }).sort({ at: 1 }).lean();
 }
 
-export async function getQuoteByIndex (index: number, room: string): Promise<Model | null> {
+export async function getQuoteByIndex(index: number, room: string): Promise<Model | null> {
 	const quotes = await getAllQuotes(room);
 	return quotes[index] ?? null;
 }
 
-export function searchQuotes (room: string, filter: Partial<Omit<Model, 'room' | 'quote' | 'rawText'>> & {
-	quote?: RegExp;
-}): Promise<Model[]> {
-	return model.find({ room, ...filter, quote: undefined, rawText: filter.quote }).sort({ at: 1 }).lean();
+export function searchQuotes(
+	room: string,
+	filter: Partial<Omit<Model, 'room' | 'quote' | 'rawText'>> & {
+		quote?: RegExp;
+	}
+): Promise<Model[]> {
+	return model
+		.find({ room, ...filter, quote: undefined, rawText: filter.quote })
+		.sort({ at: 1 })
+		.lean();
 }

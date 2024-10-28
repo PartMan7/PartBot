@@ -2,22 +2,23 @@
 
 PartBot's layout can be broadly broken down into three 'core' modules and six 'helper' modules.
 
-* PS
-* Discord
-* Web
+- PS
+- Discord
+- Web
 
 and
 
-* Types
-* Globals
-* Cache
-* Database
-* Secrets
-* Sentinel
+- Types
+- Globals
+- Cache
+- Database
+- Secrets
+- Sentinel
 
 ---
 
 ## PS
+
 The PS module has three parts - `commands`, `handlers`, and `loaders`.
 
 ### Commands
@@ -33,7 +34,6 @@ applicable to all `tsx` files inside the `ps` folder - so patterns like `message
 be used. This is reflected in both `tsc` checks as well as the actual chatbot with `npm start`, but IDEs like WebStorm
 and Visual Studio Code have slight differencess due to needing a custom Language Service Plugin.
 
-
 ### Handlers
 
 The `handlers` directory contains all PS event handlers as well as permissions management. Read the source code for
@@ -44,7 +44,6 @@ more details.
 The `loaders` directory contains code to load data from a database into cache. This lets the bot synchronize data such as
 alts and roomconfigs. It also contains the TypeScript plugin to convert JSX into HTML within the `ps` folder by injecting
 a `jsxToHTML` call.
-
 
 ---
 

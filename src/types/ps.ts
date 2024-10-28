@@ -35,9 +35,9 @@ export type PSRoomConfig = {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		[key: string]: any;
 	};
-}
+};
 
 export type UnparsedPSRoomConfig = Omit<PSRoomConfig, 'whitelist' | 'blacklist'> & {
 	whitelist?: string[];
 	blacklist?: string[];
-}
+};

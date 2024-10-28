@@ -3,7 +3,7 @@
 import ts, { CompilerHost, CompilerOptions, Program, TransformationContext, SourceFile, Node } from 'typescript';
 import { PluginConfig, ProgramTransformerExtras } from 'ts-patch';
 
-function getPatchedHost (
+function getPatchedHost(
 	maybeHost: CompilerHost | undefined,
 	tsInstance: typeof ts,
 	compilerOptions: CompilerOptions
@@ -13,7 +13,7 @@ function getPatchedHost (
 	const originalGetSourceFile = compilerHost.getSourceFile;
 
 	return Object.assign(compilerHost, {
-		getSourceFile (_fileName: string, languageVersion: ts.ScriptTarget, ...args) {
+		getSourceFile(_fileName: string, languageVersion: ts.ScriptTarget, ...args) {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore -- Types are missing normalizePath
 			const fileName = tsInstance.normalizePath(_fileName);
@@ -24,15 +24,15 @@ function getPatchedHost (
 
 			return sourceFile;
 		},
-		fileCache
+		fileCache,
 	});
 }
 
-export default function transformProgram (
+export default function transformProgram(
 	program: Program,
 	host: CompilerHost | undefined,
 	config: PluginConfig,
-	{ ts: tsInstance }: ProgramTransformerExtras,
+	{ ts: tsInstance }: ProgramTransformerExtras
 ): Program {
 	const compilerOptions = program.getCompilerOptions();
 	const compilerHost = getPatchedHost(host, tsInstance, compilerOptions);
@@ -42,10 +42,9 @@ export default function transformProgram (
 
 	/* Transform AST */
 	const transformedSource = tsInstance.transform(
-		program.getSourceFiles().filter(sourceFile =>
-			rootFileNames.includes(sourceFile.fileName) &&
-			/src\/ps\/.*\.tsx$/.test(sourceFile.fileName)
-		),
+		program
+			.getSourceFiles()
+			.filter(sourceFile => rootFileNames.includes(sourceFile.fileName) && /src\/ps\/.*\.tsx$/.test(sourceFile.fileName)),
 		[transformAst.bind(tsInstance)],
 		compilerOptions
 	).transformed;
@@ -60,21 +59,17 @@ export default function transformProgram (
 	return tsInstance.createProgram(rootFileNames, compilerOptions, compilerHost);
 }
 
-function transformAst (context: TransformationContext) {
+function transformAst(context: TransformationContext) {
 	return (sourceFile: ts.SourceFile) => {
-		function visit (node: Node): Node {
+		function visit(node: Node): Node {
 			if (
-				ts.isFunctionDeclaration(node) && /^[A-Z]/.test(node.name.text) ||
-				ts.isMethodDeclaration(node) && ts.isIdentifier(node.name) && /^[A-Z]/.test(node.name.text)
+				(ts.isFunctionDeclaration(node) && /^[A-Z]/.test(node.name.text)) ||
+				(ts.isMethodDeclaration(node) && ts.isIdentifier(node.name) && /^[A-Z]/.test(node.name.text))
 			) {
 				return node; // Don't touch JSX inside a function with a capitalized name
 			} else if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node) || ts.isJsxFragment(node)) {
 				// Wrap the topmost JSX with jsxToHTML
-				return context.factory.createCallExpression(
-					context.factory.createIdentifier('jsxToHTML'),
-					undefined,
-					[node]
-				);
+				return context.factory.createCallExpression(context.factory.createIdentifier('jsxToHTML'), undefined, [node]);
 			} else return ts.visitEachChild(node, visit, context);
 		}
 		return this.visitNode(sourceFile, visit);

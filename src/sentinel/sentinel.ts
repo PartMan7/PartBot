@@ -19,16 +19,18 @@ import EventEmitter from 'events';
 
 import { reloadCommands } from '@/ps/loaders/commands';
 
-export default function createSentinel () {
+export default function createSentinel() {
 	const eyesOn: string[] = [];
-	const listeners: { pattern: RegExp, reload: (filepath) => Promise<void> }[] = [{
-		pattern: /ps\/commands\//,
-		reload: async (filepath) => {
-			log('Reloading commands...', filepath);
-			await reloadCommands();
-			log('Reloaded commands');
-		}
-	}];
+	const listeners: { pattern: RegExp; reload: (filepath) => Promise<void> }[] = [
+		{
+			pattern: /ps\/commands\//,
+			reload: async filepath => {
+				log('Reloading commands...', filepath);
+				await reloadCommands();
+				log('Reloaded commands');
+			},
+		},
+	];
 
 	const emitter = new EventEmitter();
 	const sentinel = chokidar.watch(fsPath('..', 'src'), { ignoreInitial: true });

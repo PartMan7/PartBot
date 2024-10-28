@@ -8,5 +8,5 @@ export const INVALID_ALIAS = (aliasFor: string): string => {
 };
 
 export const QUOTES = {
-	NO_QUOTES_FOUND: 'No quotes found.'
+	NO_QUOTES_FOUND: 'No quotes found.',
 } as const;

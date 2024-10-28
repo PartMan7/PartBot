@@ -1,28 +1,28 @@
 {
-  "compilerOptions": {
-    "baseUrl": "src",
-    "target": "es2020",
-    "noEmit": true, // We run PartBot with ts-node instead of a two-step process
-    "jsx": "react",
-    "module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
-    "esModuleInterop": true,
-    "allowUmdGlobalAccess": true, // Enable globals (albeit treated as UMD globals)
-    "noImplicitUseStrict": true, // Enable 'with' syntax in eval
-    "ignoreDeprecations": "5.0", // Enable noImplicitUseStrict
-    "plugins": [
-      { "transform": "./src/typescript/jsx-to-html.ts", "transformProgram": true }, // Internally call jsxToHTML in ps
-      { "name": "partbot-language-service-plugin" } // Language Service Plugin for a better IDE experience
-    ],
-    "paths": {
-      "@/secrets/*": ["./secrets/src/*"],
-      "@/*": ["./*"]
-    }
-  },
-  "include": ["src/globals/*.d.ts", "src/**/*"], // Import global types before the rest of the code
-  "exclude": ["node_modules"],
-  "ts-node": {
-    "require": ["tsconfig-paths/register"], // For path aliases
-    "esm": true, // Enable *.ts files in ts-node
-    "files": true // Load all files (including for global definitions)
-  }
+	"compilerOptions": {
+		"baseUrl": "src",
+		"target": "es2020",
+		"noEmit": true, // We run PartBot with ts-node instead of a two-step process
+		"jsx": "react",
+		"module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
+		"esModuleInterop": true,
+		"allowUmdGlobalAccess": true, // Enable globals (albeit treated as UMD globals)
+		"noImplicitUseStrict": true, // Enable 'with' syntax in eval
+		"ignoreDeprecations": "5.0", // Enable noImplicitUseStrict
+		"plugins": [
+			{ "transform": "./src/typescript/jsx-to-html.ts", "transformProgram": true }, // Internally call jsxToHTML in ps
+			{ "name": "partbot-language-service-plugin" } // Language Service Plugin for a better IDE experience
+		],
+		"paths": {
+			"@/secrets/*": ["./secrets/src/*"],
+			"@/*": ["./*"]
+		}
+	},
+	"include": ["src/globals/*.d.ts", "src/**/*"], // Import global types before the rest of the code
+	"exclude": ["node_modules"],
+	"ts-node": {
+		"require": ["tsconfig-paths/register"], // For path aliases
+		"esm": true, // Enable *.ts files in ts-node
+		"files": true // Load all files (including for global definitions)
+	}
 }

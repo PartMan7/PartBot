@@ -14,16 +14,16 @@ const knownRankMappings: Record<string, Perms & string> = {
 	'§': 'driver',
 	'@': 'mod',
 	'#': 'owner',
-	'&': 'owner'
+	'&': 'owner',
 };
 const rankOrder: (Perms & string)[] = ['locked', 'muted', 'regular', 'whitelist', 'voice', 'bot', 'driver', 'mod', 'owner', 'admin'];
 
-export function getRank (symbol: string, unrecognizedRank: Perms & string = 'regular'): Perms & string {
+export function getRank(symbol: string, unrecognizedRank: Perms & string = 'regular'): Perms & string {
 	if (symbol in knownRankMappings) return knownRankMappings[symbol];
 	return unrecognizedRank;
 }
 
-function _checkPermissions (perm: Exclude<Perms, symbol>, message: PSMessage): boolean {
+function _checkPermissions(perm: Exclude<Perms, symbol>, message: PSMessage): boolean {
 	// Admin overrides
 	const isAdmin = admins.includes(message.author.userid);
 	if (isAdmin) return true;
@@ -46,11 +46,12 @@ function _checkPermissions (perm: Exclude<Perms, symbol>, message: PSMessage): b
 		case 'function': {
 			return perm(message);
 		}
-		default: return false;
+		default:
+			return false;
 	}
 }
 
-export function checkPermissions (perm: Perms, message: PSMessage): boolean {
+export function checkPermissions(perm: Perms, message: PSMessage): boolean {
 	if (typeof perm === 'symbol') {
 		if (perm in customPerms) return _checkPermissions(customPerms[perm], message);
 		return false;
