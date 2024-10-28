@@ -12,7 +12,7 @@
 		"prepare": "sh ./scripts/setup.sh",
 		"start": "ts-node --swc src/index.ts",
 		"test": "npm run lint && npm run tsc",
-		"tsc": "tsc"
+		"tsc": "tspc"
 	},
 	"keywords": [],
 	"author": "PartMan7",

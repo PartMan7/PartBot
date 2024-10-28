@@ -23,7 +23,7 @@ function init() {
 		// Remove UMD global suggestions
 		proxy.getSuggestionDiagnostics = fileName => {
 			const prior = info.languageService.getSuggestionDiagnostics(fileName);
-			return prior.filter(err => err.messageText.endsWith(UMD_SUGGESTION_MESSAGE));
+			return prior.filter(err => err.messageText.includes(UMD_SUGGESTION_MESSAGE));
 		};
 		return proxy;
 	}

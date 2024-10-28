@@ -3,7 +3,6 @@ set -x
 
 husky install
 
-ts-patch install -s
 if ! [ -d node_modules/partbot-language-service-plugin ]
 then
   cp -r src/typescript/language-service-plugin node_modules/partbot-language-service-plugin
