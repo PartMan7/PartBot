@@ -10,7 +10,7 @@
 		"notify-unpushed": "sh ./scripts/notify-unpushed.sh",
 		"prettify": "prettier -w",
 		"prepare": "sh ./scripts/setup.sh",
-		"start": "ts-node src/index.ts",
+		"start": "ts-node --swc src/index.ts",
 		"test": "npm run lint && npm run tsc",
 		"tsc": "tsc"
 	},
@@ -30,6 +30,7 @@
 		"prettier": "^3.3.3"
 	},
 	"dependencies": {
+		"@swc/core": "^1.7.40",
 		"ansi-to-html": "^0.7.2",
 		"axios": "^1.6.0",
 		"chokidar": "^3.5.3",

@@ -1,7 +1,10 @@
+import '@/globals/prototypes';
+
 import axios from 'axios';
-import * as fsSync from 'fs';
-import * as path from 'path';
+import fsSync from 'fs';
+import path from 'path';
 import React from 'react';
+
 global.axios = axios;
 global.fs = fsSync.promises;
 global.fsSync = fsSync;

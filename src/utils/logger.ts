@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
+import fsSync from 'fs';
 import { inspect } from 'util';
+import fsPath from '@/utils/fs-path';
 
 function dimText(str: string): string {
 	return `\x1b[2m${str}\x1b[22m`;

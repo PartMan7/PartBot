@@ -2,7 +2,7 @@
 const path = require('path');
 
 const TYPE_ERROR_MESSAGE = "Argument of type 'Element' is not assignable to parameter of type 'string'.";
-const UMD_SUGGESTION_MESSAGE = " refers to a UMD global, but the current file is a module. Consider adding an import instead.'";
+const UMD_SUGGESTION_MESSAGE = ' refers to a UMD global, but the current file is a module. Consider adding an import instead.';
 
 function init() {
 	function create(info) {

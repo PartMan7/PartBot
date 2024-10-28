@@ -1,5 +1,4 @@
 import { evaluate } from '@/utils/eval';
-import * as cache from '@/cache';
 
 export const command: PSCommand = {
 	name: 'eval',
@@ -13,11 +12,7 @@ export const command: PSCommand = {
 			arg,
 			originalCommand: [originalCommand],
 		} = context;
-		const res = await evaluate(arg, originalCommand === 'exec' ? 'ABBR_OUTPUT' : 'COLOR_OUTPUT', {
-			message,
-			context,
-			cache,
-		});
+		const res = await evaluate(arg, originalCommand === 'exec' ? 'ABBR_OUTPUT' : 'COLOR_OUTPUT', { message, context });
 		if (originalCommand === 'eval')
 			message.replyHTML(`<br/>${res.output}`); // Add a slight gap
 		else if (originalCommand === 'run') message.sendHTML(res.output);

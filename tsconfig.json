@@ -7,8 +7,6 @@
 		"module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
 		"esModuleInterop": true,
 		"allowUmdGlobalAccess": true, // Enable globals (albeit treated as UMD globals)
-		"noImplicitUseStrict": true, // Enable 'with' syntax in eval
-		"ignoreDeprecations": "5.0", // Enable noImplicitUseStrict
 		"plugins": [
 			{ "transform": "./src/typescript/jsx-to-html.ts", "transformProgram": true }, // Internally call jsxToHTML in ps
 			{ "name": "partbot-language-service-plugin" } // Language Service Plugin for a better IDE experience

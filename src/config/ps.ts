@@ -1,3 +1,4 @@
+import '@/env';
 import { Tools } from 'ps-client';
 
 export const ranks = ['locked', 'muted', 'regular', 'whitelist', 'voice', 'driver', 'mod', 'bot', 'owner', 'admin'] as const;

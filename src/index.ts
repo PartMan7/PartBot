@@ -1,7 +1,3 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
-
-import '@/globals/prototypes';
 import '@/globals';
 
 import PS from '@/ps';
@@ -12,8 +8,8 @@ global.PS = PS;
 global.Discord = Discord;
 global.Web = Web;
 
-import * as DB from '@/database';
-DB.connect().then(() => log('Connected to the database!'));
+import { connect } from '@/database';
+connect().then(() => log('Connected to the database!'));
 
 import { emitter } from '@/sentinel';
 

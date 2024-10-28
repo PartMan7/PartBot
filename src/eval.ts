@@ -1,5 +1,9 @@
-import { inspect } from 'util';
 import ANSIConverter from 'ansi-to-html';
+import { inspect } from 'util';
+
+import * as cache from '@/cache';
+import { Message as PSMessage } from 'ps-client';
+import { PSCommandContext } from '@/types/chat';
 
 export const convertANSI = ANSIConverter ? new ANSIConverter() : null;
 
@@ -67,14 +71,21 @@ export function formatValue(value: unknown, mode: EvalModes): string {
 	}
 }
 
-export async function evaluate(code: string, mode: EvalModes, context: Record<string, unknown> = {}): Promise<EvalOutput> {
+export async function evaluate(
+	code: string,
+	mode: EvalModes,
+	passedContext: {
+		message: PSMessage;
+		context: PSCommandContext;
+	} // Add Discord case here, eventually
+): Promise<EvalOutput> {
 	let success: boolean, value: unknown;
 	try {
 		const res = await (() => {
-			// @ts-expect-error -- Allow 'with' to forward context
-			with (context) {
-				return eval(code);
-			}
+			const { message, context } = passedContext;
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Storing in context for eval()
+			const evalContext = { message, context, cache };
+			return eval(code);
 		})();
 		success = true;
 		value = res;
