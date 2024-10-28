@@ -2,7 +2,7 @@ import type { PSCommand } from '@/types/chat';
 
 import getSecretCommands from '@/secrets/commands/ps';
 
-import cacheBuster from '@/utils/cachebuster';
+import { cacheBuster } from '@/utils/cachebuster';
 import { PSAliases, PSCommands } from '@/cache';
 import resetCache from '@/cache/reset';
 
