@@ -1,11 +1,11 @@
-export = {};
+import { sample, useRNG, RNGSource } from 'utils/random';
 
 declare global {
 	interface Array<T> {
-		random (): T;
-		random (amount: number): T[];
+		random (rng?: RNGSource): T;
+		sample (amount: number, rng?: RNGSource): T[];
 		remove (...toRemove: T[]): T[];
-		shuffle (): T[];
+		shuffle (rng?: RNGSource): T[];
 		filterMap<X> (cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
 		unique (): T[];
 	}
@@ -21,7 +21,7 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function<T, X> (this: T[], callback: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined {
+		value: function<X, T = unknown> (this: T[], callback: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined {
 			for (let i = 0; i < this.length; i++) {
 				const result = callback(this[i], i, this);
 				if (result === undefined) continue;
@@ -33,7 +33,7 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function  (this: unknown[], ...terms) {
+		value: function <T = unknown> (this: T[], ...terms: T[]): boolean {
 			let out = true;
 			terms.forEach(term => {
 				if (this.indexOf(term) >= 0) this.splice(this.indexOf(term), 1);
@@ -46,12 +46,20 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function (this: unknown[], amount: number) {
-			if (amount === undefined) return this[Math.floor(Math.random() * this.length)];
-			const sample = Array.from(this), out = [];
+		value: function <T = unknown> (this: T[], rng?: RNGSource): T {
+			return this[sample(this.length, useRNG(rng))];
+		}
+	},
+	sample: {
+		enumerable: false,
+		writable: false,
+		configurable: false,
+		value: function T<T = unknown> (this: T[], amount: number, rng?: RNGSource): T[] {
+			const RNG = useRNG(rng);
+			const sample = Array.from(this), out: T[] = [];
 			let i = 0;
 			while (sample.length && i++ < amount) {
-				const term = sample[Math.floor(Math.random() * sample.length)];
+				const term = sample[Math.floor(RNG() * sample.length)];
 				out.push(term);
 				sample.remove(term);
 			}
@@ -62,9 +70,10 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function (this: unknown[]) {
+		value: function <T = unknown> (this: T[], rng?: RNGSource): T[] {
+			const RNG = useRNG(rng);
 			for (let i = this.length - 1; i > 0; i--) {
-				const j = Math.floor(Math.random() * (i + 1));
+				const j = Math.floor(RNG() * (i + 1));
 				[this[i], this[j]] = [this[j], this[i]];
 			}
 			return Array.from(this);
@@ -74,7 +83,7 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function (this: unknown[]) {
+		value: function <T = unknown> (this: T[]): T[] {
 			const output = [];
 			const cache = new Set();
 			for (let i = 0; i < this.length; i++) {
