@@ -9,7 +9,7 @@
     "lint:fix": "eslint src --ext .ts --fix",
     "notify-unpushed": "sh ./scripts/notify-unpushed.sh",
     "prepare": "sh ./scripts/setup.sh",
-    "start": "ts-node src/index.ts",
+    "start": "ts-node --transpileOnly src/index.ts",
     "test": "npm run lint && npm run tsc",
     "tsc": "tsc"
   },
@@ -43,5 +43,8 @@
   },
   "optionalDependencies": {
     "ansi-to-html": "^0.7.2"
+  },
+  "engines": {
+    "node": "<=18.18.2"
   }
 }
