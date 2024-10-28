@@ -1,50 +1,53 @@
 {
-  "name": "partbot",
-  "version": "3.0.0",
-  "description": "A chatbot for Pokémon Showdown",
-  "main": "src/index.js",
-  "scripts": {
-    "build-configs": "bash ./scripts/build_nginx_confs.sh",
-    "lint": "eslint src --ext .ts",
-    "lint:fix": "eslint src --ext .ts --fix",
-    "notify-unpushed": "sh ./scripts/notify-unpushed.sh",
-    "prepare": "sh ./scripts/setup.sh",
-    "start": "ts-node src/index.ts",
-    "test": "npm run lint && npm run tsc",
-    "tsc": "tsc"
-  },
-  "keywords": [],
-  "author": "PartMan7",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/node": "^20.4.4",
-    "@types/nunjucks": "^3.2.3",
-    "@types/react": "^18.2.48",
-    "@typescript-eslint/eslint-plugin": "^6.2.0",
-    "@typescript-eslint/parser": "^6.2.0",
-    "eslint": "^8.45.0",
-    "husky": "^8.0.3"
-  },
-  "dependencies": {
-    "@types/react-dom": "^18.2.18",
-    "axios": "^1.6.0",
-    "chokidar": "^3.5.3",
-    "discord.js": "^14.11.0",
-    "dotenv": "^16.3.1",
-    "mongoose": "^7.4.1",
-    "nunjucks": "^3.2.4",
-    "ps-client": "^3.5.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "ts-node": "^10.9.2",
-    "ts-patch": "^3.1.2",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.1.6"
-  },
-  "optionalDependencies": {
-    "ansi-to-html": "^0.7.2"
-  },
-  "engines": {
-    "node": "<=18.18.2"
-  }
+	"name": "partbot",
+	"version": "3.0.0",
+	"description": "A chatbot for Pokémon Showdown",
+	"main": "src/index.js",
+	"scripts": {
+		"build-configs": "bash ./scripts/build_nginx_confs.sh",
+		"lint": "eslint src --ext .ts",
+		"lint:fix": "eslint src --ext .ts --fix",
+		"notify-unpushed": "sh ./scripts/notify-unpushed.sh",
+		"prettify": "prettier -w",
+		"prepare": "sh ./scripts/setup.sh",
+		"start": "ts-node src/index.ts",
+		"test": "npm run lint && npm run tsc",
+		"tsc": "tsc"
+	},
+	"keywords": [],
+	"author": "PartMan7",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/node": "^20.4.4",
+		"@types/nunjucks": "^3.2.3",
+		"@types/react": "^18.2.48",
+		"@typescript-eslint/eslint-plugin": "^6.2.0",
+		"@typescript-eslint/parser": "^6.2.0",
+		"eslint": "^8.45.0",
+		"eslint-config-prettier": "^9.1.0",
+		"husky": "^8.0.3",
+		"prettier": "^3.3.3"
+	},
+	"dependencies": {
+		"@types/react-dom": "^18.2.18",
+		"axios": "^1.6.0",
+		"chokidar": "^3.5.3",
+		"discord.js": "^14.11.0",
+		"dotenv": "^16.3.1",
+		"mongoose": "^7.4.1",
+		"nunjucks": "^3.2.4",
+		"ps-client": "^3.5.3",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"ts-node": "^10.9.2",
+		"ts-patch": "^3.1.2",
+		"tsconfig-paths": "^4.2.0",
+		"typescript": "^5.1.6"
+	},
+	"optionalDependencies": {
+		"ansi-to-html": "^0.7.2"
+	},
+	"engines": {
+		"node": "<=18.18.2"
+	}
 }
