@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"baseUrl": "src",
-		"target": "es2020",
+		"target": "es2021",
 		"noEmit": true, // We run PartBot with ts-node instead of a two-step process
 		"jsx": "react",
 		"module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't

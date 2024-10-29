@@ -13,3 +13,11 @@ export async function readFileStructure(root: string): Promise<Record<string, st
 			return acc;
 		}, {});
 }
+
+export async function renderTemplate(path: string, variables: Record<string, string> = {}): Promise<string> {
+	const baseTemplate = await fs.readFile(fsPath('web', 'templates', path), 'utf8');
+	return Object.entries(variables).reduce(
+		(template, [variable, value]) => template.replaceAll(`{{${variable}}}`, value),
+		baseTemplate
+	);
+}

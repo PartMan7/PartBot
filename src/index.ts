@@ -1,5 +1,7 @@
 import '@/globals';
 
+log('PartBot is starting up...');
+
 import '@/ps';
 import '@/discord';
 import '@/web';
