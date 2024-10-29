@@ -20,7 +20,7 @@ async function registerCommands() {
 		},
 		{}
 	);
-	log('Registering Discord commands', { globalBody, guildSpecificBody });
+	log('Registering Discord commands');
 	await Promise.all([
 		restClient.put(Routes.applicationCommands(clientId), { body: globalBody }),
 		...Object.entries(guildSpecificBody).map(([guildId, commands]) =>
