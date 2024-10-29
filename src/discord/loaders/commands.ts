@@ -22,15 +22,14 @@ async function registerCommands() {
 		{}
 	);
 	log('Registering Discord commands', { globalBody, guildSpecificBody });
-	const results = await Promise.allSettled([
+	await Promise.all([
 		restClient.put(Routes.applicationCommands(clientId), { body: globalBody }),
 		...Object.entries(guildSpecificBody).map(([guildId, commands]) =>
-			restClient.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
+			restClient
+				.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
+				.catch(() => log(`Unable to register commands for guild #${guildId}`))
 		),
 	]);
-	results.forEach(result => {
-		if (result.status === 'rejected') log(`Unable to register some commands`, result.reason);
-	});
 }
 
 export async function loadCommands(): Promise<void> {
