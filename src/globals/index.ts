@@ -5,21 +5,23 @@ import fsSync from 'fs';
 import path from 'path';
 import React from 'react';
 
+import * as Tools from '@/tools';
+import { fsPath } from '@/utils/fs-path';
+import { log } from '@/utils/logger';
+import { ChatError } from '@/utils/chat-error';
+
+import { jsxToHTML } from '@/utils/jsx-to-html';
+
 global.axios = axios;
 global.fs = fsSync.promises;
 global.fsSync = fsSync;
 global.path = path;
 global.React = React;
 
-import * as Tools from '@/tools';
 global.Tools = Tools;
 
-import { fsPath } from '@/utils/fs-path';
 global.fsPath = fsPath;
-import { log } from '@/utils/logger';
 global.log = log;
-import { jsxToHTML } from '@/utils/jsx-to-html';
-global.jsxToHTML = jsxToHTML;
-
-import { ChatError } from '@/utils/chat-error';
 global.ChatError = ChatError;
+
+global.jsxToHTML = jsxToHTML;
