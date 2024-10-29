@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { Perms } from '@/types/perms';
-import type { Message as PSMessage } from 'ps-client';
 import { HTMLopts } from 'ps-client/classes/common';
-import type { Message as DiscMessage } from 'discord.js';
 
 export type PSCommandContext = {
 	/**
@@ -138,11 +136,33 @@ export type PSCommand = {
 
 // Will need to update this to work with slash commands
 export type DiscCommand = {
+	/**
+	 * Name of the command.
+	 */
 	name: string;
-	aliases?: { [key: string]: string };
-	perms?: string[];
-	guilds?: string[];
-	channels?: string[];
-	children?: { [key: string]: DiscCommand };
-	run(message: DiscMessage, context: { [key: string]: unknown }): Promise<void>;
+	/**
+	 * Command description.
+	 */
+	desc: string;
+	/**
+	 * Flags to define metadata for the command.
+	 */
+	flags?: {
+		// If enabled, hides the command from command lists
+		noDisplay?: true;
+		// If enabled, replaces 'access denied' errors with 'command not found'
+		conceal?: true;
+		// Ensures a command can only be run from a room
+		roomOnly?: true;
+		// Ensures a command can only be run from a PM
+		pmOnly?: true;
+	};
+	/**
+	 * Aliases for the command.
+	 */
+	aliases?: string[];
+	perms?: 'admin' | ((message: DiscInteraction) => boolean);
+	servers?: string[];
+	args?: null; // TODO
+	run(interaction: DiscInteraction): Promise<any>;
 };

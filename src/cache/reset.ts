@@ -2,8 +2,8 @@ import * as cache from '@/cache';
 
 type CacheKeys = (keyof typeof cache)[];
 
-export default function reset(keys: CacheKeys = Object.keys(cache) as CacheKeys) {
-	keys.forEach(cacheKey => {
+export function resetCache(...keys: CacheKeys) {
+	(keys.length ? keys : Object.keys(cache)).forEach(cacheKey => {
 		const cachedValue = cache[cacheKey];
 		Object.keys(cachedValue).forEach(key => delete cachedValue[key]);
 	});

@@ -2,8 +2,6 @@ import { PSAliases, PSCommands } from '@/cache';
 import { prefix } from '@/config/ps';
 import { checkPermissions } from '@/ps/handlers/permissions';
 
-import type { Message } from 'ps-client';
-import { HTMLopts } from 'ps-client/classes/common';
 import type { PSCommand, PSCommandContext } from '@/types/chat';
 import type { Perms } from '@/types/perms';
 import { ChatError } from '@/utils/chat-error';
@@ -71,7 +69,7 @@ export function parseArgs(
 	return { command: commandObj, sourceCommand, commandSteps, context };
 }
 
-export default async function chatHandler(message: Message) {
+export default async function chatHandler(message: PSMessage): Promise<void> {
 	if (message.isIntro || !message.author.userid || !message.target) return;
 	if (message.author.userid === message.parent.status.userid) return; // Botception!
 	if (!message.content.startsWith(prefix)) return;
@@ -95,7 +93,7 @@ export default async function chatHandler(message: Message) {
 			if (checkPermissions(perm, message)) return message.sendHTML(html, opts);
 			else return message.target.privateHTML(message.author, html, opts);
 		};
-		context.run = function (altCommand: string, ctx: Partial<PSCommandContext> = {}, messageOverrides: Partial<Message> = {}) {
+		context.run = function (altCommand: string, ctx: Partial<PSCommandContext> = {}, messageOverrides: Partial<PSMessage> = {}) {
 			const altArgs = altCommand.split(/ +/);
 			const spacedArgs = altCommand.split(/( +)/);
 			const { command, sourceCommand, commandSteps, context } = parseArgs(altArgs, spacedArgs);

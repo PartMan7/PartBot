@@ -1,6 +1,7 @@
 import type { PSCommand } from '@/types/chat';
 import type { PSRoomConfig } from '@/types/ps';
 import type { Timer } from '@/utils/timer';
+import { SlashCommandBuilder } from 'discord.js';
 
 // Global cache
 export const Timers: { [key: string]: Timer } = {};
@@ -14,3 +15,6 @@ export const PSAltCache: { [key: string]: { from: string; to: string; at: Date }
 export const PSSeenCache: { [key: string]: { at: Date; in: string[] } } = {};
 
 export const PSQuoteRoomPrefs: { [key: string]: { room: string; at: Date } } = {};
+
+// Discord
+export const DiscCommands: { [key: string]: DiscCommand & { path: string; isAlias?: boolean; slash: SlashCommandBuilder } } = {};

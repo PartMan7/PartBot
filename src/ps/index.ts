@@ -9,7 +9,7 @@ import pageHandler from '@/ps/handlers/page';
 import { joinHandler, nickHandler, leaveHandler } from '@/ps/handlers/joins';
 
 const PS = new PSClient({ username, password, rooms });
-PS.on('login', () => log('Connected to PS!'));
+PS.on('login', () => log(`Connected to PS! [${username}]`));
 
 loadPS().then(() => PS.connect());
 
