@@ -52,5 +52,5 @@ export async function getAlts(user: string, limit: number = DEFAULT_ALTS_CAP): P
 }
 
 export async function fetchAllAlts(): Promise<Model[]> {
-	return model.find({}).lean();
+	return model.find({}).maxTimeMS(30_000).lean();
 }
