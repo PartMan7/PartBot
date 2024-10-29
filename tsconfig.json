@@ -19,8 +19,6 @@
 	"include": ["src/globals/*.d.ts", "src/**/*"], // Import global types before the rest of the code
 	"exclude": ["node_modules"],
 	"ts-node": {
-		"require": ["tsconfig-paths/register"], // For path aliases
-		"esm": true, // Enable *.ts files in ts-node
-		"files": true // Load all files (including for global definitions)
+		"require": ["tsconfig-paths/register"] // For path aliases
 	}
 }

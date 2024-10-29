@@ -9,7 +9,6 @@ import { cacheBuster } from '@/utils/cachebuster';
 const restClient = new REST().setToken(token);
 
 async function registerCommands() {
-	log(DiscCommands);
 	const globalBody = Object.values(DiscCommands)
 		.filter(command => !command.servers)
 		.map(command => command.slash.toJSON());
