@@ -17,7 +17,25 @@
 	"keywords": [],
 	"author": "PartMan7",
 	"license": "ISC",
+	"dependencies": {
+		"@swc/core": "^1.7.40",
+		"ansi-to-html": "^0.7.2",
+		"axios": "^1.6.0",
+		"chokidar": "^3.5.3",
+		"discord.js": "^14.11.0",
+		"dotenv": "^16.3.1",
+		"express": "^5.0.1",
+		"mongoose": "^7.4.1",
+		"ps-client": "^3.5.3",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"ts-node": "^10.9.2",
+		"ts-patch": "^3.1.2",
+		"tsconfig-paths": "^4.2.0",
+		"typescript": "^5.1.6"
+	},
 	"devDependencies": {
+		"@types/express": "^5.0.0",
 		"@types/node": "^20.4.4",
 		"@types/react": "^18.2.48",
 		"@types/react-dom": "^18.2.18",
@@ -28,23 +46,7 @@
 		"husky": "^8.0.3",
 		"prettier": "^3.3.3"
 	},
-	"dependencies": {
-		"@swc/core": "^1.7.40",
-		"ansi-to-html": "^0.7.2",
-		"axios": "^1.6.0",
-		"chokidar": "^3.5.3",
-		"discord.js": "^14.11.0",
-		"dotenv": "^16.3.1",
-		"mongoose": "^7.4.1",
-		"ps-client": "^3.5.3",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"ts-node": "^10.9.2",
-		"ts-patch": "^3.1.2",
-		"tsconfig-paths": "^4.2.0",
-		"typescript": "^5.1.6"
-	},
 	"engines": {
-		"node": "<=18.18.2"
+		"node": ">=20.9.0"
 	}
 }

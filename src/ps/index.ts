@@ -22,4 +22,6 @@ PS.on('join', joinHandler);
 PS.on('name', nickHandler);
 PS.on('leave', leaveHandler);
 
+global.PS = PS;
+
 export default PS;

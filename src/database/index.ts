@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 
 import '@/env';
 
-export function connect(): Promise<typeof mongoose> {
-	return mongoose.connect(process.env.MONGO_URL);
-}
+mongoose.connect(process.env.MONGO_URL).then(() => log('Connected to the database!'));
 
-export function disconnect(): Promise<void> {
-	return mongoose.disconnect();
-}
+export default mongoose;

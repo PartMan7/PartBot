@@ -1,3 +1,1 @@
-import _Web from '@/web';
-export as namespace Web;
-export = _Web;
+declare type RouteHandler = import('@/types/web').RouteHandler;
