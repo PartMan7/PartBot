@@ -2,6 +2,7 @@ import '@/env';
 import { Tools } from 'ps-client';
 
 export const ranks = ['locked', 'muted', 'regular', 'whitelist', 'voice', 'driver', 'mod', 'bot', 'owner', 'admin'] as const;
+
 export const owner = process.env.PS_OWNER ?? 'PartMan';
 const _admins = process.env.PS_ADMINS?.split(/ *, */) ?? [];
 export const admins = _admins.map(Tools.toID);

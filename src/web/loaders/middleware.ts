@@ -12,8 +12,9 @@ export function renderReact(req: Request, res: Response, next: NextFunction): vo
 			const page = await renderTemplate('static-react.html', { title, content });
 			return res.send(page);
 		}
+		// TODO: Hydrate interactive content
 		const preHydrated = renderToString(jsx);
-		const page = await renderTemplate('react.html', { title, preHydrated });
+		const page = await renderTemplate('react.html', { title, preHydrated, content: '???' });
 		return res.send(page);
 	};
 	Object.assign(res, { render });

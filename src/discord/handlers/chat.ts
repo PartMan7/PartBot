@@ -1,12 +1,21 @@
 import { DiscCommands } from '@/cache';
+import { admins } from '@/config/discord';
 
 import type { Interaction } from 'discord.js';
+import { ACCESS_DENIED } from '@/text';
 
 export default async function messageHandler(interaction: Interaction): Promise<void> {
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = DiscCommands[interaction.commandName];
 	if (!command) return;
+
+	if (command.perms === 'admin') {
+		if (!admins.includes(interaction.user.id)) throw new ChatError(ACCESS_DENIED);
+	}
+	if (typeof command.perms === 'function') {
+		if (!command.perms(interaction)) throw new ChatError(ACCESS_DENIED);
+	}
 
 	try {
 		await command.run(interaction);

@@ -153,7 +153,7 @@ export type DiscCommand = {
 		// If enabled, replaces 'access denied' errors with 'command not found'
 		conceal?: true;
 		// Ensures a command can only be run from a room
-		roomOnly?: true;
+		serverOnly?: true;
 		// Ensures a command can only be run from a PM
 		pmOnly?: true;
 	};
@@ -161,7 +161,7 @@ export type DiscCommand = {
 	 * Aliases for the command.
 	 */
 	aliases?: string[];
-	perms?: 'admin' | ((message: DiscInteraction) => boolean);
+	perms?: 'admin' | ((interaction: DiscInteraction) => boolean);
 	servers?: string[];
 	args?: null; // TODO
 	run(interaction: DiscInteraction): Promise<any>;
