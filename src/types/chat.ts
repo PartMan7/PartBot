@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { Perms } from '@/types/perms';
-import { HTMLopts } from 'ps-client/classes/common';
+import type { HTMLopts } from 'ps-client/classes/common';
+
+import type { SlashCommandBuilder } from 'discord.js';
 
 export type PSCommandContext = {
 	/**
@@ -159,6 +161,6 @@ export type DiscCommand = {
 	aliases?: string[];
 	perms?: 'admin' | ((interaction: DiscInteraction) => boolean);
 	servers?: string[];
-	args?: null; // TODO
+	args?: (slash: SlashCommandBuilder) => void;
 	run(interaction: DiscInteraction): Promise<any>;
 };

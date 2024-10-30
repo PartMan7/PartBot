@@ -40,7 +40,8 @@ export async function loadCommands(): Promise<void> {
 			const { command }: { command: DiscCommand } = await import(requirePath);
 			[command.name, ...(command.aliases ?? [])].forEach((commandName, isAlias) => {
 				const slash = new SlashCommandBuilder().setName(commandName).setDescription(command.desc);
-				if (command.flags.serverOnly) slash.setDMPermission(false);
+				if (command.flags?.serverOnly) slash.setDMPermission(false);
+				if (command.args) command.args(slash);
 
 				DiscCommands[commandName] = {
 					...command,
