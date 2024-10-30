@@ -148,14 +148,10 @@ export type DiscCommand = {
 	 * Flags to define metadata for the command.
 	 */
 	flags?: {
-		// If enabled, hides the command from command lists
-		noDisplay?: true;
-		// If enabled, replaces 'access denied' errors with 'command not found'
-		conceal?: true;
 		// Ensures a command can only be run from a room
-		serverOnly?: true;
+		serverOnly?: true; // Handled in loaders/commands
 		// Ensures a command can only be run from a PM
-		pmOnly?: true;
+		pmOnly?: true; // Handled in handlers/chat
 	};
 	/**
 	 * Aliases for the command.

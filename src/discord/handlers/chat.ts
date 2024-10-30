@@ -2,7 +2,7 @@ import { DiscCommands } from '@/cache';
 import { admins } from '@/config/discord';
 
 import type { Interaction } from 'discord.js';
-import { ACCESS_DENIED } from '@/text';
+import { ACCESS_DENIED, PM_ONLY_COMMAND } from '@/text';
 
 export default async function messageHandler(interaction: Interaction): Promise<void> {
 	if (!interaction.isChatInputCommand()) return;
@@ -15,6 +15,10 @@ export default async function messageHandler(interaction: Interaction): Promise<
 	}
 	if (typeof command.perms === 'function') {
 		if (!command.perms(interaction)) throw new ChatError(ACCESS_DENIED);
+	}
+
+	if (command.flags?.pmOnly) {
+		if (interaction.guild) throw new ChatError(PM_ONLY_COMMAND);
 	}
 
 	try {
