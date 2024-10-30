@@ -1,12 +1,10 @@
-import ANSIConverter from 'ansi-to-html';
 import { inspect } from 'util';
+import { ansiToHtml } from '@/utils/ansiToHtml';
 
 import * as _cache from '@/cache';
-import { PSCommandContext } from '@/types/chat';
+import type { PSCommandContext } from '@/types/chat';
 
 const cache = _cache; // Exporting into side variable for eval lookup
-
-const convertANSI = ANSIConverter ? new ANSIConverter() : null;
 
 export type EvalModes = 'COLOR_OUTPUT' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
 export type EvalOutput = {
@@ -18,12 +16,11 @@ export function formatValue(value: unknown, mode: EvalModes): string {
 	switch (mode) {
 		case 'COLOR_OUTPUT':
 		case 'FULL_OUTPUT': {
-			const color = mode === 'COLOR_OUTPUT' && !!ANSIConverter; // Cannot color without ANSIConverter
+			const color = mode === 'COLOR_OUTPUT';
 			// TODO Stringify functions and render with syntax highlighting
 			const inspection = inspect(value, { depth: 2, colors: color, numericSeparator: true });
 			return color
-				? convertANSI
-						.toHtml(inspection)
+				? ansiToHtml(inspection)
 						.replace(/\t/g, '&nbsp;'.repeat(4)) // Fill out tabs
 						.replace(/ (?= |$)/g, '&nbsp;') // Fill out multi-spaces
 						.replace(/\n/g, '<br/>') // Fill out newlines
