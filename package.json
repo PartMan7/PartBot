@@ -19,7 +19,6 @@
 	"license": "ISC",
 	"dependencies": {
 		"@swc/core": "^1.7.40",
-		"ansi-to-html": "^0.7.2",
 		"axios": "^1.6.0",
 		"chokidar": "^3.5.3",
 		"discord.js": "^14.11.0",
