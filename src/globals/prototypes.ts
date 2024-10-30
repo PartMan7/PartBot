@@ -134,13 +134,15 @@ Object.defineProperties(String.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function (this: string, match: RegExp, replace: string | ((arg: string) => string)): string {
-			// let latestMatch: RegExpExecArray;
-			// do {
-			// 	latestMatch = match.exec()
-			// } while (latestMatch);
-			// TODO
-			return 'FIXME';
+		value: function (this: string, match: RegExp, replacer: string | ((substring: string, ...args: string[]) => string)): string {
+			let output = this.toString();
+			while (true) {
+				// TypeScript what the heck
+				const next = typeof replacer === 'string' ? output.replace(match, replacer) : output.replace(match, replacer);
+				if (next === output) break;
+				output = next;
+			}
+			return output;
 		},
 	},
 });
