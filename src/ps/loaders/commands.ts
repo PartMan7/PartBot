@@ -24,6 +24,7 @@ export async function loadCommands(): Promise<void> {
 			const requirePath = fsPath('ps', 'commands', commandFileName);
 
 			const { command }: { command: PSCommand | PSCommand[] } = await import(requirePath);
+			if (!command) return;
 
 			const commands = Array.isArray(command) ? command : [command];
 			commands.forEach(command => {

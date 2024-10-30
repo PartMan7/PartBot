@@ -38,6 +38,7 @@ export async function loadCommands(): Promise<void> {
 		commands.map(async commandFile => {
 			const requirePath = fsPath('discord', 'commands', commandFile);
 			const { command }: { command: DiscCommand } = await import(requirePath);
+			if (!command) return;
 			[command.name, ...(command.aliases ?? [])].forEach((commandName, isAlias) => {
 				const slash = new SlashCommandBuilder().setName(commandName).setDescription(command.desc);
 				if (command.flags?.serverOnly) slash.setDMPermission(false);
