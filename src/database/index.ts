@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 import '@/env';
 
-mongoose.connect(process.env.MONGO_URL).then(() => log('Connected to the database!'));
+const connection = mongoose.connect(process.env.MONGO_URL);
+connection.then(() => log('Connected to database!'));
 
-export default mongoose;
+export default connection;
