@@ -1,4 +1,5 @@
 import { evaluate } from '@/utils/eval';
+import { MAX_CHAT_HTML_LENGTH } from '@/ps/constants';
 
 export const command: PSCommand = {
 	name: 'eval',
@@ -13,9 +14,20 @@ export const command: PSCommand = {
 			originalCommand: [originalCommand],
 		} = context;
 		const res = await evaluate(arg, originalCommand === 'exec' ? 'ABBR_OUTPUT' : 'COLOR_OUTPUT', { message, context });
-		if (originalCommand === 'eval')
-			message.replyHTML(`<br/>${res.output}`); // Add a slight gap
-		else if (originalCommand === 'run') message.sendHTML(res.output);
-		else return message.reply(res.success ? `Command executed successfully.` : `Error in executing command: ${res.output}`);
+		if (originalCommand !== 'exec') {
+			let outputHTML = res.output;
+			if (outputHTML.length > MAX_CHAT_HTML_LENGTH) {
+				const trimmedOutput = res.output.split(/(?<=<\/span>)|(?=<span)/);
+				let currentLength = outputHTML.length;
+				while (currentLength > MAX_CHAT_HTML_LENGTH) {
+					currentLength -= trimmedOutput.at(-1).length;
+					trimmedOutput.pop();
+				}
+				outputHTML = `${trimmedOutput.join('')} ...`;
+			}
+			const wrappedHTML = `<div style="overflow:auto;max-height:40vh;${originalCommand === 'eval' ? 'margin-top:20px' : ''}">${outputHTML}</div>`;
+			if (originalCommand === 'eval') message.replyHTML(wrappedHTML);
+			else if (originalCommand === 'run') message.sendHTML(wrappedHTML);
+		} else return message.reply(res.success ? `Command executed successfully.` : `Error in executing command: ${res.output}`);
 	},
 };
