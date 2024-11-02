@@ -25,7 +25,7 @@
 		"dotenv": "^16.3.1",
 		"express": "^5.0.1",
 		"mongoose": "^7.4.1",
-		"ps-client": "^4.0.0",
+		"ps-client": "^4.0.1",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"ts-node": "^10.9.2",
