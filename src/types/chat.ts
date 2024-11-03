@@ -4,6 +4,7 @@ import type { Perms } from '@/types/perms';
 import type { HTMLopts } from 'ps-client/classes/common';
 
 import type { SlashCommandBuilder } from 'discord.js';
+import type { ReactElement } from 'react';
 
 export type PSCommandContext = {
 	/**
@@ -63,7 +64,7 @@ export type PSCommandContext = {
 	 * @param opts The options to forward to the HTML call
 	 * @param opts.perm The required permission to broadcast instead of privateReply. Defaults to 'voice'
 	 */
-	broadcastHTML(html: string, opts?: HTMLopts & { perm?: Perms }): void;
+	broadcastHTML(html: string | ReactElement, opts?: HTMLopts & { perm?: Perms }): void;
 	[key: string]: unknown;
 };
 

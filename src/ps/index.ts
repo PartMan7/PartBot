@@ -1,6 +1,7 @@
 import { Client as PSClient } from 'ps-client';
 import { username, password, rooms } from '@/config/ps';
 
+import { transformHTML } from '@/ps/handlers/html';
 import loadPS from '@/ps/loaders';
 import chatHandler from '@/ps/handlers/chat';
 import interfaceHandler from '@/ps/handlers/interface';
@@ -8,7 +9,7 @@ import autoResHandler from '@/ps/handlers/autores';
 import pageHandler from '@/ps/handlers/page';
 import { joinHandler, nickHandler, leaveHandler } from '@/ps/handlers/joins';
 
-const PS = new PSClient({ username, password, rooms });
+const PS = new PSClient({ username, password, rooms, transformHTML });
 PS.on('login', () => log(`Connected to PS! [${username}]`));
 
 loadPS().then(() => PS.connect());

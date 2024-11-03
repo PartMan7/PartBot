@@ -25,9 +25,14 @@ export const command: PSCommand = {
 				}
 				outputHTML = `${trimmedOutput.join('')} ...`;
 			}
-			const wrappedHTML = `<div style="overflow:auto;max-height:40vh;${originalCommand === 'eval' ? 'margin-top:20px' : ''}">${outputHTML}</div>`;
-			if (originalCommand === 'eval') message.replyHTML(wrappedHTML);
-			else if (originalCommand === 'run') message.sendHTML(wrappedHTML);
+			const WrappedHTML = (
+				<div
+					style={{ overflow: 'auto', maxHeight: '40vh', marginTop: originalCommand === 'eval' ? '20px' : undefined }}
+					dangerouslySetInnerHTML={{ __html: outputHTML }}
+				/>
+			);
+			if (originalCommand === 'eval') message.replyHTML(WrappedHTML);
+			else if (originalCommand === 'run') message.sendHTML(WrappedHTML);
 		} else return message.reply(res.success ? `Command executed successfully.` : `Error in executing command: ${res.output}`);
 	},
 };
