@@ -3,11 +3,6 @@ set -x
 
 husky install
 
-if ! [ -d node_modules/partbot-language-service-plugin ]
-then
-  cp -r src/typescript/language-service-plugin node_modules/partbot-language-service-plugin
-fi
-
 if ! [ -d src/secrets ]
 then
   git clone https://github.com/PartMan7/PartBot-spoof.git src/secrets
