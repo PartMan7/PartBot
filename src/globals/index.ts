@@ -6,11 +6,11 @@ import path from 'path';
 import React from 'react';
 
 import * as Tools from '@/tools';
-import { fsPath } from '@/utils/fs-path';
+import { fsPath } from '@/utils/fsPath';
 import { log } from '@/utils/logger';
-import { ChatError } from '@/utils/chat-error';
+import { ChatError } from '@/utils/chatError';
 
-import { jsxToHTML } from '@/utils/jsx-to-html';
+import { jsxToHTML } from '@/utils/jsxToHTML';
 
 global.axios = axios;
 global.fs = fsSync.promises;

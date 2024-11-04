@@ -4,7 +4,6 @@ import { checkPermissions } from '@/ps/handlers/permissions';
 
 import type { PSCommand, PSCommandContext } from '@/types/chat';
 import type { Perms } from '@/types/perms';
-import { ChatError } from '@/utils/chat-error';
 
 import { ACCESS_DENIED, CMD_NOT_FOUND, INVALID_ALIAS, PM_ONLY_COMMAND, ROOM_ONLY_COMMAND } from '@/text';
 
