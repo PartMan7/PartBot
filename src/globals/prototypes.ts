@@ -9,10 +9,20 @@ declare global {
 		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
 		unique(): T[];
 	}
+	interface ReadonlyArray<T> {
+		random(rng?: RNGSource): T;
+		sample(amount: number, rng?: RNGSource): T[];
+		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
+		unique(): T[];
+	}
 
 	interface String {
 		lazySplit(match: string | RegExp, cases: number): string[];
 		gsub(match: RegExp, replace: string | ((arg: string, ...captures: string[]) => string)): string;
+	}
+
+	interface Number {
+		toLetter(): string;
 	}
 }
 
@@ -143,6 +153,18 @@ Object.defineProperties(String.prototype, {
 				output = next;
 			}
 			return output;
+		},
+	},
+});
+
+Object.defineProperties(Number.prototype, {
+	toLetter: {
+		enumerable: false,
+		writable: false,
+		configurable: false,
+		value: function (this: number) {
+			const aCode = 'A'.charCodeAt(0);
+			return String.fromCharCode(aCode + this - 1);
 		},
 	},
 });

@@ -5,11 +5,11 @@ import { PSQuoteRoomPrefs } from '@/cache';
 import { QUOTES } from '@/text';
 import { Username as UsernameCustom } from '@/utils/components';
 import { Username as UsernamePS } from '@/utils/components/ps';
-import { escapeRegEx } from '@/utils/regex-escape';
+import { escapeRegEx } from '@/utils/regexEscape';
 import { MAX_CHAT_HTML_LENGTH, MAX_PAGE_HTML_LENGTH } from '@/ps/constants';
 
 import type { ReactElement, ReactNode } from 'react';
-import { jsxToHTML } from '@/utils/jsx-to-html';
+import { jsxToHTML } from '@/utils/jsxToHTML';
 
 type QuoteCollection = [index: number, quote: string][];
 
