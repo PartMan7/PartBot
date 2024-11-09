@@ -27,33 +27,33 @@ export function Table<T>({
 	return (
 		<table
 			style={{
-				border: '2px solid black',
 				borderCollapse: 'collapse',
+				margin: '20px',
 			}}
 		>
 			<tbody>
 				<tr>
 					<th />
 					{colLabels.map(label => (
-						<th style={{ height: 20 }}>{label}</th>
+						<th style={{ color: 'gray', height: 20 }}>{label}</th>
 					))}
 					<th />
 				</tr>
 
 				{board.map((row, i) => (
 					<tr>
-						<th style={{ width: 20 }}>{rowLabels[i]}</th>
+						<th style={{ color: 'gray', width: 20 }}>{rowLabels[i]}</th>
 						{row.map((cell, j) => (
 							<Cell cell={cell} i={i} j={j} />
 						))}
-						<th style={{ width: 20 }}>{rowLabels[i]}</th>
+						<th style={{ color: 'gray', width: 20 }}>{rowLabels[i]}</th>
 					</tr>
 				))}
 
 				<tr>
 					<th />
 					{colLabels.map(label => (
-						<th style={{ height: 20 }}>{label}</th>
+						<th style={{ color: 'gray', height: 20 }}>{label}</th>
 					))}
 					<th />
 				</tr>

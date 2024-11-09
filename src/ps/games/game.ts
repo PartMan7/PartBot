@@ -1,16 +1,16 @@
 import { prefix } from '@/config/ps';
+import { GAME } from '@/text';
+import { sample, useRNG } from '@/utils/random';
+import { PSGames } from '@/cache';
 
 import type { Room, User } from 'ps-client';
-import type { ActionResponse, BaseGameTypes, BasePlayer, BaseState } from '@/ps/games/common';
+import { ActionResponse, BaseGameTypes, BasePlayer, BaseState, GamesList } from '@/ps/games/common';
 import type { ReactElement } from 'react';
 
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
 
-import { GAME } from '@/text';
-import { sample, useRNG } from '@/utils/random';
-
 export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
-	game: string; // TODO: Make this an enum
+	game: GamesList;
 	id: string;
 	seed: number;
 	prng: () => number;
@@ -48,7 +48,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.room = ctx.room;
 		this.roomid = ctx.room.id;
 
-		this.seed = sample(1e6);
+		this.seed = sample(1e12);
 		this.prng = useRNG(this.seed);
 
 		this.game = ctx.game;
@@ -62,8 +62,14 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.turn = null;
 		this.turns = [];
 		this.spectators = [];
+		this.log = '';
 
-		// TODO: Add to cache
+		(PSGames[this.game] ??= {})[this.id] = this;
+	}
+
+	serialize(): string {
+		const preserveKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log'];
+		return ''; // TODO
 	}
 
 	addPlayer(user: User, ctx: string[]): ActionResponse {
@@ -132,7 +138,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		do {
 			current = this.next(current);
 			if (!this.trySkipPlayer || !this.trySkipPlayer(current)) {
-				this.turn = current
+				this.turn = current;
 				this.update();
 				return current;
 			}
@@ -159,11 +165,13 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		// TODO: Render finish HTML
 		this.room.send(message);
 		// TODO: Upload to Discord
-		// TODO: Delete from cache
+		// Delete from cache
+		delete PSGames[this.game][this.id];
+		// TODO: Delete backup
 	}
 }
 
-export type BaseContext = { room: Room; id: string; game: string; backup?: string }; // TODO: Game should be an enum
+export type BaseContext = { room: Room; id: string; game: GamesList; backup?: string };
 
 export function createGrid<T>(x: number, y: number, fill: (x: number, y: number) => T) {
 	return Array.from({ length: x }).map((_, i) => Array.from({ length: y }).map((__, j) => fill(i, j)));

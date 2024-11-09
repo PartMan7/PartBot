@@ -7,7 +7,8 @@ import { render } from '@/ps/games/othello/render';
 import { GAME } from '@/text';
 
 export class Othello extends Game<State, null> {
-	winCtx: WinCtx;
+	winCtx?: WinCtx;
+	cache: Record<string, Record<Turn, number>> = {};
 	constructor(ctx: BaseContext) {
 		super(ctx);
 
@@ -20,13 +21,15 @@ export class Othello extends Game<State, null> {
 	}
 
 	count(board = this.state.board): Record<Turn, number> {
-		return board.flat(2).reduce(
+		if (this.cache[this.log]) return this.cache[this.log];
+		const count = board.flat(2).reduce(
 			(acc, cell) => {
 				if (cell) acc[cell]++;
 				return acc;
 			},
 			{ W: 0, B: 0 }
 		);
+		return (this.cache[this.log] = count);
 	}
 
 	play([i, j]: [number, number], turn: Turn): Board | null;
@@ -115,10 +118,14 @@ export class Othello extends Game<State, null> {
 		);
 	}
 
-	render(side) {
-		const ctx: RenderCtx = { board: this.state.board, validMoves: side === this.turn ? this.validMoves() : [] };
+	render(side: Turn) {
+		const ctx: RenderCtx = { board: this.state.board, validMoves: side === this.turn ? this.validMoves() : [], score: this.count() };
+		if (side === this.turn) {
+			ctx.header = 'Your turn!';
+		} else if (side) {
+			ctx.header = 'Waiting for opponent...';
+			ctx.headerStyles = { color: 'gray' };
+		}
 		return render.bind(this.renderCtx)(ctx);
 	}
 }
-
-const index = new Othello({ room: 'room' as unknown as Room, id: 'id', game: 'othello' });

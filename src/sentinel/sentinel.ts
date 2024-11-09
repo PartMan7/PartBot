@@ -3,8 +3,9 @@ import EventEmitter from 'events';
 import { debounce } from '@/utils/debounce';
 
 import { reloadCommands } from '@/ps/loaders/commands';
+import { cachebuster } from '@/utils/cachebuster';
 
-type ListenerType = 'commands';
+type ListenerType = 'commands' | 'games';
 type Register = { label: ListenerType; pattern: RegExp; reload: (filepaths: string[]) => Promise<void> | void; debounce?: number };
 type Listener = { label: ListenerType; pattern: RegExp; reload: (filepaths: string) => Promise<void> | void };
 
@@ -30,8 +31,28 @@ export default function createSentinel() {
 	const registers: Register[] = [
 		{
 			label: 'commands',
-			pattern: /ps\/commands\//,
+			pattern: /\/ps\/commands\//,
 			reload: reloadCommands,
+			debounce: 1000,
+		},
+		{
+			label: 'games',
+			pattern: /\/ps\/games\//,
+			reload: async filepaths => {
+				['common', 'game', 'index', 'render'].forEach(file => cachebuster(`@/ps/games/${file}`));
+				const games = filepaths.reduce((acc, filepath) => {
+					const match = filepath.match(/\/ps\/games\/([^/]*)\//);
+					if (match) acc.push(match[1]);
+					return acc;
+				}, []);
+				await Promise.all(
+					games.map(async game => {
+						const files = await fs.readdir(fsPath('ps', 'games', game));
+						files.forEach(file => cachebuster(fsPath('ps', 'games', game, file)));
+					})
+				);
+				// TODO: Regenerate games commands if needed
+			},
 			debounce: 1000,
 		},
 	];

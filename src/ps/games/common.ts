@@ -2,6 +2,11 @@ import type { Room } from 'ps-client';
 import type { ReactElement } from 'react';
 import type { ActionType, Game } from '@/ps/games/game';
 
+export enum GamesList {
+	Othello = 'othello',
+	Chess = 'chess',
+}
+
 export interface BaseGame {
 	type: string; // TODO: valid game key
 	id: string;

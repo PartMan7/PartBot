@@ -3,7 +3,9 @@ import { CellRenderer, Table } from '@/ps/games/render';
 
 const roundStyles = { height: 24, width: 24, display: 'inline-block', borderRadius: 100, marginLeft: 3 };
 
-export const render = function (this: { msg: string }, ctx: RenderCtx) {
+type This = { msg: string };
+
+export function renderBoard(this: This, ctx: RenderCtx) {
 	const Cell: CellRenderer<Turn | null> = ({ cell, i, j }) => {
 		const action = ctx.validMoves.some(([x, y]) => x === i && y === j);
 		return (
@@ -22,4 +24,16 @@ export const render = function (this: { msg: string }, ctx: RenderCtx) {
 	};
 
 	return <Table<Turn | null> board={ctx.board} rowLabel="1-9" colLabel="A-Z" Cell={Cell} />;
-};
+}
+
+export function render(this: This, ctx: RenderCtx) {
+	return (
+		<center>
+			<h1 style={ctx.headerStyles}>{ctx.header}</h1>
+			{renderBoard.bind(this)(ctx)}
+			<b style={{ margin: '10px' }}>
+				Score: {ctx.score.B}/{ctx.score.W}
+			</b>
+		</center>
+	);
+}
