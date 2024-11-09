@@ -7,10 +7,13 @@ import type { ReactElement } from 'react';
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
 
 import { GAME } from '@/text';
+import { sample, useRNG } from '@/utils/random';
 
 export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	game: string; // TODO: Make this an enum
 	id: string;
+	seed: number;
+	prng: () => number;
 	room: Room;
 	roomid: string;
 	state: State;
@@ -37,13 +40,16 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	onAddPlayer?(user: User, ctx: string[]): ActionResponse<Record<string, unknown>>;
 	onRemovePlayer?(player: BasePlayer, ctx: string | User): ActionResponse;
 	onStart?(): ActionResponse;
-	onEnd?(): void;
+	onEnd?(): string;
 	trySkipPlayer?(turn: State['turn']): boolean;
 
 	constructor(ctx: BaseContext) {
 		this.id = ctx.id;
 		this.room = ctx.room;
 		this.roomid = ctx.room.id;
+
+		this.seed = sample(1e6);
+		this.prng = useRNG(this.seed);
 
 		this.game = ctx.game;
 		this.renderCtx = { msg: `/msgroom ${ctx.room.id},/botmsg ${PS.status.userid},${prefix}${ctx.game} #` };
@@ -88,6 +94,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		}
 		this.players[newPlayer.turn] = newPlayer;
 		return { success: true };
+		// TODO: Autostart for relevant games
 	}
 
 	removePlayer(ctx: string | User): ActionResponse {
@@ -109,7 +116,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 
 	start(): ActionResponse {
 		const tryStart = this.onStart?.();
-		if (tryStart.success === false) return tryStart;
+		if (tryStart?.success === false) return tryStart;
 		this.started = true;
 		this.turns ??= Object.keys(this.players).shuffle();
 		this.nextPlayer();
@@ -124,8 +131,11 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		let current = this.turn;
 		do {
 			current = this.next(current);
-			if (!this.trySkipPlayer) return current;
-			if (!this.trySkipPlayer(current)) return current;
+			if (!this.trySkipPlayer || !this.trySkipPlayer(current)) {
+				this.turn = current
+				this.update();
+				return current;
+			}
 		} while (current !== this.turn);
 		return null;
 	}
@@ -144,13 +154,16 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		}
 	}
 
-	end(ctx: GameTypes['endCtx']): void {
-		this.onEnd?.();
+	end(): void {
+		const message = this.onEnd();
+		// TODO: Render finish HTML
+		this.room.send(message);
+		// TODO: Upload to Discord
 		// TODO: Delete from cache
 	}
 }
 
-export type BaseContext = { room: Room; id: string; game: string }; // TODO: Game should be an enum
+export type BaseContext = { room: Room; id: string; game: string; backup?: string }; // TODO: Game should be an enum
 
 export function createGrid<T>(x: number, y: number, fill: (x: number, y: number) => T) {
 	return Array.from({ length: x }).map((_, i) => Array.from({ length: y }).map((__, j) => fill(i, j)));

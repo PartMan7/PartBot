@@ -1,15 +1,17 @@
 import { Game, BaseContext, createGrid } from '@/ps/games/game';
-import type { Board, State, Turn, RenderCtx } from '@/ps/games/othello/types';
+import type { Board, State, Turn, RenderCtx, WinCtx } from '@/ps/games/othello/types';
 import { Room } from 'ps-client';
 
 import { deepClone } from '@/utils/deepClone';
 import { render } from '@/ps/games/othello/render';
+import { GAME } from '@/text';
 
 export class Othello extends Game<State, null> {
+	winCtx: WinCtx;
 	constructor(ctx: BaseContext) {
 		super(ctx);
 
-		this.turns = ['W', 'B'];
+		this.turns = ['B', 'W'];
 
 		const board = createGrid(8, 8, () => null);
 		board[3][3] = board[4][4] = 'W';
@@ -30,6 +32,7 @@ export class Othello extends Game<State, null> {
 	play([i, j]: [number, number], turn: Turn): Board | null;
 	play([i, j]: [number, number], turn: Turn, board: Board): boolean;
 	play([i, j]: [number, number], turn: Turn, board = this.state.board): Board | null | boolean {
+		// TODO: check if the right turn
 		const isActual = board === this.state.board;
 		const other = this.next(turn);
 
@@ -61,7 +64,7 @@ export class Othello extends Game<State, null> {
 		this.log += `[${i},${j}]`;
 
 		const next = this.nextPlayer();
-		if (!next) this.end(null);
+		if (!next) this.end();
 		return board;
 	}
 
@@ -90,8 +93,30 @@ export class Othello extends Game<State, null> {
 		return !this.hasMoves(turn);
 	}
 
+	onEnd(): string {
+		const scores = this.count();
+		if (scores.W === scores.B) {
+			this.winCtx = { type: 'draw' };
+			return GAME.DRAW(this.players.W.name, this.players.B.name);
+		}
+		const winningSide = scores.W > scores.B ? 'W' : 'B';
+		const winner = this.players[winningSide];
+		const loser = this.players[this.next(winningSide)];
+		this.winCtx = {
+			type: 'win',
+			winner: { ...winner, score: scores[winningSide] },
+			loser: { ...loser, score: scores[this.next(winningSide)] },
+		};
+		return GAME.WON_AGAINST(
+			`${winner.name} (${winningSide})`,
+			`${loser.name} (${this.next(winningSide)})`,
+			this.game,
+			`${scores[winningSide]}-${scores[this.next(winningSide)]}`
+		);
+	}
+
 	render(side) {
-		const ctx: RenderCtx = { board: this.state.board, validMoves: this.validMoves() };
+		const ctx: RenderCtx = { board: this.state.board, validMoves: side === this.turn ? this.validMoves() : [] };
 		return render.bind(this.renderCtx)(ctx);
 	}
 }

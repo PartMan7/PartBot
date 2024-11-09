@@ -24,4 +24,10 @@ export const GAME = {
 		"You don't seem to be a player?",
 		'Prayer not found. Or something like that.',
 	],
+	WON_AGAINST(winner: string, loser: string, game: string, ctx?: string): string {
+		return `${winner} won the game of ${game} against ${loser}!${ctx ? ` ${ctx}` : ''}`;
+	},
+	DRAW(...players: string[]): string {
+		return `The game between ${players.join(', ')} ended in a draw!`; // TODO: listify
+	},
 } as const;

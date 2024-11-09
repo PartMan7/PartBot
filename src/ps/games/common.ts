@@ -19,8 +19,6 @@ export type BaseGameTypes = {
 	player?: Record<string, unknown>;
 	actions?: { type: ActionType; name: string }[];
 	log?: unknown;
-	renderCtx?: unknown;
-	endCtx?: unknown;
 };
 
 export type GameRender<State extends BaseState, GameTypes extends BaseGameTypes> = (
