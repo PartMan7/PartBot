@@ -32,15 +32,15 @@ function sample(input: null | number | [number, number] | Record<string, number>
 	if (typeof input === 'number') return Math.floor(input * RNG());
 	if (Array.isArray(input)) return input[0] + Math.floor((input[1] - input[0]) * RNG());
 	if (typeof input === 'object') {
-		const thresholds = Object.entries(input).reduce((acc, [key, weight]) => {
-			const lastWeight = acc.length ? acc.at(-1)[1] : 0;
+		const thresholds = Object.entries(input).reduce<[string, number][]>((acc, [key, weight]) => {
+			const lastWeight = acc.length ? acc.at(-1)![1] : 0;
 			return [...acc, [key, lastWeight + weight]];
 		}, []);
-		const totalWeight = thresholds.at(-1)[1];
 		if (!thresholds.length) throw new Error('Called RNG on record set with no keys');
+		const totalWeight = thresholds.at(-1)![1];
 		if (totalWeight <= 0) throw new Error('Called RNG on record set with invalid weights');
 		const lookup = totalWeight * RNG();
-		return thresholds.find(([, weight]) => lookup < weight)[0];
+		return thresholds.find(([, weight]) => lookup < weight)![0];
 	}
 	log(`Called sample() with input`, input);
 	return RNG();

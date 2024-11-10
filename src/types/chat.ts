@@ -78,13 +78,15 @@ export type PSCommand = {
 	 */
 	flags?: {
 		// If enabled, hides the command from command lists
-		noDisplay?: true;
+		noDisplay?: boolean;
 		// If enabled, replaces 'access denied' errors with 'command not found'
-		conceal?: true;
+		conceal?: boolean;
 		// Ensures a command can only be run from a room
-		roomOnly?: true;
+		roomOnly?: boolean;
 		// Ensures a command can only be run from a PM
-		pmOnly?: true;
+		pmOnly?: boolean;
+		// Allows 'rerouted' PMs (eg: ,@boardgames othello join). Disabled by default.
+		routePMs?: boolean;
 	};
 	/**
 	 * Command help message to be shown if executor function rejects without a message.

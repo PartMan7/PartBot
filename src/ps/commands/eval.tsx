@@ -20,14 +20,14 @@ export const command: PSCommand = {
 				const trimmedOutput = res.output.split(/(?<=<\/span>)|(?=<span)/);
 				let currentLength = outputHTML.length;
 				while (currentLength > MAX_CHAT_HTML_LENGTH) {
-					currentLength -= trimmedOutput.at(-1).length;
+					currentLength -= trimmedOutput.at(-1)!.length;
 					trimmedOutput.pop();
 				}
 				outputHTML = `${trimmedOutput.join('')} ...`;
 			}
 			const WrappedHTML = (
 				<div
-					style={{ overflow: 'auto', maxHeight: '40vh', marginTop: originalCommand === 'eval' ? '20px' : undefined }}
+					style={{ overflow: 'auto', maxHeight: '40vh', marginTop: originalCommand === 'eval' ? 20 : undefined }}
 					dangerouslySetInnerHTML={{ __html: outputHTML }}
 				/>
 			);

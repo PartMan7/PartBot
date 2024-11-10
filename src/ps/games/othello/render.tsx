@@ -1,7 +1,7 @@
 import type { RenderCtx, Turn } from '@/ps/games/othello/types';
 import { CellRenderer, Table } from '@/ps/games/render';
 
-const roundStyles = { height: 24, width: 24, display: 'inline-block', borderRadius: 100, marginLeft: 3 };
+const roundStyles = { height: 24, width: 24, display: 'inline-block', borderRadius: 100, marginLeft: 3, marginTop: 3 };
 
 type This = { msg: string };
 
@@ -29,9 +29,9 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 export function render(this: This, ctx: RenderCtx) {
 	return (
 		<center>
-			<h1 style={ctx.headerStyles}>{ctx.header}</h1>
+			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
 			{renderBoard.bind(this)(ctx)}
-			<b style={{ margin: '10px' }}>
+			<b style={{ margin: 10 }}>
 				Score: {ctx.score.B}/{ctx.score.W}
 			</b>
 		</center>

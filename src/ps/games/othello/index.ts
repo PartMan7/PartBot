@@ -1,12 +1,15 @@
 import { Game, BaseContext, createGrid } from '@/ps/games/game';
 import type { Board, State, Turn, RenderCtx, WinCtx } from '@/ps/games/othello/types';
-import { Room } from 'ps-client';
+import type { User } from 'ps-client';
 
 import { deepClone } from '@/utils/deepClone';
 import { render } from '@/ps/games/othello/render';
 import { GAME } from '@/text';
+import { ChatError } from '@/utils/chatError';
 
-export class Othello extends Game<State, null> {
+export { meta } from '@/ps/games/othello/meta';
+
+export class Othello extends Game<State, object> {
 	winCtx?: WinCtx;
 	cache: Record<string, Record<Turn, number>> = {};
 	constructor(ctx: BaseContext) {
@@ -14,7 +17,7 @@ export class Othello extends Game<State, null> {
 
 		this.turns = ['B', 'W'];
 
-		const board = createGrid(8, 8, () => null);
+		const board = createGrid<Turn | null>(8, 8, () => null);
 		board[3][3] = board[4][4] = 'W';
 		board[3][4] = board[4][3] = 'B';
 		this.state.board = board;
@@ -30,6 +33,15 @@ export class Othello extends Game<State, null> {
 			{ W: 0, B: 0 }
 		);
 		return (this.cache[this.log] = count);
+	}
+
+	action(user: User, ctx: string[]) {
+		if (!this.started) throw new ChatError(GAME.NOT_STARTED);
+		if (user.id !== this.players[this.turn!].id) throw new ChatError(GAME.IMPOSTOR_ALERT.random());
+		const [i, j] = ctx.map(num => parseInt(num));
+		if (isNaN(i) || isNaN(j)) throw new ChatError(GAME.INVALID_INPUT);
+		const res = this.play([i, j], this.turn!);
+		if (!res) throw new ChatError(GAME.INVALID_INPUT);
 	}
 
 	play([i, j]: [number, number], turn: Turn): Board | null;
@@ -71,7 +83,7 @@ export class Othello extends Game<State, null> {
 		return board;
 	}
 
-	hasMoves(turn = this.turn): boolean {
+	hasMoves(turn = this.turn!): boolean {
 		const board = deepClone(this.state.board);
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
@@ -86,7 +98,7 @@ export class Othello extends Game<State, null> {
 		const moves: [number, number][] = [];
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
-				if (this.play([i, j], this.turn, board)) moves.push([i, j]);
+				if (this.play([i, j], this.turn!, board)) moves.push([i, j]);
 			}
 		}
 		return moves;
@@ -113,18 +125,20 @@ export class Othello extends Game<State, null> {
 		return GAME.WON_AGAINST(
 			`${winner.name} (${winningSide})`,
 			`${loser.name} (${this.next(winningSide)})`,
-			this.game,
+			this.meta.id,
 			`${scores[winningSide]}-${scores[this.next(winningSide)]}`
 		);
 	}
 
 	render(side: Turn) {
 		const ctx: RenderCtx = { board: this.state.board, validMoves: side === this.turn ? this.validMoves() : [], score: this.count() };
-		if (side === this.turn) {
+		if (this.winCtx) {
+			ctx.header = 'Game ended.';
+		} else if (side === this.turn) {
 			ctx.header = 'Your turn!';
 		} else if (side) {
 			ctx.header = 'Waiting for opponent...';
-			ctx.headerStyles = { color: 'gray' };
+			ctx.dimHeader = true;
 		}
 		return render.bind(this.renderCtx)(ctx);
 	}

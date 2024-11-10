@@ -98,7 +98,7 @@ Object.defineProperties(Array.prototype, {
 		writable: false,
 		configurable: false,
 		value: function <T = unknown>(this: T[]): T[] {
-			const output = [];
+			const output: T[] = [];
 			const cache = new Set();
 			for (let i = 0; i < this.length; i++) {
 				if (!cache.has(this[i])) {
@@ -127,7 +127,7 @@ Object.defineProperties(String.prototype, {
 					if (!match) return [...out, input];
 					const m = match[0];
 					out.push(input.slice(0, match.index));
-					input = input.slice(match.index + m.length);
+					input = input.slice(match.index! + m.length);
 					for (let j = 1; j < match.length; j++) out.push(match[j]);
 				} else {
 					const match = input.indexOf(delim);

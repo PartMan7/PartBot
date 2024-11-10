@@ -4,13 +4,16 @@ import { sample, useRNG } from '@/utils/random';
 import { PSGames } from '@/cache';
 
 import type { Room, User } from 'ps-client';
-import { ActionResponse, BaseGameTypes, BasePlayer, BaseState, GamesList } from '@/ps/games/common';
+import { ActionResponse, BaseGameTypes, BasePlayer, BaseState, GamesList, Meta } from '@/ps/games/common';
 import type { ReactElement } from 'react';
+import { renderSignups } from '@/ps/games/render';
+import { Games } from '@/ps/games/index';
+import { ChatError } from '@/utils/chatError';
 
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
 
 export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
-	game: GamesList;
+	meta: Meta;
 	id: string;
 	seed: number;
 	prng: () => number;
@@ -37,6 +40,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	// Game-provided methods:
 	render?(side: State['turn'] | null): ReactElement;
 
+	action?(user: User, ctx: string[]): void;
 	onAddPlayer?(user: User, ctx: string[]): ActionResponse<Record<string, unknown>>;
 	onRemovePlayer?(player: BasePlayer, ctx: string | User): ActionResponse;
 	onStart?(): ActionResponse;
@@ -51,8 +55,10 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.seed = sample(1e12);
 		this.prng = useRNG(this.seed);
 
-		this.game = ctx.game;
-		this.renderCtx = { msg: `/msgroom ${ctx.room.id},/botmsg ${PS.status.userid},${prefix}${ctx.game} #` };
+		this.meta = ctx.meta;
+		this.renderCtx = { msg: `/w ${PS.status.userid},${prefix}@${ctx.room.id} ${ctx.meta.id}` };
+		// TODO: Use /botmsg
+		// this.renderCtx = { msg: `/msgroom ${ctx.room.id},/botmsg ${PS.status.userid},${prefix}@${ctx.room.id} ${ctx.game}` };
 
 		this.started = false;
 		// @ts-expect-error -- State isn't initialized yet
@@ -64,7 +70,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.spectators = [];
 		this.log = '';
 
-		(PSGames[this.game] ??= {})[this.id] = this;
+		(PSGames[this.meta.id] ??= {})[this.id] = this as unknown as InstanceType<Games[GamesList]['instance']>;
 	}
 
 	serialize(): string {
@@ -72,11 +78,18 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		return ''; // TODO
 	}
 
+	signups(): void {
+		if (this.started) throw new ChatError(GAME.ALREADY_STARTED);
+		const signupsHTML = renderSignups.bind(this)();
+		this.room.sendHTML(signupsHTML);
+	}
+
 	addPlayer(user: User, ctx: string[]): ActionResponse {
 		if (this.started) return { success: false, error: GAME.ALREADY_STARTED };
 		const availableSlots: number | State['turn'][] = this.turns
 			? this.turns.filter(turn => !this.players[turn])
-			: this.maxSize - Object.keys(this.players).length;
+			: this.maxSize! - Object.keys(this.players).length;
+		if (Object.values(this.players).some((player: BasePlayer) => player.id === user.id)) throw new ChatError(GAME.ALREADY_JOINED);
 		const newPlayer: BasePlayer = {
 			name: user.name,
 			id: user.id,
@@ -95,7 +108,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		}
 		if (this.onAddPlayer) {
 			const extraData = this.onAddPlayer(user, ctx);
-			if (extraData.success === false) return extraData;
+			if (!extraData.success) return extraData;
 			Object.assign(newPlayer, extraData);
 		}
 		this.players[newPlayer.turn] = newPlayer;
@@ -107,14 +120,16 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		if (this.started) {
 			if (!this.allowForfeits) return { success: false, error: GAME.ALREADY_STARTED };
 			// TODO: Support forfeits
+			return { success: true };
 		}
 		if (typeof ctx === 'string') {
 			// TODO: Support staff DQs
+			return { success: true };
 		} else {
 			const player = (Object.values(this.players) as BasePlayer[]).find(p => p.id === ctx.id);
 			if (!player) return { success: false, error: GAME.NOT_PLAYING.random() };
 			const removePlayer = this.onRemovePlayer?.(player, ctx);
-			if (removePlayer.success === false) return removePlayer;
+			if (removePlayer?.success === false) return removePlayer;
 			delete this.players[player.turn];
 			return { success: true };
 		}
@@ -126,10 +141,11 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.started = true;
 		this.turns ??= Object.keys(this.players).shuffle();
 		this.nextPlayer();
+		return { success: true };
 	}
 
 	next(current = this.turn): State['turn'] {
-		const baseIndex = this.turns.indexOf(current);
+		const baseIndex = this.turns.indexOf(current!);
 		return this.turns[(baseIndex + 1) % this.turns.length];
 	}
 
@@ -148,30 +164,31 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 
 	sendHTML(to: string | User, html: ReactElement | string): void {
 		const user = typeof to === 'object' ? to : PS.addUser({ userid: Tools.toId(to) });
-		user.pageHTML(html, { name: this.id });
+		user.pageHTML(html, { name: this.id, room: this.room });
 	}
 
 	update() {
 		if ('render' in this && typeof this.render === 'function') {
-			Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render(side)));
-			this.spectators.forEach(spec => this.sendHTML(spec, this.render(null)));
+			Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render!(side)));
+			this.spectators.forEach(spec => this.sendHTML(spec, this.render!(null)));
 			// TODO: Replace the line above with the line below once PS supports sending HTML pages to multiple people
 			// this.room.send(`/sendhtmlpage ${this.spectators.join(';')},${this.id},${this.render(null)}`);
 		}
 	}
 
 	end(): void {
-		const message = this.onEnd();
-		// TODO: Render finish HTML
+		const message = this.onEnd!();
+		this.update();
+		// TODO: Render finish HTML in chat
 		this.room.send(message);
 		// TODO: Upload to Discord
 		// Delete from cache
-		delete PSGames[this.game][this.id];
+		delete PSGames[this.meta.id]![this.id];
 		// TODO: Delete backup
 	}
 }
 
-export type BaseContext = { room: Room; id: string; game: GamesList; backup?: string };
+export type BaseContext = { room: Room; id: string; meta: Meta; backup?: string };
 
 export function createGrid<T>(x: number, y: number, fill: (x: number, y: number) => T) {
 	return Array.from({ length: x }).map((_, i) => Array.from({ length: y }).map((__, j) => fill(i, j)));

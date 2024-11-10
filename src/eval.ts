@@ -35,8 +35,9 @@ export function formatValue(value: unknown, mode: EvalModes): string {
 				case 'bigint':
 				case 'boolean':
 				case 'symbol':
-				case 'undefined':
 					return value.toString();
+				case 'undefined':
+					return 'undefined';
 				case 'function': {
 					const funcStr = value.toString();
 					const isAsync = funcStr.startsWith('async');

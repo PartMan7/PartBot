@@ -32,7 +32,10 @@ export default function createSentinel() {
 		{
 			label: 'commands',
 			pattern: /\/ps\/commands\//,
-			reload: reloadCommands,
+			reload: async filepaths => {
+				filepaths.forEach(cachebuster);
+				return reloadCommands();
+			},
 			debounce: 1000,
 		},
 		{
@@ -44,7 +47,7 @@ export default function createSentinel() {
 					const match = filepath.match(/\/ps\/games\/([^/]*)\//);
 					if (match) acc.push(match[1]);
 					return acc;
-				}, []);
+				}, [] as string[]);
 				await Promise.all(
 					games.map(async game => {
 						const files = await fs.readdir(fsPath('ps', 'games', game));
@@ -67,7 +70,7 @@ export default function createSentinel() {
 						await listener.reload(filepaths);
 						emitter.emit('complete', listener.label, filepaths);
 					} catch (err) {
-						emitter.emit('error', err, listener.label, filepaths);
+						emitter.emit('error', err as Error, listener.label, filepaths);
 					}
 				};
 				return {

@@ -2,9 +2,19 @@ import type { Room } from 'ps-client';
 import type { ReactElement } from 'react';
 import type { ActionType, Game } from '@/ps/games/game';
 
+export type Meta = {
+	name: string;
+	id: GamesList;
+	aliases?: string[];
+
+	turns?: Record<string, string>;
+
+	allowForfeits?: boolean;
+	autostart?: boolean;
+};
+
 export enum GamesList {
 	Othello = 'othello',
-	Chess = 'chess',
 }
 
 export interface BaseGame {

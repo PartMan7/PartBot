@@ -5,7 +5,7 @@ type CacheTypes = {
 };
 
 const defaults: CacheTypes = {
-	gameId: 36 ** 3,
+	gameId: 0,
 };
 
 export type Cache<T> = {
@@ -13,7 +13,7 @@ export type Cache<T> = {
 	set(arg: T): void;
 };
 
-export function useCache<T extends keyof CacheTypes>(cacheId: T): Cache<CacheTypes[T]> {
+export function usePersistedCache<T extends keyof CacheTypes>(cacheId: T): Cache<CacheTypes[T]> {
 	const flatCache = new FlatCache();
 	flatCache.load(cacheId);
 

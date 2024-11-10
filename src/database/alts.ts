@@ -32,7 +32,7 @@ const model = mongoose.model('alt', schema, 'alts');
 
 const DEFAULT_ALTS_CAP = 50;
 
-export async function rename(from: string, to: string): Promise<Model> {
+export async function rename(from: string, to: string): Promise<Model | undefined> {
 	const fromId = Tools.toId(from),
 		toId = Tools.toId(to),
 		id = `${fromId}-${toId}`;

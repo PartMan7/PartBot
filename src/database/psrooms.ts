@@ -50,13 +50,14 @@ export function parseRoomConfig(config: UnparsedPSRoomConfig): PSRoomConfig {
 	const newConfig: UnparsedPSRoomConfig = config;
 	return {
 		...newConfig,
-		whitelist: newConfig.whitelist.map(str => new RegExp(str)),
-		blacklist: newConfig.whitelist.map(str => new RegExp(str)),
+		whitelist: newConfig.whitelist?.map(str => new RegExp(str)),
+		blacklist: newConfig.blacklist?.map(str => new RegExp(str)),
 	};
 }
 
-export async function getRoomConfig(roomId: string): Promise<PSRoomConfig> {
-	const res: UnparsedPSRoomConfig = await model.findOne({ roomId }).lean();
+export async function getRoomConfig(roomId: string): Promise<PSRoomConfig | null> {
+	const res: UnparsedPSRoomConfig | null = await model.findOne({ roomId }).lean();
+	if (!res) return null;
 	return parseRoomConfig(res);
 }
 

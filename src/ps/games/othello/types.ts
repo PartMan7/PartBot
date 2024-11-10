@@ -15,7 +15,7 @@ export type RenderCtx = {
 	board: Board;
 	validMoves: [number, number][];
 	header?: string;
-	headerStyles?: CSSProperties;
+	dimHeader?: boolean;
 	score: Record<Turn, number>;
 };
 export type WinCtx =

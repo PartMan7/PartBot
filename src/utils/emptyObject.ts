@@ -6,7 +6,7 @@ export function emptyObject<T extends Record<string, any>>(obj: T): Record<strin
 			delete obj[key];
 		} catch {
 			try {
-				// Otherwise try assigning to undefined
+				// @ts-expect-error -- Otherwise try assigning to undefined
 				obj[key] = undefined;
 			} catch {
 				// Admit defeat

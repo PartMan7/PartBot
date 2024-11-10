@@ -18,7 +18,7 @@ export const PSSeenCache: { [key: string]: { at: Date; in: string[] } } = {};
 export const PSQuoteRoomPrefs: { [key: string]: { room: string; at: Date } } = {};
 
 // Games
-export const PSGames: { [key in keyof Games]?: Record<string, Games[key]> } = {};
+export const PSGames: { [key in keyof Games]?: Record<string, InstanceType<Games[key]['instance']>> } = {};
 
 // Discord
 export const DiscCommands: { [key: string]: DiscCommand & { path: string; isAlias?: boolean; slash: SlashCommandBuilder } } = {};

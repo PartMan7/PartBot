@@ -1,7 +1,10 @@
-import { Othello } from '@/ps/games/othello';
+import { Othello, meta as OthelloMeta } from '@/ps/games/othello';
 import { GamesList } from '@/ps/games/common';
 
 export const Games = {
-	[GamesList.Othello]: Othello,
+	[GamesList.Othello]: {
+		meta: OthelloMeta,
+		instance: Othello,
+	},
 };
 export type Games = typeof Games;

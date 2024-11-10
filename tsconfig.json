@@ -7,6 +7,9 @@
 		"module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
 		"esModuleInterop": true,
 		"allowUmdGlobalAccess": true, // Enable globals (albeit treated as UMD globals)
+		// Some strict mode patterns:
+		"strictBindCallApply": true,
+		"strictNullChecks": true,
 		"paths": {
 			"@/secrets/*": ["./secrets/src/*"],
 			"@/*": ["./*"]

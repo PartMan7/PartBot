@@ -1,4 +1,44 @@
 import type { ReactElement, ReactNode } from 'react';
+import type { Game } from '@/ps/games/game';
+import type { BaseGameTypes, BaseState } from '@/ps/games/common';
+import { Button } from '@/utils/components/ps';
+import { prefix } from '@/config/ps';
+
+export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this: Game<S, T>): ReactElement {
+	return (
+		<>
+			<hr />
+			<h1>{this.meta.name} Signups have begun!</h1>
+			{this.turns
+				? this.turns.map(side => (
+						<Button
+							key={side}
+							name="send"
+							value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}, ${side}`}
+							style={{ margin: 5 }}
+						>
+							{side}
+						</Button>
+					))
+				: null}
+			{this.turns && this.turns.length - Object.keys(this.players).length > 1 ? (
+				<Button
+					name="send"
+					value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}, -`}
+					style={{ margin: 5 }}
+				>
+					Random
+				</Button>
+			) : null}
+			{!this.turns ? (
+				<Button name="send" value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}`}>
+					Join
+				</Button>
+			) : null}
+			<hr />
+		</>
+	);
+}
 
 type Label = 'A-Z' | 'Z-A' | '1-9' | '9-1';
 
@@ -28,7 +68,7 @@ export function Table<T>({
 		<table
 			style={{
 				borderCollapse: 'collapse',
-				margin: '20px',
+				margin: 20,
 			}}
 		>
 			<tbody>

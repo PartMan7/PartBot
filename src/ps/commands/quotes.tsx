@@ -49,7 +49,7 @@ function parseQuote(quote: string): string {
 	const lines = quote.trim().split(/ {3}|\\n|\n/);
 	const foundNames = lines
 		.map(line => line.match(chatRegEx)?.[3])
-		.filter(Boolean)
+		.filter((name): name is string => !!name)
 		.unique();
 	const reformatRegExes = foundNames.map(name => {
 		return new RegExp(`^((?:\\[(?:\\d{2}:){1,2}\\d{2}] )?• [${ranks}]?)(${escapeRegEx(name)})( .*)$`, 'i');
@@ -179,13 +179,13 @@ function MultiQuotes({ list, paginate, buffer }: { list: QuoteCollection; pagina
 	remaining: QuoteCollection;
 } {
 	const quoteList = list.slice();
-	const cap = (paginate ? MAX_PAGE_HTML_LENGTH : MAX_CHAT_HTML_LENGTH) - buffer;
+	const cap = (paginate ? MAX_PAGE_HTML_LENGTH : MAX_CHAT_HTML_LENGTH) - (buffer ?? 10);
 
 	const renderedQuotes: QuoteCollection = [];
 	let component = '';
 
 	while (quoteList.length) {
-		const next = quoteList.shift();
+		const next = quoteList.shift()!;
 		const newComponent = jsxToHTML(
 			<>
 				<hr />
