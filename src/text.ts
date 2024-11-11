@@ -14,6 +14,7 @@ export const QUOTES = {
 
 // Games
 export const GAME = {
+	NOT_FOUND: 'Could not find the game you meant...',
 	NOT_STARTED: 'The game has not started yet.',
 	ALREADY_STARTED: 'The game has already started!',
 	ALREADY_JOINED: 'You have already joined this game.',

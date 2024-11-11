@@ -6,7 +6,7 @@ import { PSGames } from '@/cache';
 import type { Room, User } from 'ps-client';
 import { ActionResponse, BaseGameTypes, BasePlayer, BaseState, GamesList, Meta } from '@/ps/games/common';
 import type { ReactElement } from 'react';
-import { renderSignups } from '@/ps/games/render';
+import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { Games } from '@/ps/games/index';
 import { ChatError } from '@/utils/chatError';
 
@@ -22,7 +22,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	state: State;
 	log: string;
 
-	maxSize?: number;
+	startable?: boolean;
 	started: boolean;
 
 	allowForfeits?: boolean;
@@ -40,8 +40,8 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	// Game-provided methods:
 	render?(side: State['turn'] | null): ReactElement;
 
-	action?(user: User, ctx: string[]): void;
-	onAddPlayer?(user: User, ctx: string[]): ActionResponse<Record<string, unknown>>;
+	action?(user: User, ctx: string): void;
+	onAddPlayer?(user: User, ctx: string): ActionResponse<Record<string, unknown>>;
 	onRemovePlayer?(player: BasePlayer, ctx: string | User): ActionResponse;
 	onStart?(): ActionResponse;
 	onEnd?(): string;
@@ -56,9 +56,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.prng = useRNG(this.seed);
 
 		this.meta = ctx.meta;
-		this.renderCtx = { msg: `/w ${PS.status.userid},${prefix}@${ctx.room.id} ${ctx.meta.id}` };
-		// TODO: Use /botmsg
-		// this.renderCtx = { msg: `/msgroom ${ctx.room.id},/botmsg ${PS.status.userid},${prefix}@${ctx.room.id} ${ctx.game}` };
+		this.renderCtx = { msg: `/msgroom ${ctx.room.id},/botmsg ${PS.status.userid},${prefix}@${ctx.room.id} ${ctx.meta.id}` };
 
 		this.started = false;
 		// @ts-expect-error -- State isn't initialized yet
@@ -81,14 +79,18 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	signups(): void {
 		if (this.started) throw new ChatError(GAME.ALREADY_STARTED);
 		const signupsHTML = renderSignups.bind(this)();
-		this.room.sendHTML(signupsHTML);
+		this.room.sendHTML(signupsHTML, { name: `${this.meta.id}${this.id}` });
+	}
+	closeSignups(): void {
+		const closeSignupsHTML = renderCloseSignups.bind(this)();
+		this.room.sendHTML(closeSignupsHTML, { name: `${this.meta.id}${this.id}` });
 	}
 
-	addPlayer(user: User, ctx: string[]): ActionResponse {
+	addPlayer(user: User, ctx: string): ActionResponse<{ started: boolean; as: State['turn'] }> {
 		if (this.started) return { success: false, error: GAME.ALREADY_STARTED };
 		const availableSlots: number | State['turn'][] = this.turns
 			? this.turns.filter(turn => !this.players[turn])
-			: this.maxSize! - Object.keys(this.players).length;
+			: this.meta.maxSize! - Object.keys(this.players).length;
 		if (Object.values(this.players).some((player: BasePlayer) => player.id === user.id)) throw new ChatError(GAME.ALREADY_JOINED);
 		const newPlayer: BasePlayer = {
 			name: user.name,
@@ -100,7 +102,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		}
 		if (Array.isArray(availableSlots)) {
 			if (availableSlots.length === 0) return { success: false, error: GAME.IS_FULL };
-			let turn = ctx[0] as State['turn'];
+			let turn = ctx as State['turn'];
 			// `-` is the 'random' side
 			if (turn === '-') turn = availableSlots.random();
 			else if (!availableSlots.includes(turn)) return { success: false, error: GAME.INVALID_SIDE(availableSlots) };
@@ -111,9 +113,21 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 			if (!extraData.success) return extraData;
 			Object.assign(newPlayer, extraData);
 		}
+		if (this.turns) this.startable = Array.isArray(availableSlots) && availableSlots.length === 1;
+		else {
+			const playerCount = Object.keys(this.players).length;
+			if (playerCount <= this.meta.maxSize!) {
+				if (!this.meta.minSize || playerCount >= this.meta.minSize) this.startable = true;
+			}
+		}
 		this.players[newPlayer.turn] = newPlayer;
-		return { success: true };
-		// TODO: Autostart for relevant games
+		if ((Array.isArray(availableSlots) && availableSlots.length === 1) || availableSlots === 1) {
+			// Join was successful and game is now full
+			if (this.meta.autostart) this.start();
+			return { success: true, data: { started: true, as: newPlayer.turn } };
+			// TODO: Maybe add a hint to start game?
+		}
+		return { success: true, data: { started: false, as: newPlayer.turn } };
 	}
 
 	removePlayer(ctx: string | User): ActionResponse {

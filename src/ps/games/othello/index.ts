@@ -35,10 +35,10 @@ export class Othello extends Game<State, object> {
 		return (this.cache[this.log] = count);
 	}
 
-	action(user: User, ctx: string[]) {
+	action(user: User, ctx: string) {
 		if (!this.started) throw new ChatError(GAME.NOT_STARTED);
 		if (user.id !== this.players[this.turn!].id) throw new ChatError(GAME.IMPOSTOR_ALERT.random());
-		const [i, j] = ctx.map(num => parseInt(num));
+		const [i, j] = ctx.split('-').map(num => parseInt(num));
 		if (isNaN(i) || isNaN(j)) throw new ChatError(GAME.INVALID_INPUT);
 		const res = this.play([i, j], this.turn!);
 		if (!res) throw new ChatError(GAME.INVALID_INPUT);
@@ -131,7 +131,12 @@ export class Othello extends Game<State, object> {
 	}
 
 	render(side: Turn) {
-		const ctx: RenderCtx = { board: this.state.board, validMoves: side === this.turn ? this.validMoves() : [], score: this.count() };
+		const ctx: RenderCtx = {
+			board: this.state.board,
+			validMoves: side === this.turn ? this.validMoves() : [],
+			score: this.count(),
+			id: this.id,
+		};
 		if (this.winCtx) {
 			ctx.header = 'Game ended.';
 		} else if (side === this.turn) {

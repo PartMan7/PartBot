@@ -15,7 +15,7 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 				) : action ? (
 					<button
 						name="send"
-						value={`${this.msg} play ${i},${j}`}
+						value={`${this.msg} play ${ctx.id}, ${i}-${j}`}
 						style={{ ...roundStyles, border: '1px dashed black', background: '#6666' }}
 					/>
 				) : null}

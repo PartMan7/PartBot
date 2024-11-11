@@ -9,17 +9,19 @@ export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this
 		<>
 			<hr />
 			<h1>{this.meta.name} Signups have begun!</h1>
-			{this.turns
-				? this.turns.map(side => (
-						<Button
-							key={side}
-							name="send"
-							value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}, ${side}`}
-							style={{ margin: 5 }}
-						>
-							{side}
-						</Button>
-					))
+			{this.meta.turns
+				? Object.entries(this.meta.turns)
+						.filter(([turn]) => !this.players[turn])
+						.map(([side, sideName]) => (
+							<Button
+								key={side}
+								name="send"
+								value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}, ${side}`}
+								style={{ margin: 5 }}
+							>
+								{sideName}
+							</Button>
+						))
 				: null}
 			{this.turns && this.turns.length - Object.keys(this.players).length > 1 ? (
 				<Button
@@ -35,6 +37,16 @@ export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this
 					Join
 				</Button>
 			) : null}
+			<hr />
+		</>
+	);
+}
+
+export function renderCloseSignups<S extends BaseState, T extends BaseGameTypes>(this: Game<S, T>): ReactElement {
+	return (
+		<>
+			<hr />
+			<h1>{this.meta.name} Signups have closed.</h1>
 			<hr />
 		</>
 	);

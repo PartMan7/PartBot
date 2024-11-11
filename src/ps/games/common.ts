@@ -1,6 +1,4 @@
-import type { Room } from 'ps-client';
-import type { ReactElement } from 'react';
-import type { ActionType, Game } from '@/ps/games/game';
+import type { ActionType } from '@/ps/games/game';
 
 export type Meta = {
 	name: string;
@@ -8,6 +6,8 @@ export type Meta = {
 	aliases?: string[];
 
 	turns?: Record<string, string>;
+	minSize?: number;
+	maxSize?: number;
 
 	allowForfeits?: boolean;
 	autostart?: boolean;
@@ -15,12 +15,6 @@ export type Meta = {
 
 export enum GamesList {
 	Othello = 'othello',
-}
-
-export interface BaseGame {
-	type: string; // TODO: valid game key
-	id: string;
-	room: Room;
 }
 
 export interface BasePlayer {
@@ -35,10 +29,5 @@ export type BaseGameTypes = {
 	actions?: { type: ActionType; name: string }[];
 	log?: unknown;
 };
-
-export type GameRender<State extends BaseState, GameTypes extends BaseGameTypes> = (
-	this: Game<State, GameTypes>,
-	side: State['turn'] | null // null for spectators
-) => ReactElement;
 
 export type ActionResponse<T = undefined> = { success: true; data?: T } | { success: false; error: string };

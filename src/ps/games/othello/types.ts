@@ -12,6 +12,7 @@ export type State = {
 };
 
 export type RenderCtx = {
+	id: string;
 	board: Board;
 	validMoves: [number, number][];
 	header?: string;

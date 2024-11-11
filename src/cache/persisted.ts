@@ -13,8 +13,9 @@ export type Cache<T> = {
 	set(arg: T): void;
 };
 
-export function usePersistedCache<T extends keyof CacheTypes>(cacheId: T): Cache<CacheTypes[T]> {
-	const flatCache = new FlatCache();
+export function usePersistedCache<T extends keyof CacheTypes>(cacheKey: T): Cache<CacheTypes[T]> {
+	const cacheId = `cache-${cacheKey}.json`;
+	const flatCache = new FlatCache({ cacheId: cacheId, cacheDir: fsPath('cache', 'flat-cache') });
 	flatCache.load(cacheId);
 
 	const get = (): CacheTypes[T] => {
@@ -26,6 +27,7 @@ export function usePersistedCache<T extends keyof CacheTypes>(cacheId: T): Cache
 	};
 	const set = (value: CacheTypes[T]): void => {
 		flatCache.set('value', value);
+		flatCache.save();
 	};
 
 	return { get, set };
