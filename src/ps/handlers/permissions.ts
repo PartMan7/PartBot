@@ -1,5 +1,5 @@
 import { Perms } from '@/types/perms';
-import customPerms from '@/ps/handlers/custom-perms';
+import customPerms from '@/ps/handlers/customPerms';
 
 import { admins } from '@/config/ps';
 

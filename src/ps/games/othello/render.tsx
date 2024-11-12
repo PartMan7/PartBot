@@ -1,5 +1,6 @@
-import type { RenderCtx, Turn } from '@/ps/games/othello/types';
 import { CellRenderer, Table } from '@/ps/games/render';
+import { Button } from '@/utils/components/ps';
+import type { RenderCtx, Turn } from '@/ps/games/othello/types';
 
 const roundStyles = { height: 24, width: 24, display: 'inline-block', borderRadius: 100, marginLeft: 3, marginTop: 3 };
 
@@ -13,8 +14,7 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 				{cell ? (
 					<span style={{ ...roundStyles, background: cell === 'W' ? 'white' : 'black' }} />
 				) : action ? (
-					<button
-						name="send"
+					<Button
 						value={`${this.msg} play ${ctx.id}, ${i}-${j}`}
 						style={{ ...roundStyles, border: '1px dashed black', background: '#6666' }}
 					/>

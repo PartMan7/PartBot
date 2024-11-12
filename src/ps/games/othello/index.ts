@@ -4,7 +4,6 @@ import type { User } from 'ps-client';
 
 import { deepClone } from '@/utils/deepClone';
 import { render } from '@/ps/games/othello/render';
-import { GAME } from '@/text';
 import { ChatError } from '@/utils/chatError';
 
 export { meta } from '@/ps/games/othello/meta';
@@ -36,12 +35,12 @@ export class Othello extends Game<State, object> {
 	}
 
 	action(user: User, ctx: string) {
-		if (!this.started) throw new ChatError(GAME.NOT_STARTED);
-		if (user.id !== this.players[this.turn!].id) throw new ChatError(GAME.IMPOSTOR_ALERT.random());
+		if (!this.started) throw new ChatError(this.$T('GAME.NOT_STARTED'));
+		if (user.id !== this.players[this.turn!].id) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
 		const [i, j] = ctx.split('-').map(num => parseInt(num));
-		if (isNaN(i) || isNaN(j)) throw new ChatError(GAME.INVALID_INPUT);
+		if (isNaN(i) || isNaN(j)) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
 		const res = this.play([i, j], this.turn!);
-		if (!res) throw new ChatError(GAME.INVALID_INPUT);
+		if (!res) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
 	}
 
 	play([i, j]: [number, number], turn: Turn): Board | null;
@@ -112,7 +111,7 @@ export class Othello extends Game<State, object> {
 		const scores = this.count();
 		if (scores.W === scores.B) {
 			this.winCtx = { type: 'draw' };
-			return GAME.DRAW(this.players.W.name, this.players.B.name);
+			return this.$T('GAME.DRAW', { players: [this.players.W.name, this.players.B.name].list(this.$T) });
 		}
 		const winningSide = scores.W > scores.B ? 'W' : 'B';
 		const winner = this.players[winningSide];
@@ -122,12 +121,12 @@ export class Othello extends Game<State, object> {
 			winner: { ...winner, score: scores[winningSide] },
 			loser: { ...loser, score: scores[this.next(winningSide)] },
 		};
-		return GAME.WON_AGAINST(
-			`${winner.name} (${winningSide})`,
-			`${loser.name} (${this.next(winningSide)})`,
-			this.meta.id,
-			`${scores[winningSide]}-${scores[this.next(winningSide)]}`
-		);
+		return this.$T('GAME.WON_AGAINST', {
+			winner: `${winner.name} (${winningSide})`,
+			game: this.meta.name,
+			loser: `${loser.name} (${this.next(winningSide)})`,
+			ctx: `${scores[winningSide]}-${scores[this.next(winningSide)]}`,
+		});
 	}
 
 	render(side: Turn) {

@@ -2,6 +2,7 @@ import { Message } from 'ps-client';
 import { PSAliases, PSCommands } from '@/cache';
 import { prefix } from '@/config/ps';
 import { checkPermissions } from '@/ps/handlers/permissions';
+import { i18n } from '@/i18n';
 
 import type { PSCommand, PSCommandContext } from '@/types/chat';
 import type { Perms } from '@/types/perms';
@@ -17,6 +18,8 @@ export function getPerms(args: string[], sourceCommand: PSCommand): Perms {
 	return 'regular';
 }
 
+type Cascade = { flags: NonNullable<PSCommand['flags']>; perms: NonNullable<PSCommand['perms']> };
+
 export function parseArgs(
 	aliasArgs: string[],
 	spaceCapturedArgs: string[]
@@ -24,12 +27,11 @@ export function parseArgs(
 	command: PSCommand;
 	sourceCommand: PSCommand;
 	commandSteps: string[];
-	flags: NonNullable<PSCommand['flags']>;
+	cascade: Cascade;
 	context: PSCommandContext;
 } {
 	const args = aliasArgs.slice();
 	let commandSet: string[] | null = null;
-	const flags: PSCommand['flags'] = {};
 	for (let i = args.length; i >= 0; i--) {
 		const argSet = args.slice(0, i).map(Tools.toId);
 		if (PSAliases.hasOwnProperty(argSet.join(' '))) {
@@ -61,14 +63,19 @@ export function parseArgs(
 	let commandObj: PSCommand = sourceCommand;
 	if (!commandObj) throw new Error(INVALID_ALIAS(context.command![0]));
 
+	const cascade: Cascade = {
+		flags: commandObj.flags ?? {},
+		perms: commandObj.perms ?? 'regular',
+	};
 	while (command.length && commandObj) {
-		if (commandObj.flags) {
-			Object.entries(commandObj.flags).forEach(([flag, value]) => {
-				if (typeof value === 'boolean') flags[flag as keyof typeof commandObj.flags] = value;
-			});
-		}
 		const next: PSCommand | undefined = commandObj.children?.[command[0]];
 		if (!next) break;
+		if (next.flags) {
+			Object.entries(next.flags).forEach(([flag, value]) => {
+				if (typeof value !== 'undefined') cascade.flags[flag as keyof typeof next.flags] = value;
+			});
+		}
+		if (next.perms) cascade.perms = next.perms;
 		commandObj = next;
 		commandSteps.push(command.shift()!);
 		spaceCapturedArgs.splice(0, 2);
@@ -76,7 +83,7 @@ export function parseArgs(
 	context.args = [...command, ...args];
 	context.arg = `${command.length ? command.map(cmd => `${cmd} `).join('') : ''}${spaceCapturedArgs.join('')}`;
 	// TODO: Cascade permissions
-	return { command: commandObj, sourceCommand, commandSteps, flags, context: context as PSCommandContext };
+	return { command: commandObj, sourceCommand, commandSteps, cascade, context: context as PSCommandContext };
 }
 
 export default async function chatHandler(message: PSMessage, originalMessage?: PSMessage): Promise<void> {
@@ -105,13 +112,19 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 		}
 		const args = argData.split(/ +/);
 		const spacedArgs = argData.split(/( +)/);
-		const { command: commandObj, sourceCommand, commandSteps, flags, context } = parseArgs(args, spacedArgs);
-		const requiredPerms = getPerms(commandSteps.slice(1), sourceCommand);
+		const {
+			command: commandObj,
+			sourceCommand,
+			commandSteps,
+			cascade: { flags, perms },
+			context,
+		} = parseArgs(args, spacedArgs);
 		const conceal = sourceCommand.flags?.conceal ? CMD_NOT_FOUND : null;
-		if (!checkPermissions(requiredPerms, message)) throw new ChatError(conceal ?? ACCESS_DENIED);
+		if (!checkPermissions(perms, message)) throw new ChatError(conceal ?? ACCESS_DENIED);
 		if (!flags.routePMs && originalMessage) throw new ChatError(conceal ?? NO_DMS_COMMAND);
 		if (flags.roomOnly && message.type !== 'chat') throw new ChatError(conceal ?? ROOM_ONLY_COMMAND);
 		if (flags.pmOnly && message.type !== 'pm') throw new ChatError(conceal ?? PM_ONLY_COMMAND);
+		context.$T = i18n(); // TODO: Allow overriding translations
 		context.broadcast = function (msg, perm = 'voice') {
 			if (checkPermissions(perm, message)) return message.reply(msg);
 			else return message.privateReply(msg);
@@ -125,12 +138,18 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 		context.run = function (altCommand: string, ctx: Partial<PSCommandContext> = {}, messageOverrides: Partial<PSMessage> = {}) {
 			const altArgs = altCommand.split(/ +/);
 			const spacedArgs = altCommand.split(/( +)/);
-			const { command, sourceCommand, commandSteps, context } = parseArgs(altArgs, spacedArgs);
+			const {
+				command,
+				sourceCommand,
+				commandSteps,
+				cascade: { perms },
+				context,
+			} = parseArgs(altArgs, spacedArgs);
 			context.calledFrom = commandSteps.join('.');
 			context.calledFromMsg = message;
 			// TODO Clone message and assign from overrides
 			const newMessage = message;
-			Object.assign(context, ctx);
+			Object.assign(ctx, context);
 			ctx.broadcast = function (msg, perm = 'voice') {
 				if (checkPermissions(perm, newMessage)) return newMessage.reply(msg);
 				else return newMessage.privateReply(msg);
@@ -141,10 +160,8 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 				if (checkPermissions(perm, newMessage)) return newMessage.sendHTML(html, opts);
 				else return newMessage.target.privateHTML(newMessage.author, html, opts);
 			};
-			const requiredPerms = getPerms(commandSteps.slice(1), sourceCommand);
 			// TODO: Reuse upper flags logic
-			if (!checkPermissions(requiredPerms, newMessage))
-				throw new ChatError(sourceCommand.flags?.conceal ? CMD_NOT_FOUND : ACCESS_DENIED);
+			if (!checkPermissions(perms, newMessage)) throw new ChatError(sourceCommand.flags?.conceal ? CMD_NOT_FOUND : ACCESS_DENIED);
 			return command.run({ ...ctx, message: newMessage } as PSCommandContext);
 		};
 		context.unsafeRun = function (altCommand: string, ctx: Partial<PSCommandContext> = {}) {
@@ -153,9 +170,9 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 			const { command, context } = parseArgs(altArgs, spacedArgs);
 			context.calledFrom = commandSteps.join('.');
 			context.calledFromMsg = message;
-			// TODO Clone message and assign from overrides
+			// TODO: Clone message and assign from overrides
 			const newMessage = message;
-			Object.assign(context, ctx);
+			Object.assign(ctx, context);
 			ctx.broadcast = function (msg) {
 				return newMessage.reply(msg);
 			};

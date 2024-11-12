@@ -15,7 +15,6 @@ export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this
 						.map(([side, sideName]) => (
 							<Button
 								key={side}
-								name="send"
 								value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}, ${side}`}
 								style={{ margin: 5 }}
 							>
@@ -25,7 +24,6 @@ export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this
 				: null}
 			{this.turns && this.turns.length - Object.keys(this.players).length > 1 ? (
 				<Button
-					name="send"
 					value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}, -`}
 					style={{ margin: 5 }}
 				>
@@ -33,9 +31,7 @@ export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this
 				</Button>
 			) : null}
 			{!this.turns ? (
-				<Button name="send" value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}`}>
-					Join
-				</Button>
+				<Button value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}`}>Join</Button>
 			) : null}
 			<hr />
 		</>

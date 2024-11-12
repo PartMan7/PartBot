@@ -1,4 +1,5 @@
 import { sample, useRNG, RNGSource } from 'utils/random';
+import type { TranslationFn } from '@/i18n/types';
 
 declare global {
 	interface Array<T> {
@@ -8,12 +9,16 @@ declare global {
 		shuffle(rng?: RNGSource): T[];
 		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
 		unique(): T[];
+		list($T?: TranslationFn): string;
+		space<S = unknown>(spacer: S): (T | S)[];
 	}
 	interface ReadonlyArray<T> {
 		random(rng?: RNGSource): T;
 		sample(amount: number, rng?: RNGSource): T[];
 		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
 		unique(): T[];
+		list($T?: TranslationFn): string;
+		space<S = unknown>(spacer: S): (T | S)[];
 	}
 
 	interface String {
@@ -107,6 +112,35 @@ Object.defineProperties(Array.prototype, {
 				}
 			}
 			return output;
+		},
+	},
+	list: {
+		enumerable: false,
+		writable: false,
+		configurable: false,
+		value: function <T extends string | number>(this: T[], $T?: TranslationFn): string {
+			const conjunction = $T?.('GRAMMAR.AND') ?? 'and';
+			if (this.length === 0) return '';
+			if (this.length === 1) return this.toString();
+			if (this.length === 2) return this.map(term => term.toString()).join(` ${conjunction} `);
+			return `${this.slice(0, -1)
+				.map(term => term.toString())
+				.join(', ')}, ${conjunction} ${this.at(-1)!.toString()}`;
+		},
+	},
+	space: {
+		enumerable: false,
+		writable: false,
+		configurable: false,
+		value: function <T = unknown, S = unknown>(this: T[], spacer: S): (T | S)[] {
+			if (this.length === 0 || this.length === 1) return this;
+			return this.slice(1).reduce(
+				(acc, term) => {
+					acc.push(spacer, term);
+					return acc;
+				},
+				[this[0]] as (T | S)[]
+			);
 		},
 	},
 });

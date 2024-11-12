@@ -1,5 +1,5 @@
 export function Button({
-	name,
+	name = 'send',
 	value,
 	children,
 	...props

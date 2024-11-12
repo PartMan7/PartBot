@@ -1,5 +1,4 @@
 import { prefix } from '@/config/ps';
-import { GAME } from '@/text';
 import { sample, useRNG } from '@/utils/random';
 import { PSGames } from '@/cache';
 
@@ -9,12 +8,14 @@ import type { ReactElement } from 'react';
 import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { Games } from '@/ps/games/index';
 import { ChatError } from '@/utils/chatError';
+import { TranslationFn } from '@/i18n/types';
 
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
 
 export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	meta: Meta;
 	id: string;
+	$T: TranslationFn;
 	seed: number;
 	prng: () => number;
 	room: Room;
@@ -51,6 +52,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.id = ctx.id;
 		this.room = ctx.room;
 		this.roomid = ctx.room.id;
+		this.$T = ctx.$T;
 
 		this.seed = sample(1e12);
 		this.prng = useRNG(this.seed);
@@ -77,7 +79,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	}
 
 	signups(): void {
-		if (this.started) throw new ChatError(GAME.ALREADY_STARTED);
+		if (this.started) throw new ChatError(this.$T('GAME.ALREADY_STARTED'));
 		const signupsHTML = renderSignups.bind(this)();
 		this.room.sendHTML(signupsHTML, { name: `${this.meta.id}${this.id}` });
 	}
@@ -87,25 +89,27 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	}
 
 	addPlayer(user: User, ctx: string): ActionResponse<{ started: boolean; as: State['turn'] }> {
-		if (this.started) return { success: false, error: GAME.ALREADY_STARTED };
+		if (this.started) return { success: false, error: this.$T('GAME.ALREADY_STARTED') };
 		const availableSlots: number | State['turn'][] = this.turns
 			? this.turns.filter(turn => !this.players[turn])
 			: this.meta.maxSize! - Object.keys(this.players).length;
-		if (Object.values(this.players).some((player: BasePlayer) => player.id === user.id)) throw new ChatError(GAME.ALREADY_JOINED);
+		if (Object.values(this.players).some((player: BasePlayer) => player.id === user.id))
+			throw new ChatError(this.$T('GAME.ALREADY_JOINED'));
 		const newPlayer: BasePlayer = {
 			name: user.name,
 			id: user.id,
 			turn: user.id,
 		};
 		if (typeof availableSlots === 'number') {
-			if (availableSlots === 0) return { success: false, error: GAME.IS_FULL };
+			if (availableSlots === 0) return { success: false, error: this.$T('GAME.IS_FULL') };
 		}
 		if (Array.isArray(availableSlots)) {
-			if (availableSlots.length === 0) return { success: false, error: GAME.IS_FULL };
+			if (availableSlots.length === 0) return { success: false, error: this.$T('GAME.IS_FULL') };
 			let turn = ctx as State['turn'];
 			// `-` is the 'random' side
 			if (turn === '-') turn = availableSlots.random();
-			else if (!availableSlots.includes(turn)) return { success: false, error: GAME.INVALID_SIDE(availableSlots) };
+			else if (!availableSlots.includes(turn))
+				return { success: false, error: this.$T('GAME.INVALID_SIDE', { sides: availableSlots.list(this.$T) }) };
 			newPlayer.turn = turn;
 		}
 		if (this.onAddPlayer) {
@@ -132,7 +136,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 
 	removePlayer(ctx: string | User): ActionResponse {
 		if (this.started) {
-			if (!this.allowForfeits) return { success: false, error: GAME.ALREADY_STARTED };
+			if (!this.allowForfeits) return { success: false, error: this.$T('GAME.ALREADY_STARTED') };
 			// TODO: Support forfeits
 			return { success: true };
 		}
@@ -141,7 +145,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 			return { success: true };
 		} else {
 			const player = (Object.values(this.players) as BasePlayer[]).find(p => p.id === ctx.id);
-			if (!player) return { success: false, error: GAME.NOT_PLAYING.random() };
+			if (!player) return { success: false, error: this.$T('GAME.NOT_PLAYING') };
 			const removePlayer = this.onRemovePlayer?.(player, ctx);
 			if (removePlayer?.success === false) return removePlayer;
 			delete this.players[player.turn];
@@ -200,7 +204,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	}
 }
 
-export type BaseContext = { room: Room; id: string; meta: Meta; backup?: string };
+export type BaseContext = { room: Room; id: string; meta: Meta; $T: TranslationFn; backup?: string };
 
 export function createGrid<T>(x: number, y: number, fill: (x: number, y: number) => T) {
 	return Array.from({ length: x }).map((_, i) => Array.from({ length: y }).map((_, j) => fill(i, j)));
