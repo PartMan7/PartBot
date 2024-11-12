@@ -184,9 +184,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	update() {
 		if ('render' in this && typeof this.render === 'function') {
 			Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render!(side)));
-			this.spectators.forEach(spec => this.sendHTML(spec, this.render!(null)));
-			// TODO: Replace the line above with the line below once PS supports sending HTML pages to multiple people
-			// this.room.send(`/sendhtmlpage ${this.spectators.join(';')},${this.id},${this.render(null)}`);
+			this.room.send(`/sendhtmlpage ${this.spectators.join(';')},${this.id},${this.render(null)}`);
 		}
 	}
 
@@ -205,5 +203,5 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 export type BaseContext = { room: Room; id: string; meta: Meta; backup?: string };
 
 export function createGrid<T>(x: number, y: number, fill: (x: number, y: number) => T) {
-	return Array.from({ length: x }).map((_, i) => Array.from({ length: y }).map((__, j) => fill(i, j)));
+	return Array.from({ length: x }).map((_, i) => Array.from({ length: y }).map((_, j) => fill(i, j)));
 }
