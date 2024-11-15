@@ -22,6 +22,8 @@ export default {
 		NOT_STARTED: 'The game has not started yet.',
 		ALREADY_STARTED: 'The game has already started!',
 		ALREADY_JOINED: 'You have already joined this game.',
+		ALREADY_WATCHING: 'You are already watching this game!',
+		NOT_WATCHING: "You aren't watching this game, though...",
 		IS_FULL: 'The game has no more space for players.',
 		INVALID_SIDE: `Invalid side chosen! Valid sides are: {{sides}}`,
 		INVALID_INPUT: "That input doesn't seem to work...",

@@ -13,7 +13,9 @@ type SearchContext =
 	| { action: 'play'; user: string }
 	| { action: 'leave'; user: string }
 	| { action: 'end'; user: string }
-	| { action: 'sub'; user1?: string; user2?: string };
+	| { action: 'sub'; user1?: string; user2?: string }
+	| { action: 'watch'; user: string }
+	| { action: 'unwatch'; user: string };
 
 type RoomContext = { room: Room; $T: TranslationFn };
 
@@ -45,6 +47,10 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					return true;
 				case 'leave':
 					return hasJoined;
+				case 'watch':
+					return game.started && !game.spectators.includes(ctx.user);
+				case 'unwatch':
+					return game.started && game.spectators.includes(ctx.user);
 				default:
 					return true;
 			}
@@ -177,6 +183,31 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					game.update();
 				},
 			},
+			watch: {
+				name: 'watch',
+				aliases: ['w', 'spectate', 'spec'],
+				help: 'Watches the given game',
+				syntax: 'CMD [game ref]',
+				async run({ message, arg, $T }) {
+					const { game } = getGame(arg, { action: 'watch', user: message.author.id }, { room: message.target, $T });
+					if (game.spectators.includes(message.author.id)) throw new ChatError($T('GAME.ALREADY_WATCHING'));
+					// TODO: watch context, eg: side
+					game.spectators.push(message.author.id);
+					game.update(message.author.id);
+				},
+			},
+			unwatch: {
+				name: 'unwatch',
+				aliases: ['uw', 'unspectate', 'uspec'],
+				help: 'Unwatches the given game',
+				syntax: 'CMD [game ref]',
+				async run({ message, arg, $T }) {
+					const { game } = getGame(arg, { action: 'unwatch', user: message.author.id }, { room: message.target, $T });
+					if (!game.spectators.includes(message.author.id)) throw new ChatError($T('GAME.NOT_WATCHING'));
+					game.spectators.remove(message.author.id);
+					// TODO: Close HTML page
+				},
+			},
 			menu: {
 				name: 'menu',
 				aliases: ['m', 'list'],
@@ -226,3 +257,17 @@ export const command = [
 		},
 	},
 ];
+
+/**
+ * TODO:
+ * End
+ * Resign
+ * DQ
+ * Spectate
+ * Unspectate
+ * Rejoin
+ *
+ * Stash
+ * Restore
+ * Backups
+ */

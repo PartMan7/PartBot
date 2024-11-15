@@ -204,10 +204,16 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		user.pageHTML(html, { name: this.id, room: this.room });
 	}
 
-	update() {
+	update(user?: string) {
 		if ('render' in this && typeof this.render === 'function') {
+			if (user) {
+				const asPlayer = (Object.values(this.players) as BasePlayer[]).find(player => player.id === user);
+				if (asPlayer) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
+				if (this.spectators.includes(user)) return this.sendHTML(user, this.render(null));
+				throw new ChatError('User not in players/spectators');
+			}
 			Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render!(side)));
-			this.room.send(`/sendhtmlpage ${this.spectators.join(';')},${this.id},${this.render(null)}`);
+			this.room.pageHTML(this.spectators, this.render(null), { name: this.id });
 		}
 	}
 
