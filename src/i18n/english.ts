@@ -26,6 +26,7 @@ export default {
 		ALREADY_WATCHING: 'You are already watching this game!',
 		NO_LONGER_WATCHING: 'You are no longer watching the game of {{game}} between {{players}}.',
 		NOT_WATCHING: "You aren't watching this game, though...",
+		WATCHING_NOTHING: "You don't seem to need to rejoin anything...",
 		ENDED: `The game of {{game}} [{{id}}] has been ended.`,
 		IS_FULL: 'The game has no more space for players.',
 		INVALID_SIDE: `Invalid side chosen! Valid sides are: {{sides}}`,

@@ -193,10 +193,31 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					game.update();
 				},
 			},
+			rejoin: {
+				name: 'rejoin',
+				aliases: ['rj'],
+				help: 'Rejoins games that may have been left.',
+				syntax: 'CMD',
+				async run({ message, $T }) {
+					const allGames = gameId in PSGames ? Object.values(PSGames[gameId]!) : [];
+					const rejoinGames = allGames.filter(game => {
+						// Filter with a side-effect!
+						// I'm sorry, superstar64
+						if (
+							Object.values(game.players).some(player => player.id === message.author.id) ||
+							game.spectators.includes(message.author.id)
+						) {
+							game.update(message.author.id);
+							return true;
+						} else return false;
+					});
+					if (!rejoinGames.length) throw new ChatError($T('GAME.WATCHING_NOTHING'));
+				},
+			},
 			watch: {
 				name: 'watch',
 				aliases: ['w', 'spectate', 'spec'],
-				help: 'Watches the given game',
+				help: 'Watches the given game.',
 				syntax: 'CMD [game ref]',
 				async run({ message, arg, $T }) {
 					const { game } = getGame(arg, { action: 'watch', user: message.author.id }, { room: message.target, $T });
@@ -219,9 +240,10 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 			unwatch: {
 				name: 'unwatch',
 				aliases: ['uw', 'unspectate', 'uspec'],
-				help: 'Unwatches the given game',
+				help: 'Unwatches the given game.',
 				syntax: 'CMD [game ref]',
 				async run({ message, arg, $T }) {
+					// TODO: Hook closehtmlpage events to this
 					const { game } = getGame(arg, { action: 'unwatch', user: message.author.id }, { room: message.target, $T });
 					if (!game.spectators.includes(message.author.id)) throw new ChatError($T('GAME.NOT_WATCHING'));
 					game.spectators.remove(message.author.id);
@@ -290,7 +312,6 @@ export const command = [
  * TODO:
  * Resign
  * DQ
- * Rejoin
  *
  * Stash
  * Restore
