@@ -7,6 +7,7 @@ import type { Meta } from '@/ps/games/common';
 
 export function renderMenu(room: Room, meta: Meta, isStaff: boolean): ReactElement {
 	const games = Object.values(PSGames[meta.id] ?? {}).filter(game => game.roomid === room.id);
+	if (!games?.length) return <div>No games found.</div>;
 	return (
 		<>
 			{games.map(game => {

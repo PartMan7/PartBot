@@ -47,7 +47,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	onRemovePlayer?(player: BasePlayer, ctx: string | User): ActionResponse;
 	onReplacePlayer?(turn: State['turn'], withPlayer: User): ActionResponse<BasePlayer & GameTypes['player']>;
 	onStart?(): ActionResponse;
-	onEnd?(): string;
+	onEnd?(type?: 'force'): string;
 	trySkipPlayer?(turn: State['turn']): boolean;
 
 	constructor(ctx: BaseContext) {
@@ -219,8 +219,8 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		}
 	}
 
-	end(): void {
-		const message = this.onEnd!();
+	end(type?: 'force'): void {
+		const message = this.onEnd!(type);
 		this.update();
 		// TODO: Render finish HTML in chat
 		this.room.send(message);

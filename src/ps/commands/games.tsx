@@ -12,7 +12,7 @@ type SearchContext =
 	| { action: 'join'; user: string }
 	| { action: 'play'; user: string }
 	| { action: 'leave'; user: string }
-	| { action: 'end'; user: string }
+	| { action: 'end' }
 	| { action: 'sub'; user1?: string; user2?: string }
 	| { action: 'watch'; user: string }
 	| { action: 'unwatch'; user: string };
@@ -33,6 +33,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				const onlineUser2 = game.room.users.some(user => Tools.toId(user) === ctx.user2);
 				return (hasUser1 && onlineUser1 && !hasUser2) || (hasUser2 && onlineUser2 && !hasUser1);
 			}
+			if (ctx.action === 'end') return true;
 			const hasJoined = Object.values(game.players).some(player => player.id === ctx.user);
 			const hasSpace =
 				(game.sides && Object.keys(game.players).length < game.turns.length) || Object.keys(game.players).length < game.meta.maxSize!;
@@ -43,8 +44,6 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					return !game.started && !hasJoined && hasSpace;
 				case 'play':
 					return game.started && hasJoined && game.players[game.turn!].id === ctx.user;
-				case 'end':
-					return true;
 				case 'leave':
 					return hasJoined;
 				case 'watch':
@@ -163,6 +162,17 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					game.action(message.author, ctx);
 				},
 			},
+			end: {
+				name: 'end',
+				aliases: ['e', 'x'],
+				help: 'Ends a game.',
+				perms: Symbol.for('games.manage'),
+				syntax: 'CMD [game ref]',
+				async run({ message, arg, $T }) {
+					const { game } = getGame(arg, { action: 'end' }, { room: message.target, $T });
+					game.end('force');
+				},
+			},
 			substitute: {
 				name: 'substitute',
 				aliases: ['sub', 'swap'],
@@ -278,7 +288,6 @@ export const command = [
 
 /**
  * TODO:
- * End
  * Resign
  * DQ
  * Rejoin

@@ -9,7 +9,7 @@ import { ChatError } from '@/utils/chatError';
 export { meta } from '@/ps/games/othello/meta';
 
 export class Othello extends Game<State, object> {
-	winCtx?: WinCtx;
+	winCtx?: WinCtx | 'force';
 	cache: Record<string, Record<Turn, number>> = {};
 	constructor(ctx: BaseContext) {
 		super(ctx);
@@ -107,7 +107,11 @@ export class Othello extends Game<State, object> {
 		return !this.hasMoves(turn);
 	}
 
-	onEnd(): string {
+	onEnd(type?: 'force'): string {
+		if (type) {
+			this.winCtx = 'force';
+			return this.$T('GAME.ENDED', { game: this.meta.name, id: this.id });
+		}
 		const scores = this.count();
 		if (scores.W === scores.B) {
 			this.winCtx = { type: 'draw' };
