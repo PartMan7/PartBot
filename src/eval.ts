@@ -2,9 +2,12 @@ import { inspect } from 'util';
 import { ansiToHtml } from '@/utils/ansiToHtml';
 
 import * as _cache from '@/cache';
+import { cachebuster as _cachebuster } from '@/utils/cachebuster';
 import type { PSCommandContext } from '@/types/chat';
 
-const cache = _cache; // Exporting into side variable for eval lookup
+// Exporting into side variables for eval lookup
+const cache = _cache;
+const cachebuster = _cachebuster;
 
 export type EvalModes = 'COLOR_OUTPUT' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
 export type EvalOutput = {
@@ -83,7 +86,7 @@ export async function evaluate(
 		const res = await (() => {
 			const { message, context } = passedContext;
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Storing in context for eval()
-			const evalContext = { message, context, cache };
+			const evalContext = { message, context, cache, cachebuster };
 			return eval(code);
 		})();
 		success = true;

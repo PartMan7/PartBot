@@ -25,6 +25,7 @@ export default {
 		IS_FULL: 'The game has no more space for players.',
 		INVALID_SIDE: `Invalid side chosen! Valid sides are: {{sides}}`,
 		INVALID_INPUT: "That input doesn't seem to work...",
+		SUB: '{{out}} has been subbed with {{in}}!',
 		NOT_PLAYING: [
 			"You're not a player!",
 			"You're not playing, weeb.",

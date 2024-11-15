@@ -7,7 +7,6 @@ import { ActionResponse, BaseGameTypes, BasePlayer, BaseState, GamesList, Meta }
 import type { ReactElement } from 'react';
 import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { Games } from '@/ps/games/index';
-import { ChatError } from '@/utils/chatError';
 import { TranslationFn } from '@/i18n/types';
 
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
@@ -42,8 +41,10 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	render?(side: State['turn'] | null): ReactElement;
 
 	action?(user: User, ctx: string): void;
+
 	onAddPlayer?(user: User, ctx: string): ActionResponse<Record<string, unknown>>;
 	onRemovePlayer?(player: BasePlayer, ctx: string | User): ActionResponse;
+	onReplacePlayer?(turn: State['turn'], withPlayer: User): ActionResponse<BasePlayer & GameTypes['player']>;
 	onStart?(): ActionResponse;
 	onEnd?(): string;
 	trySkipPlayer?(turn: State['turn']): boolean;
@@ -151,6 +152,24 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 			delete this.players[player.turn];
 			return { success: true };
 		}
+	}
+
+	replacePlayer(turn: State['turn'], withPlayer: User): ActionResponse<string> {
+		if (Object.values(this.players).some((player: BasePlayer) => player.id === withPlayer.id))
+			throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
+		const assign: Partial<BasePlayer> = {
+			name: withPlayer.name,
+			id: withPlayer.id,
+		};
+		if (this.onReplacePlayer) {
+			const res = this.onReplacePlayer(turn, withPlayer);
+			if (!res.success) throw new ChatError(res.error);
+			if (res.data) Object.assign(assign, res.data);
+		}
+		const oldPlayer = this.players[turn];
+		this.players[turn] = { ...oldPlayer, ...assign };
+		this.spectators.remove(oldPlayer.id);
+		return { success: true, data: this.$T('GAME.SUB', { in: withPlayer.name, out: oldPlayer.name }) };
 	}
 
 	start(): ActionResponse {

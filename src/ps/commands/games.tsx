@@ -11,9 +11,9 @@ type SearchContext =
 	| { action: 'start'; user: string }
 	| { action: 'join'; user: string }
 	| { action: 'play'; user: string }
-	| { action: 'end'; user: string }
 	| { action: 'leave'; user: string }
-	| { action: 'sub'; user1: string; user2: string };
+	| { action: 'end'; user: string }
+	| { action: 'sub'; user1?: string; user2?: string };
 
 type RoomContext = { room: Room; $T: TranslationFn };
 
@@ -26,8 +26,10 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 		return game => {
 			if (ctx.action === 'sub') {
 				const hasUser1 = Object.values(game.players).some(player => player.id === ctx.user1);
+				const onlineUser1 = game.room.users.some(user => Tools.toId(user) === ctx.user1);
 				const hasUser2 = Object.values(game.players).some(player => player.id === ctx.user2);
-				return (hasUser1 && !hasUser2) || (hasUser2 && !hasUser1);
+				const onlineUser2 = game.room.users.some(user => Tools.toId(user) === ctx.user2);
+				return (hasUser1 && onlineUser1 && !hasUser2) || (hasUser2 && onlineUser2 && !hasUser1);
 			}
 			const hasJoined = Object.values(game.players).some(player => player.id === ctx.user);
 			const hasSpace =
@@ -52,13 +54,19 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 	function gameFromContext(
 		specifier: string | null,
 		searchCtx: SearchContext,
-		roomCtx: RoomContext
+		roomCtx: RoomContext,
+		restCtx: string
 	): InstanceType<typeof Game.instance> | null {
 		if (!PSGames[gameId]) return null;
 		if (typeof specifier === 'string' && /^#\w{4}$/.test(specifier)) {
 			const game = PSGames[gameId][specifier.toUpperCase()];
 			if (!game) throw new ChatError(roomCtx.$T('GAME.NOT_FOUND'));
 			return game;
+		}
+		if (searchCtx.action === 'sub') {
+			if (!restCtx) throw new ChatError(roomCtx.$T('GAME.INVALID_INPUT'));
+			[searchCtx.user1, searchCtx.user2] = restCtx.split(',').map(Tools.toId);
+			if (!searchCtx.user2) return null;
 		}
 		const allGames = Object.values(PSGames[gameId]).filter(game => game.roomid === roomCtx.room.id);
 		const byContext = getByContext(searchCtx);
@@ -92,9 +100,9 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 	): { game: InstanceType<typeof Game.instance>; ctx: string } {
 		const { $T } = roomCtx;
 		const [fullSpec, fullCtx] = feed.lazySplit(/\s*,\s*/, 1);
-		const fullGame = gameFromContext(fullSpec, searchCtx, roomCtx);
+		const fullGame = gameFromContext(fullSpec, searchCtx, roomCtx, fullCtx);
 		if (fullGame) return { game: fullGame, ctx: fullCtx };
-		const inferredGame = gameFromContext(null, searchCtx, roomCtx);
+		const inferredGame = gameFromContext(null, searchCtx, roomCtx, feed);
 		if (inferredGame) return { game: inferredGame, ctx: feed };
 		throw new ChatError($T('GAME.NOT_FOUND'));
 	}
@@ -147,6 +155,26 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				async run({ message, arg, $T }) {
 					const { game, ctx } = getGame(arg, { action: 'play', user: message.author.id }, { room: message.target, $T });
 					game.action(message.author, ctx);
+				},
+			},
+			substitute: {
+				name: 'substitute',
+				aliases: ['sub', 'swap'],
+				help: 'Replaces an inactive player with an active one.',
+				perms: Symbol.for('games.manage'),
+				syntax: 'CMD #id, [user1], [user2]',
+				async run({ message, arg, $T }) {
+					const { game, ctx } = getGame(arg, { action: 'sub' }, { room: message.target, $T });
+					const users = ctx.split(',').map(Tools.toId);
+					const outUser = users.find(user => Object.values(game.players).some(player => player.id === user));
+					const outTurn = (Object.keys(game.players) as (keyof typeof game.players)[]).find(turn => game.players[turn].id === outUser);
+					const inUserId = users.find(user => !Object.values(game.players).some(player => player.id === user));
+					const inUser = inUserId ? PS.getUser(inUserId) : false;
+					if (!inUser || !outUser || !outTurn) throw new ChatError($T('GAME.IMPOSTOR_ALERT'));
+					const replace = game.replacePlayer(outTurn, inUser);
+					if (!replace.success) throw new ChatError(replace.error);
+					if (replace.data) message.reply(replace.data);
+					game.update();
 				},
 			},
 			menu: {
