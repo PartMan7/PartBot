@@ -21,6 +21,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	roomid: string;
 	state: State;
 	log: string;
+	sides: boolean;
 
 	startable?: boolean;
 	started: boolean;
@@ -68,6 +69,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.players = {};
 		this.turn = null;
 		this.turns = [];
+		this.sides = !!ctx.meta.turns;
 		this.spectators = [];
 		this.log = '';
 
@@ -91,7 +93,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 
 	addPlayer(user: User, ctx: string): ActionResponse<{ started: boolean; as: State['turn'] }> {
 		if (this.started) return { success: false, error: this.$T('GAME.ALREADY_STARTED') };
-		const availableSlots: number | State['turn'][] = this.turns
+		const availableSlots: number | State['turn'][] = this.sides
 			? this.turns.filter(turn => !this.players[turn])
 			: this.meta.maxSize! - Object.keys(this.players).length;
 		if (Object.values(this.players).some((player: BasePlayer) => player.id === user.id))

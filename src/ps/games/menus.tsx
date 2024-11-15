@@ -22,7 +22,7 @@ export function renderMenu(room: Room, meta: Meta, isStaff: boolean): ReactEleme
 									Watch
 								</Button>
 							</>
-						) : game.turns ? (
+						) : game.sides ? (
 							game.turns
 								.map(turn =>
 									game.players[turn] ? (

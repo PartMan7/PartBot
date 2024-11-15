@@ -9,8 +9,8 @@ export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this
 		<>
 			<hr />
 			<h1>{this.meta.name} Signups have begun!</h1>
-			{this.meta.turns
-				? Object.entries(this.meta.turns)
+			{this.sides
+				? Object.entries(this.meta.turns!)
 						.filter(([turn]) => !this.players[turn])
 						.map(([side, sideName]) => (
 							<Button
@@ -22,7 +22,7 @@ export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this
 							</Button>
 						))
 				: null}
-			{this.turns && this.turns.length - Object.keys(this.players).length > 1 ? (
+			{this.sides && this.turns.length - Object.keys(this.players).length > 1 ? (
 				<Button
 					value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}, -`}
 					style={{ margin: 5 }}
@@ -30,7 +30,7 @@ export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this
 					Random
 				</Button>
 			) : null}
-			{!this.turns ? (
+			{!this.sides ? (
 				<Button value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}`}>Join</Button>
 			) : null}
 			<hr />

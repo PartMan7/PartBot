@@ -143,6 +143,9 @@ export class Othello extends Game<State, object> {
 		} else if (side) {
 			ctx.header = 'Waiting for opponent...';
 			ctx.dimHeader = true;
+		} else if (this.turn) {
+			const current = this.players[this.turn];
+			ctx.header = `Waiting for ${current.name}${this.sides ? ` (${this.turn})` : ''}...`;
 		}
 		return render.bind(this.renderCtx)(ctx);
 	}

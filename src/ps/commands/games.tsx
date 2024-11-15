@@ -35,7 +35,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 			}
 			const hasJoined = Object.values(game.players).some(player => player.id === ctx.user);
 			const hasSpace =
-				(game.turns && Object.keys(game.players).length < game.turns.length) || Object.keys(game.players).length < game.meta.maxSize!;
+				(game.sides && Object.keys(game.players).length < game.turns.length) || Object.keys(game.players).length < game.meta.maxSize!;
 			switch (ctx.action) {
 				case 'start':
 					return game.startable ?? false;
@@ -48,9 +48,9 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				case 'leave':
 					return hasJoined;
 				case 'watch':
-					return game.started && !game.spectators.includes(ctx.user);
+					return game.started && !hasJoined && !game.spectators.includes(ctx.user);
 				case 'unwatch':
-					return game.started && game.spectators.includes(ctx.user);
+					return game.started && !hasJoined && game.spectators.includes(ctx.user);
 				default:
 					return true;
 			}
@@ -190,9 +190,19 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				syntax: 'CMD [game ref]',
 				async run({ message, arg, $T }) {
 					const { game } = getGame(arg, { action: 'watch', user: message.author.id }, { room: message.target, $T });
+					if (Object.values(game.players).some(player => player.id === message.author.id))
+						throw new ChatError($T('GAME.ALREADY_JOINED'));
 					if (game.spectators.includes(message.author.id)) throw new ChatError($T('GAME.ALREADY_WATCHING'));
 					// TODO: watch context, eg: side
 					game.spectators.push(message.author.id);
+					message.privateReply(
+						$T('GAME.NOW_WATCHING', {
+							game: game.meta.name,
+							players: Object.values(game.players)
+								.map(player => player.name)
+								.list($T),
+						})
+					);
 					game.update(message.author.id);
 				},
 			},
@@ -205,6 +215,14 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					const { game } = getGame(arg, { action: 'unwatch', user: message.author.id }, { room: message.target, $T });
 					if (!game.spectators.includes(message.author.id)) throw new ChatError($T('GAME.NOT_WATCHING'));
 					game.spectators.remove(message.author.id);
+					message.privateReply(
+						$T('GAME.NO_LONGER_WATCHING', {
+							game: game.meta.name,
+							players: Object.values(game.players)
+								.map(player => player.name)
+								.list($T),
+						})
+					);
 					// TODO: Close HTML page
 				},
 			},
@@ -263,8 +281,6 @@ export const command = [
  * End
  * Resign
  * DQ
- * Spectate
- * Unspectate
  * Rejoin
  *
  * Stash
