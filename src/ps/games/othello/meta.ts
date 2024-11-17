@@ -12,4 +12,6 @@ export const meta: Meta = {
 
 	allowForfeits: true,
 	autostart: true,
+	pokeTimer: Tools.fromHumanTime('30 sec'),
+	timer: Tools.fromHumanTime('1 min'),
 };

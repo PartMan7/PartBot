@@ -33,7 +33,7 @@ export function parseArgs(
 	const args = aliasArgs.slice();
 	let commandSet: string[] | null = null;
 	for (let i = args.length; i >= 0; i--) {
-		const argSet = args.slice(0, i).map(Tools.toId);
+		const argSet = args.slice(0, i).map(cmd => cmd.toLowerCase());
 		if (PSAliases.hasOwnProperty(argSet.join(' '))) {
 			commandSet = argSet;
 			args.splice(0, i);

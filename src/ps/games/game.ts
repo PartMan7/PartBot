@@ -1,13 +1,14 @@
 import { prefix } from '@/config/ps';
-import { sample, useRNG } from '@/utils/random';
 import { PSGames } from '@/cache';
-
-import type { Room, User } from 'ps-client';
-import { ActionResponse, BaseGameTypes, BasePlayer, BaseState, GamesList, Meta } from '@/ps/games/common';
-import type { ReactElement } from 'react';
 import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { Games } from '@/ps/games/index';
-import { TranslationFn } from '@/i18n/types';
+import { sample, useRNG } from '@/utils/random';
+import { Timer } from '@/utils/timer';
+
+import type { Room, User } from 'ps-client';
+import type { ReactElement } from 'react';
+import type { TranslationFn } from '@/i18n/types';
+import type { ActionResponse, BaseGameTypes, BasePlayer, BaseState, GamesList, Meta } from '@/ps/games/common';
 
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
 
@@ -25,6 +26,11 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 
 	startable?: boolean;
 	started: boolean;
+
+	pokeTimer?: Timer;
+	timer?: Timer;
+	pokeTimerLength?: number | false;
+	timerLength?: number;
 
 	allowForfeits?: boolean;
 
@@ -73,7 +79,48 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.spectators = [];
 		this.log = '';
 
+		if (ctx.meta.timer) {
+			this.timerLength = ctx.meta.timer;
+			this.pokeTimerLength = ctx.meta.pokeTimer ?? ctx.meta.timer;
+		}
+
 		(PSGames[this.meta.id] ??= {})[this.id] = this as unknown as InstanceType<Games[GamesList]['instance']>;
+	}
+
+	setTimer(comment: string): void {
+		if (!this.timerLength || !this.pokeTimerLength) return;
+		this.timer?.cancel();
+		this.pokeTimer?.cancel();
+
+		const turn = this.turn!;
+		const timerLength = this.timerLength;
+		const player = PS.getUser(this.players[turn].id);
+		if (!player) {
+			log('Unable to find player for ', { turn, game: this });
+			return;
+		}
+		this.timer = new Timer(
+			() => {
+				this.room.send(`${player.name} hasn't played in ${this.meta.name} [${this.id}] for ${Tools.toHumanTime(timerLength)}...`);
+			},
+			this.timerLength,
+			`${comment} [${this.id}]`
+		);
+		if (this.pokeTimerLength)
+			this.pokeTimer = new Timer(
+				() => {
+					this.room.privateSend(player, `Psst it's your turn to play in ${this.meta.name} [${this.id}]`);
+					this.room.send(`/notifyuser ${player.id}, ${this.meta.name}, Waiting for you to play...`);
+					// TODO: Use ping when ps-client supports
+					// this.room.ping(player, { title: this.meta.name, label: 'Waiting for you to play...' });
+				},
+				this.pokeTimerLength,
+				`Poke for ${comment} [${this.id}]`
+			);
+	}
+	clearTimer(): void {
+		this.timer?.cancel();
+		this.pokeTimer?.cancel();
 	}
 
 	serialize(): string {
@@ -180,6 +227,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.started = true;
 		this.turns ??= Object.keys(this.players).shuffle();
 		this.nextPlayer();
+		this.setTimer('Game started');
 		return { success: true };
 	}
 
@@ -195,9 +243,11 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 			if (!this.trySkipPlayer || !this.trySkipPlayer(current)) {
 				this.turn = current;
 				this.update();
+				this.setTimer('Next turn');
 				return current;
 			}
 		} while (current !== this.turn);
+		this.clearTimer();
 		return null;
 	}
 
@@ -221,6 +271,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 
 	end(type?: 'force'): void {
 		const message = this.onEnd!(type);
+		this.clearTimer();
 		this.update();
 		// TODO: Render finish HTML in chat
 		this.room.send(message);

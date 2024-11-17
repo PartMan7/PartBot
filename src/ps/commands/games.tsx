@@ -154,7 +154,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 			},
 			play: {
 				name: 'play',
-				aliases: ['p'],
+				aliases: ['p', '!'],
 				help: 'Performs an action.',
 				syntax: 'CMD [id], [move]',
 				async run({ message, arg, $T }) {

@@ -11,6 +11,8 @@ export type Meta = {
 
 	allowForfeits?: boolean;
 	autostart?: boolean;
+	timer: number | false;
+	pokeTimer: number | false | undefined;
 };
 
 export enum GamesList {
