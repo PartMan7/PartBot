@@ -7,14 +7,13 @@ import { render } from '@/ps/games/othello/render';
 import type { User } from 'ps-client';
 import type { Board, State, Turn, RenderCtx, WinCtx } from '@/ps/games/othello/types';
 import { winnerIcon } from '@/discord/constants/emotes';
+import { EndType } from '@/ps/games/common';
 
 export class Othello extends Game<State, object> {
-	winCtx?: WinCtx | 'force';
+	winCtx?: WinCtx | { type: EndType };
 	cache: Record<string, Record<Turn, number>> = {};
 	constructor(ctx: BaseContext) {
 		super(ctx);
-
-		this.turns = ['B', 'W'];
 
 		const board = createGrid<Turn | null>(8, 8, () => null);
 		board[3][3] = board[4][4] = 'W';
@@ -23,7 +22,7 @@ export class Othello extends Game<State, object> {
 	}
 
 	count(board = this.state.board): Record<Turn, number> {
-		if (this.cache[this.log]) return this.cache[this.log];
+		if (board !== this.state.board && this.cache[this.log]) return this.cache[this.log];
 		const count = board.flat(2).reduce(
 			(acc, cell) => {
 				if (cell) acc[cell]++;
@@ -107,9 +106,10 @@ export class Othello extends Game<State, object> {
 		return !this.hasMoves(turn);
 	}
 
-	onEnd(type?: 'force'): string {
+	onEnd(type?: EndType): string {
 		if (type) {
-			this.winCtx = 'force';
+			this.winCtx = { type };
+			if (type === 'dq') return this.$T('GAME.ENDED_AUTOMATICALLY', { game: this.meta.name, id: this.id });
 			return this.$T('GAME.ENDED', { game: this.meta.name, id: this.id });
 		}
 		const scores = this.count();

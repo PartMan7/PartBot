@@ -6,12 +6,13 @@ import { renderMenu } from '@/ps/games/menus';
 import type { Room } from 'ps-client';
 import type { TranslationFn } from '@/i18n/types';
 import type { HTMLopts } from 'ps-client/classes/common';
+import { ChatError } from '@/utils/chatError';
 
 type SearchContext =
 	| { action: 'start'; user: string }
 	| { action: 'join'; user: string }
 	| { action: 'play'; user: string }
-	| { action: 'leave'; user: string }
+	| { action: 'leave'; user?: string }
 	| { action: 'end' }
 	| { action: 'sub'; user1?: string; user2?: string }
 	| { action: 'watch'; user: string }
@@ -72,6 +73,10 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 			if (!restCtx) throw new ChatError(roomCtx.$T('GAME.INVALID_INPUT'));
 			[searchCtx.user1, searchCtx.user2] = restCtx.split(',').map(Tools.toId);
 			if (!searchCtx.user2) return null;
+		}
+		if (searchCtx.action === 'leave' && !searchCtx.user) {
+			if (!restCtx) return null;
+			searchCtx.user = Tools.toId(restCtx);
 		}
 		const allGames = Object.values(PSGames[gameId]).filter(game => game.roomid === roomCtx.room.id);
 		const byContext = getByContext(searchCtx);
@@ -147,7 +152,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					const res = game.addPlayer(message.author, ctx);
 					if (!res.success) throw new ChatError(res.error);
 					const turnMsg = Game.meta.turns ? ` as ${Game.meta.turns[res.data!.as]}` : '';
-					message.reply(`[[ ]]${message.author.name} joined the game of ${Game.meta.name}${turnMsg}! [${game.id}]`);
+					message.reply(`${message.author.name} joined the game of ${Game.meta.name}${turnMsg}! [${game.id}]`); // TODO: $T
 					if (res.data!.started) game.closeSignups();
 					else game.signups();
 				},
@@ -191,6 +196,39 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					if (!replace.success) throw new ChatError(replace.error);
 					if (replace.data) message.reply(replace.data);
 					game.update();
+				},
+			},
+			forfeit: {
+				name: 'forfeit',
+				aliases: ['f', 'ff', 'leave', 'l'],
+				help: 'Forfeits a game, or leaves one in signups.',
+				syntax: 'CMD #id',
+				async run({ message, arg, $T }) {
+					const { game } = getGame(arg, { action: 'leave', user: message.author.id }, { room: message.target, $T });
+					const res = game.removePlayer(message.author);
+					if (!res.success) throw new ChatError(res.error);
+					if (res.data) {
+						message.reply(res.data.message);
+						if (res.data.cb) res.data.cb();
+					}
+					if (!game.started) game.signups();
+				},
+			},
+			disqualify: {
+				name: 'disqualify',
+				aliases: ['dq', 'yeet'],
+				help: 'Disqualifies a user.',
+				perms: Symbol.for('games.manage'),
+				syntax: 'CMD [game ref?], user',
+				async run({ message, arg, $T }) {
+					const { game, ctx } = getGame(arg, { action: 'leave' }, { room: message.target, $T });
+					const res = game.removePlayer(Tools.toId(ctx));
+					if (!res.success) throw new ChatError(res.error);
+					if (res.data) {
+						message.reply(res.data.message);
+						if (res.data.cb) res.data.cb();
+					}
+					if (!game.started) game.signups();
 				},
 			},
 			rejoin: {
@@ -310,9 +348,6 @@ export const command = [
 
 /**
  * TODO:
- * Resign
- * DQ
- *
  * Stash
  * Restore
  * Backups

@@ -6,11 +6,10 @@ export const meta: Meta = {
 	aliases: ['otgoodbye'],
 
 	turns: {
-		W: 'White',
 		B: 'Black',
+		W: 'White',
 	},
 
-	allowForfeits: true,
 	autostart: true,
 	pokeTimer: Tools.fromHumanTime('30 sec'),
 	timer: Tools.fromHumanTime('1 min'),

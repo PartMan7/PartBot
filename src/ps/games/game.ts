@@ -5,12 +5,12 @@ import { Games } from '@/ps/games/index';
 import { sample, useRNG } from '@/utils/random';
 import { Timer } from '@/utils/timer';
 import { botLogChannel } from '@/discord/constants/servers/boardgames';
+import { ChannelType, EmbedBuilder } from 'discord.js';
 
 import type { Room, User } from 'ps-client';
 import type { ReactElement } from 'react';
 import type { TranslationFn } from '@/i18n/types';
 import type { ActionResponse, BaseGameTypes, BasePlayer, BaseState, GamesList, Meta } from '@/ps/games/common';
-import { ChannelType, EmbedBuilder } from 'discord.js';
 
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
 
@@ -34,8 +34,6 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	pokeTimerLength?: number | false;
 	timerLength?: number;
 
-	allowForfeits?: boolean;
-
 	turn: State['turn'] | null;
 	turns: State['turn'][];
 
@@ -53,10 +51,11 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	action?(user: User, ctx: string): void;
 
 	onAddPlayer?(user: User, ctx: string): ActionResponse<Record<string, unknown>>;
-	onRemovePlayer?(player: BasePlayer, ctx: string | User): ActionResponse;
+	onLeavePlayer?(player: BasePlayer, ctx: string | User): ActionResponse;
+	onForfeitPlayer?(player: BasePlayer, ctx: string | User): ActionResponse;
 	onReplacePlayer?(turn: State['turn'], withPlayer: User): ActionResponse<BasePlayer & GameTypes['player']>;
 	onStart?(): ActionResponse;
-	onEnd?(type?: 'force'): string;
+	onEnd?(type?: 'force' | 'dq'): string;
 	trySkipPlayer?(turn: State['turn']): boolean;
 
 	constructor(ctx: BaseContext) {
@@ -78,6 +77,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.players = {};
 		this.turn = null;
 		this.turns = [];
+		if (ctx.meta.turns) this.turns = Object.keys(ctx.meta.turns);
 		this.sides = !!ctx.meta.turns;
 		this.spectators = [];
 		this.log = '';
@@ -187,23 +187,36 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		return { success: true, data: { started: false, as: newPlayer.turn } };
 	}
 
-	removePlayer(ctx: string | User): ActionResponse {
+	// ctx: string for DQ; ctx: User for self-leave
+	removePlayer(ctx: string | User): ActionResponse<{ message: string; cb?: () => void }> {
+		const staffAction = typeof ctx === 'string';
+		const player = (Object.values(this.players) as BasePlayer[]).find(p => p.id === (typeof ctx === 'string' ? ctx : ctx.id));
+		if (!player) return { success: false, error: this.$T('GAME.NOT_PLAYING') };
 		if (this.started) {
-			if (!this.allowForfeits) return { success: false, error: this.$T('GAME.ALREADY_STARTED') };
-			// TODO: Support forfeits
-			return { success: true };
+			const forfeitPlayer = this.onForfeitPlayer?.(player, ctx);
+			if (forfeitPlayer?.success === false) return forfeitPlayer;
+			player.out = true;
+			return {
+				success: true,
+				data: {
+					message: staffAction ? `${player.name} has been disqualified from the game.` : 'You have forfeited the game.',
+					cb: () => {
+						const playersLeft = Object.values(this.players).filter((player: BasePlayer) => !player.out);
+						if (playersLeft.length <= 1) this.end('dq');
+						else if (this.turn === player.turn) this.nextPlayer(); // Needs to be run AFTER consumer has finished DQing
+					},
+				},
+			};
 		}
-		if (typeof ctx === 'string') {
-			// TODO: Support staff DQs
-			return { success: true };
-		} else {
-			const player = (Object.values(this.players) as BasePlayer[]).find(p => p.id === ctx.id);
-			if (!player) return { success: false, error: this.$T('GAME.NOT_PLAYING') };
-			const removePlayer = this.onRemovePlayer?.(player, ctx);
-			if (removePlayer?.success === false) return removePlayer;
-			delete this.players[player.turn];
-			return { success: true };
-		}
+		const removePlayer = this.onLeavePlayer?.(player, ctx);
+		if (removePlayer?.success === false) return removePlayer;
+		delete this.players[player.turn];
+		return {
+			success: true,
+			data: {
+				message: staffAction ? `${player.name} has been removed from the game.` : 'You have left the game',
+			},
+		};
 	}
 
 	replacePlayer(turn: State['turn'], withPlayer: User): ActionResponse<string> {
@@ -243,6 +256,9 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		let current = this.turn;
 		do {
 			current = this.next(current);
+			const currentPlayer = this.players[current];
+			if (!currentPlayer) throw new Error(`Could not find ${current} in ${Object.keys(this.players)} from ${this.turns}`);
+			if (currentPlayer.out) continue;
 			if (!this.trySkipPlayer || !this.trySkipPlayer(current)) {
 				this.turn = current;
 				this.update();
@@ -274,7 +290,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		}
 	}
 
-	end(type?: 'force'): void {
+	end(type?: 'force' | 'dq'): void {
 		const message = this.onEnd!(type);
 		this.clearTimer();
 		this.update();

@@ -9,7 +9,6 @@ export type Meta = {
 	minSize?: number;
 	maxSize?: number;
 
-	allowForfeits?: boolean;
 	autostart?: boolean;
 	timer: number | false;
 	pokeTimer: number | false | undefined;
@@ -23,13 +22,16 @@ export interface BasePlayer {
 	name: string;
 	id: string;
 	turn: string;
+	out?: boolean;
 }
 
 export type BaseState = { board: unknown; turn: string };
 export type BaseGameTypes = {
-	player?: Record<string, unknown>;
+	player?: Record<string, string>;
 	actions?: { type: ActionType; name: string }[];
 	log?: unknown;
 };
 
 export type ActionResponse<T = undefined> = { success: true; data?: T } | { success: false; error: string };
+
+export type EndType = 'regular' | 'force' | 'dq';
