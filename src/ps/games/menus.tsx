@@ -46,7 +46,7 @@ export function renderMenu(room: Room, meta: Meta, isStaff: boolean): ReactEleme
 							</>
 						)}
 						{isStaff ? (
-							<Button value={`${cmd} end`} style={{ marginLeft: 20 }}>
+							<Button value={`${cmd} end ${game.id}`} style={{ marginLeft: 20 }}>
 								End
 							</Button>
 						) : null}
