@@ -205,6 +205,14 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				syntax: 'CMD #id',
 				async run({ message, arg, $T }) {
 					const { game } = getGame(arg, { action: 'leave', user: message.author.id }, { room: message.target, $T });
+					if (game.started) {
+						message.privateReply($T('CONFIRM'));
+						await message.target
+							.waitFor(msg => msg.content.toLowerCase() === 'confirm', 10_000)
+							.catch(() => {
+								throw new ChatError($T('CANCELLED'));
+							});
+					}
 					const res = game.removePlayer(message.author);
 					if (!res.success) throw new ChatError(res.error);
 					if (res.data) {

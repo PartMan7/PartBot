@@ -12,6 +12,9 @@ export default {
 	NO_DMS_COMMAND: 'This command may not be run from private messages.',
 	INVALID_ALIAS: `Had an invalid alias for {{aliasFor}}.`,
 
+	CONFIRM: "Are you sure? Type 'confirm' to confirm.",
+	CANCELLED: 'This action was cancelled.',
+
 	QUOTES: {
 		NO_QUOTES_FOUND: 'No quotes found.',
 	},
