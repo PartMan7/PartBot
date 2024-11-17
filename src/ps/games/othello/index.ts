@@ -147,7 +147,7 @@ export class Othello extends Game<State, object> {
 					{
 						name: Object.values(this.count()).join(' - '),
 						value: this.state.board
-							.map(row => row.map(cell => (cell ? { B: ':black_circle:', W: ':white_circle:' }[cell] : ':green_square:')).join(''))
+							.map(row => row.map(cell => (cell ? { B: ':black_circle:', W: ':white_circle:' }[cell] : ':green_circle:')).join(''))
 							.join('\n'),
 					},
 				])
