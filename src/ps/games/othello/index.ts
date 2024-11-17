@@ -1,12 +1,12 @@
+import { EmbedBuilder } from 'discord.js';
 import { Game, BaseContext, createGrid } from '@/ps/games/game';
-import type { Board, State, Turn, RenderCtx, WinCtx } from '@/ps/games/othello/types';
-import type { User } from 'ps-client';
-
+export { meta } from '@/ps/games/othello/meta';
 import { deepClone } from '@/utils/deepClone';
 import { render } from '@/ps/games/othello/render';
-import { ChatError } from '@/utils/chatError';
 
-export { meta } from '@/ps/games/othello/meta';
+import type { User } from 'ps-client';
+import type { Board, State, Turn, RenderCtx, WinCtx } from '@/ps/games/othello/types';
+import { winnerIcon } from '@/discord/constants/emotes';
 
 export class Othello extends Game<State, object> {
 	winCtx?: WinCtx | 'force';
@@ -29,7 +29,7 @@ export class Othello extends Game<State, object> {
 				if (cell) acc[cell]++;
 				return acc;
 			},
-			{ W: 0, B: 0 }
+			{ B: 0, W: 0 }
 		);
 		return (this.cache[this.log] = count);
 	}
@@ -131,6 +131,28 @@ export class Othello extends Game<State, object> {
 			loser: `${loser.name} (${this.next(winningSide)})`,
 			ctx: `${scores[winningSide]}-${scores[this.next(winningSide)]}`,
 		});
+	}
+
+	renderEmbed(): EmbedBuilder {
+		const winner = this.winCtx && typeof this.winCtx !== 'string' && this.winCtx.type === 'win' ? this.winCtx.winner.id : null;
+		const title = Object.values(this.players)
+			.map(player => `${player.name} (${player.turn})${player.id === winner ? ` ${winnerIcon}` : ''}`)
+			.join(' vs ');
+		return (
+			new EmbedBuilder()
+				.setColor('#008000')
+				.setAuthor({ name: 'Othello - Room Match' })
+				.setTitle(title)
+				// .setURL // TODO: Link game logs on Web
+				.addFields([
+					{
+						name: Object.values(this.count()).join(' - '),
+						value: this.state.board
+							.map(row => row.map(cell => (cell ? { B: ':black_circle:', W: ':white_circle:' }[cell] : ':green_square:')).join(''))
+							.join('\n'),
+					},
+				])
+		);
 	}
 
 	render(side: Turn) {

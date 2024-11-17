@@ -4,11 +4,13 @@ import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { Games } from '@/ps/games/index';
 import { sample, useRNG } from '@/utils/random';
 import { Timer } from '@/utils/timer';
+import { botLogChannel } from '@/discord/constants/servers/boardgames';
 
 import type { Room, User } from 'ps-client';
 import type { ReactElement } from 'react';
 import type { TranslationFn } from '@/i18n/types';
 import type { ActionResponse, BaseGameTypes, BasePlayer, BaseState, GamesList, Meta } from '@/ps/games/common';
+import { ChannelType, EmbedBuilder } from 'discord.js';
 
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
 
@@ -46,6 +48,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 
 	// Game-provided methods:
 	render?(side: State['turn'] | null): ReactElement;
+	renderEmbed?(): EmbedBuilder;
 
 	action?(user: User, ctx: string): void;
 
@@ -257,6 +260,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	}
 
 	update(user?: string) {
+		if (!this.started) return;
 		if ('render' in this && typeof this.render === 'function') {
 			if (user) {
 				const asPlayer = (Object.values(this.players) as BasePlayer[]).find(player => player.id === user);
@@ -265,6 +269,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 				throw new ChatError('User not in players/spectators');
 			}
 			Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render!(side)));
+			// TODO: Add page pings
 			this.room.pageHTML(this.spectators, this.render(null), { name: this.id });
 		}
 	}
@@ -273,9 +278,19 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		const message = this.onEnd!(type);
 		this.clearTimer();
 		this.update();
-		// TODO: Render finish HTML in chat
+		if (this.started) {
+			// TODO: Revisit broadcasting logic for single-player games
+			this.room.sendHTML(this.render!(null));
+		}
 		this.room.send(message);
-		// TODO: Upload to Discord
+		if (this.started && this.renderEmbed) {
+			const embed = this.renderEmbed();
+			if (this.roomid === 'boardgames') {
+				// Send only for games from BG
+				const channel = Discord.channels.cache.get(botLogChannel);
+				if (channel && channel.type === ChannelType.GuildText) channel.send({ embeds: [embed] });
+			}
+		}
 		// Delete from cache
 		delete PSGames[this.meta.id]![this.id];
 		// TODO: Delete backup
