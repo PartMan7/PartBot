@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { Perms } from '@/types/perms';
-import type { HTMLopts } from 'ps-client/classes/common';
-
 import type { SlashCommandBuilder } from 'discord.js';
+import type { User } from 'ps-client';
+import type { HTMLopts } from 'ps-client/classes/common';
 import type { ReactElement } from 'react';
+import type { TranslationFn } from '@/i18n/types';
+import type { Perms } from '@/types/perms';
 
 export type PSCommandContext = {
 	/**
@@ -36,6 +37,10 @@ export type PSCommandContext = {
 	 * (Only on forwarded messages) The message the original command was called with
 	 */
 	calledFromMsg?: PSMessage;
+	/**
+	 * Translations function.
+	 */
+	$T: TranslationFn;
 	/**
 	 * Executor function for command
 	 * Allows commands to run other commands
@@ -78,13 +83,15 @@ export type PSCommand = {
 	 */
 	flags?: {
 		// If enabled, hides the command from command lists
-		noDisplay?: true;
+		noDisplay?: boolean | undefined;
 		// If enabled, replaces 'access denied' errors with 'command not found'
-		conceal?: true;
+		conceal?: boolean | undefined;
 		// Ensures a command can only be run from a room
-		roomOnly?: true;
+		roomOnly?: boolean | undefined;
 		// Ensures a command can only be run from a PM
-		pmOnly?: true;
+		pmOnly?: boolean | undefined;
+		// Allows 'rerouted' PMs (eg: ,@boardgames othello join). Disabled by default.
+		routePMs?: boolean | undefined;
 	};
 	/**
 	 * Command help message to be shown if executor function rejects without a message.
@@ -112,7 +119,7 @@ export type PSCommand = {
 	 * If a value is passed, allows ranks above (and including) the provided rank.
 	 * If ['room', rank] or ['global', rank] is passed, checks whether the user's room/global rank is sufficient.
 	 * If a function is passed, runs said function on the message and uses truthiness to determine.
-	 * If a symbol is passed, looks up the permissions requirement from ps/handlers/custom-perms.
+	 * If a symbol is passed, looks up the permissions requirement from ps/handlers/customPerms.
 	 */
 	perms?: Perms;
 	/**

@@ -3,7 +3,7 @@ export const command: PSCommand = {
 	help: 'Boops',
 	syntax: 'CMD',
 	perms: ['room', 'mod'],
-	async run({ message }) {
-		return message.reply('BOOP');
+	async run({ message, $T }) {
+		return message.reply($T('BOOP'));
 	},
 };

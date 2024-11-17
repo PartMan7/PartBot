@@ -4,7 +4,7 @@ import { token, clientId } from '@/config/discord';
 
 import { DiscCommands } from '@/cache';
 import { resetCache } from '@/cache/reset';
-import { cacheBuster } from '@/utils/cachebuster';
+import { cachebuster } from '@/utils/cachebuster';
 
 const restClient = new REST().setToken(token);
 
@@ -59,7 +59,7 @@ export async function loadCommands(): Promise<void> {
 
 export function unloadCommands(): void {
 	// Delete require cache for commands
-	Object.values(DiscCommands).forEach(({ path }) => cacheBuster(path));
+	Object.values(DiscCommands).forEach(({ path }) => cachebuster(path));
 	resetCache('DiscCommands');
 }
 

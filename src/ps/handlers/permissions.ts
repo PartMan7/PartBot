@@ -1,5 +1,5 @@
 import { Perms } from '@/types/perms';
-import customPerms from '@/ps/handlers/custom-perms';
+import customPerms from '@/ps/handlers/customPerms';
 
 import { admins } from '@/config/ps';
 
@@ -30,7 +30,7 @@ function _checkPermissions(perm: Exclude<Perms, symbol>, message: PSMessage): bo
 	// Other overrides are applied only on rank and [scope, rank], not functions
 	switch (typeof perm) {
 		case 'string': {
-			return rankOrder.indexOf(getRank(message.msgRank)) >= rankOrder.indexOf(perm);
+			return rankOrder.indexOf(getRank(message.msgRank ?? ' ')) >= rankOrder.indexOf(perm);
 		}
 		case 'object': {
 			const [level, rank] = perm;
@@ -38,7 +38,7 @@ function _checkPermissions(perm: Exclude<Perms, symbol>, message: PSMessage): bo
 			const globalRank = message.author.group ?? ' ';
 			if (level === 'global' || message.type === 'pm') return rankOrder.indexOf(getRank(globalRank)) >= permIndex;
 			const roomAuth = message.target.auth;
-			const roomRank = Object.keys(roomAuth).find(rank => roomAuth[rank].includes(message.author.userid)) ?? ' ';
+			const roomRank = Object.keys(roomAuth ?? {}).find(rank => roomAuth?.[rank].includes(message.author.userid)) ?? ' ';
 			const roomIndex = rankOrder.indexOf(getRank(roomRank));
 			if (level === 'room') return roomIndex >= permIndex;
 			else return Math.max(roomIndex, rankOrder.indexOf(getRank(globalRank))) >= permIndex;
@@ -52,6 +52,7 @@ function _checkPermissions(perm: Exclude<Perms, symbol>, message: PSMessage): bo
 }
 
 export function checkPermissions(perm: Perms, message: PSMessage): boolean {
+	// TODO: Support room overrides
 	if (typeof perm === 'symbol') {
 		if (perm in customPerms) return _checkPermissions(customPerms[perm], message);
 		return false;

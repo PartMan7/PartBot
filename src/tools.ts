@@ -7,6 +7,14 @@ export async function uploadToPastie(text: string): Promise<string> {
 	return `https://pastie.io/raw/${res.data.key as string}`;
 }
 
+type Entry = {
+	abbr: string;
+	name: string;
+	plur: string;
+	time: number;
+	count?: number;
+};
+
 export function toHumanTime(timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' = 'f2s'): string {
 	const timeList: (
 		| {
@@ -68,13 +76,7 @@ export function toHumanTime(timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' =
 		entries: timeEntries,
 	}: {
 		scale: number;
-		entries: {
-			abbr: string;
-			name: string;
-			plur: string;
-			time: number;
-			count?: number;
-		}[];
+		entries: Entry[];
 	} = timeList.reduce(
 		(acc, current) => {
 			if (Array.isArray(current)) {
@@ -83,7 +85,7 @@ export function toHumanTime(timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' =
 			} else acc.entries.push({ ...current, time: acc.scale });
 			return acc;
 		},
-		{ entries: [], scale: 1 }
+		{ entries: [] as Entry[], scale: 1 }
 	);
 	if (format === 'hhmmss') timeEntries.splice(-3);
 	let timeLeft = timeInMs;
@@ -97,7 +99,7 @@ export function toHumanTime(timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' =
 	timeEntries.reverse();
 	switch (format) {
 		case 'abs': {
-			const firstIndex = timeEntries.findIndex(entry => entry.count > 0);
+			const firstIndex = timeEntries.findIndex(entry => entry.count! > 0);
 			if (firstIndex === -1) return '0 ms';
 			return timeEntries
 				.slice(firstIndex, firstIndex + 2)

@@ -1,5 +1,5 @@
 import { renderToString } from 'react-dom/server';
-import { jsxToHTML } from '@/utils/jsx-to-html';
+import { jsxToHTML } from '@/utils/jsxToHTML';
 import { renderTemplate } from '@/web/loaders/util';
 
 import type { Request, Response, NextFunction } from 'express';

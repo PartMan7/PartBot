@@ -1,3 +1,3 @@
-import { ChatError as _chatError } from '@/utils/chat-error';
+import { ChatError as _chatError } from '@/utils/chatError';
 export as namespace ChatError;
 export = _chatError;

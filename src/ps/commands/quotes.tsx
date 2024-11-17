@@ -5,11 +5,11 @@ import { PSQuoteRoomPrefs } from '@/cache';
 import { QUOTES } from '@/text';
 import { Username as UsernameCustom } from '@/utils/components';
 import { Username as UsernamePS } from '@/utils/components/ps';
-import { escapeRegEx } from '@/utils/regex-escape';
+import { escapeRegEx } from '@/utils/regexEscape';
 import { MAX_CHAT_HTML_LENGTH, MAX_PAGE_HTML_LENGTH } from '@/ps/constants';
 
 import type { ReactElement, ReactNode } from 'react';
-import { jsxToHTML } from '@/utils/jsx-to-html';
+import { jsxToHTML } from '@/utils/jsxToHTML';
 
 type QuoteCollection = [index: number, quote: string][];
 
@@ -49,7 +49,7 @@ function parseQuote(quote: string): string {
 	const lines = quote.trim().split(/ {3}|\\n|\n/);
 	const foundNames = lines
 		.map(line => line.match(chatRegEx)?.[3])
-		.filter(Boolean)
+		.filter((name): name is string => !!name)
 		.unique();
 	const reformatRegExes = foundNames.map(name => {
 		return new RegExp(`^((?:\\[(?:\\d{2}:){1,2}\\d{2}] )?• [${ranks}]?)(${escapeRegEx(name)})( .*)$`, 'i');
@@ -179,13 +179,13 @@ function MultiQuotes({ list, paginate, buffer }: { list: QuoteCollection; pagina
 	remaining: QuoteCollection;
 } {
 	const quoteList = list.slice();
-	const cap = (paginate ? MAX_PAGE_HTML_LENGTH : MAX_CHAT_HTML_LENGTH) - buffer;
+	const cap = (paginate ? MAX_PAGE_HTML_LENGTH : MAX_CHAT_HTML_LENGTH) - (buffer ?? 10);
 
 	const renderedQuotes: QuoteCollection = [];
 	let component = '';
 
 	while (quoteList.length) {
-		const next = quoteList.shift();
+		const next = quoteList.shift()!;
 		const newComponent = jsxToHTML(
 			<>
 				<hr />

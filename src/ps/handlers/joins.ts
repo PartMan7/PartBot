@@ -27,7 +27,7 @@ export function leaveHandler(room: string, user: string, isIntro: boolean): void
 	// Throttling cache updates at once per 5s per leave
 	if (Date.now() - PSSeenCache[userId]?.at.getTime() < Tools.fromHumanTime('5 seconds')) return;
 	const userObj = PS.getUser(user);
-	const rooms = userObj ? Object.keys(userObj.rooms).map(room => room.replace(/^[^a-z0-9]/, '')) : [room];
+	const rooms = userObj && userObj.rooms ? Object.keys(userObj.rooms).map(room => room.replace(/^[^a-z0-9]/, '')) : [room];
 	PSSeenCache[userId] = { at: new Date(), in: rooms };
 	seeUser(user, rooms);
 }

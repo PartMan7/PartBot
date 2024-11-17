@@ -1,4 +1,5 @@
 import { sample, useRNG, RNGSource } from 'utils/random';
+import type { TranslationFn } from '@/i18n/types';
 
 declare global {
 	interface Array<T> {
@@ -8,11 +9,25 @@ declare global {
 		shuffle(rng?: RNGSource): T[];
 		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
 		unique(): T[];
+		list($T?: TranslationFn | string): string;
+		space<S = unknown>(spacer: S): (T | S)[];
+	}
+	interface ReadonlyArray<T> {
+		random(rng?: RNGSource): T;
+		sample(amount: number, rng?: RNGSource): T[];
+		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
+		unique(): T[];
+		list($T?: TranslationFn): string;
+		space<S = unknown>(spacer: S): (T | S)[];
 	}
 
 	interface String {
 		lazySplit(match: string | RegExp, cases: number): string[];
 		gsub(match: RegExp, replace: string | ((arg: string, ...captures: string[]) => string)): string;
+	}
+
+	interface Number {
+		toLetter(): string;
 	}
 }
 
@@ -88,7 +103,7 @@ Object.defineProperties(Array.prototype, {
 		writable: false,
 		configurable: false,
 		value: function <T = unknown>(this: T[]): T[] {
-			const output = [];
+			const output: T[] = [];
 			const cache = new Set();
 			for (let i = 0; i < this.length; i++) {
 				if (!cache.has(this[i])) {
@@ -97,6 +112,35 @@ Object.defineProperties(Array.prototype, {
 				}
 			}
 			return output;
+		},
+	},
+	list: {
+		enumerable: false,
+		writable: false,
+		configurable: false,
+		value: function <T extends string | number>(this: T[], $T?: TranslationFn | string): string {
+			const conjunction = typeof $T === 'string' ? $T : ($T?.('GRAMMAR.AND') ?? 'and');
+			if (this.length === 0) return '';
+			if (this.length === 1) return this.toString();
+			if (this.length === 2) return this.map(term => term.toString()).join(` ${conjunction} `);
+			return `${this.slice(0, -1)
+				.map(term => term.toString())
+				.join(', ')}, ${conjunction} ${this.at(-1)!.toString()}`;
+		},
+	},
+	space: {
+		enumerable: false,
+		writable: false,
+		configurable: false,
+		value: function <T = unknown, S = unknown>(this: T[], spacer: S): (T | S)[] {
+			if (this.length === 0 || this.length === 1) return this;
+			return this.slice(1).reduce(
+				(acc, term) => {
+					acc.push(spacer, term);
+					return acc;
+				},
+				[this[0]] as (T | S)[]
+			);
 		},
 	},
 });
@@ -117,7 +161,7 @@ Object.defineProperties(String.prototype, {
 					if (!match) return [...out, input];
 					const m = match[0];
 					out.push(input.slice(0, match.index));
-					input = input.slice(match.index + m.length);
+					input = input.slice(match.index! + m.length);
 					for (let j = 1; j < match.length; j++) out.push(match[j]);
 				} else {
 					const match = input.indexOf(delim);
@@ -143,6 +187,18 @@ Object.defineProperties(String.prototype, {
 				output = next;
 			}
 			return output;
+		},
+	},
+});
+
+Object.defineProperties(Number.prototype, {
+	toLetter: {
+		enumerable: false,
+		writable: false,
+		configurable: false,
+		value: function (this: number) {
+			const aCode = 'A'.charCodeAt(0);
+			return String.fromCharCode(aCode + this - 1);
 		},
 	},
 });

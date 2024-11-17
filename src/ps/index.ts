@@ -1,4 +1,4 @@
-import { Client as PSClient } from 'ps-client';
+import { Client } from 'ps-client';
 import { username, password, rooms } from '@/config/ps';
 
 import { transformHTML } from '@/ps/handlers/html';
@@ -9,7 +9,7 @@ import autoResHandler from '@/ps/handlers/autores';
 import pageHandler from '@/ps/handlers/page';
 import { joinHandler, nickHandler, leaveHandler } from '@/ps/handlers/joins';
 
-const PS = new PSClient({ username, password, rooms, transformHTML });
+const PS = new Client({ username, password, rooms, transformHTML });
 PS.on('login', () => log(`Connected to PS! [${username}]`));
 
 loadPS().then(() => PS.connect());
