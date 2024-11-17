@@ -293,7 +293,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 								.list($T),
 						})
 					);
-					// TODO: Close HTML page
+					message.reply(`/closehtmlpage ${message.author.id}, ${game.id}`);
 				},
 			},
 			menu: {

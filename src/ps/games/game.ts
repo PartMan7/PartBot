@@ -284,8 +284,9 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 				if (this.spectators.includes(user)) return this.sendHTML(user, this.render(null));
 				throw new ChatError('User not in players/spectators');
 			}
+			// TODO: Add ping to ps-client HTML opts
 			Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render!(side)));
-			// TODO: Add page pings
+			this.room.send(`/highlighthtmlpage ${this.players[this.turn!].id}, ${this.id}, Your turn!`);
 			this.room.pageHTML(this.spectators, this.render(null), { name: this.id });
 		}
 	}

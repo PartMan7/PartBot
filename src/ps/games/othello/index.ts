@@ -45,14 +45,13 @@ export class Othello extends Game<State, object> {
 	play([i, j]: [number, number], turn: Turn): Board | null;
 	play([i, j]: [number, number], turn: Turn, board: Board): boolean;
 	play([i, j]: [number, number], turn: Turn, board = this.state.board): Board | null | boolean {
-		// TODO: check if the right turn
 		const isActual = board === this.state.board;
 		const other = this.next(turn);
+		if (isActual && this.turn !== turn) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
 
 		if (board[i][j]) return null;
 
 		let flipped = false;
-
 		for (let X = -1; X <= 1; X++) {
 			for (let Y = -1; Y <= 1; Y++) {
 				if (!X && !Y) continue;

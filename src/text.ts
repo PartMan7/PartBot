@@ -20,7 +20,7 @@ export const GAME = {
 	ALREADY_JOINED: 'You have already joined this game.',
 	IS_FULL: 'The game has no more space for players.',
 	INVALID_SIDE(valid: string[]): string {
-		return `Invalid side chosen! Valid sides are: ${valid.join(', ')}`; // TODO: listify
+		return `Invalid side chosen! Valid sides are: ${valid.join(', ')}`;
 	},
 	INVALID_INPUT: "That input doesn't seem to work...",
 	NOT_PLAYING: [
@@ -39,6 +39,6 @@ export const GAME = {
 		return `${winner} won the game of ${game} against ${loser}!${ctx ? ` ${ctx}` : ''}`;
 	},
 	DRAW(...players: string[]): string {
-		return `The game between ${players.join(', ')} ended in a draw!`; // TODO: listify
+		return `The game between ${players.list()} ended in a draw!`;
 	},
 } as const;

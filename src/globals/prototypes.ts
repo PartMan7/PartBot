@@ -9,7 +9,7 @@ declare global {
 		shuffle(rng?: RNGSource): T[];
 		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
 		unique(): T[];
-		list($T?: TranslationFn): string;
+		list($T?: TranslationFn | string): string;
 		space<S = unknown>(spacer: S): (T | S)[];
 	}
 	interface ReadonlyArray<T> {
@@ -118,8 +118,8 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function <T extends string | number>(this: T[], $T?: TranslationFn): string {
-			const conjunction = $T?.('GRAMMAR.AND') ?? 'and';
+		value: function <T extends string | number>(this: T[], $T?: TranslationFn | string): string {
+			const conjunction = typeof $T === 'string' ? $T : ($T?.('GRAMMAR.AND') ?? 'and');
 			if (this.length === 0) return '';
 			if (this.length === 1) return this.toString();
 			if (this.length === 2) return this.map(term => term.toString()).join(` ${conjunction} `);
