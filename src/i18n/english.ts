@@ -45,7 +45,7 @@ export default {
 			"Wait you're not the right player for this!",
 			'You are not the chosen one.',
 		],
-		WON_AGAINST: `{{winner}} won the game of {{game}} against {{loser}}!{{ctx}}`,
+		WON_AGAINST: `{{winner}} won the game of {{game}} against {{loser}}{{ctx}}!`,
 		DRAW: `The game between {{players}} ended in a draw!`,
 	},
 };

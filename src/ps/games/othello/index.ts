@@ -128,7 +128,7 @@ export class Othello extends Game<State, object> {
 			winner: `${winner.name} (${winningSide})`,
 			game: this.meta.name,
 			loser: `${loser.name} (${this.next(winningSide)})`,
-			ctx: `${scores[winningSide]}-${scores[this.next(winningSide)]}`,
+			ctx: ` [${scores[winningSide]}-${scores[this.next(winningSide)]}]`,
 		});
 	}
 

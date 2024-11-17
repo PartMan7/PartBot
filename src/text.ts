@@ -11,34 +11,3 @@ export const INVALID_ALIAS = (aliasFor: string): string => {
 export const QUOTES = {
 	NO_QUOTES_FOUND: 'No quotes found.',
 } as const;
-
-// Games
-export const GAME = {
-	NOT_FOUND: 'Could not find the game you meant...',
-	NOT_STARTED: 'The game has not started yet.',
-	ALREADY_STARTED: 'The game has already started!',
-	ALREADY_JOINED: 'You have already joined this game.',
-	IS_FULL: 'The game has no more space for players.',
-	INVALID_SIDE(valid: string[]): string {
-		return `Invalid side chosen! Valid sides are: ${valid.join(', ')}`;
-	},
-	INVALID_INPUT: "That input doesn't seem to work...",
-	NOT_PLAYING: [
-		"You're not a player!",
-		"You're not playing, weeb.",
-		"You don't seem to be a player?",
-		'Prayer not found. Or something like that.',
-	],
-	IMPOSTOR_ALERT: [
-		"Hold up! Your ID doesn't match!",
-		'Kinda sus, if you ask me...',
-		"Wait you're not the right player for this!",
-		'You are not the chosen one.',
-	],
-	WON_AGAINST(winner: string, loser: string, game: string, ctx?: string): string {
-		return `${winner} won the game of ${game} against ${loser}!${ctx ? ` ${ctx}` : ''}`;
-	},
-	DRAW(...players: string[]): string {
-		return `The game between ${players.list()} ended in a draw!`;
-	},
-} as const;
