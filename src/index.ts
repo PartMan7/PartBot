@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import '@/globals';
 
 log('PartBot is starting up...');
