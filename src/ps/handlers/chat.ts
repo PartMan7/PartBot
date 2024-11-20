@@ -5,18 +5,9 @@ import { checkPermissions } from '@/ps/handlers/permissions';
 import { i18n } from '@/i18n';
 
 import type { PSCommand, PSCommandContext } from '@/types/chat';
-import type { Perms } from '@/types/perms';
 
 import { ACCESS_DENIED, CMD_NOT_FOUND, INVALID_ALIAS, NO_DMS_COMMAND, PM_ONLY_COMMAND, ROOM_ONLY_COMMAND } from '@/text';
 import { ChatError } from '@/utils/chatError';
-
-export function getPerms(args: string[], sourceCommand: PSCommand): Perms {
-	for (let i = args.length; i >= 0; i--) {
-		const subCommand = args.slice(0, i).reduce((cmd, arg) => cmd.children![arg], sourceCommand);
-		if (subCommand.perms) return subCommand.perms;
-	}
-	return 'regular';
-}
 
 type Cascade = { flags: NonNullable<PSCommand['flags']>; perms: NonNullable<PSCommand['perms']> };
 
@@ -82,8 +73,26 @@ export function parseArgs(
 	}
 	context.args = [...command, ...args];
 	context.arg = `${command.length ? command.map(cmd => `${cmd} `).join('') : ''}${spaceCapturedArgs.join('')}`;
-	// TODO: Cascade permissions
 	return { command: commandObj, sourceCommand, commandSteps, cascade, context: context as PSCommandContext };
+}
+
+function spoofMessage(argData: string, message: PSMessage): PSMessage {
+	const [roomId, newArgData] = argData.slice(1).lazySplit(' ', 1);
+	const room = message.parent.getRoom(roomId);
+	if (!room) throw new ChatError('Invalid room ID.');
+	const by = room.users.find(user => Tools.toId(user) === message.author.id);
+	if (!by) throw new ChatError('Not in room.');
+	const [empty, _type, _from, rest] = message.raw.replace(new RegExp(`${prefix}@\\S* `), prefix).lazySplit('|', 3);
+	return new Message({
+		type: 'chat',
+		raw: [empty, 'spoof', by, rest].join('|'),
+		text: `${prefix}${newArgData}`,
+		by,
+		target: room.id,
+		time: message.time,
+		isIntro: message.isIntro,
+		parent: message.parent,
+	});
 }
 
 export default async function chatHandler(message: PSMessage, originalMessage?: PSMessage): Promise<void> {
@@ -95,19 +104,7 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 		// Check if this is a spoof message. If so, spoof and pass to the room.
 		// Will only trigger commands with `flags.routePMs` enabled.
 		if (argData.startsWith('@')) {
-			const [roomId, newArgData] = argData.slice(1).lazySplit(' ', 1);
-			const room = message.parent.getRoom(roomId);
-			if (!room) throw new ChatError('Invalid room ID.');
-			const mockMessage = new Message({
-				type: 'chat',
-				raw: message.raw.replace(new RegExp(`${prefix}@\\S*`), ''),
-				text: `${prefix}${newArgData}`,
-				by: message.author.userid,
-				target: room.id,
-				time: message.time,
-				isIntro: message.isIntro,
-				parent: message.parent,
-			});
+			const mockMessage = spoofMessage(argData, message);
 			return chatHandler(mockMessage, message);
 		}
 		const args = argData.split(/ +/);
@@ -120,11 +117,11 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 			context,
 		} = parseArgs(args, spacedArgs);
 		const conceal = sourceCommand.flags?.conceal ? CMD_NOT_FOUND : null;
+		context.$T = i18n(); // TODO: Allow overriding translations
 		if (!checkPermissions(perms, message)) throw new ChatError(conceal ?? ACCESS_DENIED);
 		if (!flags.routePMs && originalMessage) throw new ChatError(conceal ?? NO_DMS_COMMAND);
 		if (flags.roomOnly && message.type !== 'chat') throw new ChatError(conceal ?? ROOM_ONLY_COMMAND);
 		if (flags.pmOnly && message.type !== 'pm') throw new ChatError(conceal ?? PM_ONLY_COMMAND);
-		context.$T = i18n(); // TODO: Allow overriding translations
 		context.broadcast = function (msg, perm = 'voice') {
 			if (checkPermissions(perm, message)) return message.reply(msg);
 			else return message.privateReply(msg);
