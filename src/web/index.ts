@@ -9,8 +9,9 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-loadAPI(app).then(() => loadUI(app));
-
-app.listen(port, () => log(`Web is running!`));
+if (process.env.USE_WEB) {
+	loadAPI(app).then(() => loadUI(app));
+	app.listen(port, () => log(`Web is running!`));
+}
 
 export default app;

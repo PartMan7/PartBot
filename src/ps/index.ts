@@ -12,7 +12,7 @@ import { joinHandler, nickHandler, leaveHandler } from '@/ps/handlers/joins';
 const PS = new Client({ username, password, rooms, transformHTML });
 PS.on('login', () => log(`Connected to PS! [${username}]`));
 
-loadPS().then(() => PS.connect());
+if (process.env.USE_PS) loadPS().then(() => PS.connect());
 
 PS.on('message', chatHandler);
 PS.on('message', interfaceHandler);
