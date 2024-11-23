@@ -6,6 +6,7 @@ import { sample, useRNG } from '@/utils/random';
 import { Timer } from '@/utils/timer';
 import { botLogChannel } from '@/discord/constants/servers/boardgames';
 import { ChannelType, EmbedBuilder } from 'discord.js';
+import { pick } from '@/utils/pick';
 
 import type { Room, User } from 'ps-client';
 import type { ReactElement } from 'react';
@@ -127,9 +128,10 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	}
 
 	serialize(): string {
-		const preserveKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log'];
-		return ''; // TODO
+		const sparseGame = pick(this, ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log']);
+		return JSON.stringify(sparseGame);
 	}
+	backup(): void {}
 
 	signups(): void {
 		if (this.started) throw new ChatError(this.$T('GAME.ALREADY_STARTED'));
