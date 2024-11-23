@@ -12,6 +12,7 @@ export type GameCache = {
 	get(id: string): GameBackup;
 	getByGame(room: string, game: GamesList | 'all'): GameBackup[];
 	set(backup: GameBackup): void;
+	delete(id: string): void;
 };
 
 const cacheId = 'games.json';
@@ -33,5 +34,8 @@ export const gameCache: GameCache = {
 	set(backup) {
 		flatCache.set(backup.id, backup);
 		flatCache.save();
+	},
+	delete(id) {
+		flatCache.delete(id);
 	},
 };
