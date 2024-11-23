@@ -13,11 +13,7 @@ export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this
 				? Object.entries(this.meta.turns!)
 						.filter(([turn]) => !this.players[turn])
 						.map(([side, sideName]) => (
-							<Button
-								key={side}
-								value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}, ${side}`}
-								style={{ margin: 5 }}
-							>
+							<Button key={side} value={`${this.renderCtx.msg} join ${this.id}, ${side}`} style={{ margin: 5 }}>
 								{sideName}
 							</Button>
 						))
