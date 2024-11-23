@@ -133,10 +133,11 @@ export class Othello extends Game<State, object> {
 	}
 
 	renderEmbed(): EmbedBuilder {
-		const winner = this.winCtx && typeof this.winCtx !== 'string' && this.winCtx.type === 'win' ? this.winCtx.winner.id : null;
+		const winner = this.winCtx && this.winCtx.type === 'win' ? this.winCtx.winner.id : null;
 		const title = Object.values(this.players)
 			.map(player => `${player.name} (${player.turn})${player.id === winner ? ` ${winnerIcon}` : ''}`)
 			.join(' vs ');
+		const count = this.count();
 		return (
 			new EmbedBuilder()
 				.setColor('#008000')
@@ -145,7 +146,7 @@ export class Othello extends Game<State, object> {
 				// .setURL // TODO: Link game logs on Web
 				.addFields([
 					{
-						name: Object.values(this.count()).join(' - '),
+						name: [count.B, count.W].join(' - '),
 						value: this.state.board
 							.map(row => row.map(cell => (cell ? { B: ':black_circle:', W: ':white_circle:' }[cell] : ':green_circle:')).join(''))
 							.join('\n'),
