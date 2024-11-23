@@ -1,5 +1,5 @@
-export function pick<T extends { [key: string | symbol]: unknown }>(base: T, ..._keys: (keyof T | (keyof T)[])[]): Partial<T> {
-	const keys: (keyof T)[] = _keys.flat(2);
+export function pick<T extends object>(base: T, ..._keys: (keyof T | (keyof T)[])[]): Partial<T> {
+	const keys = _keys.flat(2) as (keyof T)[];
 	const picked = {} as T;
 
 	keys.forEach(key => {
