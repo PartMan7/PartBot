@@ -17,7 +17,9 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 					<Button
 						value={`${this.msg} play ${ctx.id}, ${i}-${j}`}
 						style={{ ...roundStyles, border: '1px dashed black', background: '#6666' }}
-					/>
+					>
+						{' '}
+					</Button>
 				) : null}
 			</td>
 		);

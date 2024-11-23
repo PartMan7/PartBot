@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export function Button({
 	name = 'send',
 	value,
@@ -5,7 +7,8 @@ export function Button({
 	...props
 }: React.HTMLAttributes<HTMLButtonElement> & {
 	name?: 'send' | 'parseCommand' | 'receive';
-	value?: string;
+	value: string;
+	children: ReactNode;
 }): React.ReactElement {
 	return (
 		<button name={name} value={value} {...props}>
