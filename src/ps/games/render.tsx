@@ -23,16 +23,11 @@ export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this
 						))
 				: null}
 			{this.sides && this.turns.length - Object.keys(this.players).length > 1 ? (
-				<Button
-					value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}, -`}
-					style={{ margin: 5 }}
-				>
+				<Button value={`${this.renderCtx.msg} join ${this.id}, -`} style={{ margin: 5 }}>
 					Random
 				</Button>
 			) : null}
-			{!this.sides ? (
-				<Button value={`/botmsg ${PS.status.userid},${prefix}@${this.roomid} ${this.meta.id} join ${this.id}`}>Join</Button>
-			) : null}
+			{!this.sides ? <Button value={`${this.renderCtx.msg} join ${this.id}`}>Join</Button> : null}
 			<hr />
 		</>
 	);
@@ -43,6 +38,7 @@ export function renderCloseSignups<S extends BaseState, T extends BaseGameTypes>
 		<>
 			<hr />
 			<h1>{this.meta.name} Signups have closed.</h1>
+			<Button value={`${this.renderCtx.msg} watch`}>Watch</Button>
 			<hr />
 		</>
 	);
