@@ -34,6 +34,10 @@ const schema = new mongoose.Schema({
 		},
 		required: true,
 	},
+	created: {
+		type: Date,
+		required: true,
+	},
 	started: {
 		type: Date,
 		required: true,
@@ -47,17 +51,19 @@ const schema = new mongoose.Schema({
 });
 
 schema.index({ id: 1 });
-interface Model {
+
+export interface GameModel {
 	id: string;
 	game: string;
 	room: string;
 	players: Map<string, BasePlayer>;
-	started: Date;
+	created: Date;
+	started: Date | null;
 	ended: Date;
 	log: string[];
 }
 const model = mongoose.model('game', schema, 'games');
 
-export function uploadGame(game: Model): Promise<Model> {
+export function uploadGame(game: GameModel): Promise<GameModel> {
 	return model.create(game);
 }

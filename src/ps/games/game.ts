@@ -7,16 +7,17 @@ import { Timer } from '@/utils/timer';
 import { botLogChannel } from '@/discord/constants/servers/boardgames';
 import { ChannelType, EmbedBuilder } from 'discord.js';
 import { pick } from '@/utils/pick';
+import { gameCache } from '@/cache/games';
+import { GameModel, uploadGame } from '@/database/games';
 
 import type { Room, User } from 'ps-client';
 import type { ReactElement } from 'react';
 import type { TranslationFn } from '@/i18n/types';
 import type { ActionResponse, BaseGameTypes, BasePlayer, BaseState, GamesList, Meta } from '@/ps/games/common';
-import { gameCache } from '@/cache/games';
 
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
 
-const backupKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log'] as const;
+const backupKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log', 'startedAt', 'createdAt'] as const;
 
 export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	meta: Meta;
@@ -33,6 +34,9 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 
 	startable?: boolean;
 	started: boolean = false;
+	createdAt: Date = new Date();
+	startedAt?: Date;
+	endedAt?: Date;
 
 	pokeTimer?: Timer;
 	timer?: Timer;
@@ -90,7 +94,9 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 					case 'state':
 					case 'turn':
 					case 'turns':
-					case 'started': {
+					case 'started':
+					case 'createdAt':
+					case 'startedAt': {
 						// @ts-expect-error -- TS is going absolutely wild; FIXME
 						if (key in parsedBackup) this[key] = parsedBackup[key];
 						break;
@@ -267,6 +273,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.started = true;
 		this.turns ??= Object.keys(this.players).shuffle();
 		this.nextPlayer();
+		this.startedAt = new Date();
 		this.setTimer('Game started');
 		return { success: true };
 	}
@@ -324,6 +331,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 			// TODO: Revisit broadcasting logic for single-player games
 			this.room.sendHTML(this.render!(null));
 		}
+		this.endedAt = new Date();
 		this.room.send(message);
 		if (this.started && this.renderEmbed && this.roomid === 'boardgames') {
 			const embed = this.renderEmbed();
@@ -331,6 +339,23 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 			const channel = Discord.channels.cache.get(botLogChannel);
 			if (channel && channel.type === ChannelType.GuildText) channel.send({ embeds: [embed] });
 		}
+		// Upload to DB
+		const model: GameModel = {
+			id: this.id,
+			game: this.meta.id,
+			room: this.roomid,
+			players: new Map(Object.entries(this.players)),
+
+			log: this.log.map(entry => JSON.stringify(entry)),
+
+			created: this.createdAt,
+			started: this.startedAt!,
+			ended: this.endedAt!,
+		};
+		uploadGame(model).catch(err => {
+			log(err);
+			throw new Error(`Failed to upload game ${this.id}`);
+		});
 		// Delete from cache
 		delete PSGames[this.meta.id]![this.id];
 		gameCache.delete(this.id);
