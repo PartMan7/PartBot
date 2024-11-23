@@ -1,8 +1,5 @@
-import { RecursiveArray } from '@/types/common';
-
-export function pick<T extends { [key: string]: unknown }>(base: T, ..._keys: RecursiveArray<string>): T {
-	// @ts-expect-error -- I don't think we'll ever put this deep enough to matter
-	const keys: (keyof T)[] = _keys.flat(Infinity);
+export function pick<T extends { [key: string | symbol]: unknown }>(base: T, ..._keys: (keyof T | (keyof T)[])[]): Partial<T> {
+	const keys: (keyof T)[] = _keys.flat(2);
 	const picked = {} as T;
 
 	keys.forEach(key => {
