@@ -89,9 +89,21 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 					case 'log':
 					case 'state':
 					case 'turn':
-					case 'turns': {
+					case 'turns':
+					case 'started': {
 						// @ts-expect-error -- TS is going absolutely wild; FIXME
 						if (key in parsedBackup) this[key] = parsedBackup[key];
+						break;
+					}
+					case 'seed': {
+						this.seed = parsedBackup.seed;
+						this.prng = useRNG(this.seed);
+						break;
+					}
+					case 'players': {
+						// Honestly, at this point I just want to yeet custom data in players
+						this.players = parsedBackup.players;
+						break;
 					}
 				}
 			});
