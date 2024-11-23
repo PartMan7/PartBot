@@ -286,6 +286,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 			if (!this.trySkipPlayer || !this.trySkipPlayer(current)) {
 				this.turn = current;
 				this.update();
+				this.backup();
 				this.setTimer('Next turn');
 				return current;
 			}

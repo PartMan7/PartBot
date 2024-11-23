@@ -15,6 +15,7 @@ export class Othello extends Game<State, object> {
 	constructor(ctx: BaseContext) {
 		super(ctx);
 
+		if (ctx.backup) return;
 		const board = createGrid<Turn | null>(8, 8, () => null);
 		board[3][3] = board[4][4] = 'W';
 		board[3][4] = board[4][3] = 'B';

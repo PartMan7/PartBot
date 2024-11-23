@@ -7,6 +7,7 @@ import type { Room } from 'ps-client';
 import type { TranslationFn } from '@/i18n/types';
 import type { HTMLopts } from 'ps-client/classes/common';
 import { ChatError } from '@/utils/chatError';
+import { ReactElement } from 'react';
 
 type SearchContext =
 	| { action: 'start'; user: string }
@@ -247,7 +248,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				async run({ message, $T }) {
 					const allGames = gameId in PSGames ? Object.values(PSGames[gameId]!) : [];
 					const rejoinGames = allGames.filter(game => {
-						// Filter with a side-effect!
+						// Filter with a side effect!
 						// I'm sorry, superstar64
 						if (
 							Object.values(game.players).some(player => player.id === message.author.id) ||
@@ -327,8 +328,8 @@ const metaCommands: PSCommand = {
 	help: 'Metacommands for games.',
 	syntax: 'CMD [menu]',
 	perms: Symbol.for('games.manage'),
-	async run({ broadcastHTML }) {
-		broadcastHTML(<div>BOO!</div>);
+	async run({ run }) {
+		return run('games menu');
 	},
 	children: {
 		menu: {
@@ -336,7 +337,26 @@ const metaCommands: PSCommand = {
 			aliases: ['list', 'm'],
 			help: 'Displays a menu of all games currently active.',
 			syntax: 'CMD',
-			async run({ message }) {},
+			async run({ message, broadcastHTML }) {
+				const Menu = ({ staff }: { staff?: boolean }): ReactElement => (
+					<>
+						<hr />
+						{Object.values(Games)
+							.map(Game => (
+								<>
+									<h3>{Game.meta.name}</h3>
+									{renderMenu(message.target, Game.meta, !!staff)}
+								</>
+							))
+							.space(<hr />)}
+						<br />
+						<hr />
+					</>
+				);
+				const opts: HTMLopts = { name: 'games-menu' };
+				broadcastHTML(<Menu />, opts);
+				message.target.sendHTML(<Menu staff />, { ...opts, rank: '%' });
+			},
 		},
 	},
 };
