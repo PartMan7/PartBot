@@ -12,6 +12,7 @@ import type { Room, User } from 'ps-client';
 import type { ReactElement } from 'react';
 import type { TranslationFn } from '@/i18n/types';
 import type { ActionResponse, BaseGameTypes, BasePlayer, BaseState, GamesList, Meta } from '@/ps/games/common';
+import { gameCache } from '@/cache/games';
 
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
 
@@ -131,7 +132,10 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		const sparseGame = pick(this, ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log']);
 		return JSON.stringify(sparseGame);
 	}
-	backup(): void {}
+	backup(): void {
+		const backup = this.serialize();
+		gameCache.set({ id: this.id, room: this.roomid, game: this.meta.id, backup });
+	}
 
 	signups(): void {
 		if (this.started) throw new ChatError(this.$T('GAME.ALREADY_STARTED'));
