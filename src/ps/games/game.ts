@@ -16,35 +16,39 @@ import { gameCache } from '@/cache/games';
 
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
 
+const backupKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log'] as const;
+
 export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	meta: Meta;
 	id: string;
 	$T: TranslationFn;
-	seed: number;
-	prng: () => number;
+	seed: number = sample(1e12);
+	prng: () => number = useRNG(this.seed);
 	room: Room;
 	roomid: string;
-	state: State;
-	log: { action: string; turn: State['turn'] | null; ctx: unknown }[];
+	// @ts-expect-error -- State isn't initialized yet
+	state: State = {};
+	log: { action: string; turn: State['turn'] | null; ctx: unknown }[] = [];
 	sides: boolean;
 
 	startable?: boolean;
-	started: boolean;
+	started: boolean = false;
 
 	pokeTimer?: Timer;
 	timer?: Timer;
 	pokeTimerLength?: number | false;
 	timerLength?: number;
 
-	turn: State['turn'] | null;
-	turns: State['turn'][];
+	turn: State['turn'] | null = null;
+	turns: State['turn'][] = [];
 
 	renderCtx: {
 		msg: string;
 	};
 
-	players: Record<State['turn'], BasePlayer & GameTypes['player']>;
-	spectators: string[];
+	// @ts-expect-error -- Players aren't initialized yet
+	players: Record<State['turn'], BasePlayer & GameTypes['player']> = {};
+	spectators: string[] = [];
 
 	// Game-provided methods:
 	render?(side: State['turn'] | null): ReactElement;
@@ -66,23 +70,11 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		this.roomid = ctx.room.id;
 		this.$T = ctx.$T;
 
-		this.seed = sample(1e12);
-		this.prng = useRNG(this.seed);
-
 		this.meta = ctx.meta;
 		this.renderCtx = { msg: `/msgroom ${ctx.room.id},/botmsg ${PS.status.userid},${prefix}@${ctx.room.id} ${ctx.meta.id}` };
 
-		this.started = false;
-		// @ts-expect-error -- State isn't initialized yet
-		this.state = {};
-		// @ts-expect-error -- Players aren't initialized yet
-		this.players = {};
-		this.turn = null;
-		this.turns = [];
 		if (ctx.meta.turns) this.turns = Object.keys(ctx.meta.turns);
 		this.sides = !!ctx.meta.turns;
-		this.spectators = [];
-		this.log = [];
 
 		if (ctx.meta.timer) {
 			this.timerLength = ctx.meta.timer;
@@ -90,6 +82,20 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		}
 
 		(PSGames[this.meta.id] ??= {})[this.id] = this as unknown as InstanceType<Games[GamesList]['instance']>;
+		if (ctx.backup) {
+			const parsedBackup: Pick<Game<BaseState, BaseGameTypes>, (typeof backupKeys)[number]> = JSON.parse(ctx.backup);
+			backupKeys.forEach(key => {
+				switch (key) {
+					case 'log':
+					case 'state':
+					case 'turn':
+					case 'turns': {
+						// @ts-expect-error -- TS is going absolutely wild; FIXME
+						if (key in parsedBackup) this[key] = parsedBackup[key];
+					}
+				}
+			});
+		}
 	}
 
 	setTimer(comment: string): void {
@@ -129,7 +135,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	}
 
 	serialize(): string {
-		const sparseGame = pick(this, ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log']);
+		const sparseGame = pick(this, backupKeys);
 		return JSON.stringify(sparseGame);
 	}
 	backup(): void {
@@ -314,7 +320,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		}
 		// Delete from cache
 		delete PSGames[this.meta.id]![this.id];
-		// TODO: Delete backup
+		gameCache.delete(this.id);
 	}
 }
 

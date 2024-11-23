@@ -19,6 +19,7 @@ const cacheId = 'games.json';
 const flatCache = new FlatCache({ cacheId: cacheId, cacheDir: fsPath('cache', 'flat-cache') });
 flatCache.load(cacheId);
 
+// This is the cache for game backups. For the actual game object, use cache.PSGames.
 export const gameCache: GameCache = {
 	get(id) {
 		const lookup = flatCache.get<GameBackup>(id);
