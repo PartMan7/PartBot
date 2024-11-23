@@ -153,7 +153,9 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					const res = game.addPlayer(message.author, ctx);
 					if (!res.success) throw new ChatError(res.error);
 					const turnMsg = Game.meta.turns ? ` as ${Game.meta.turns[res.data!.as]}` : '';
-					message.reply(`${message.author.name} joined the game of ${Game.meta.name}${turnMsg}! [${game.id}]`); // TODO: $T
+					message.reply(
+						`${message.author.name} joined the game of ${Game.meta.name}${turnMsg}${ctx === '-' ? ' (randomly chosen)' : ''}! [${game.id}]`
+					); // TODO: $T
 					if (res.data!.started) game.closeSignups();
 					else game.signups();
 				},

@@ -75,7 +75,7 @@ export class Othello extends Game<State, object> {
 		if (!isActual) return false;
 		if (!flipped) return null;
 		board[i][j] = turn;
-		this.log.push({ action: 'play', turn, ctx: [i, j] });
+		this.log.push({ action: 'play', time: new Date(), turn, ctx: [i, j] });
 
 		const next = this.nextPlayer();
 		if (!next) this.end();

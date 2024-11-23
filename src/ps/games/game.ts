@@ -29,7 +29,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	roomid: string;
 	// @ts-expect-error -- State isn't initialized yet
 	state: State = {};
-	log: { action: string; turn: State['turn'] | null; ctx: unknown }[] = [];
+	log: { action: string; time: Date; turn: State['turn'] | null; ctx: unknown }[] = [];
 	sides: boolean;
 
 	startable?: boolean;
