@@ -1,10 +1,17 @@
 import { FlatCache } from 'flat-cache';
 import { GamesList } from '@/ps/games/common';
 
+export type GameBackup = {
+	room: string;
+	id: string;
+	game: string;
+	backup: string;
+};
+
 export type GameCache = {
-	get(id: string): string;
-	getByGame(game: GamesList | 'all'): string[];
-	set(id: string, arg: string): void;
+	get(id: string): GameBackup;
+	getByGame(room: string, game: GamesList | 'all'): GameBackup[];
+	set(backup: GameBackup): void;
 };
 
 const cacheId = 'games.json';
@@ -13,26 +20,18 @@ flatCache.load(cacheId);
 
 export const gameCache: GameCache = {
 	get(id) {
-		const lookup = flatCache.get<string>(id);
+		const lookup = flatCache.get<GameBackup>(id);
 		if (!lookup) throw new Error(`Attempting to get ${id} but nothing found.`);
 		return lookup;
 	},
-	getByGame(game) {
-		const flatCacheObj = flatCache.all();
-		const unfilteredGames = Object.values(flatCacheObj);
+	getByGame(room, game) {
+		const flatCacheObj: Record<string, GameBackup> = flatCache.all();
+		const unfilteredGames = Object.values(flatCacheObj).filter(backup => backup.room === room);
 		if (game === 'all') return unfilteredGames;
-		return unfilteredGames.filter(gameLog => {
-			try {
-				const parsed = JSON.parse(gameLog);
-				return 'meta' in parsed && 'id' in parsed.meta && parsed.meta.id === game;
-			} catch (e) {
-				log(`Error parsing backups for: ${gameLog}`, e);
-				return false;
-			}
-		});
+		return unfilteredGames.filter(backup => backup.game === game);
 	},
-	set(id, value) {
-		flatCache.set(id, value);
+	set(backup) {
+		flatCache.set(backup.id, backup);
 		flatCache.save();
 	},
 };
