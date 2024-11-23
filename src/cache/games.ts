@@ -38,5 +38,6 @@ export const gameCache: GameCache = {
 	},
 	delete(id) {
 		flatCache.delete(id);
+		flatCache.save();
 	},
 };

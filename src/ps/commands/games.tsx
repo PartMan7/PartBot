@@ -1,23 +1,24 @@
 import { Games } from '@/ps/games';
 import { PSGames } from '@/cache';
 import { generateId } from '@/ps/games/utils';
-import { renderMenu } from '@/ps/games/menus';
+import { renderBackups, renderMenu } from '@/ps/games/menus';
 
 import type { Room } from 'ps-client';
 import type { TranslationFn } from '@/i18n/types';
 import type { HTMLopts } from 'ps-client/classes/common';
 import { ChatError } from '@/utils/chatError';
 import { ReactElement } from 'react';
+import { gameCache } from '@/cache/games';
 
 type SearchContext =
 	| { action: 'start'; user: string }
 	| { action: 'join'; user: string }
 	| { action: 'play'; user: string }
 	| { action: 'leave'; user?: string }
-	| { action: 'end' }
 	| { action: 'sub'; user1?: string; user2?: string }
 	| { action: 'watch'; user: string }
-	| { action: 'unwatch'; user: string };
+	| { action: 'unwatch'; user: string }
+	| { action: 'any' };
 
 type RoomContext = { room: Room; $T: TranslationFn };
 
@@ -35,7 +36,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				const onlineUser2 = game.room.users.some(user => Tools.toId(user) === ctx.user2);
 				return (hasUser1 && onlineUser1 && !hasUser2) || (hasUser2 && onlineUser2 && !hasUser1);
 			}
-			if (ctx.action === 'end') return true;
+			if (ctx.action === 'any') return true;
 			const hasJoined = Object.values(game.players).some(player => player.id === ctx.user);
 			const hasSpace =
 				(game.sides && Object.keys(game.players).length < game.turns.length) || Object.keys(game.players).length < game.meta.maxSize!;
@@ -177,7 +178,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				perms: Symbol.for('games.manage'),
 				syntax: 'CMD [game ref]',
 				async run({ message, arg, $T }) {
-					const { game } = getGame(arg, { action: 'end' }, { room: message.target, $T });
+					const { game } = getGame(arg, { action: 'any' }, { room: message.target, $T });
 					game.end('force');
 				},
 			},
@@ -321,6 +322,50 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					message.target.sendHTML(staffHTML, { ...opts, rank: '%' });
 				},
 			},
+			stash: {
+				name: 'stash',
+				aliases: ['yeet'],
+				help: 'Stashes a game to store it for later.',
+				perms: Symbol.for('games.manage'),
+				syntax: 'CMD [game ref]',
+				async run({ message, arg, $T }) {
+					const { game } = getGame(arg, { action: 'any' }, { room: message.target, $T });
+					delete PSGames[gameId]?.[game.id];
+					game.pokeTimer?.cancel();
+					game.timer?.cancel();
+					message.reply($T('GAME.STASHED', { id: game.id }));
+				},
+			},
+			backups: {
+				name: 'backups',
+				aliases: ['bu', 'b'],
+				help: 'Shows a list of currently available backups.',
+				perms: Symbol.for('games.manage'),
+				syntax: 'CMD',
+				async run({ message }) {
+					const HTML = renderBackups(message.target, Game.meta);
+					message.sendHTML(HTML, { name: `${gameId}-backups` });
+				},
+			},
+			restore: {
+				name: 'restore',
+				aliases: ['r', 'unstash', 'unyeet'],
+				help: 'Restores a game from stash/backups.',
+				perms: Symbol.for('games.manage'),
+				syntax: 'CMD [id]',
+				async run({ message, arg, $T }) {
+					const id = arg.trim().toUpperCase();
+					if (!/^#\w+$/.test(id)) throw new ChatError($T('GAME.INVALID_INPUT'));
+					if (PSGames[gameId]?.[id]) throw new ChatError($T('GAME.IN_PROGRESS'));
+					const lookup = gameCache.get(id);
+					if (lookup.room !== message.target.roomid) throw new ChatError($T('WRONG_ROOM'));
+					if (lookup.game !== gameId) throw new ChatError($T('GAME.RESTORING_WRONG_TYPE'));
+					const game = new Game.instance({ id: lookup.id, meta: Game.meta, room: message.target, $T, backup: lookup.backup });
+					message.reply($T('GAME.RESTORED', { id: game.id }));
+					if (game.started) game.update();
+					else game.signups();
+				},
+			},
 		},
 	};
 });
@@ -375,10 +420,3 @@ export const command = [
 		},
 	},
 ];
-
-/**
- * TODO:
- * Stash
- * Restore
- * Backups
- */

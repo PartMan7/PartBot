@@ -11,6 +11,7 @@ export default {
 	PM_ONLY_COMMAND: 'This command may only be used in private messages.',
 	NO_DMS_COMMAND: 'This command may not be run from private messages.',
 	INVALID_ALIAS: `Had an invalid alias for {{aliasFor}}.`,
+	WRONG_ROOM: 'Wrong room.',
 
 	CONFIRM: "Are you sure? Type 'confirm' to confirm.",
 	CANCELLED: 'This action was cancelled.',
@@ -32,9 +33,13 @@ export default {
 		WATCHING_NOTHING: "You don't seem to need to rejoin anything...",
 		ENDED: `The game of {{game}} [{{id}}] has been ended.`,
 		ENDED_AUTOMATICALLY: `The game of {{game}} [{{id}}] has ended automatically.`,
+		STASHED: 'Successfully stashed game {{id}}.',
+		IN_PROGRESS: 'This game is already in progress. Weeb.',
 		IS_FULL: 'The game has no more space for players.',
 		INVALID_SIDE: `Invalid side chosen! Valid sides are: {{sides}}`,
 		INVALID_INPUT: "That input doesn't seem to work...",
+		RESTORED: 'Game {{id}} has been restored.',
+		RESTORING_WRONG_TYPE: 'You seem to be restoring the wrong type of game...',
 		SUB: '{{out}} has been subbed with {{in}}!',
 		NOT_PLAYING: [
 			"You're not a player!",
