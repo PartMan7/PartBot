@@ -23,7 +23,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	room: Room;
 	roomid: string;
 	state: State;
-	log: string;
+	log: { action: string; turn: State['turn'] | null; ctx: unknown }[];
 	sides: boolean;
 
 	startable?: boolean;
@@ -80,7 +80,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		if (ctx.meta.turns) this.turns = Object.keys(ctx.meta.turns);
 		this.sides = !!ctx.meta.turns;
 		this.spectators = [];
-		this.log = '';
+		this.log = [];
 
 		if (ctx.meta.timer) {
 			this.timerLength = ctx.meta.timer;
@@ -300,13 +300,11 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 			this.room.sendHTML(this.render!(null));
 		}
 		this.room.send(message);
-		if (this.started && this.renderEmbed) {
+		if (this.started && this.renderEmbed && this.roomid === 'boardgames') {
 			const embed = this.renderEmbed();
-			if (this.roomid === 'boardgames') {
-				// Send only for games from BG
-				const channel = Discord.channels.cache.get(botLogChannel);
-				if (channel && channel.type === ChannelType.GuildText) channel.send({ embeds: [embed] });
-			}
+			// Send only for games from BG
+			const channel = Discord.channels.cache.get(botLogChannel);
+			if (channel && channel.type === ChannelType.GuildText) channel.send({ embeds: [embed] });
 		}
 		// Delete from cache
 		delete PSGames[this.meta.id]![this.id];

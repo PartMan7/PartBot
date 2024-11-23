@@ -22,7 +22,7 @@ export class Othello extends Game<State, object> {
 	}
 
 	count(board = this.state.board): Record<Turn, number> {
-		if (board !== this.state.board && this.cache[this.log]) return this.cache[this.log];
+		if (board === this.state.board && this.cache[this.log.length]) return this.cache[this.log.length];
 		const count = board.flat(2).reduce(
 			(acc, cell) => {
 				if (cell) acc[cell]++;
@@ -30,7 +30,8 @@ export class Othello extends Game<State, object> {
 			},
 			{ B: 0, W: 0 }
 		);
-		return (this.cache[this.log] = count);
+		if (board === this.state.board) this.cache[this.log.length] = count;
+		return count;
 	}
 
 	action(user: User, ctx: string) {
@@ -73,7 +74,7 @@ export class Othello extends Game<State, object> {
 		if (!isActual) return false;
 		if (!flipped) return null;
 		board[i][j] = turn;
-		this.log += `[${i},${j}]`;
+		this.log.push({ action: 'play', turn, ctx: [i, j] });
 
 		const next = this.nextPlayer();
 		if (!next) this.end();
