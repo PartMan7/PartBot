@@ -26,7 +26,15 @@
 		],
 		"camelcase": "error",
 		"eqeqeq": "error",
-		"import/order": "error",
+		"import/order": [
+			"error",
+			{
+				"alphabetize": { "order": "asc" },
+				"groups": [["builtin", "external", "unknown"], ["parent", "sibling"], "internal", "type"],
+				"newlines-between": "always",
+				"named": true
+			}
+		],
 		"max-len": [
 			"error",
 			{
