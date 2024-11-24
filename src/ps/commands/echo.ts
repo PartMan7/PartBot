@@ -1,5 +1,6 @@
 import { checkPermissions } from '@/ps/handlers/permissions';
 import { ACCESS_DENIED } from '@/text';
+import { ChatError } from '@/utils/chatError';
 
 import type { PSCommand } from '@/types/chat';
 

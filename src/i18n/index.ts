@@ -1,5 +1,6 @@
 import English from '@/i18n/english';
 import Hindi from '@/i18n/hindi';
+import { ChatError } from '@/utils/chatError';
 
 import type { TranslationFn } from '@/i18n/types';
 

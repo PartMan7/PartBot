@@ -1,6 +1,7 @@
 import { DiscCommands } from '@/cache';
 import { admins } from '@/config/discord';
 import { ACCESS_DENIED, PM_ONLY_COMMAND } from '@/text';
+import { ChatError } from '@/utils/chatError';
 import { log } from '@/utils/logger';
 
 import type { Interaction } from 'discord.js';

@@ -8,6 +8,7 @@ import Discord from '@/discord';
 import { botLogChannel } from '@/discord/constants/servers/boardgames';
 import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { toHumanTime, toId } from '@/tools';
+import { ChatError } from '@/utils/chatError';
 import { log } from '@/utils/logger';
 import { pick } from '@/utils/pick';
 import { sample, useRNG } from '@/utils/random';
@@ -18,7 +19,7 @@ import type { TranslationFn } from '@/i18n/types';
 import type { ActionResponse, BaseState, GamesList, Meta, Player } from '@/ps/games/common';
 import type { Games } from '@/ps/games/index';
 import type { EmbedBuilder } from 'discord.js';
-import type { Room, User } from 'ps-client';
+import type { Client, Room, User } from 'ps-client';
 import type { ReactElement } from 'react';
 
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
@@ -32,6 +33,7 @@ export class Game<State extends BaseState> {
 	seed: number = sample(1e12);
 	prng: () => number = useRNG(this.seed);
 	room: Room;
+	parent: Client;
 	roomid: string;
 	// @ts-expect-error -- State isn't initialized yet
 	state: State = {};
@@ -77,10 +79,11 @@ export class Game<State extends BaseState> {
 		this.id = ctx.id;
 		this.room = ctx.room;
 		this.roomid = ctx.room.id;
+		this.parent = ctx.room.parent;
 		this.$T = ctx.$T;
 
 		this.meta = ctx.meta;
-		this.renderCtx = { msg: `/msgroom ${ctx.room.id},/botmsg ${PS.status.userid},${prefix}@${ctx.room.id} ${ctx.meta.id}` };
+		this.renderCtx = { msg: `/msgroom ${ctx.room.id},/botmsg ${this.parent.status.userid},${prefix}@${ctx.room.id} ${ctx.meta.id}` };
 
 		if (ctx.meta.turns) this.turns = Object.keys(ctx.meta.turns);
 		this.sides = !!ctx.meta.turns;
@@ -128,7 +131,7 @@ export class Game<State extends BaseState> {
 
 		const turn = this.turn!;
 		const timerLength = this.timerLength;
-		const player = PS.getUser(this.players[turn].id);
+		const player = this.parent.getUser(this.players[turn].id);
 		if (!player) {
 			log('Unable to find player for ', { turn, game: this });
 			return;
@@ -308,7 +311,7 @@ export class Game<State extends BaseState> {
 	}
 
 	sendHTML(to: string | User, html: ReactElement | string): void {
-		const user = typeof to === 'object' ? to : PS.addUser({ userid: toId(to) });
+		const user = typeof to === 'object' ? to : this.parent.addUser({ userid: toId(to) });
 		user.pageHTML(html, { name: this.id, room: this.room });
 	}
 

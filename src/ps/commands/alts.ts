@@ -2,6 +2,7 @@ import { getAlts } from '@/database/alts';
 import { checkPermissions } from '@/ps/handlers/permissions';
 import { ACCESS_DENIED } from '@/text';
 import { toId } from '@/tools';
+import { ChatError } from '@/utils/chatError';
 
 import type { PSCommand } from '@/types/chat';
 

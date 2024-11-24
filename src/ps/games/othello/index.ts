@@ -4,6 +4,7 @@ import { winnerIcon } from '@/discord/constants/emotes';
 import { Game, createGrid } from '@/ps/games/game';
 export { meta } from '@/ps/games/othello/meta';
 import { render } from '@/ps/games/othello/render';
+import { ChatError } from '@/utils/chatError';
 import { deepClone } from '@/utils/deepClone';
 
 import type { EndType } from '@/ps/games/common';

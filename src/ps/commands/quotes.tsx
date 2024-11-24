@@ -4,6 +4,7 @@ import { addQuote, getAllQuotes } from '@/database/quotes';
 import { MAX_CHAT_HTML_LENGTH, MAX_PAGE_HTML_LENGTH } from '@/ps/constants';
 import { QUOTES } from '@/text';
 import { fromHumanTime, toId } from '@/tools';
+import { ChatError } from '@/utils/chatError';
 import { Username as UsernameCustom } from '@/utils/components';
 import { Username as UsernamePS } from '@/utils/components/ps';
 import { jsxToHTML } from '@/utils/jsxToHTML';
