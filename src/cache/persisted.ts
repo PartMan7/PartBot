@@ -23,8 +23,8 @@ export function usePersistedCache<T extends keyof CacheTypes>(cacheKey: T): Cach
 	const get = (): CacheTypes[T] => {
 		const stored = flatCache.get<CacheTypes[T]>('value');
 		if (typeof stored === 'undefined') {
-			flatCache.set('value', defaults[cacheId]);
-			return defaults[cacheId];
+			flatCache.set('value', defaults[cacheKey]);
+			return defaults[cacheKey];
 		} else return stored;
 	};
 	const set = (value: CacheTypes[T]): void => {

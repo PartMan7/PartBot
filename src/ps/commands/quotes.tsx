@@ -16,7 +16,7 @@ import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
 type QuoteCollection = [index: number, quote: string][];
 
-function Entry({ name, children }) {
+function Entry({ name, children }: { name: string; children: ReactNode }) {
 	return (
 		<li>
 			<b>{name}</b>: {children}

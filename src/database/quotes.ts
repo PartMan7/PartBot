@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
 	rawText: {
 		type: String,
 		required: true,
-		default: function () {
+		default: function (this: Model) {
 			return (this.quote as string)
 				.toLowerCase()
 				.replace(/[^a-zA-Z0-9]+/g, ' ')
@@ -28,7 +28,7 @@ const schema = new mongoose.Schema({
 	addedById: {
 		type: String,
 		required: true,
-		default: function () {
+		default: function (this: Model) {
 			return toId(this.addedBy);
 		},
 	},

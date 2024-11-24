@@ -1,7 +1,7 @@
-import type { RouteHandler } from '@/types/web';
+import type { UIRouteHandler } from '@/types/web';
 
 const Div = () => <div>Test content here; fully static</div>;
 
-export const handler: RouteHandler = (req, res) => {
-	return res.render(<Div />, 'Test Title', false);
+export const handler: UIRouteHandler = (req, res) => {
+	res.render(<Div />, 'Test Title', false);
 };

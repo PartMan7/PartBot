@@ -5,10 +5,8 @@
 		"noEmit": true, // We run PartBot with ts-node instead of a two-step process
 		"jsx": "react-jsx",
 		"module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
-		"esModuleInterop": true,
-		// Some strict mode patterns:
-		"strictBindCallApply": true,
-		"strictNullChecks": true,
+		"esModuleInterop": true, // allow default-importing stuff like path
+		"strict": true,
 		"paths": {
 			"@/secrets/*": ["./secrets/src/*"],
 			"@/*": ["./*"]

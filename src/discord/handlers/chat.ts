@@ -26,7 +26,9 @@ export default async function messageHandler(interaction: Interaction): Promise<
 	try {
 		await command.run(interaction);
 	} catch (err) {
-		interaction.reply({ content: err.message, ephemeral: true });
-		if (err.name !== 'ChatError') log(err);
+		if (err instanceof Error) {
+			interaction.reply({ content: err.message, ephemeral: true });
+			if (err.name !== 'ChatError') log(err);
+		}
 	}
 }

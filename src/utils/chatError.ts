@@ -1,5 +1,5 @@
 export class ChatError extends Error {
-	constructor(args) {
+	constructor(args: string) {
 		super(args);
 		this.name = this.constructor.name;
 	}

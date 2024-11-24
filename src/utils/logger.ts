@@ -11,7 +11,7 @@ function dimText(str: string): string {
 const logStream = fsSync.createWriteStream(fsPath('..', 'logs', 'logs.txt'), { flags: 'a' });
 const errLogStream = fsSync.createWriteStream(fsPath('..', 'logs', 'err-logs.txt'), { flags: 'a' });
 
-export function log(...args): void {
+export function log(...args: unknown[]): void {
 	const timestamp = `[${new Date().toISOString()}]`;
 	args.forEach(arg => {
 		const logStr = inspect(arg, { depth: 3 });
@@ -20,7 +20,7 @@ export function log(...args): void {
 	console.log(dimText(timestamp), ...args);
 }
 
-export function deepLog(...args): void {
+export function deepLog(...args: unknown[]): void {
 	const timestamp = `[${new Date().toISOString()}]`;
 	args.forEach(arg => {
 		const logStr = inspect(arg, { depth: null });

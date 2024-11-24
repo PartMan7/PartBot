@@ -410,7 +410,7 @@ const metaCommands: PSCommand = {
 	},
 };
 
-export const command = [
+export const command: PSCommand[] = [
 	...gameCommands,
 	metaCommands,
 	{
