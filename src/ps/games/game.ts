@@ -4,13 +4,14 @@ import { PSGames } from '@/cache';
 import { gameCache } from '@/cache/games';
 import { prefix } from '@/config/ps';
 import { uploadGame } from '@/database/games';
+import Discord from '@/discord';
 import { botLogChannel } from '@/discord/constants/servers/boardgames';
 import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { pick } from '@/utils/pick';
 import { sample, useRNG } from '@/utils/random';
 import { Timer } from '@/utils/timer';
 
-import type { GameModel} from '@/database/games';
+import type { GameModel } from '@/database/games';
 import type { TranslationFn } from '@/i18n/types';
 import type { ActionResponse, BaseState, GamesList, Meta, Player } from '@/ps/games/common';
 import type { Games } from '@/ps/games/index';

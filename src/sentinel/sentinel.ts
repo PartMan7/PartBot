@@ -4,6 +4,7 @@ import EventEmitter from 'events';
 import { reloadCommands } from '@/ps/loaders/commands';
 import { cachebuster } from '@/utils/cachebuster';
 import { debounce } from '@/utils/debounce';
+import { fsPath } from '@/utils/fsPath';
 
 type ListenerType = 'commands' | 'games';
 type Register = { label: ListenerType; pattern: RegExp; reload: (filepaths: string[]) => Promise<void> | void; debounce?: number };

@@ -1,5 +1,7 @@
 import { FlatCache } from 'flat-cache';
 
+import { fsPath } from '@/utils/fsPath';
+
 import type { GamesList } from '@/ps/games/common';
 
 export type GameBackup = {

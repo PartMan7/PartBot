@@ -10,6 +10,7 @@ import type { PSMessage } from '@/types/ps';
 // Exporting into side variables for eval lookup
 const cache = _cache;
 const cachebuster = _cachebuster;
+// Add: axios, fs, fsPath, fsSync, log, path, tools
 
 export type EvalModes = 'COLOR_OUTPUT' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
 export type EvalOutput = {

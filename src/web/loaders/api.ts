@@ -1,9 +1,10 @@
 import { Router } from 'express';
 
+import { fsPath } from '@/utils/fsPath';
 import { readFileStructure } from '@/web/loaders/util';
 
 import type { APIRoute } from '@/types/web';
-import type { Application} from 'express';
+import type { Application } from 'express';
 
 export default async function init(app: Application): Promise<void> {
 	const router = Router();

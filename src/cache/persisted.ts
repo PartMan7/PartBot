@@ -1,5 +1,7 @@
 import { FlatCache } from 'flat-cache';
 
+import { fsPath } from '@/utils/fsPath';
+
 type CacheTypes = {
 	gameId: number;
 };

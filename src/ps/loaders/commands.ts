@@ -1,8 +1,8 @@
-
 import { PSAliases, PSCommands } from '@/cache';
 import { resetCache } from '@/cache/reset';
 import getSecretCommands from '@/secrets/commands/ps';
 import { cachebuster } from '@/utils/cachebuster';
+import { fsPath } from '@/utils/fsPath';
 
 import type { PSCommand } from '@/types/chat';
 

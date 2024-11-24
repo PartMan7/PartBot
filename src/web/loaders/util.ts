@@ -1,5 +1,7 @@
 import path from 'path';
 
+import { fsPath } from '@/utils/fsPath';
+
 export async function readFileStructure(root: string): Promise<Record<string, string>> {
 	const files = await fs.readdir(root, { recursive: true });
 	return files
