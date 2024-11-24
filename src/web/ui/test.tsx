@@ -1,3 +1,5 @@
+import type { RouteHandler } from '@/types/web';
+
 const Div = () => <div>Test content here; fully static</div>;
 
 export const handler: RouteHandler = (req, res) => {

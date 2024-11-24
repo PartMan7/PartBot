@@ -5,6 +5,8 @@ import { resetCache } from '@/cache/reset';
 import { clientId, token } from '@/config/discord';
 import { cachebuster } from '@/utils/cachebuster';
 
+import type { DiscCommand } from '@/types/chat';
+
 const restClient = new REST().setToken(token);
 
 async function registerCommands() {
@@ -40,7 +42,7 @@ export async function loadCommands(): Promise<void> {
 			if (!command) return;
 			[command.name, ...(command.aliases ?? [])].forEach((commandName, isAlias) => {
 				const slash = new SlashCommandBuilder().setName(commandName).setDescription(command.desc);
-				if (command.flags?.serverOnly) slash.setDMPermission(false);
+				if (command.flags?.serverOnly) slash.setDMPermission(false); // TODO: This is deprecated?
 				if (command.args) command.args(slash);
 
 				DiscCommands[commandName] = {

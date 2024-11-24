@@ -1,3 +1,5 @@
+import type { DiscCommand } from '@/types/chat';
+
 export const command: DiscCommand = {
 	name: 'bonk',
 	desc: 'Bonks!',

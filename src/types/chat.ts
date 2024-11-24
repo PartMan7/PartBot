@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { TranslationFn } from '@/i18n/types';
+import type { DiscInteraction } from '@/types/discord';
 import type { Perms } from '@/types/perms';
+import type { PSMessage } from '@/types/ps';
 import type { SlashCommandBuilder } from 'discord.js';
-import type { User } from 'ps-client';
 import type { HTMLopts } from 'ps-client/classes/common';
 import type { ReactElement } from 'react';
 

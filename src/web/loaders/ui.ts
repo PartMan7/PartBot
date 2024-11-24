@@ -1,9 +1,10 @@
-import { Application, Router } from 'express';
+import { Router } from 'express';
 
 import { renderReact } from '@/web/loaders/middleware';
 import { readFileStructure } from '@/web/loaders/util';
 
 import type { UIRoute } from '@/types/web';
+import type { Application} from 'express';
 
 export default async function init(app: Application): Promise<void> {
 	const router = Router();

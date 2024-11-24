@@ -1,6 +1,7 @@
-import { RNGSource, sample, useRNG } from '@/utils/random';
+import { sample, useRNG } from '@/utils/random';
 
 import type { TranslationFn } from '@/i18n/types';
+import type { RNGSource} from '@/utils/random';
 
 declare global {
 	interface Array<T> {

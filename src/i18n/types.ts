@@ -1,4 +1,4 @@
-import refText from '@/i18n/english';
+import type refText from '@/i18n/english';
 
 export type Translations = typeof refText;
 

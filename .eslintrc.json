@@ -24,6 +24,7 @@
 				"varsIgnorePattern": "^_"
 			}
 		],
+		"@typescript-eslint/consistent-type-imports": "error",
 		"camelcase": "error",
 		"eqeqeq": "error",
 		"import/order": [

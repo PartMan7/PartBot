@@ -1,6 +1,8 @@
 import { Timers } from '@/cache';
-import { PSCommand } from '@/types/chat';
 import { Timer } from '@/utils/timer';
+
+import type { PSCommand } from '@/types/chat';
+import type { PSMessage } from '@/types/ps';
 
 const $ = {
 	messageToId(message: PSMessage) {

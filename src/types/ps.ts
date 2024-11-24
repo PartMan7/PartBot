@@ -1,4 +1,6 @@
-import { Perms } from '@/types/perms';
+import type { Perms } from '@/types/perms';
+export type { Message as PSMessage } from 'ps-client';
+
 type AuthKey = Perms & string;
 
 export type PSRoomConfig = {

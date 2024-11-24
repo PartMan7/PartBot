@@ -1,15 +1,16 @@
+import { PSQuoteRoomPrefs } from '@/cache';
 import { prefix } from '@/config/ps';
 import { addQuote, getAllQuotes } from '@/database/quotes';
-import { PSQuoteRoomPrefs } from '@/cache';
-
+import { MAX_CHAT_HTML_LENGTH, MAX_PAGE_HTML_LENGTH } from '@/ps/constants';
 import { QUOTES } from '@/text';
 import { Username as UsernameCustom } from '@/utils/components';
 import { Username as UsernamePS } from '@/utils/components/ps';
-import { escapeRegEx } from '@/utils/regexEscape';
-import { MAX_CHAT_HTML_LENGTH, MAX_PAGE_HTML_LENGTH } from '@/ps/constants';
-
-import type { ReactElement, ReactNode } from 'react';
 import { jsxToHTML } from '@/utils/jsxToHTML';
+import { escapeRegEx } from '@/utils/regexEscape';
+
+import type { PSCommand } from '@/types/chat';
+import type { PSMessage } from '@/types/ps';
+import type { ReactElement, ReactNode } from 'react';
 
 type QuoteCollection = [index: number, quote: string][];
 

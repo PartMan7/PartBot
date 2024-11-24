@@ -1,18 +1,20 @@
-import { ChannelType, EmbedBuilder } from 'discord.js';
+import { ChannelType } from 'discord.js';
 
 import { PSGames } from '@/cache';
 import { gameCache } from '@/cache/games';
 import { prefix } from '@/config/ps';
-import { GameModel, uploadGame } from '@/database/games';
+import { uploadGame } from '@/database/games';
 import { botLogChannel } from '@/discord/constants/servers/boardgames';
-import { Games } from '@/ps/games/index';
 import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { pick } from '@/utils/pick';
 import { sample, useRNG } from '@/utils/random';
 import { Timer } from '@/utils/timer';
 
+import type { GameModel} from '@/database/games';
 import type { TranslationFn } from '@/i18n/types';
 import type { ActionResponse, BaseState, GamesList, Meta, Player } from '@/ps/games/common';
+import type { Games } from '@/ps/games/index';
+import type { EmbedBuilder } from 'discord.js';
 import type { Room, User } from 'ps-client';
 import type { ReactElement } from 'react';
 

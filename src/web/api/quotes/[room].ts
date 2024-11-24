@@ -1,5 +1,7 @@
 import { getAllQuotes } from '@/database/quotes';
 
+import type { RouteHandler } from '@/types/web';
+
 export const handler: RouteHandler = async (req, res) => {
 	const { room } = req.params as { room: string };
 	const quotes = await getAllQuotes(room);

@@ -1,6 +1,8 @@
 import { PSNoPrefixHelp } from '@/cache';
 import { owner, prefix, username } from '@/config/ps';
 
+import type { PSMessage } from '@/types/ps';
+
 export default function interfaceHandler(message: PSMessage) {
 	// Ignore & messages
 	if (message.isIntro || !message.author.userid || !message.target) return;

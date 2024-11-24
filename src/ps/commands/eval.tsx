@@ -1,5 +1,7 @@
-import { evaluate } from '@/utils/eval';
 import { MAX_CHAT_HTML_LENGTH } from '@/ps/constants';
+import { evaluate } from '@/utils/eval';
+
+import type { PSCommand } from '@/types/chat';
 
 export const command: PSCommand = {
 	name: 'eval',

@@ -1,14 +1,15 @@
-import { Games } from '@/ps/games';
 import { PSGames } from '@/cache';
-import { generateId } from '@/ps/games/utils';
-import { renderBackups, renderMenu } from '@/ps/games/menus';
-
-import type { Room } from 'ps-client';
-import type { TranslationFn } from '@/i18n/types';
-import type { HTMLopts } from 'ps-client/classes/common';
-import { ChatError } from '@/utils/chatError';
-import { ReactElement } from 'react';
 import { gameCache } from '@/cache/games';
+import { Games } from '@/ps/games';
+import { renderBackups, renderMenu } from '@/ps/games/menus';
+import { generateId } from '@/ps/games/utils';
+import { ChatError } from '@/utils/chatError';
+
+import type { TranslationFn } from '@/i18n/types';
+import type { PSCommand } from '@/types/chat';
+import type { Room } from 'ps-client';
+import type { HTMLopts } from 'ps-client/classes/common';
+import type { ReactElement } from 'react';
 
 type SearchContext =
 	| { action: 'start'; user: string }

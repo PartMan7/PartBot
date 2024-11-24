@@ -1,6 +1,8 @@
 import { checkPermissions } from '@/ps/handlers/permissions';
 import { ACCESS_DENIED } from '@/text';
 
+import type { PSCommand } from '@/types/chat';
+
 export const command: PSCommand = {
 	name: 'echo',
 	help: 'Echoes the given text',

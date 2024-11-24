@@ -5,6 +5,7 @@ import { ansiToHtml } from '@/utils/ansiToHtml';
 import { cachebuster as _cachebuster } from '@/utils/cachebuster';
 
 import type { PSCommandContext } from '@/types/chat';
+import type { PSMessage } from '@/types/ps';
 
 // Exporting into side variables for eval lookup
 const cache = _cache;

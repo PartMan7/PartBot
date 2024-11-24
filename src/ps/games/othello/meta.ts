@@ -1,4 +1,6 @@
-import { GamesList, Meta } from '@/ps/games/common';
+import { GamesList } from '@/ps/games/common';
+
+import type { Meta } from '@/ps/games/common';
 
 export const meta: Meta = {
 	name: 'Othello',

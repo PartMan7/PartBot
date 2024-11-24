@@ -8,6 +8,7 @@ import { ACCESS_DENIED, CMD_NOT_FOUND, INVALID_ALIAS, NO_DMS_COMMAND, PM_ONLY_CO
 import { ChatError } from '@/utils/chatError';
 
 import type { PSCommand, PSCommandContext } from '@/types/chat';
+import type { PSMessage } from '@/types/ps';
 
 type Cascade = { flags: NonNullable<PSCommand['flags']>; perms: NonNullable<PSCommand['perms']> };
 

@@ -1,3 +1,5 @@
+import type { PSCommand } from '@/types/chat';
+
 export const command: PSCommand = {
 	name: 'boop',
 	help: 'Boops',

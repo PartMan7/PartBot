@@ -1,6 +1,6 @@
 import { FlatCache } from 'flat-cache';
 
-import { GamesList } from '@/ps/games/common';
+import type { GamesList } from '@/ps/games/common';
 
 export type GameBackup = {
 	room: string;
