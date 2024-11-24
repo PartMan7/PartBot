@@ -6,7 +6,6 @@
 		"jsx": "react-jsx",
 		"module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
 		"esModuleInterop": true,
-		"allowUmdGlobalAccess": true, // Enable globals (albeit treated as UMD globals)
 		// Some strict mode patterns:
 		"strictBindCallApply": true,
 		"strictNullChecks": true,
@@ -15,8 +14,7 @@
 			"@/*": ["./*"]
 		}
 	},
-	"include": ["src/globals/*.d.ts", "src/**/*"], // Import global types before the rest of the code
-	"exclude": ["node_modules"],
+	"include": ["src/**/*"],
 	"ts-node": {
 		"require": ["tsconfig-paths/register"] // For path aliases
 	}
