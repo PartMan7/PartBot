@@ -12,6 +12,4 @@ if (process.env.USE_DISCORD) loadDiscord().then(() => Discord.login(token));
 
 Discord.on(Events.InteractionCreate, chatHandler);
 
-global.Discord = Discord;
-
 export default Discord;
