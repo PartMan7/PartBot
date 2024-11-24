@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import { toId } from '@/tools';
+
 const schema = new mongoose.Schema({
 	id: {
 		type: String,
@@ -33,16 +35,16 @@ const model = mongoose.model('alt', schema, 'alts');
 const DEFAULT_ALTS_CAP = 50;
 
 export async function rename(from: string, to: string): Promise<Model | undefined> {
-	const fromId = Tools.toId(from),
-		toId = Tools.toId(to),
-		id = `${fromId}-${toId}`;
-	if (fromId === toId) return;
-	const entry = { id, from: fromId, to: toId, at: Date.now() };
+	const userFromId = toId(from),
+		userToId = toId(to),
+		id = `${userFromId}-${userToId}`;
+	if (userFromId === userToId) return;
+	const entry = { id, from: userFromId, to: userToId, at: Date.now() };
 	return model.findOneAndUpdate({ id }, entry, { upsert: true, new: true });
 }
 
 export async function getAlts(user: string, limit: number = DEFAULT_ALTS_CAP): Promise<string[]> {
-	const userId = Tools.toId(user);
+	const userId = toId(user);
 	const altsList = await model.find({ $or: [{ from: userId }, { to: userId }] }, null, limit ? { limit } : {});
 	return altsList
 		.map(doc => {

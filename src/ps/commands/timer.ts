@@ -1,4 +1,5 @@
 import { Timers } from '@/cache';
+import { fromHumanTime, toHumanTime } from '@/tools';
 import { Timer } from '@/utils/timer';
 
 import type { PSCommand } from '@/types/chat';
@@ -25,7 +26,7 @@ export const command: PSCommand = {
 				const id = $.messageToId(message);
 				const timer = Timers[id];
 				if (!timer) throw new ChatError("You don't have a timer running!");
-				const timeLeft = Tools.toHumanTime(timer.endTime - Date.now());
+				const timeLeft = toHumanTime(timer.endTime - Date.now());
 				return message.reply(`Your timer will end in ${timeLeft}${timer.comment ? ` (${timer.comment})` : ''}.`);
 			},
 		},
@@ -40,7 +41,7 @@ export const command: PSCommand = {
 				if (!timer) throw new ChatError("You don't have a timer running!");
 				delete Timers[id];
 				timer.cancel();
-				const timeLeftText = Tools.toHumanTime(timer.endTime - Date.now());
+				const timeLeftText = toHumanTime(timer.endTime - Date.now());
 				return message.reply(`Your timer${timer.comment ? ` (${timer.comment})` : ''} was cancelled with ${timeLeftText} left.`);
 			},
 		},
@@ -55,7 +56,7 @@ export const command: PSCommand = {
 				if (!timer) throw new ChatError("You don't have a timer running!");
 				delete Timers[id];
 				timer.execute();
-				const timeLeftText = Tools.toHumanTime(timer.endTime - Date.now());
+				const timeLeftText = toHumanTime(timer.endTime - Date.now());
 				return message.reply(`(The timer would have ended in ${timeLeftText}.)`);
 			},
 		},
@@ -65,9 +66,9 @@ export const command: PSCommand = {
 		if (Timers[id]) return run('timer status');
 		const [timeText, ...commentLines] = args.join(' ').split('//');
 		const comment = commentLines.join('//').trim();
-		const timeToSet = Tools.fromHumanTime(timeText);
+		const timeToSet = fromHumanTime(timeText);
 		if (!timeToSet) throw new ChatError('Please specify a time for the timer! (Remember to include units)');
-		if (timeToSet > Tools.fromHumanTime('7 days')) throw new ChatError('Timers can be set for a maximum of one week.');
+		if (timeToSet > fromHumanTime('7 days')) throw new ChatError('Timers can be set for a maximum of one week.');
 		Timers[id] = new Timer(
 			() => {
 				delete Timers[id];
@@ -76,7 +77,7 @@ export const command: PSCommand = {
 			timeToSet,
 			comment
 		);
-		const humanFormat = Tools.toHumanTime(timeToSet);
+		const humanFormat = toHumanTime(timeToSet);
 		message.reply(`Your timer has been set for ${humanFormat} from now.`);
 	},
 };

@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import { toId } from '@/tools';
+
 // We don't really care about storing joins (since we can just use their 'online' status)
 // Instead, we store the last time they were seen online; i.e. their leave time, not join
 
@@ -30,12 +32,12 @@ interface Model {
 const model = mongoose.model('seen', schema, 'seens');
 
 export function seeUser(user: string, rooms: string[] = []): Promise<Model> {
-	const userId = Tools.toId(user);
+	const userId = toId(user);
 	return model.findOneAndUpdate({ id: userId }, { id: userId, in: rooms }, { upsert: true, new: true });
 }
 
 export function lastSeen(user: string): Promise<Model | null> {
-	const userId = Tools.toId(user);
+	const userId = toId(user);
 	return model.findOne({ id: userId });
 }
 

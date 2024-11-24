@@ -1,4 +1,5 @@
 import { GamesList } from '@/ps/games/common';
+import { fromHumanTime } from '@/tools';
 
 import type { Meta } from '@/ps/games/common';
 
@@ -13,6 +14,6 @@ export const meta: Meta = {
 	},
 
 	autostart: true,
-	pokeTimer: Tools.fromHumanTime('30 sec'),
-	timer: Tools.fromHumanTime('1 min'),
+	pokeTimer: fromHumanTime('30 sec'),
+	timer: fromHumanTime('1 min'),
 };

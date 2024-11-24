@@ -3,6 +3,7 @@ import { prefix } from '@/config/ps';
 import { addQuote, getAllQuotes } from '@/database/quotes';
 import { MAX_CHAT_HTML_LENGTH, MAX_PAGE_HTML_LENGTH } from '@/ps/constants';
 import { QUOTES } from '@/text';
+import { fromHumanTime, toId } from '@/tools';
 import { Username as UsernameCustom } from '@/utils/components';
 import { Username as UsernamePS } from '@/utils/components/ps';
 import { jsxToHTML } from '@/utils/jsxToHTML';
@@ -32,7 +33,7 @@ const rawRegEx = /^(\[(?:\d{2}:){1,2}\d{2}] )?(.*)$/;
 async function getRoom(message: PSMessage): Promise<string> {
 	if (message.type === 'chat') return message.target.roomid;
 	const prefs = PSQuoteRoomPrefs[message.author.userid];
-	if (prefs && message.time - prefs.at.getTime() < Tools.fromHumanTime('1 hour')) return prefs.room;
+	if (prefs && message.time - prefs.at.getTime() < fromHumanTime('1 hour')) return prefs.room;
 	message.reply(`Which room are you looking for a quote in?`);
 	const answer = await message.target
 		.waitFor(msg => {
@@ -41,7 +42,7 @@ async function getRoom(message: PSMessage): Promise<string> {
 		.catch(() => {
 			throw new ChatError('Did not receive a room within a minute');
 		});
-	const _room = Tools.toId(answer.content);
+	const _room = toId(answer.content);
 	PSQuoteRoomPrefs[message.author.userid] = { room: _room, at: new Date() };
 	return _room;
 }
@@ -79,7 +80,7 @@ function FormatQuoteLine({ line, style, psUsernameTag }: { line: string; style?:
 	const meMatch = line.match(meRegEx);
 	if (meMatch)
 		return (
-			<div className={`chat chatmessage-${Tools.toId(meMatch[3])}`} style={style ?? { padding: '3px 0' }}>
+			<div className={`chat chatmessage-${toId(meMatch[3])}`} style={style ?? { padding: '3px 0' }}>
 				<small>{meMatch[1]}</small>
 				<UsernameCustom name={meMatch[3]}>• </UsernameCustom>
 				<em>

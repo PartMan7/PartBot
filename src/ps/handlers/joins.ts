@@ -1,6 +1,7 @@
 import { PSAltCache, PSSeenCache } from '@/cache';
 import { rename } from '@/database/alts';
 import { seeUser } from '@/database/seens';
+import { fromHumanTime, toId } from '@/tools';
 
 export function joinHandler(room: string, user: string, isIntro: boolean): void {
 	if (isIntro) return;
@@ -11,21 +12,21 @@ export function joinHandler(room: string, user: string, isIntro: boolean): void 
 
 export function nickHandler(room: string, newName: string, oldName: string, isIntro: boolean): void {
 	if (isIntro) return;
-	const from = Tools.toId(oldName),
-		to = Tools.toId(newName),
+	const from = toId(oldName),
+		to = toId(newName),
 		id = `${from}-${to}`;
 	if (from === to) return;
 	// Throttling cache updates at once per 5s per rename (A-B)
-	if (Date.now() - PSAltCache[id]?.at.getTime() < Tools.fromHumanTime('5 seconds')) return;
+	if (Date.now() - PSAltCache[id]?.at.getTime() < fromHumanTime('5 seconds')) return;
 	PSAltCache[id] = { from, to, at: new Date() };
 	rename(oldName, newName);
 }
 
 export function leaveHandler(room: string, user: string, isIntro: boolean): void {
 	if (isIntro) return;
-	const userId = Tools.toId(user);
+	const userId = toId(user);
 	// Throttling cache updates at once per 5s per leave
-	if (Date.now() - PSSeenCache[userId]?.at.getTime() < Tools.fromHumanTime('5 seconds')) return;
+	if (Date.now() - PSSeenCache[userId]?.at.getTime() < fromHumanTime('5 seconds')) return;
 	const userObj = PS.getUser(user);
 	const rooms = userObj && userObj.rooms ? Object.keys(userObj.rooms).map(room => room.replace(/^[^a-z0-9]/, '')) : [room];
 	PSSeenCache[userId] = { at: new Date(), in: rooms };

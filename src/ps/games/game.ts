@@ -7,6 +7,7 @@ import { uploadGame } from '@/database/games';
 import Discord from '@/discord';
 import { botLogChannel } from '@/discord/constants/servers/boardgames';
 import { renderCloseSignups, renderSignups } from '@/ps/games/render';
+import { toHumanTime, toId } from '@/tools';
 import { pick } from '@/utils/pick';
 import { sample, useRNG } from '@/utils/random';
 import { Timer } from '@/utils/timer';
@@ -133,7 +134,7 @@ export class Game<State extends BaseState> {
 		}
 		this.timer = new Timer(
 			() => {
-				this.room.send(`${player.name} hasn't played in ${this.meta.name} [${this.id}] for ${Tools.toHumanTime(timerLength)}...`);
+				this.room.send(`${player.name} hasn't played in ${this.meta.name} [${this.id}] for ${toHumanTime(timerLength)}...`);
 			},
 			this.timerLength,
 			`${comment} [${this.id}]`
@@ -306,7 +307,7 @@ export class Game<State extends BaseState> {
 	}
 
 	sendHTML(to: string | User, html: ReactElement | string): void {
-		const user = typeof to === 'object' ? to : PS.addUser({ userid: Tools.toId(to) });
+		const user = typeof to === 'object' ? to : PS.addUser({ userid: toId(to) });
 		user.pageHTML(html, { name: this.id, room: this.room });
 	}
 

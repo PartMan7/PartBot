@@ -3,6 +3,7 @@ import { gameCache } from '@/cache/games';
 import { Games } from '@/ps/games';
 import { renderBackups, renderMenu } from '@/ps/games/menus';
 import { generateId } from '@/ps/games/utils';
+import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
 
 import type { TranslationFn } from '@/i18n/types';
@@ -32,9 +33,9 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 		return game => {
 			if (ctx.action === 'sub') {
 				const hasUser1 = Object.values(game.players).some(player => player.id === ctx.user1);
-				const onlineUser1 = game.room.users.some(user => Tools.toId(user) === ctx.user1);
+				const onlineUser1 = game.room.users.some(user => toId(user) === ctx.user1);
 				const hasUser2 = Object.values(game.players).some(player => player.id === ctx.user2);
-				const onlineUser2 = game.room.users.some(user => Tools.toId(user) === ctx.user2);
+				const onlineUser2 = game.room.users.some(user => toId(user) === ctx.user2);
 				return (hasUser1 && onlineUser1 && !hasUser2) || (hasUser2 && onlineUser2 && !hasUser1);
 			}
 			if (ctx.action === 'any') return true;
@@ -74,12 +75,12 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 		}
 		if (searchCtx.action === 'sub') {
 			if (!restCtx) throw new ChatError(roomCtx.$T('GAME.INVALID_INPUT'));
-			[searchCtx.user1, searchCtx.user2] = restCtx.split(',').map(Tools.toId);
+			[searchCtx.user1, searchCtx.user2] = restCtx.split(',').map(toId);
 			if (!searchCtx.user2) return null;
 		}
 		if (searchCtx.action === 'leave' && !searchCtx.user) {
 			if (!restCtx) return null;
-			searchCtx.user = Tools.toId(restCtx);
+			searchCtx.user = toId(restCtx);
 		}
 		const allGames = Object.values(PSGames[gameId]).filter(game => game.roomid === roomCtx.room.id);
 		const byContext = getByContext(searchCtx);
@@ -89,7 +90,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 			return null;
 		}
 		if (specifier?.includes(' vs ')) {
-			const players = specifier.split(' vs ').map(Tools.toId);
+			const players = specifier.split(' vs ').map(toId);
 			const lookup = players.sort().join('|');
 			const matchingGames = allGames.filter(
 				game =>
@@ -191,7 +192,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				syntax: 'CMD #id, [user1], [user2]',
 				async run({ message, arg, $T }) {
 					const { game, ctx } = getGame(arg, { action: 'sub' }, { room: message.target, $T });
-					const users = ctx.split(',').map(Tools.toId);
+					const users = ctx.split(',').map(toId);
 					const outUser = users.find(user => Object.values(game.players).some(player => player.id === user));
 					const outTurn = Object.keys(game.players).find(turn => game.players[turn].id === outUser) as typeof game.turn;
 					const inUserId = users.find(user => !Object.values(game.players).some(player => player.id === user));
@@ -235,7 +236,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				syntax: 'CMD [game ref?], user',
 				async run({ message, arg, $T }) {
 					const { game, ctx } = getGame(arg, { action: 'leave' }, { room: message.target, $T });
-					const res = game.removePlayer(Tools.toId(ctx));
+					const res = game.removePlayer(toId(ctx));
 					if (!res.success) throw new ChatError(res.error);
 					if (res.data) {
 						message.reply(res.data.message);

@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import { toId } from '@/tools';
+
 const schema = new mongoose.Schema({
 	quote: {
 		type: String,
@@ -27,7 +29,7 @@ const schema = new mongoose.Schema({
 		type: String,
 		required: true,
 		default: function () {
-			return Tools.toId(this.addedBy);
+			return toId(this.addedBy);
 		},
 	},
 	at: {

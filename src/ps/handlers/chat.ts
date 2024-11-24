@@ -5,6 +5,7 @@ import { prefix } from '@/config/ps';
 import { i18n } from '@/i18n';
 import { checkPermissions } from '@/ps/handlers/permissions';
 import { ACCESS_DENIED, CMD_NOT_FOUND, INVALID_ALIAS, NO_DMS_COMMAND, PM_ONLY_COMMAND, ROOM_ONLY_COMMAND } from '@/text';
+import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
 
 import type { PSCommand, PSCommandContext } from '@/types/chat';
@@ -81,7 +82,7 @@ function spoofMessage(argData: string, message: PSMessage): PSMessage {
 	const [roomId, newArgData] = argData.slice(1).lazySplit(' ', 1);
 	const room = message.parent.getRoom(roomId);
 	if (!room) throw new ChatError('Invalid room ID.');
-	const by = room.users.find(user => Tools.toId(user) === message.author.id);
+	const by = room.users.find(user => toId(user) === message.author.id);
 	if (!by) throw new ChatError('Not in room.');
 	const [empty, _type, _from, rest] = message.raw.replace(new RegExp(`${prefix}@\\S* `), prefix).lazySplit('|', 3);
 	return new Message({

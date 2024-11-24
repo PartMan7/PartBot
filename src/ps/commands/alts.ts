@@ -1,6 +1,7 @@
 import { getAlts } from '@/database/alts';
 import { checkPermissions } from '@/ps/handlers/permissions';
 import { ACCESS_DENIED } from '@/text';
+import { toId } from '@/tools';
 
 import type { PSCommand } from '@/types/chat';
 
@@ -13,7 +14,7 @@ export const command: PSCommand = {
 		let lookup = message.author.userid;
 		if (arg) {
 			if (!checkPermissions(['room', 'driver'], message)) throw new ChatError(ACCESS_DENIED);
-			lookup = Tools.toId(arg);
+			lookup = toId(arg);
 		}
 		const altsList = await getAlts(lookup);
 		message.reply(`Alts: ${altsList.join(', ')}`);
