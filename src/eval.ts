@@ -1,16 +1,31 @@
+import _axios from 'axios';
+import _fsSync, { promises as _fs } from 'fs';
+import _path from 'path';
 import { inspect } from 'util';
 
 import * as _cache from '@/cache';
+import * as _Tools from '@/tools';
 import { ansiToHtml } from '@/utils/ansiToHtml';
 import { cachebuster as _cachebuster } from '@/utils/cachebuster';
+import { fsPath as _fsPath } from '@/utils/fsPath';
+import { log as _log } from '@/utils/logger';
 
 import type { PSCommandContext } from '@/types/chat';
 import type { PSMessage } from '@/types/ps';
 
-// Exporting into side variables for eval lookup
+// Exporting into side variables for eval lookup; this gets garbage-collected otherwise
+const axios = _axios;
 const cache = _cache;
 const cachebuster = _cachebuster;
-// Add: axios, fs, fsPath, fsSync, log, path, tools
+const fs = _fs;
+const fsSync = _fsSync;
+const fsPath = _fsPath;
+const log = _log;
+const path = _path;
+const Tools = _Tools;
+
+// Storing in context for eval()
+const _evalContext = [axios, cache, cachebuster, fs, fsSync, fsPath, log, path, Tools];
 
 export type EvalModes = 'COLOR_OUTPUT' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
 export type EvalOutput = {
@@ -88,8 +103,8 @@ export async function evaluate(
 	try {
 		const res = await (() => {
 			const { message, context } = passedContext;
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Storing in context for eval()
-			const evalContext = { message, context, cache, cachebuster };
+			// Storing in context for eval()
+			const _innerEvalContext = { message, context };
 			return eval(code);
 		})();
 		success = true;
