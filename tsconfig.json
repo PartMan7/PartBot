@@ -3,7 +3,7 @@
 		"baseUrl": "src",
 		"target": "es2021",
 		"noEmit": true, // We run PartBot with ts-node instead of a two-step process
-		"jsx": "react",
+		"jsx": "react-jsx",
 		"module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
 		"esModuleInterop": true,
 		"allowUmdGlobalAccess": true, // Enable globals (albeit treated as UMD globals)

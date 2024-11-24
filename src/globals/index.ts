@@ -3,7 +3,6 @@ import '@/globals/prototypes';
 import axios from 'axios';
 import fsSync from 'fs';
 import path from 'path';
-import React from 'react';
 
 import * as Tools from '@/tools';
 import { ChatError } from '@/utils/chatError';
@@ -15,7 +14,6 @@ global.axios = axios;
 global.fs = fsSync.promises;
 global.fsSync = fsSync;
 global.path = path;
-global.React = React;
 
 global.Tools = Tools;
 

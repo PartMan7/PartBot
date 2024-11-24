@@ -10,7 +10,7 @@ import { escapeRegEx } from '@/utils/regexEscape';
 
 import type { PSCommand } from '@/types/chat';
 import type { PSMessage } from '@/types/ps';
-import type { ReactElement, ReactNode } from 'react';
+import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
 type QuoteCollection = [index: number, quote: string][];
 
@@ -63,15 +63,7 @@ function parseQuote(quote: string): string {
 		.join('\n');
 }
 
-function FormatQuoteLine({
-	line,
-	style,
-	psUsernameTag,
-}: {
-	line: string;
-	style?: React.CSSProperties;
-	psUsernameTag?: boolean;
-}): ReactNode {
+function FormatQuoteLine({ line, style, psUsernameTag }: { line: string; style?: CSSProperties; psUsernameTag?: boolean }): ReactNode {
 	const chatMatch = line.match(chatRegEx);
 	if (chatMatch)
 		return (

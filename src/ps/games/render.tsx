@@ -1,7 +1,8 @@
-import type { ReactElement, ReactNode } from 'react';
-import type { Game } from '@/ps/games/game';
-import type { BaseState } from '@/ps/games/common';
 import { Button } from '@/utils/components/ps';
+
+import type { BaseState } from '@/ps/games/common';
+import type { Game } from '@/ps/games/game';
+import type { ReactElement, ReactNode } from 'react';
 
 export function renderSignups<State extends BaseState>(this: Game<State>): ReactElement {
 	return (
