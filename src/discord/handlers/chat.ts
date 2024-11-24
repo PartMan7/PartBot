@@ -1,7 +1,7 @@
+import type { Interaction } from 'discord.js';
 import { DiscCommands } from '@/cache';
 import { admins } from '@/config/discord';
 
-import type { Interaction } from 'discord.js';
 import { ACCESS_DENIED, PM_ONLY_COMMAND } from '@/text';
 
 export default async function messageHandler(interaction: Interaction): Promise<void> {

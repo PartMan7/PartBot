@@ -1,5 +1,5 @@
-import chokidar from 'chokidar';
 import EventEmitter from 'events';
+import { watch } from 'chokidar';
 import { debounce } from '@/utils/debounce';
 
 import { reloadCommands } from '@/ps/loaders/commands';
@@ -88,7 +88,7 @@ export default function createSentinel() {
 			},
 		}));
 
-	const sentinel = chokidar.watch(fsPath('..', 'src'), { ignoreInitial: true });
+	const sentinel = watch(fsPath('..', 'src'), { ignoreInitial: true });
 	sentinel.on('all', async (event, filepath) => {
 		listeners.find(({ pattern }) => pattern.test(filepath))?.reload(filepath);
 	});

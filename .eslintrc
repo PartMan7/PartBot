@@ -1,7 +1,14 @@
 {
 	"root": true,
 	"parser": "@typescript-eslint/parser",
-	"extends": ["plugin:@typescript-eslint/recommended", "prettier"],
+	"extends": ["plugin:@typescript-eslint/recommended", "prettier", "plugin:import/recommended"],
+	"settings": {
+		"import/resolver": {
+			"typescript": true,
+			"node": true
+		},
+		"import/extensions": [".ts", ".tsx"]
+	},
 	"env": {
 		"node": true,
 		"es6": true
@@ -19,6 +26,7 @@
 		],
 		"camelcase": "error",
 		"eqeqeq": "error",
+		"import/order": "error",
 		"max-len": [
 			"error",
 			{

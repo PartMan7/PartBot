@@ -1,8 +1,8 @@
 import { renderToString } from 'react-dom/server';
+import type { Request, Response, NextFunction } from 'express';
 import { jsxToHTML } from '@/utils/jsxToHTML';
 import { renderTemplate } from '@/web/loaders/util';
 
-import type { Request, Response, NextFunction } from 'express';
 import type { Render } from '@/types/web';
 
 export function renderReact(req: Request, res: Response, next: NextFunction): void {

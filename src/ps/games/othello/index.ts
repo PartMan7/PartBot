@@ -1,11 +1,11 @@
 import { EmbedBuilder } from 'discord.js';
+import type { User } from 'ps-client';
 import { Game, BaseContext, createGrid } from '@/ps/games/game';
 export { meta } from '@/ps/games/othello/meta';
 import { deepClone } from '@/utils/deepClone';
 import { render } from '@/ps/games/othello/render';
 import { winnerIcon } from '@/discord/constants/emotes';
 
-import type { User } from 'ps-client';
 import type { Board, State, Turn, RenderCtx, WinCtx } from '@/ps/games/othello/types';
 import type { EndType } from '@/ps/games/common';
 

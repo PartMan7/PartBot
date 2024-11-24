@@ -1,7 +1,7 @@
+import { SlashCommandBuilder } from 'discord.js';
 import type { PSCommand } from '@/types/chat';
 import type { PSRoomConfig } from '@/types/ps';
 import type { Timer } from '@/utils/timer';
-import { SlashCommandBuilder } from 'discord.js';
 import { Games } from '@/ps/games';
 
 // Global cache
