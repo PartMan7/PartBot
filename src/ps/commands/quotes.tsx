@@ -2,7 +2,6 @@ import { PSQuoteRoomPrefs } from '@/cache';
 import { prefix } from '@/config/ps';
 import { addQuote, getAllQuotes } from '@/database/quotes';
 import { MAX_CHAT_HTML_LENGTH, MAX_PAGE_HTML_LENGTH } from '@/ps/constants';
-import { QUOTES } from '@/text';
 import { fromHumanTime, toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
 import { Username as UsernameCustom } from '@/utils/components';
@@ -245,10 +244,10 @@ export const command: PSCommand = {
 			aliases: ['rand', 'r'],
 			help: 'Displays a random quote',
 			syntax: 'CMD',
-			async run({ message, broadcast, broadcastHTML, room: _room }) {
+			async run({ message, broadcast, broadcastHTML, room: _room, $T }) {
 				const room: string = (_room as string) ?? (await getRoom(message));
 				const [index, randQuote] = Object.entries(await getAllQuotes(room)).random();
-				if (!randQuote) return broadcast(QUOTES.NO_QUOTES_FOUND);
+				if (!randQuote) return broadcast($T('QUOTES.NO_QUOTES_FOUND'));
 				broadcastHTML(
 					<>
 						<hr />

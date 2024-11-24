@@ -171,5 +171,5 @@ export type DiscCommand = {
 	perms?: 'admin' | ((interaction: DiscInteraction) => boolean);
 	servers?: string[];
 	args?: (slash: SlashCommandBuilder) => void;
-	run(interaction: DiscInteraction): Promise<any>;
+	run(interaction: DiscInteraction, $T: TranslationFn): Promise<any>;
 };

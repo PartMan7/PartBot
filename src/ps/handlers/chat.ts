@@ -4,11 +4,11 @@ import { PSAliases, PSCommands } from '@/cache';
 import { prefix } from '@/config/ps';
 import { i18n } from '@/i18n';
 import { checkPermissions } from '@/ps/handlers/permissions';
-import { ACCESS_DENIED, CMD_NOT_FOUND, INVALID_ALIAS, NO_DMS_COMMAND, PM_ONLY_COMMAND, ROOM_ONLY_COMMAND } from '@/text';
 import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
 import { log } from '@/utils/logger';
 
+import type { TranslationFn } from '@/i18n/types';
 import type { PSCommand, PSCommandContext } from '@/types/chat';
 import type { PSMessage } from '@/types/ps';
 
@@ -16,7 +16,8 @@ type Cascade = { flags: NonNullable<PSCommand['flags']>; perms: NonNullable<PSCo
 
 export function parseArgs(
 	aliasArgs: string[],
-	spaceCapturedArgs: string[]
+	spaceCapturedArgs: string[],
+	$T: TranslationFn
 ): {
 	command: PSCommand;
 	sourceCommand: PSCommand;
@@ -34,13 +35,14 @@ export function parseArgs(
 			break;
 		}
 	}
-	if (!commandSet) throw new ChatError(CMD_NOT_FOUND);
+	if (!commandSet) throw new ChatError($T('CMD_NOT_FOUND'));
 	const rawArgs = [...args];
 	const originalCommand = commandSet.slice();
 	const command = PSAliases[commandSet.join(' ')].split(' ');
-	if (!command.length) throw new ChatError(CMD_NOT_FOUND);
+	if (!command.length) throw new ChatError($T('CMD_NOT_FOUND'));
 	const commandSteps: string[] = [];
 	const context: Partial<PSCommandContext> = {
+		$T,
 		rawArgs,
 		originalCommand,
 		command: command.slice(),
@@ -55,7 +57,7 @@ export function parseArgs(
 	const sourceCommand = PSCommands[command.shift()!];
 	spaceCapturedArgs.splice(0, 2);
 	let commandObj: PSCommand = sourceCommand;
-	if (!commandObj) throw new Error(INVALID_ALIAS(context.command![0]));
+	if (!commandObj) throw new Error($T('INVALID_ALIAS', { aliasFor: context.command![0] }));
 
 	const cascade: Cascade = {
 		flags: commandObj.flags ?? {},
@@ -110,6 +112,7 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 			const mockMessage = spoofMessage(argData, message);
 			return chatHandler(mockMessage, message);
 		}
+		const $T = i18n(); // TODO: Allow overriding translations
 		const args = argData.split(/ +/);
 		const spacedArgs = argData.split(/( +)/);
 		const {
@@ -118,13 +121,12 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 			commandSteps,
 			cascade: { flags, perms },
 			context,
-		} = parseArgs(args, spacedArgs);
-		const conceal = sourceCommand.flags?.conceal ? CMD_NOT_FOUND : null;
-		context.$T = i18n(); // TODO: Allow overriding translations
-		if (!checkPermissions(perms, message)) throw new ChatError(conceal ?? ACCESS_DENIED);
-		if (!flags.routePMs && originalMessage) throw new ChatError(conceal ?? NO_DMS_COMMAND);
-		if (flags.roomOnly && message.type !== 'chat') throw new ChatError(conceal ?? ROOM_ONLY_COMMAND);
-		if (flags.pmOnly && message.type !== 'pm') throw new ChatError(conceal ?? PM_ONLY_COMMAND);
+		} = parseArgs(args, spacedArgs, $T);
+		const conceal = sourceCommand.flags?.conceal ? $T('CMD_NOT_FOUND') : null;
+		if (!checkPermissions(perms, message)) throw new ChatError(conceal ?? $T('ACCESS_DENIED'));
+		if (!flags.routePMs && originalMessage) throw new ChatError(conceal ?? $T('NO_DMS_COMMAND'));
+		if (flags.roomOnly && message.type !== 'chat') throw new ChatError(conceal ?? $T('ROOM_ONLY_COMMAND'));
+		if (flags.pmOnly && message.type !== 'pm') throw new ChatError(conceal ?? $T('PM_ONLY_COMMAND'));
 		context.broadcast = function (msg, perm = 'voice') {
 			if (checkPermissions(perm, message)) return message.reply(msg);
 			else return message.privateReply(msg);
@@ -144,7 +146,7 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 				commandSteps,
 				cascade: { perms },
 				context,
-			} = parseArgs(altArgs, spacedArgs);
+			} = parseArgs(altArgs, spacedArgs, $T); // Note: Translations are carried over from the original command and not recalculated!
 			context.calledFrom = commandSteps.join('.');
 			context.calledFromMsg = message;
 			// TODO Clone message and assign from overrides
@@ -160,14 +162,15 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 				if (checkPermissions(perm, newMessage)) return newMessage.sendHTML(html, opts);
 				else return newMessage.target.privateHTML(newMessage.author, html, opts);
 			};
-			// TODO: Reuse upper flags logic
-			if (!checkPermissions(perms, newMessage)) throw new ChatError(sourceCommand.flags?.conceal ? CMD_NOT_FOUND : ACCESS_DENIED);
+			if (!checkPermissions(perms, newMessage)) {
+				throw new ChatError(sourceCommand.flags?.conceal ? $T('CMD_NOT_FOUND') : $T('ACCESS_DENIED'));
+			}
 			return command.run({ ...ctx, message: newMessage } as PSCommandContext);
 		};
 		context.unsafeRun = function (altCommand: string, ctx: Partial<PSCommandContext> = {}) {
 			const altArgs = altCommand.split(/ +/);
 			const spacedArgs = altCommand.split(/( +)/);
-			const { command, context } = parseArgs(altArgs, spacedArgs);
+			const { command, context } = parseArgs(altArgs, spacedArgs, $T);
 			context.calledFrom = commandSteps.join('.');
 			context.calledFromMsg = message;
 			// TODO: Clone message and assign from overrides
