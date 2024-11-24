@@ -1,6 +1,7 @@
 import express, { json, urlencoded } from 'express';
 
 import { port } from '@/config/web';
+import { log } from '@/utils/logger';
 import loadAPI from '@/web/loaders/api';
 import loadUI from '@/web/loaders/ui';
 

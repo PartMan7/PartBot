@@ -7,6 +7,7 @@ import { checkPermissions } from '@/ps/handlers/permissions';
 import { ACCESS_DENIED, CMD_NOT_FOUND, INVALID_ALIAS, NO_DMS_COMMAND, PM_ONLY_COMMAND, ROOM_ONLY_COMMAND } from '@/text';
 import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
+import { log } from '@/utils/logger';
 
 import type { PSCommand, PSCommandContext } from '@/types/chat';
 import type { PSMessage } from '@/types/ps';

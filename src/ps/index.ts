@@ -8,6 +8,7 @@ import interfaceHandler from '@/ps/handlers/interface';
 import { joinHandler, leaveHandler, nickHandler } from '@/ps/handlers/joins';
 import pageHandler from '@/ps/handlers/page';
 import loadPS from '@/ps/loaders';
+import { log } from '@/utils/logger';
 
 const PS = new Client({ username, password, rooms, transformHTML });
 PS.on('login', () => log(`Connected to PS! [${username}]`));

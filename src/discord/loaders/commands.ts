@@ -5,6 +5,7 @@ import { resetCache } from '@/cache/reset';
 import { clientId, token } from '@/config/discord';
 import { cachebuster } from '@/utils/cachebuster';
 import { fsPath } from '@/utils/fsPath';
+import { log } from '@/utils/logger';
 
 import type { DiscCommand } from '@/types/chat';
 

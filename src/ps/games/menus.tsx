@@ -1,11 +1,12 @@
 import { PSGames } from '@/cache';
 import { gameCache } from '@/cache/games';
+import { prefix } from '@/config/ps';
 import { Button, Username } from '@/utils/components/ps';
+import { log } from '@/utils/logger';
 
+import type { Meta, Player } from '@/ps/games/common';
 import type { Room } from 'ps-client';
 import type { ReactElement } from 'react';
-import type { Player, Meta } from '@/ps/games/common';
-import { prefix } from '@/config/ps';
 
 export function renderMenu(room: Room, meta: Meta, isStaff: boolean): ReactElement {
 	const games = Object.values(PSGames[meta.id] ?? {}).filter(game => game.roomid === room.id);

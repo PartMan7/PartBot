@@ -1,4 +1,5 @@
 import createSentinel from '@/sentinel/sentinel';
+import { log } from '@/utils/logger';
 const { emitter, sentinel } = createSentinel();
 
 emitter.on('trigger', (label, file) => {

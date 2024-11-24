@@ -1,5 +1,6 @@
 import { PSAltCache } from '@/cache';
 import { fetchAllAlts } from '@/database/alts';
+import { log } from '@/utils/logger';
 
 export async function loadAlts(): Promise<void> {
 	const fetched = await fetchAllAlts();

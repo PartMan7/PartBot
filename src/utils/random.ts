@@ -1,3 +1,5 @@
+import { log } from '@/utils/logger';
+
 export type RNGSource = null | undefined | number | (() => number);
 
 function PRNG(seed: number): () => number {

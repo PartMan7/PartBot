@@ -8,6 +8,7 @@ import Discord from '@/discord';
 import { botLogChannel } from '@/discord/constants/servers/boardgames';
 import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { toHumanTime, toId } from '@/tools';
+import { log } from '@/utils/logger';
 import { pick } from '@/utils/pick';
 import { sample, useRNG } from '@/utils/random';
 import { Timer } from '@/utils/timer';

@@ -1,8 +1,9 @@
 import { isValidElement } from 'react';
 
 import { jsxToHTML } from '@/utils/jsxToHTML';
+import { log } from '@/utils/logger';
 
-import type { ReactElement} from 'react';
+import type { ReactElement } from 'react';
 
 export function transformHTML(input: string | ReactElement): string {
 	if (typeof input === 'string') return input;
