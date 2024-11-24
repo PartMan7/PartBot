@@ -1,13 +1,13 @@
 import { Client } from 'ps-client';
-import { username, password, rooms } from '@/config/ps';
 
-import { transformHTML } from '@/ps/handlers/html';
-import loadPS from '@/ps/loaders';
-import chatHandler from '@/ps/handlers/chat';
-import interfaceHandler from '@/ps/handlers/interface';
+import { password, rooms, username } from '@/config/ps';
 import autoResHandler from '@/ps/handlers/autores';
+import chatHandler from '@/ps/handlers/chat';
+import { transformHTML } from '@/ps/handlers/html';
+import interfaceHandler from '@/ps/handlers/interface';
+import { joinHandler, leaveHandler, nickHandler } from '@/ps/handlers/joins';
 import pageHandler from '@/ps/handlers/page';
-import { joinHandler, nickHandler, leaveHandler } from '@/ps/handlers/joins';
+import loadPS from '@/ps/loaders';
 
 const PS = new Client({ username, password, rooms, transformHTML });
 PS.on('login', () => log(`Connected to PS! [${username}]`));

@@ -1,5 +1,7 @@
-import { Router, Application } from 'express';
+import { Application, Router } from 'express';
+
 import { readFileStructure } from '@/web/loaders/util';
+
 import type { APIRoute } from '@/types/web';
 
 export default async function init(app: Application): Promise<void> {

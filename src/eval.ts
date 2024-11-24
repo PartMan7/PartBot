@@ -1,8 +1,9 @@
 import { inspect } from 'util';
-import { ansiToHtml } from '@/utils/ansiToHtml';
 
 import * as _cache from '@/cache';
+import { ansiToHtml } from '@/utils/ansiToHtml';
 import { cachebuster as _cachebuster } from '@/utils/cachebuster';
+
 import type { PSCommandContext } from '@/types/chat';
 
 // Exporting into side variables for eval lookup

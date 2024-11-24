@@ -1,9 +1,9 @@
-import EventEmitter from 'events';
 import { watch } from 'chokidar';
-import { debounce } from '@/utils/debounce';
+import EventEmitter from 'events';
 
 import { reloadCommands } from '@/ps/loaders/commands';
 import { cachebuster } from '@/utils/cachebuster';
+import { debounce } from '@/utils/debounce';
 
 type ListenerType = 'commands' | 'games';
 type Register = { label: ListenerType; pattern: RegExp; reload: (filepaths: string[]) => Promise<void> | void; debounce?: number };

@@ -1,4 +1,5 @@
-import { isValidElement, ReactElement } from 'react';
+import { ReactElement, isValidElement } from 'react';
+
 import { jsxToHTML } from '@/utils/jsxToHTML';
 
 export function transformHTML(input: string | ReactElement): string {

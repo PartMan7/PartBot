@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import fsSync from 'fs';
 import { inspect } from 'util';
+
 import { fsPath } from '@/utils/fsPath';
 
 function dimText(str: string): string {

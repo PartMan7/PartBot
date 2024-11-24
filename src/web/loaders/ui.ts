@@ -1,7 +1,7 @@
-import { Router, Application } from 'express';
-import { readFileStructure } from '@/web/loaders/util';
+import { Application, Router } from 'express';
 
 import { renderReact } from '@/web/loaders/middleware';
+import { readFileStructure } from '@/web/loaders/util';
 
 import type { UIRoute } from '@/types/web';
 

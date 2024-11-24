@@ -1,8 +1,10 @@
 import { SlashCommandBuilder } from 'discord.js';
+
+import { Games } from '@/ps/games';
+
 import type { PSCommand } from '@/types/chat';
 import type { PSRoomConfig } from '@/types/ps';
 import type { Timer } from '@/utils/timer';
-import { Games } from '@/ps/games';
 
 // Global cache
 export const Timers: { [key: string]: Timer } = {};

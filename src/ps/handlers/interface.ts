@@ -1,5 +1,5 @@
-import { owner, prefix, username } from '@/config/ps';
 import { PSNoPrefixHelp } from '@/cache';
+import { owner, prefix, username } from '@/config/ps';
 
 export default function interfaceHandler(message: PSMessage) {
 	// Ignore & messages

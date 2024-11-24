@@ -1,9 +1,8 @@
 import { REST, Routes, SlashCommandBuilder } from 'discord.js';
 
-import { token, clientId } from '@/config/discord';
-
 import { DiscCommands } from '@/cache';
 import { resetCache } from '@/cache/reset';
+import { clientId, token } from '@/config/discord';
 import { cachebuster } from '@/utils/cachebuster';
 
 const restClient = new REST().setToken(token);

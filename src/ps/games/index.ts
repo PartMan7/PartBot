@@ -1,5 +1,5 @@
-import { Othello, meta as OthelloMeta } from '@/ps/games/othello';
 import { GamesList } from '@/ps/games/common';
+import { Othello, meta as OthelloMeta } from '@/ps/games/othello';
 
 export const Games = {
 	[GamesList.Othello]: {

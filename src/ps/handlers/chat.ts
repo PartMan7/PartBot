@@ -1,13 +1,13 @@
 import { Message } from 'ps-client';
+
 import { PSAliases, PSCommands } from '@/cache';
 import { prefix } from '@/config/ps';
-import { checkPermissions } from '@/ps/handlers/permissions';
 import { i18n } from '@/i18n';
-
-import type { PSCommand, PSCommandContext } from '@/types/chat';
-
+import { checkPermissions } from '@/ps/handlers/permissions';
 import { ACCESS_DENIED, CMD_NOT_FOUND, INVALID_ALIAS, NO_DMS_COMMAND, PM_ONLY_COMMAND, ROOM_ONLY_COMMAND } from '@/text';
 import { ChatError } from '@/utils/chatError';
+
+import type { PSCommand, PSCommandContext } from '@/types/chat';
 
 type Cascade = { flags: NonNullable<PSCommand['flags']>; perms: NonNullable<PSCommand['perms']> };
 

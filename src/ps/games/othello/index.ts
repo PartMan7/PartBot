@@ -1,13 +1,14 @@
 import { EmbedBuilder } from 'discord.js';
-import type { User } from 'ps-client';
-import { Game, BaseContext, createGrid } from '@/ps/games/game';
-export { meta } from '@/ps/games/othello/meta';
-import { deepClone } from '@/utils/deepClone';
-import { render } from '@/ps/games/othello/render';
-import { winnerIcon } from '@/discord/constants/emotes';
 
-import type { Board, State, Turn, RenderCtx, WinCtx } from '@/ps/games/othello/types';
+import { winnerIcon } from '@/discord/constants/emotes';
+import { BaseContext, Game, createGrid } from '@/ps/games/game';
+export { meta } from '@/ps/games/othello/meta';
+import { render } from '@/ps/games/othello/render';
+import { deepClone } from '@/utils/deepClone';
+
 import type { EndType } from '@/ps/games/common';
+import type { Board, RenderCtx, State, Turn, WinCtx } from '@/ps/games/othello/types';
+import type { User } from 'ps-client';
 
 export class Othello extends Game<State> {
 	winCtx?: WinCtx | { type: EndType };

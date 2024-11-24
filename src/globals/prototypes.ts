@@ -1,4 +1,5 @@
-import { sample, useRNG, RNGSource } from 'utils/random';
+import { RNGSource, sample, useRNG } from '@/utils/random';
+
 import type { TranslationFn } from '@/i18n/types';
 
 declare global {

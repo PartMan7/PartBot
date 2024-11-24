@@ -1,5 +1,6 @@
 import English from '@/i18n/english';
 import Hindi from '@/i18n/hindi';
+
 import type { TranslationFn } from '@/i18n/types';
 
 export const LanguageMap = {

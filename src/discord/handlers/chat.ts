@@ -1,8 +1,8 @@
-import type { Interaction } from 'discord.js';
 import { DiscCommands } from '@/cache';
 import { admins } from '@/config/discord';
-
 import { ACCESS_DENIED, PM_ONLY_COMMAND } from '@/text';
+
+import type { Interaction } from 'discord.js';
 
 export default async function messageHandler(interaction: Interaction): Promise<void> {
 	if (!interaction.isChatInputCommand()) return;

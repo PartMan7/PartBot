@@ -1,5 +1,5 @@
-import { RecursivePartial } from '@/types/common';
 import { Translations } from '@/i18n/types';
+import { RecursivePartial } from '@/types/common';
 
 const translations: RecursivePartial<Translations> = {
 	GRAMMAR: {

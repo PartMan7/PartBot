@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 import type { PSRoomConfig, UnparsedPSRoomConfig } from '@/types/ps';
 
 const schema = new mongoose.Schema({
