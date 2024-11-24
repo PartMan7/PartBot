@@ -2,7 +2,6 @@ import { PSAltCache, PSSeenCache } from '@/cache';
 import { rename } from '@/database/alts';
 import { seeUser } from '@/database/seens';
 import { fromHumanTime, toId } from '@/tools';
-import { log } from '@/utils/logger';
 
 import type { Client } from 'ps-client';
 

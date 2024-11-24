@@ -1,5 +1,6 @@
 import { watch } from 'chokidar';
 import EventEmitter from 'events';
+import { promises as fs } from 'fs';
 
 import { reloadCommands } from '@/ps/loaders/commands';
 import { cachebuster } from '@/utils/cachebuster';

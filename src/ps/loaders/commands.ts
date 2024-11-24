@@ -1,3 +1,5 @@
+import { promises as fs } from 'fs';
+
 import { PSAliases, PSCommands } from '@/cache';
 import { resetCache } from '@/cache/reset';
 import getSecretCommands from '@/secrets/commands/ps';

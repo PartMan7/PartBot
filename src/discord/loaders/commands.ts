@@ -1,4 +1,5 @@
 import { REST, Routes, SlashCommandBuilder } from 'discord.js';
+import { promises as fs } from 'fs';
 
 import { DiscCommands } from '@/cache';
 import { resetCache } from '@/cache/reset';
