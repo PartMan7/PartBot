@@ -5,8 +5,8 @@ import { log } from '@/utils/logger';
 
 log('PartBot is starting up...');
 
-import '@/ps';
-import '@/discord';
-import '@/web';
 import '@/database';
+import '@/discord';
+import '@/ps';
 import '@/sentinel';
+import '@/web';
