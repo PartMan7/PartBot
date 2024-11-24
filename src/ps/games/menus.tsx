@@ -4,7 +4,7 @@ import { Button, Username } from '@/utils/components/ps';
 
 import type { Room } from 'ps-client';
 import type { ReactElement } from 'react';
-import type { BasePlayer, Meta } from '@/ps/games/common';
+import type { Player, Meta } from '@/ps/games/common';
 import { prefix } from '@/config/ps';
 
 export function renderMenu(room: Room, meta: Meta, isStaff: boolean): ReactElement {
@@ -72,7 +72,7 @@ export function renderBackups(room: Room, meta: Meta): ReactElement {
 			<hr />
 			{stashedGames.length > 0 ? (
 				stashedGames.map(game => {
-					let parsed: { players: Record<string, BasePlayer> };
+					let parsed: { players: Record<string, Player> };
 					try {
 						parsed = JSON.parse(game.backup);
 					} catch (e) {

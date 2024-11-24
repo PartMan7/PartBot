@@ -192,7 +192,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					const { game, ctx } = getGame(arg, { action: 'sub' }, { room: message.target, $T });
 					const users = ctx.split(',').map(Tools.toId);
 					const outUser = users.find(user => Object.values(game.players).some(player => player.id === user));
-					const outTurn = (Object.keys(game.players) as (keyof typeof game.players)[]).find(turn => game.players[turn].id === outUser);
+					const outTurn = Object.keys(game.players).find(turn => game.players[turn].id === outUser) as typeof game.turn;
 					const inUserId = users.find(user => !Object.values(game.players).some(player => player.id === user));
 					const inUser = inUserId ? PS.getUser(inUserId) : false;
 					if (!inUser || !outUser || !outTurn) throw new ChatError($T('GAME.IMPOSTOR_ALERT'));

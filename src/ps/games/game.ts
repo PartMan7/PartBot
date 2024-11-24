@@ -13,13 +13,13 @@ import { GameModel, uploadGame } from '@/database/games';
 import type { Room, User } from 'ps-client';
 import type { ReactElement } from 'react';
 import type { TranslationFn } from '@/i18n/types';
-import type { ActionResponse, BaseGameTypes, BasePlayer, BaseState, GamesList, Meta } from '@/ps/games/common';
+import type { ActionResponse, Player, BaseState, GamesList, Meta } from '@/ps/games/common';
 
 export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
 
 const backupKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log', 'startedAt', 'createdAt'] as const;
 
-export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
+export class Game<State extends BaseState> {
 	meta: Meta;
 	id: string;
 	$T: TranslationFn;
@@ -50,8 +50,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		msg: string;
 	};
 
-	// @ts-expect-error -- Players aren't initialized yet
-	players: Record<State['turn'], BasePlayer & GameTypes['player']> = {};
+	players: Record<string, Player> = {};
 	spectators: string[] = [];
 
 	// Game-provided methods:
@@ -61,9 +60,9 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	action?(user: User, ctx: string): void;
 
 	onAddPlayer?(user: User, ctx: string): ActionResponse<Record<string, unknown>>;
-	onLeavePlayer?(player: BasePlayer, ctx: string | User): ActionResponse;
-	onForfeitPlayer?(player: BasePlayer, ctx: string | User): ActionResponse;
-	onReplacePlayer?(turn: State['turn'], withPlayer: User): ActionResponse<BasePlayer & GameTypes['player']>;
+	onLeavePlayer?(player: Player, ctx: string | User): ActionResponse;
+	onForfeitPlayer?(player: Player, ctx: string | User): ActionResponse;
+	onReplacePlayer?(turn: State['turn'], withPlayer: User): ActionResponse<Player>;
 	onStart?(): ActionResponse;
 	onEnd?(type?: 'force' | 'dq'): string;
 	trySkipPlayer?(turn: State['turn']): boolean;
@@ -87,7 +86,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 
 		(PSGames[this.meta.id] ??= {})[this.id] = this as unknown as InstanceType<Games[GamesList]['instance']>;
 		if (ctx.backup) {
-			const parsedBackup: Pick<Game<BaseState, BaseGameTypes>, (typeof backupKeys)[number]> = JSON.parse(ctx.backup);
+			const parsedBackup: Pick<Game<BaseState>, (typeof backupKeys)[number]> = JSON.parse(ctx.backup);
 			backupKeys.forEach(key => {
 				switch (key) {
 					case 'log':
@@ -176,9 +175,9 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		const availableSlots: number | State['turn'][] = this.sides
 			? this.turns.filter(turn => !this.players[turn])
 			: this.meta.maxSize! - Object.keys(this.players).length;
-		if (Object.values(this.players).some((player: BasePlayer) => player.id === user.id))
+		if (Object.values(this.players).some((player: Player) => player.id === user.id))
 			throw new ChatError(this.$T('GAME.ALREADY_JOINED'));
-		const newPlayer: BasePlayer = {
+		const newPlayer: Player = {
 			name: user.name,
 			id: user.id,
 			turn: user.id,
@@ -220,7 +219,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	// ctx: string for DQ; ctx: User for self-leave
 	removePlayer(ctx: string | User): ActionResponse<{ message: string; cb?: () => void }> {
 		const staffAction = typeof ctx === 'string';
-		const player = (Object.values(this.players) as BasePlayer[]).find(p => p.id === (typeof ctx === 'string' ? ctx : ctx.id));
+		const player = Object.values(this.players).find(p => p.id === (typeof ctx === 'string' ? ctx : ctx.id));
 		if (!player) return { success: false, error: this.$T('GAME.NOT_PLAYING') };
 		if (this.started) {
 			const forfeitPlayer = this.onForfeitPlayer?.(player, ctx);
@@ -231,7 +230,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 				data: {
 					message: staffAction ? `${player.name} has been disqualified from the game.` : 'You have forfeited the game.',
 					cb: () => {
-						const playersLeft = Object.values(this.players).filter((player: BasePlayer) => !player.out);
+						const playersLeft = Object.values(this.players).filter((player: Player) => !player.out);
 						if (playersLeft.length <= 1) this.end('dq');
 						else if (this.turn === player.turn) this.nextPlayer(); // Needs to be run AFTER consumer has finished DQing
 					},
@@ -250,9 +249,9 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 	}
 
 	replacePlayer(turn: State['turn'], withPlayer: User): ActionResponse<string> {
-		if (Object.values(this.players).some((player: BasePlayer) => player.id === withPlayer.id))
+		if (Object.values(this.players).some((player: Player) => player.id === withPlayer.id))
 			throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
-		const assign: Partial<BasePlayer> = {
+		const assign: Partial<Player> = {
 			name: withPlayer.name,
 			id: withPlayer.id,
 		};
@@ -311,7 +310,7 @@ export class Game<State extends BaseState, GameTypes extends BaseGameTypes> {
 		if (!this.started) return;
 		if ('render' in this && typeof this.render === 'function') {
 			if (user) {
-				const asPlayer = (Object.values(this.players) as BasePlayer[]).find(player => player.id === user);
+				const asPlayer = Object.values(this.players).find(player => player.id === user);
 				if (asPlayer) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
 				if (this.spectators.includes(user)) return this.sendHTML(user, this.render(null));
 				throw new ChatError('User not in players/spectators');

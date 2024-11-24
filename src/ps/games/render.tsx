@@ -1,10 +1,9 @@
 import type { ReactElement, ReactNode } from 'react';
 import type { Game } from '@/ps/games/game';
-import type { BaseGameTypes, BaseState } from '@/ps/games/common';
+import type { BaseState } from '@/ps/games/common';
 import { Button } from '@/utils/components/ps';
-import { prefix } from '@/config/ps';
 
-export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this: Game<S, T>): ReactElement {
+export function renderSignups<State extends BaseState>(this: Game<State>): ReactElement {
 	return (
 		<>
 			<hr />
@@ -29,7 +28,7 @@ export function renderSignups<S extends BaseState, T extends BaseGameTypes>(this
 	);
 }
 
-export function renderCloseSignups<S extends BaseState, T extends BaseGameTypes>(this: Game<S, T>): ReactElement {
+export function renderCloseSignups<State extends BaseState>(this: Game<State>): ReactElement {
 	return (
 		<>
 			<hr />

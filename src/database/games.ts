@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import type { BasePlayer } from '@/ps/games/common';
+import type { Player } from '@/ps/games/common';
 
 const schema = new mongoose.Schema({
 	id: {
@@ -56,7 +56,7 @@ export interface GameModel {
 	id: string;
 	game: string;
 	room: string;
-	players: Map<string, BasePlayer>;
+	players: Map<string, Player>;
 	created: Date;
 	started: Date | null;
 	ended: Date;

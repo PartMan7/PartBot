@@ -3,13 +3,13 @@ import { Game, BaseContext, createGrid } from '@/ps/games/game';
 export { meta } from '@/ps/games/othello/meta';
 import { deepClone } from '@/utils/deepClone';
 import { render } from '@/ps/games/othello/render';
+import { winnerIcon } from '@/discord/constants/emotes';
 
 import type { User } from 'ps-client';
 import type { Board, State, Turn, RenderCtx, WinCtx } from '@/ps/games/othello/types';
-import { winnerIcon } from '@/discord/constants/emotes';
-import { EndType } from '@/ps/games/common';
+import type { EndType } from '@/ps/games/common';
 
-export class Othello extends Game<State, object> {
+export class Othello extends Game<State> {
 	winCtx?: WinCtx | { type: EndType };
 	cache: Record<string, Record<Turn, number>> = {};
 	constructor(ctx: BaseContext) {
