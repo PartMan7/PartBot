@@ -53,4 +53,8 @@ export default {
 	QUOTES: {
 		NO_QUOTES_FOUND: 'No quotes found.',
 	},
+
+	COMMANDS: {
+		UPTIME: 'The Bot has been running for {{time}}.',
+	},
 };
