@@ -1,6 +1,4 @@
 {
 	"$schema": "https://swc.rs/schema.json",
-	"module": {
-		"type": "commonjs"
-	}
+	"module": { "type": "commonjs" }
 }
