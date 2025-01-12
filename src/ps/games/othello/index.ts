@@ -39,7 +39,7 @@ export class Othello extends Game<State> {
 		return count;
 	}
 
-	action(user: User, ctx: string) {
+	action(user: User, ctx: string): void {
 		if (!this.started) throw new ChatError(this.$T('GAME.NOT_STARTED'));
 		if (user.id !== this.players[this.turn!].id) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
 		const [i, j] = ctx.split('-').map(num => parseInt(num));

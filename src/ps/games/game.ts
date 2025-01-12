@@ -16,7 +16,7 @@ import { Timer } from '@/utils/timer';
 
 import type { GameModel } from '@/database/games';
 import type { TranslationFn } from '@/i18n/types';
-import type { ActionResponse, BaseState, GamesList, Meta, Player } from '@/ps/games/common';
+import type { ActionResponse, BaseState, Meta, Player } from '@/ps/games/common';
 import type { Games } from '@/ps/games/index';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, Room, User } from 'ps-client';
@@ -62,10 +62,14 @@ export class Game<State extends BaseState> {
 	spectators: string[] = [];
 
 	// Game-provided methods:
-	render?(side: State['turn'] | null): ReactElement;
+	render(side: State['turn'] | null): ReactElement;
+	render() {
+		return null as unknown as ReactElement;
+	}
 	renderEmbed?(): EmbedBuilder;
 
-	action?(user: User, ctx: string): void;
+	action(user: User, ctx: string): void;
+	action() {}
 
 	onAddPlayer?(user: User, ctx: string): ActionResponse<Record<string, unknown>>;
 	onLeavePlayer?(player: Player, ctx: string | User): ActionResponse;
@@ -91,6 +95,11 @@ export class Game<State extends BaseState> {
 		if (ctx.meta.timer) {
 			this.timerLength = ctx.meta.timer;
 			this.pokeTimerLength = ctx.meta.pokeTimer ?? ctx.meta.timer;
+		}
+
+		if (ctx.meta.players === 'single') {
+			this.addPlayer(ctx.by, null);
+			this.start();
 		}
 
 		if (!PSGames[this.meta.id]) PSGames[this.meta.id] = {};
@@ -180,8 +189,9 @@ export class Game<State extends BaseState> {
 		this.room.sendHTML(closeSignupsHTML, { name: `${this.meta.id}${this.id}` });
 	}
 
-	addPlayer(user: User, ctx: string): ActionResponse<{ started: boolean; as: BaseState['turn'] }> {
+	addPlayer(user: User, ctx: string | null): ActionResponse<{ started: boolean; as: BaseState['turn'] }> {
 		if (this.started) return { success: false, error: this.$T('GAME.ALREADY_STARTED') };
+		if (this.meta.players === 'single' && Object.keys(this.players).length >= 1) throw new Error(this.$T('GAME.IS_FULL'));
 		const availableSlots: number | State['turn'][] = this.sides
 			? this.turns.filter(turn => !this.players[turn])
 			: this.meta.maxSize! - Object.keys(this.players).length;
@@ -199,13 +209,13 @@ export class Game<State extends BaseState> {
 			if (availableSlots.length === 0) return { success: false, error: this.$T('GAME.IS_FULL') };
 			let turn = ctx as State['turn'];
 			// `-` is the 'random' side
-			if (turn === '-') turn = availableSlots.random();
+			if (turn === '-') turn = availableSlots.random(this.prng);
 			else if (!availableSlots.includes(turn))
 				return { success: false, error: this.$T('GAME.INVALID_SIDE', { sides: availableSlots.list(this.$T) }) };
 			newPlayer.turn = turn;
 		}
 		if (this.onAddPlayer) {
-			const extraData = this.onAddPlayer(user, ctx);
+			const extraData = this.onAddPlayer(user, ctx as string);
 			if (!extraData.success) return extraData;
 			Object.assign(newPlayer, extraData);
 		}
@@ -281,7 +291,7 @@ export class Game<State extends BaseState> {
 		const tryStart = this.onStart?.();
 		if (tryStart?.success === false) return tryStart;
 		this.started = true;
-		this.turns ??= Object.keys(this.players).shuffle();
+		if (!this.turns.length) this.turns = Object.keys(this.players).shuffle();
 		this.nextPlayer();
 		this.startedAt = new Date();
 		this.setTimer('Game started');
@@ -372,7 +382,7 @@ export class Game<State extends BaseState> {
 	}
 }
 
-export type BaseContext = { room: Room; id: string; meta: Meta; $T: TranslationFn; backup?: string };
+export type BaseContext = { by: User; room: Room; id: string; meta: Meta; $T: TranslationFn; backup?: string; args: string[] };
 
 export function createGrid<T>(x: number, y: number, fill: (x: number, y: number) => T) {
 	return Array.from({ length: x }).map((_, i) => Array.from({ length: y }).map((_, j) => fill(i, j)));

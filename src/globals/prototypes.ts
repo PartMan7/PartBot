@@ -1,7 +1,7 @@
 import { sample, useRNG } from '@/utils/random';
 
 import type { TranslationFn } from '@/i18n/types';
-import type { RNGSource} from '@/utils/random';
+import type { RNGSource } from '@/utils/random';
 
 declare global {
 	interface Array<T> {
@@ -13,6 +13,7 @@ declare global {
 		unique(): T[];
 		list($T?: TranslationFn | string): string;
 		space<S = unknown>(spacer: S): (T | S)[];
+		count(): Record<T & (string | number), number>;
 	}
 	interface ReadonlyArray<T> {
 		random(rng?: RNGSource): T;
@@ -21,6 +22,7 @@ declare global {
 		unique(): T[];
 		list($T?: TranslationFn): string;
 		space<S = unknown>(spacer: S): (T | S)[];
+		count(): Record<T & string, number>;
 	}
 
 	interface String {
@@ -143,6 +145,19 @@ Object.defineProperties(Array.prototype, {
 				},
 				[this[0]] as (T | S)[]
 			);
+		},
+	},
+	count: {
+		enumerable: false,
+		writable: false,
+		configurable: false,
+		value: function <T extends string | number | symbol = unknown & (string | number)>(this: T[]): Record<T, number> {
+			const out = {} as Record<T, number>;
+			this.forEach(term => {
+				out[term] ??= 0;
+				out[term]++;
+			});
+			return out;
 		},
 	},
 });

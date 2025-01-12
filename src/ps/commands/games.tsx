@@ -136,12 +136,19 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				help: 'Creates a new game.',
 				syntax: 'CMD [mods?]',
 				perms: Symbol.for('games.create'),
-				async run({ message, $T }) {
+				async run({ message, args, $T }) {
+					if (Game.meta.players === 'single') {
+						if (Object.values(PSGames[gameId] ?? {}).find(game => message.author.id in game.players)) {
+							throw new ChatError($T('GAME.ALREADY_JOINED'));
+						}
+					}
 					const id = generateId();
-					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T });
+					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T, args, by: message.author });
 					if (game.meta.players === 'many') {
 						message.reply(`/notifyrank all, ${Game.meta.name}, A game of ${Game.meta.name} has been created!,${gameId}signup`);
 						game.signups();
+					} else if (game.meta.players === 'single') {
+						game.update();
 					}
 				},
 			},
@@ -362,7 +369,15 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					const lookup = gameCache.get(id);
 					if (lookup.room !== message.target.roomid) throw new ChatError($T('WRONG_ROOM'));
 					if (lookup.game !== gameId) throw new ChatError($T('GAME.RESTORING_WRONG_TYPE'));
-					const game = new Game.instance({ id: lookup.id, meta: Game.meta, room: message.target, $T, backup: lookup.backup });
+					const game = new Game.instance({
+						id: lookup.id,
+						meta: Game.meta,
+						room: message.target,
+						$T,
+						by: message.author,
+						backup: lookup.backup,
+						args: [],
+					});
 					message.reply($T('GAME.RESTORED', { id: game.id }));
 					if (game.started) game.update();
 					else game.signups();
