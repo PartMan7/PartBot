@@ -109,12 +109,12 @@ export type PSCommand = {
 	 * Aliases for the current (sub) command.
 	 * @example aliases: ['c4', 'cfour'] // for the connectfour command
 	 */
-	aliases?: string[];
+	aliases?: readonly string[];
 	/**
 	 * Multi-word aliases for command.
 	 * @example { addquote: ['quote', 'add'] }
 	 */
-	extendedAliases?: { [key: string]: string[] };
+	extendedAliases?: { [key: string]: readonly string[] };
 	/**
 	 * Permissions for command.
 	 * If a value is passed, allows ranks above (and including) the provided rank.
@@ -167,9 +167,9 @@ export type DiscCommand = {
 	/**
 	 * Aliases for the command.
 	 */
-	aliases?: string[];
+	aliases?: readonly string[];
 	perms?: 'admin' | ((interaction: DiscInteraction) => boolean);
-	servers?: string[];
+	servers?: readonly string[];
 	args?: (slash: SlashCommandBuilder) => void;
 	run(interaction: DiscInteraction, $T: TranslationFn): Promise<any>;
 };

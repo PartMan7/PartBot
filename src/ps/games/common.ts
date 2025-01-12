@@ -1,19 +1,21 @@
 export type Meta = {
 	name: string;
 	id: GamesList;
-	aliases?: string[];
+	aliases?: readonly string[];
 
+	players: 'single' | 'many';
 	turns?: Record<string, string>;
 	minSize?: number;
 	maxSize?: number;
 
 	autostart?: boolean;
-	timer: number | false;
-	pokeTimer: number | false | undefined;
+	timer?: number | false;
+	pokeTimer?: number | false | undefined;
 };
 
 export enum GamesList {
 	Othello = 'othello',
+	Mastermind = 'mastermind',
 }
 
 export interface Player {

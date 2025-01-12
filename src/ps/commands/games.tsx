@@ -7,6 +7,7 @@ import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
 
 import type { TranslationFn } from '@/i18n/types';
+import type { BaseGame } from '@/ps/games/game';
 import type { PSCommand } from '@/types/chat';
 import type { Room } from 'ps-client';
 import type { HTMLopts } from 'ps-client/classes/common';
@@ -27,7 +28,7 @@ type RoomContext = { room: Room; $T: TranslationFn };
 const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 	const gameId = _gameId as keyof Games;
 
-	type GameFilter = (game: InstanceType<typeof Game.instance>) => boolean;
+	type GameFilter = (game: BaseGame) => boolean;
 
 	function getByContext(ctx: SearchContext): GameFilter {
 		return game => {
@@ -66,7 +67,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 		searchCtx: SearchContext,
 		roomCtx: RoomContext,
 		restCtx: string
-	): InstanceType<typeof Game.instance> | null {
+	): BaseGame | null {
 		if (!PSGames[gameId]) return null;
 		if (typeof specifier === 'string' && /^#\w{4}$/.test(specifier)) {
 			const game = PSGames[gameId][specifier.toUpperCase()];
@@ -107,11 +108,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 		return null;
 	}
 
-	function getGame(
-		feed: string,
-		searchCtx: SearchContext,
-		roomCtx: RoomContext
-	): { game: InstanceType<typeof Game.instance>; ctx: string } {
+	function getGame(feed: string, searchCtx: SearchContext, roomCtx: RoomContext): { game: BaseGame; ctx: string } {
 		const { $T } = roomCtx;
 		const [fullSpec, fullCtx] = feed.lazySplit(/\s*,\s*/, 1);
 		const fullGame = gameFromContext(fullSpec, searchCtx, roomCtx, fullCtx);
@@ -142,8 +139,10 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				async run({ message, $T }) {
 					const id = generateId();
 					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T });
-					message.reply(`/notifyrank all, ${Game.meta.name}, A game of ${Game.meta.name} has been created!,${gameId}signup`);
-					game.signups();
+					if (game.meta.players === 'many') {
+						message.reply(`/notifyrank all, ${Game.meta.name}, A game of ${Game.meta.name} has been created!,${gameId}signup`);
+						game.signups();
+					}
 				},
 			},
 			join: {
@@ -155,7 +154,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					const { game, ctx } = getGame(arg, { action: 'join', user: message.author.id }, { room: message.target, $T });
 					const res = game.addPlayer(message.author, ctx);
 					if (!res.success) throw new ChatError(res.error);
-					const turnMsg = Game.meta.turns ? ` as ${Game.meta.turns[res.data!.as]}` : '';
+					const turnMsg = 'turns' in Game.meta ? ` as ${Game.meta.turns[res.data!.as as keyof typeof Game.meta.turns]}` : '';
 					message.reply(
 						`${message.author.name} joined the game of ${Game.meta.name}${turnMsg}${ctx === '-' ? ' (randomly chosen)' : ''}! [${game.id}]`
 					); // TODO: $T
@@ -170,7 +169,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				syntax: 'CMD [id], [move]',
 				async run({ message, arg, $T }) {
 					const { game, ctx } = getGame(arg, { action: 'play', user: message.author.id }, { room: message.target, $T });
-					game.action(message.author, ctx);
+					game.action!(message.author, ctx);
 				},
 			},
 			end: {
@@ -191,6 +190,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				perms: Symbol.for('games.manage'),
 				syntax: 'CMD #id, [user1], [user2]',
 				async run({ message, arg, $T }) {
+					if (Game.meta.players === 'single') throw new ChatError($T('GAME.COMMAND_NOT_ENABLED', { game: Game.meta.name }));
 					const { game, ctx } = getGame(arg, { action: 'sub' }, { room: message.target, $T });
 					const users = ctx.split(',').map(toId);
 					const outUser = users.find(user => Object.values(game.players).some(player => player.id === user));

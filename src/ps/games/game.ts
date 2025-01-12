@@ -58,7 +58,7 @@ export class Game<State extends BaseState> {
 		msg: string;
 	};
 
-	players: Record<string, Player> = {};
+	players: Record<BaseState['turn'], Player> = {};
 	spectators: string[] = [];
 
 	// Game-provided methods:
@@ -70,10 +70,10 @@ export class Game<State extends BaseState> {
 	onAddPlayer?(user: User, ctx: string): ActionResponse<Record<string, unknown>>;
 	onLeavePlayer?(player: Player, ctx: string | User): ActionResponse;
 	onForfeitPlayer?(player: Player, ctx: string | User): ActionResponse;
-	onReplacePlayer?(turn: State['turn'], withPlayer: User): ActionResponse<Player>;
+	onReplacePlayer?(turn: BaseState['turn'], withPlayer: User): ActionResponse<Player>;
 	onStart?(): ActionResponse;
 	onEnd?(type?: 'force' | 'dq'): string;
-	trySkipPlayer?(turn: State['turn']): boolean;
+	trySkipPlayer?(turn: BaseState['turn']): boolean;
 
 	constructor(ctx: BaseContext) {
 		this.id = ctx.id;
@@ -93,9 +93,10 @@ export class Game<State extends BaseState> {
 			this.pokeTimerLength = ctx.meta.pokeTimer ?? ctx.meta.timer;
 		}
 
-		(PSGames[this.meta.id] ??= {})[this.id] = this as unknown as InstanceType<Games[GamesList]['instance']>;
+		if (!PSGames[this.meta.id]) PSGames[this.meta.id] = {};
+		PSGames[this.meta.id]![this.id] = this as unknown as InstanceType<Games[typeof this.meta.id]['instance']>;
 		if (ctx.backup) {
-			const parsedBackup: Pick<Game<BaseState>, (typeof backupKeys)[number]> = JSON.parse(ctx.backup);
+			const parsedBackup: Pick<BaseGame, (typeof backupKeys)[number]> = JSON.parse(ctx.backup);
 			backupKeys.forEach(key => {
 				switch (key) {
 					case 'log':
@@ -179,7 +180,7 @@ export class Game<State extends BaseState> {
 		this.room.sendHTML(closeSignupsHTML, { name: `${this.meta.id}${this.id}` });
 	}
 
-	addPlayer(user: User, ctx: string): ActionResponse<{ started: boolean; as: State['turn'] }> {
+	addPlayer(user: User, ctx: string): ActionResponse<{ started: boolean; as: BaseState['turn'] }> {
 		if (this.started) return { success: false, error: this.$T('GAME.ALREADY_STARTED') };
 		const availableSlots: number | State['turn'][] = this.sides
 			? this.turns.filter(turn => !this.players[turn])
@@ -257,7 +258,8 @@ export class Game<State extends BaseState> {
 		};
 	}
 
-	replacePlayer(turn: State['turn'], withPlayer: User): ActionResponse<string> {
+	replacePlayer(_turn: BaseState['turn'], withPlayer: User): ActionResponse<string> {
+		const turn = _turn as State['turn'];
 		if (Object.values(this.players).some((player: Player) => player.id === withPlayer.id))
 			throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
 		const assign: Partial<Player> = {
@@ -375,3 +377,5 @@ export type BaseContext = { room: Room; id: string; meta: Meta; $T: TranslationF
 export function createGrid<T>(x: number, y: number, fill: (x: number, y: number) => T) {
 	return Array.from({ length: x }).map((_, i) => Array.from({ length: y }).map((_, j) => fill(i, j)));
 }
+
+export type BaseGame = Game<BaseState>;

@@ -1,6 +1,8 @@
-import { CellRenderer, Table } from '@/ps/games/render';
+import { Table } from '@/ps/games/render';
 import { Button } from '@/utils/components/ps';
+
 import type { RenderCtx, Turn } from '@/ps/games/othello/types';
+import type { CellRenderer } from '@/ps/games/render';
 
 const roundStyles = { height: 24, width: 24, display: 'inline-block', borderRadius: 100, marginLeft: 3, marginTop: 3 };
 

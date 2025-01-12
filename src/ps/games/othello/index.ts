@@ -2,7 +2,6 @@ import { EmbedBuilder } from 'discord.js';
 
 import { winnerIcon } from '@/discord/constants/emotes';
 import { Game, createGrid } from '@/ps/games/game';
-export { meta } from '@/ps/games/othello/meta';
 import { render } from '@/ps/games/othello/render';
 import { ChatError } from '@/utils/chatError';
 import { deepClone } from '@/utils/deepClone';
@@ -11,6 +10,8 @@ import type { EndType } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
 import type { Board, RenderCtx, State, Turn, WinCtx } from '@/ps/games/othello/types';
 import type { User } from 'ps-client';
+
+export { meta } from '@/ps/games/othello/meta';
 
 export class Othello extends Game<State> {
 	winCtx?: WinCtx | { type: EndType };

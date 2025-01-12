@@ -1,4 +1,5 @@
 import type { Games } from '@/ps/games';
+import type { BaseGame } from '@/ps/games/game';
 import type { DiscCommand, PSCommand } from '@/types/chat';
 import type { PSRoomConfig } from '@/types/ps';
 import type { Timer } from '@/utils/timer';
@@ -18,7 +19,7 @@ export const PSSeenCache: { [key: string]: { at: Date; in: string[] } } = {};
 export const PSQuoteRoomPrefs: { [key: string]: { room: string; at: Date } } = {};
 
 // Games
-export const PSGames: { [key in keyof Games]?: Record<string, InstanceType<Games[key]['instance']>> } = {};
+export const PSGames: { [key in keyof Games]?: Record<string, BaseGame> } = {};
 
 // Discord
 export const DiscCommands: { [key: string]: DiscCommand & { path: string; isAlias?: boolean; slash: SlashCommandBuilder } } = {};

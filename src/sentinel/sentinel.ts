@@ -45,11 +45,11 @@ export default function createSentinel() {
 			pattern: /\/ps\/games\//,
 			reload: async filepaths => {
 				['common', 'game', 'index', 'render'].forEach(file => cachebuster(`@/ps/games/${file}`));
-				const games = filepaths.reduce((acc, filepath) => {
+				const games = filepaths.reduce<string[]>((acc, filepath) => {
 					const match = filepath.match(/\/ps\/games\/([^/]*)\//);
 					if (match) acc.push(match[1]);
 					return acc;
-				}, [] as string[]);
+				}, []);
 				await Promise.all(
 					games.map(async game => {
 						const files = await fs.readdir(fsPath('ps', 'games', game));
