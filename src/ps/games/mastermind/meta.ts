@@ -5,4 +5,5 @@ export const meta = {
 	id: GamesList.Mastermind,
 	aliases: ['mm'],
 	players: 'single',
+	abbr: 'mm',
 } as const;

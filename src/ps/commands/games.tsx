@@ -142,7 +142,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 							throw new ChatError($T('GAME.ALREADY_JOINED'));
 						}
 					}
-					const id = Game.meta.players === 'single' ? message.author.id : generateId();
+					const id = Game.meta.players === 'single' ? `${Game.meta.abbr}-${message.author.id}` : generateId();
 					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T, args, by: message.author });
 					if (game.meta.players === 'many') {
 						message.reply(`/notifyrank all, ${Game.meta.name}, A game of ${Game.meta.name} has been created!,${gameId}signup`);
