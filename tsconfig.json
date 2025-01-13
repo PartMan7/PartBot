@@ -4,6 +4,7 @@
 		"target": "es2021",
 		"noEmit": true, // PartBot runs through ts-node; we don't compile separately
 		"jsx": "react-jsx",
+		"skipLibCheck": true,
 		"module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
 		"esModuleInterop": true, // Allow default-importing stuff like path
 		"strict": true,

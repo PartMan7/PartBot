@@ -3,6 +3,7 @@ import { render } from '@/ps/games/mastermind/render';
 import { ChatError } from '@/utils/chatError';
 import { sample } from '@/utils/random';
 
+import type { EndType } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
 import type { Guess, GuessResult, State } from '@/ps/games/mastermind/types';
 import type { User } from 'ps-client';
@@ -10,14 +11,21 @@ import type { User } from 'ps-client';
 export { meta } from '@/ps/games/mastermind/meta';
 
 export class Mastermind extends Game<State> {
+	ended = false;
+
 	constructor(ctx: BaseContext) {
 		super(ctx);
+
+		this.state.cap = parseInt(ctx.args.join(''));
+		if (this.state.cap > 12 || this.state.cap < 4) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+		super.persist(ctx);
 
 		if (ctx.backup) return;
 		this.state.board = [];
 		this.state.solution = Array.from({ length: 4 }, () => sample(8, this.prng)) as Guess;
-		this.state.cap = parseInt(ctx.args.join(''));
-		if (isNaN(this.state.cap)) this.state.cap = 6;
+		if (isNaN(this.state.cap)) this.state.cap = 8;
+
+		super.after(ctx);
 	}
 	action(user: User, ctx: string): void {
 		if (!this.started) throw new ChatError(this.$T('GAME.NOT_STARTED'));
@@ -28,10 +36,10 @@ export class Mastermind extends Game<State> {
 		const result = this.guess(guess);
 		this.state.board.push({ guess, result });
 		if (result.exact === this.state.solution.length) {
-			return this.end(); // Set winCtx?
+			return this.end();
 		}
 		if (this.state.board.length >= this.state.cap) {
-			return this.end('loss'); // FIXME support loss
+			return this.end('loss');
 		}
 		this.nextPlayer();
 	}
@@ -54,15 +62,17 @@ export class Mastermind extends Game<State> {
 		return { exact, moved };
 	}
 
-	// TODO
-	onEnd(type: any): string {
+	onEnd(type: EndType): string {
+		this.ended = true;
+		const player = Object.values(this.players)[0].name;
 		if (type === 'loss') {
-			return `${Object.values(this.players)[0].name} was unable to guess ${this.state.solution.join('')} in ${this.state.cap} guesses.`;
+			return `${player} was unable to guess ${this.state.solution.join('')} in ${this.state.cap} guesses.`;
 		}
-		return `Ended in ${this.state.board.length} turn(s).`; // TODO
+		const guesses = this.state.board.length;
+		return `${player} guessed ${this.state.solution.join('')} in ${guesses} turn${guesses === 1 ? '' : 's'}!`;
 	}
 
-	render() {
-		return render(this.state.board);
+	render(asPlayer: string | null) {
+		return render.bind(this.renderCtx)(this.state, asPlayer ? (this.ended ? 'over' : 'playing') : 'spectator');
 	}
 }

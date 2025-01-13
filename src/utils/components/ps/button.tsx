@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactElement, ReactNode } from 'react';
+import type { HTMLAttributes, ReactElement } from 'react';
 
 export function Button({
 	name = 'send',
@@ -8,7 +8,6 @@ export function Button({
 }: HTMLAttributes<HTMLButtonElement> & {
 	name?: 'send' | 'parseCommand' | 'receive';
 	value: string;
-	children: ReactNode;
 }): ReactElement {
 	return (
 		<button name={name} value={value} {...props}>

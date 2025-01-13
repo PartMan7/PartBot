@@ -16,8 +16,7 @@ import { Timer } from '@/utils/timer';
 
 import type { GameModel } from '@/database/games';
 import type { TranslationFn } from '@/i18n/types';
-import type { ActionResponse, BaseState, Meta, Player } from '@/ps/games/common';
-import type { Games } from '@/ps/games/index';
+import type { ActionResponse, BaseState, EndType, Meta, Player } from '@/ps/games/common';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, Room, User } from 'ps-client';
 import type { ReactElement } from 'react';
@@ -76,7 +75,10 @@ export class Game<State extends BaseState> {
 	onForfeitPlayer?(player: Player, ctx: string | User): ActionResponse;
 	onReplacePlayer?(turn: BaseState['turn'], withPlayer: User): ActionResponse<Player>;
 	onStart?(): ActionResponse;
-	onEnd?(type?: 'force' | 'dq'): string;
+	onEnd(type?: EndType): string;
+	onEnd() {
+		return 'Game ended';
+	}
 	trySkipPlayer?(turn: BaseState['turn']): boolean;
 
 	constructor(ctx: BaseContext) {
@@ -96,14 +98,10 @@ export class Game<State extends BaseState> {
 			this.timerLength = ctx.meta.timer;
 			this.pokeTimerLength = ctx.meta.pokeTimer ?? ctx.meta.timer;
 		}
-
-		if (ctx.meta.players === 'single') {
-			this.addPlayer(ctx.by, null);
-			this.start();
-		}
-
+	}
+	persist(ctx: BaseContext) {
 		if (!PSGames[this.meta.id]) PSGames[this.meta.id] = {};
-		PSGames[this.meta.id]![this.id] = this as unknown as InstanceType<Games[typeof this.meta.id]['instance']>;
+		PSGames[this.meta.id]![this.id] = this as BaseGame;
 		if (ctx.backup) {
 			const parsedBackup: Pick<BaseGame, (typeof backupKeys)[number]> = JSON.parse(ctx.backup);
 			backupKeys.forEach(key => {
@@ -131,6 +129,12 @@ export class Game<State extends BaseState> {
 					}
 				}
 			});
+		}
+	}
+	after(ctx: BaseContext) {
+		if (this.meta.players === 'single') {
+			this.addPlayer(ctx.by, null);
+			this.start();
 		}
 	}
 
@@ -329,25 +333,23 @@ export class Game<State extends BaseState> {
 
 	update(user?: string) {
 		if (!this.started) return;
-		if ('render' in this && typeof this.render === 'function') {
-			if (user) {
-				const asPlayer = Object.values(this.players).find(player => player.id === user);
-				if (asPlayer) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
-				if (this.spectators.includes(user)) return this.sendHTML(user, this.render(null));
-				throw new ChatError('User not in players/spectators');
-			}
-			// TODO: Add ping to ps-client HTML opts
-			Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render!(side)));
-			this.room.send(`/highlighthtmlpage ${this.players[this.turn!].id}, ${this.id}, Your turn!`);
-			this.room.pageHTML(this.spectators, this.render(null), { name: this.id });
+		if (user) {
+			const asPlayer = Object.values(this.players).find(player => player.id === user);
+			if (asPlayer) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
+			if (this.spectators.includes(user)) return this.sendHTML(user, this.render(null));
+			throw new ChatError('User not in players/spectators');
 		}
+		// TODO: Add ping to ps-client HTML opts
+		Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render!(side)));
+		this.room.send(`/highlighthtmlpage ${this.players[this.turn!].id}, ${this.id}, Your turn!`);
+		this.room.pageHTML(this.spectators, this.render(null), { name: this.id });
 	}
 
-	end(type?: 'force' | 'dq'): void {
+	end(type?: EndType): void {
 		const message = this.onEnd!(type);
 		this.clearTimer();
 		this.update();
-		if (this.started) {
+		if (this.started && this.meta.players !== 'single') {
 			// TODO: Revisit broadcasting logic for single-player games
 			this.room.sendHTML(this.render!(null));
 		}
@@ -360,22 +362,22 @@ export class Game<State extends BaseState> {
 			if (channel && channel.type === ChannelType.GuildText) channel.send({ embeds: [embed] });
 		}
 		// Upload to DB
-		const model: GameModel = {
-			id: this.id,
-			game: this.meta.id,
-			room: this.roomid,
-			players: new Map(Object.entries(this.players)),
-
-			log: this.log.map(entry => JSON.stringify(entry)),
-
-			created: this.createdAt,
-			started: this.startedAt!,
-			ended: this.endedAt!,
-		};
-		uploadGame(model).catch(err => {
-			log(err);
-			throw new Error(`Failed to upload game ${this.id}`);
-		});
+		if (this.meta.players !== 'single') {
+			const model: GameModel = {
+				id: this.id,
+				game: this.meta.id,
+				room: this.roomid,
+				players: new Map(Object.entries(this.players)),
+				log: this.log.map(entry => JSON.stringify(entry)),
+				created: this.createdAt,
+				started: this.startedAt!,
+				ended: this.endedAt!,
+			};
+			uploadGame(model).catch(err => {
+				log(err);
+				throw new ChatError(`Failed to upload game ${this.id}`);
+			});
+		}
 		// Delete from cache
 		delete PSGames[this.meta.id]![this.id];
 		gameCache.delete(this.id);

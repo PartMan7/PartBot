@@ -137,6 +137,7 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 			if (checkPermissions(perm, message)) return message.sendHTML(html, opts);
 			else return message.target.privateHTML(message.author, html, opts);
 		};
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars -- FIXME when message overrides are supported
 		context.run = function (altCommand: string, ctx: Partial<PSCommandContext> = {}, messageOverrides: Partial<PSMessage> = {}) {
 			const altArgs = altCommand.split(/ +/);
 			const spacedArgs = altCommand.split(/( +)/);

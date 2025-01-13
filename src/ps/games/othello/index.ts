@@ -18,6 +18,7 @@ export class Othello extends Game<State> {
 	cache: Record<string, Record<Turn, number>> = {};
 	constructor(ctx: BaseContext) {
 		super(ctx);
+		super.persist(ctx);
 
 		if (ctx.backup) return;
 		const board = createGrid<Turn | null>(8, 8, () => null);
