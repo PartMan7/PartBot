@@ -381,7 +381,7 @@ export class Game<State extends BaseState> {
 			};
 			uploadGame(model).catch(err => {
 				log(err);
-				throw new ChatError(`Failed to upload game ${this.id}`);
+				this.room.send(`Failed to upload game ${this.id}`);
 			});
 		}
 		// Delete from cache
