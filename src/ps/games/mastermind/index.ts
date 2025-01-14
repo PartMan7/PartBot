@@ -78,6 +78,7 @@ export class Mastermind extends Game<State> {
 	external(user: User, ctx: string) {
 		if (this.state.board.length > 0) throw new ChatError(this.$T('GAME.ALREADY_STARTED'));
 		if (this.setBy) throw new ChatError('Too late!'); // TODO $T
+		if (user.id in this.players) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
 
 		this.state.solution = this.parseGuess(ctx);
 		this.setBy = user;
