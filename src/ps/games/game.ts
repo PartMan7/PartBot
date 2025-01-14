@@ -67,8 +67,10 @@ export class Game<State extends BaseState> {
 	}
 	renderEmbed?(): EmbedBuilder;
 
-	action(user: User, ctx: string): void;
+	action(user: User, ctx: string, reaction: boolean): void;
 	action() {}
+
+	external?(user: User, ctx: string): void;
 
 	onAddPlayer?(user: User, ctx: string): ActionResponse<Record<string, unknown>>;
 	onLeavePlayer?(player: Player, ctx: string | User): ActionResponse;
@@ -134,7 +136,7 @@ export class Game<State extends BaseState> {
 	after(ctx: BaseContext) {
 		if (this.meta.players === 'single') {
 			this.addPlayer(ctx.by, null);
-			this.start();
+			this.closeSignups(false);
 		}
 	}
 
@@ -183,14 +185,16 @@ export class Game<State extends BaseState> {
 		gameCache.set({ id: this.id, room: this.roomid, game: this.meta.id, backup });
 	}
 
+	renderSignups?(): ReactElement;
 	signups(): void {
 		if (this.started) throw new ChatError(this.$T('GAME.ALREADY_STARTED'));
-		const signupsHTML = renderSignups.bind(this)();
-		this.room.sendHTML(signupsHTML, { name: `${this.meta.id}${this.id}` });
+		const signupsHTML = (this.renderSignups ?? renderSignups).bind(this)();
+		if (signupsHTML) this.room.sendHTML(signupsHTML, { name: this.id });
 	}
-	closeSignups(): void {
-		const closeSignupsHTML = renderCloseSignups.bind(this)();
-		this.room.sendHTML(closeSignupsHTML, { name: `${this.meta.id}${this.id}` });
+	renderCloseSignups?(): ReactElement;
+	closeSignups(change = true): void {
+		const closeSignupsHTML = (this.renderCloseSignups ?? renderCloseSignups).bind(this)();
+		if (closeSignupsHTML) this.room.sendHTML(closeSignupsHTML, { name: this.id, change });
 	}
 
 	addPlayer(user: User, ctx: string | null): ActionResponse<{ started: boolean; as: BaseState['turn'] }> {
@@ -221,7 +225,7 @@ export class Game<State extends BaseState> {
 		if (this.onAddPlayer) {
 			const extraData = this.onAddPlayer(user, ctx as string);
 			if (!extraData.success) return extraData;
-			Object.assign(newPlayer, extraData);
+			Object.assign(newPlayer, extraData.data);
 		}
 		if (this.turns) this.startable = Array.isArray(availableSlots) && availableSlots.length === 1;
 		else {
@@ -231,9 +235,9 @@ export class Game<State extends BaseState> {
 			}
 		}
 		this.players[newPlayer.turn] = newPlayer;
-		if ((Array.isArray(availableSlots) && availableSlots.length === 1) || availableSlots === 1) {
+		if (this.meta.players === 'single' || (Array.isArray(availableSlots) && availableSlots.length === 1) || availableSlots === 1) {
 			// Join was successful and game is now full
-			if (this.meta.autostart) this.start();
+			if (this.meta.players === 'single' || this.meta.autostart) this.start();
 			return { success: true, data: { started: true, as: newPlayer.turn } };
 			// TODO: Maybe add a hint to start game?
 		}
@@ -299,7 +303,7 @@ export class Game<State extends BaseState> {
 		this.nextPlayer();
 		this.startedAt = new Date();
 		this.setTimer('Game started');
-		return { success: true };
+		return { success: true, data: undefined };
 	}
 
 	next(current = this.turn): State['turn'] {
@@ -340,9 +344,9 @@ export class Game<State extends BaseState> {
 			throw new ChatError('User not in players/spectators');
 		}
 		// TODO: Add ping to ps-client HTML opts
-		Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render!(side)));
+		Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render(side)));
 		this.room.send(`/highlighthtmlpage ${this.players[this.turn!].id}, ${this.id}, Your turn!`);
-		this.room.pageHTML(this.spectators, this.render(null), { name: this.id });
+		if (this.spectators.length > 0) this.room.pageHTML(this.spectators, this.render(null), { name: this.id });
 	}
 
 	end(type?: EndType): void {
@@ -351,7 +355,7 @@ export class Game<State extends BaseState> {
 		this.update();
 		if (this.started && this.meta.players !== 'single') {
 			// TODO: Revisit broadcasting logic for single-player games
-			this.room.sendHTML(this.render!(null));
+			this.room.sendHTML(this.render(null));
 		}
 		this.endedAt = new Date();
 		this.room.send(message);

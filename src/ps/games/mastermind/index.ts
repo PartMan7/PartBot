@@ -1,5 +1,7 @@
+import { type ReactElement } from 'react';
+
 import { Game } from '@/ps/games/game';
-import { render } from '@/ps/games/mastermind/render';
+import { render, renderCloseSignups } from '@/ps/games/mastermind/render';
 import { ChatError } from '@/utils/chatError';
 import { sample } from '@/utils/random';
 
@@ -12,27 +14,37 @@ export { meta } from '@/ps/games/mastermind/meta';
 
 export class Mastermind extends Game<State> {
 	ended = false;
+	setBy: User | null = null;
 
 	constructor(ctx: BaseContext) {
 		super(ctx);
 
 		this.state.cap = parseInt(ctx.args.join(''));
 		if (this.state.cap > 12 || this.state.cap < 4) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+		if (isNaN(this.state.cap)) this.state.cap = 10;
 		super.persist(ctx);
 
 		if (ctx.backup) return;
 		this.state.board = [];
 		this.state.solution = Array.from({ length: 4 }, () => sample(8, this.prng)) as Guess;
-		if (isNaN(this.state.cap)) this.state.cap = 8;
 
 		super.after(ctx);
 	}
+	renderCloseSignups(): ReactElement {
+		return renderCloseSignups.bind(this)();
+	}
+
+	parseGuess(guess: string): Guess {
+		const guessStr = guess.replace(/\s/g, '');
+		if (!/^[0-7]{4}$/.test(guessStr)) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+		return guessStr.split('').map(n => +n) as Guess;
+	}
+
 	action(user: User, ctx: string): void {
 		if (!this.started) throw new ChatError(this.$T('GAME.NOT_STARTED'));
 		if (!(user.id in this.players)) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
-		const guessStr = ctx.replace(/\s/g, '');
-		if (!/^[0-7]{4}$/.test(guessStr)) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
-		const guess = guessStr.split('').map(n => +n) as Guess;
+
+		const guess = this.parseGuess(ctx);
 		const result = this.guess(guess);
 		this.state.board.push({ guess, result });
 		if (result.exact === this.state.solution.length) {
@@ -44,6 +56,8 @@ export class Mastermind extends Game<State> {
 		this.nextPlayer();
 	}
 	guess(guess: Guess): GuessResult {
+		if (this.state.board.length === 0 && !this.setBy) this.closeSignups();
+
 		const solCount = this.state.solution.count();
 		const guessCount = guess.count();
 		let exact = 0;
@@ -61,10 +75,21 @@ export class Mastermind extends Game<State> {
 		}
 		return { exact, moved };
 	}
+	external(user: User, ctx: string) {
+		if (this.state.board.length > 0) throw new ChatError(this.$T('GAME.ALREADY_STARTED'));
+		if (this.setBy) throw new ChatError('Too late!'); // TODO $T
+
+		this.state.solution = this.parseGuess(ctx);
+		this.setBy = user;
+		this.closeSignups();
+	}
 
 	onEnd(type: EndType): string {
 		this.ended = true;
 		const player = Object.values(this.players)[0].name;
+		if (type === 'dq' || type === 'force') {
+			return `The game of Mastermind was ended for ${player}.`;
+		}
 		if (type === 'loss') {
 			return `${player} was unable to guess ${this.state.solution.join('')} in ${this.state.cap} guesses.`;
 		}

@@ -1,8 +1,39 @@
 import { Button, Form } from '@/utils/components/ps';
 import { repeat } from '@/utils/repeat';
 
+import type { Mastermind } from '@/ps/games/mastermind/index';
 import type { Guess, GuessResult, State } from '@/ps/games/mastermind/types';
 import type { ReactElement } from 'react';
+
+export function renderCloseSignups(this: Mastermind): ReactElement {
+	const hasGuessed = this.state.board.length > 0;
+	const player = Object.values(this.players)[0].name;
+	return (
+		<>
+			<hr />
+			{player} is playing a round of {this.meta.name}!
+			<Button value={`${this.renderCtx.msg} watch ${this.id}`} style={{ marginLeft: 16 }}>
+				Watch
+			</Button>
+			{this.setBy || !hasGuessed ? (
+				<>
+					<br />
+					<br />
+				</>
+			) : null}
+			{this.setBy ? (
+				`${this.setBy.name} has set a code for ${player}.`
+			) : !hasGuessed ? (
+				<Form value={`${this.renderCtx.msg} audience ${this.id}, {code}`}>
+					<label htmlFor="choosecode">Set Code: </label>
+					<input type="text" id="choosecode" name="code" style={{ width: 30 }} /> &nbsp;&nbsp;
+					<input type="submit" value="Set" />
+				</Form>
+			) : null}
+			<hr />
+		</>
+	);
+}
 
 const COLORS: { color: string; text: string; index: number }[] = [
 	{ color: 'white', text: 'black', index: 0 },
@@ -18,7 +49,6 @@ const COLORS: { color: string; text: string; index: number }[] = [
 const scale = 3.5;
 
 type This = { msg: string };
-
 function Pin({ red, white }: { red?: boolean; white?: boolean }): ReactElement {
 	return (
 		<div
@@ -48,7 +78,6 @@ function Pin({ red, white }: { red?: boolean; white?: boolean }): ReactElement {
 		</div>
 	);
 }
-
 function Entry({ data }: { data: { guess: Guess; result: GuessResult } | null }): ReactElement {
 	const entry = data
 		? data.guess.map(num => (
@@ -115,7 +144,6 @@ function Entry({ data }: { data: { guess: Guess; result: GuessResult } | null })
 		</>
 	);
 }
-
 export function render(this: This, data: State, mode: 'playing' | 'over' | 'spectator'): ReactElement {
 	return (
 		<div style={{ marginLeft: 50, marginTop: 20 }}>

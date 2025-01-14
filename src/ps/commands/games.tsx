@@ -16,6 +16,8 @@ import type { ReactElement } from 'react';
 type SearchContext =
 	| { action: 'start'; user: string }
 	| { action: 'join'; user: string }
+	| { action: 'reaction'; user: string }
+	| { action: 'audience'; user: string }
 	| { action: 'play'; user: string }
 	| { action: 'leave'; user?: string }
 	| { action: 'sub'; user1?: string; user2?: string }
@@ -50,6 +52,10 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					return !game.started && !hasJoined && hasSpace;
 				case 'play':
 					return game.started && hasJoined && game.players[game.turn!].id === ctx.user;
+				case 'reaction':
+					return game.started && hasJoined;
+				case 'audience':
+					return game.started && !hasJoined;
 				case 'leave':
 					return hasJoined;
 				case 'watch':
@@ -69,8 +75,8 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 		restCtx: string
 	): BaseGame | null {
 		if (!PSGames[gameId]) return null;
-		if (typeof specifier === 'string' && /^#\w{4}$/.test(specifier)) {
-			const game = PSGames[gameId][specifier.toUpperCase()];
+		if (typeof specifier === 'string' && /^#/.test(specifier)) {
+			const game = PSGames[gameId][specifier.toUpperCase()] ?? PSGames[gameId][specifier];
 			if (!game) throw new ChatError(roomCtx.$T('GAME.NOT_FOUND'));
 			return game;
 		}
@@ -142,7 +148,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 							throw new ChatError($T('GAME.ALREADY_JOINED'));
 						}
 					}
-					const id = Game.meta.players === 'single' ? `${Game.meta.abbr}-${message.author.id}` : generateId();
+					const id = Game.meta.players === 'single' ? `#${Game.meta.abbr}-${message.author.id}` : generateId();
 					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T, args, by: message.author });
 					if (game.meta.players === 'many') {
 						message.reply(`/notifyrank all, ${Game.meta.name}, A game of ${Game.meta.name} has been created!,${gameId}signup`);
@@ -165,7 +171,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					message.reply(
 						`${message.author.name} joined the game of ${Game.meta.name}${turnMsg}${ctx === '-' ? ' (randomly chosen)' : ''}! [${game.id}]`
 					); // TODO: $T
-					if (res.data!.started) game.closeSignups();
+					if (res.data.started) game.closeSignups();
 					else game.signups();
 				},
 			},
@@ -176,12 +182,32 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				syntax: 'CMD [id], [move]',
 				async run({ message, arg, $T }) {
 					const { game, ctx } = getGame(arg, { action: 'play', user: message.author.id }, { room: message.target, $T });
-					game.action!(message.author, ctx);
+					game.action(message.author, ctx, false);
+				},
+			},
+			reaction: {
+				name: 'reaction',
+				aliases: ['x', '!!'],
+				help: 'Performs an out-of-turn action.',
+				syntax: 'CMD [id], [move]',
+				async run({ message, arg, $T }) {
+					const { game, ctx } = getGame(arg, { action: 'reaction', user: message.author.id }, { room: message.target, $T });
+					game.action(message.author, ctx, true);
+				},
+			},
+			audience: {
+				name: 'audience',
+				help: 'Allows an audience member to perform an action.',
+				syntax: 'CMD [id], [move]',
+				async run({ message, arg, $T }) {
+					if (!('external' in Game.instance.prototype)) throw new ChatError($T('GAME.COMMAND_NOT_ENABLED'));
+					const { game, ctx } = getGame(arg, { action: 'audience', user: message.author.id }, { room: message.target, $T });
+					game.external!(message.author, ctx);
 				},
 			},
 			end: {
 				name: 'end',
-				aliases: ['e', 'x'],
+				aliases: ['e'],
 				help: 'Ends a game.',
 				perms: Symbol.for('games.manage'),
 				syntax: 'CMD [game ref]',
