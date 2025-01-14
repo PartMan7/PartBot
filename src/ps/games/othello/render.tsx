@@ -3,6 +3,7 @@ import { Button } from '@/utils/components/ps';
 
 import type { RenderCtx, Turn } from '@/ps/games/othello/types';
 import type { CellRenderer } from '@/ps/games/render';
+import type { ReactElement } from 'react';
 
 const roundStyles = { height: 24, width: 24, display: 'inline-block', borderRadius: 100, marginLeft: 3, marginTop: 3 };
 
@@ -30,7 +31,7 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 	return <Table<Turn | null> board={ctx.board} rowLabel="1-9" colLabel="A-Z" Cell={Cell} />;
 }
 
-export function render(this: This, ctx: RenderCtx) {
+export function render(this: This, ctx: RenderCtx): ReactElement {
 	return (
 		<center>
 			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>

@@ -306,11 +306,13 @@ export class Game<State extends BaseState> {
 		return { success: true, data: undefined };
 	}
 
+	// Only gets next turn. No side effects.
 	next(current = this.turn): State['turn'] {
 		const baseIndex = this.turns.indexOf(current!);
 		return this.turns[(baseIndex + 1) % this.turns.length];
 	}
 
+	// Increments turn as needed and backs up state.
 	nextPlayer(): State['turn'] | null {
 		let current = this.turn;
 		do {
@@ -350,7 +352,7 @@ export class Game<State extends BaseState> {
 	}
 
 	end(type?: EndType): void {
-		const message = this.onEnd!(type);
+		const message = this.onEnd(type);
 		this.clearTimer();
 		this.update();
 		if (this.started && this.meta.players !== 'single') {

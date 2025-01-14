@@ -171,7 +171,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					message.reply(
 						`${message.author.name} joined the game of ${Game.meta.name}${turnMsg}${ctx === '-' ? ' (randomly chosen)' : ''}! [${game.id}]`
 					); // TODO: $T
-					if (res.data.started) game.closeSignups();
+					if (res.data.started) game.closeSignups(false);
 					else game.signups();
 				},
 			},

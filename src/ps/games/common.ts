@@ -16,6 +16,7 @@ export type Meta = {
 export enum GamesList {
 	Othello = 'othello',
 	Mastermind = 'mastermind',
+	ConnectFour = 'connectfour',
 }
 
 export interface Player {

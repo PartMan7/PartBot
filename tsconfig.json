@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"baseUrl": "src",
-		"target": "es2021",
+		"lib": ["esnext"],
 		"noEmit": true, // PartBot runs through ts-node; we don't compile separately
 		"jsx": "react-jsx",
 		"skipLibCheck": true,
