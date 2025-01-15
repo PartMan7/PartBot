@@ -141,7 +141,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				aliases: ['new', 'n'],
 				help: 'Creates a new game.',
 				syntax: 'CMD [mods?]',
-				perms: Symbol.for('games.create'),
+				perms: Game.meta.players === 'single' ? 'regular' : Symbol.for('games.create'),
 				async run({ message, args, $T }) {
 					if (Game.meta.players === 'single') {
 						if (Object.values(PSGames[gameId] ?? {}).find(game => message.author.id in game.players)) {
@@ -209,10 +209,14 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				name: 'end',
 				aliases: ['e'],
 				help: 'Ends a game.',
-				perms: Symbol.for('games.manage'),
+				perms: Game.meta.players === 'single' ? 'regular' : Symbol.for('games.manage'),
 				syntax: 'CMD [game ref]',
 				async run({ message, arg, $T }) {
-					const { game } = getGame(arg, { action: 'any' }, { room: message.target, $T });
+					const { game } = getGame(
+						arg,
+						Game.meta.players === 'single' ? { action: 'play', user: message.author.id } : { action: 'any' },
+						{ room: message.target, $T }
+					);
 					game.end('force');
 				},
 			},
