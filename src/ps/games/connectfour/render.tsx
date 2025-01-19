@@ -33,7 +33,9 @@ function renderBoard(this: This, ctx: RenderCtx): ReactElement {
 			{repeat(null, ctx.board[0].length).map((_, col) => {
 				const column = ctx.board.map(row => row[col]);
 				return column[0] ? (
-					<Column data={column} />
+					<div style={{ display: 'inline-block' }}>
+						<Column data={column} />
+					</div>
 				) : (
 					<Button value={`${this.msg} play ${col}`} style={{ background: 'none', border: 'none', padding: 0 }}>
 						<Column data={column} />
