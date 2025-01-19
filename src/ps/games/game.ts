@@ -112,11 +112,14 @@ export class Game<State extends BaseState> {
 					case 'state':
 					case 'turn':
 					case 'turns':
-					case 'started':
-					case 'createdAt':
-					case 'startedAt': {
+					case 'started': {
 						// @ts-expect-error -- TS is going absolutely wild; FIXME
 						if (key in parsedBackup) this[key] = parsedBackup[key];
+						break;
+					}
+					case 'createdAt':
+					case 'startedAt': {
+						if (key in parsedBackup) this[key] = new Date(parsedBackup[key]!);
 						break;
 					}
 					case 'seed': {
