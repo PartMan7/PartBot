@@ -34,7 +34,7 @@ export function renderCloseSignups<State extends BaseState>(this: Game<State>): 
 		<>
 			<hr />
 			<h1>{this.meta.name} Signups have closed.</h1>
-			<Button value={`${this.renderCtx.msg} watch`}>Watch</Button>
+			<Button value={`${this.renderCtx.msg} watch ${this.id}`}>Watch</Button>
 			<hr />
 		</>
 	);
