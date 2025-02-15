@@ -5,6 +5,7 @@ import { render, renderCloseSignups } from '@/ps/games/mastermind/render';
 import { ChatError } from '@/utils/chatError';
 import { sample } from '@/utils/random';
 
+import type { ToTranslate, TranslatedText } from '@/i18n/types';
 import type { EndType } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
 import type { Guess, GuessResult, State } from '@/ps/games/mastermind/types';
@@ -77,7 +78,7 @@ export class Mastermind extends Game<State> {
 	}
 	external(user: User, ctx: string) {
 		if (this.state.board.length > 0) throw new ChatError(this.$T('GAME.ALREADY_STARTED'));
-		if (this.setBy) throw new ChatError('Too late!'); // TODO $T
+		if (this.setBy) throw new ChatError(this.$T('TOO_LATE'));
 		if (user.id in this.players) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
 
 		this.state.solution = this.parseGuess(ctx);
@@ -85,17 +86,17 @@ export class Mastermind extends Game<State> {
 		this.closeSignups();
 	}
 
-	onEnd(type: EndType): string {
+	onEnd(type: EndType): TranslatedText {
 		this.ended = true;
 		const player = Object.values(this.players)[0].name;
 		if (type === 'dq' || type === 'force') {
-			return `The game of Mastermind was ended for ${player}.`;
+			return `The game of Mastermind was ended for ${player}.` as ToTranslate;
 		}
 		if (type === 'loss') {
-			return `${player} was unable to guess ${this.state.solution.join('')} in ${this.state.cap} guesses.`;
+			return `${player} was unable to guess ${this.state.solution.join('')} in ${this.state.cap} guesses.` as ToTranslate;
 		}
 		const guesses = this.state.board.length;
-		return `${player} guessed ${this.state.solution.join('')} in ${guesses} turn${guesses === 1 ? '' : 's'}!`;
+		return `${player} guessed ${this.state.solution.join('')} in ${guesses} turn${guesses === 1 ? '' : 's'}!` as ToTranslate;
 	}
 
 	render(asPlayer: string | null) {

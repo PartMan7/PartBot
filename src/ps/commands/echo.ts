@@ -1,6 +1,7 @@
 import { checkPermissions } from '@/ps/handlers/permissions';
 import { ChatError } from '@/utils/chatError';
 
+import type { NoTranslate } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 
 export const command: PSCommand = {
@@ -11,8 +12,8 @@ export const command: PSCommand = {
 	perms: ['room', 'voice'],
 	async run({ message, originalCommand: [originalCommand], arg, $T }) {
 		if (originalCommand === 'do') {
-			if (checkPermissions('admin', message)) message.reply(arg);
+			if (checkPermissions('admin', message)) message.reply(arg as NoTranslate);
 			else throw new ChatError($T('ACCESS_DENIED'));
-		} else message.reply(`[[ ]]${arg}`);
+		} else message.reply(`[[ ]]${arg}` as NoTranslate);
 	},
 };

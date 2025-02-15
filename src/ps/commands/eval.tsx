@@ -14,6 +14,7 @@ export const command: PSCommand = {
 			message,
 			arg,
 			originalCommand: [originalCommand],
+			$T,
 		} = context;
 		const res = await evaluate(arg, originalCommand === 'exec' ? 'ABBR_OUTPUT' : 'COLOR_OUTPUT', { message, context });
 		if (originalCommand !== 'exec') {
@@ -35,6 +36,6 @@ export const command: PSCommand = {
 			);
 			if (originalCommand === 'eval') message.replyHTML(WrappedHTML);
 			else if (originalCommand === 'run') message.sendHTML(WrappedHTML);
-		} else return message.reply(res.success ? `Command executed successfully.` : `Error in executing command: ${res.output}`);
+		} else return message.reply(res.success ? $T('COMMANDS.EVAL.SUCCESS') : $T('COMMANDS.EVAL.ERROR', { error: res.output }));
 	},
 };

@@ -17,6 +17,6 @@ export const command: PSCommand = {
 			lookup = toId(arg);
 		}
 		const altsList = await getAlts(lookup);
-		message.reply(`Alts: ${altsList.join(', ')}`);
+		message.reply($T('COMMANDS.ALTS', { alts: altsList.join(', ') }));
 	},
 };

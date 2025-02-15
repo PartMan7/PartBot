@@ -6,6 +6,6 @@ export const command: PSCommand = {
 	syntax: 'CMD',
 	perms: ['room', 'mod'],
 	async run({ message, $T }) {
-		return message.reply($T('BOOP'));
+		return message.reply($T('COMMANDS.BOOP'));
 	},
 };

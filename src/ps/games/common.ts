@@ -1,3 +1,5 @@
+import type { TranslatedText } from '@/i18n/types';
+
 export type Meta = {
 	name: string;
 	id: GamesList;
@@ -28,6 +30,6 @@ export interface Player {
 
 export type BaseState = { board: unknown; turn: string };
 
-export type ActionResponse<T = undefined> = { success: true; data: T } | { success: false; error: string };
+export type ActionResponse<T = undefined> = { success: true; data: T } | { success: false; error: TranslatedText };
 
 export type EndType = 'regular' | 'force' | 'dq' | 'loss';

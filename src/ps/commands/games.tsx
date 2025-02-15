@@ -6,7 +6,7 @@ import { generateId } from '@/ps/games/utils';
 import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
 
-import type { TranslationFn } from '@/i18n/types';
+import type { NoTranslate, ToTranslate, TranslationFn } from '@/i18n/types';
 import type { BaseGame } from '@/ps/games/game';
 import type { PSCommand } from '@/types/chat';
 import type { Room } from 'ps-client';
@@ -151,7 +151,9 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					const id = Game.meta.players === 'single' ? `#${Game.meta.abbr}-${message.author.id}` : generateId();
 					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T, args, by: message.author });
 					if (game.meta.players === 'many') {
-						message.reply(`/notifyrank all, ${Game.meta.name}, A game of ${Game.meta.name} has been created!,${gameId}signup`);
+						message.reply(
+							`/notifyrank all, ${Game.meta.name}, A game of ${Game.meta.name} has been created!,${gameId}signup` as ToTranslate
+						);
 						game.signups();
 					} else if (game.meta.players === 'single') {
 						game.update();
@@ -169,8 +171,10 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					if (!res.success) throw new ChatError(res.error);
 					const turnMsg = 'turns' in Game.meta ? ` as ${Game.meta.turns[res.data!.as as keyof typeof Game.meta.turns]}` : '';
 					message.reply(
-						`${message.author.name} joined the game of ${Game.meta.name}${turnMsg}${ctx === '-' ? ' (randomly chosen)' : ''}! [${game.id}]`
-					); // TODO: $T
+						`${message.author.name} joined the game of ${Game.meta.name}${turnMsg}${
+							ctx === '-' ? ' (randomly chosen)' : ''
+						}! [${game.id}]` as ToTranslate
+					);
 					if (res.data.started) game.closeSignups(false);
 					else game.signups();
 				},
@@ -344,7 +348,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 								.list($T),
 						})
 					);
-					message.reply(`/closehtmlpage ${message.author.id}, ${game.id}`);
+					message.reply(`/closehtmlpage ${message.author.id}, ${game.id}` as NoTranslate);
 				},
 			},
 			menu: {

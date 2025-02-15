@@ -23,12 +23,12 @@ export const command: PSCommand = {
 			aliases: ['left', 'count', 'togo', 'longer', 'howmuchlonger', 'ongoing', 'current'],
 			help: 'Displays the current timer status',
 			syntax: 'CMD',
-			async run({ message }) {
+			async run({ message, $T }) {
 				const id = $.messageToId(message);
 				const timer = Timers[id];
-				if (!timer) throw new ChatError("You don't have a timer running!");
-				const timeLeft = toHumanTime(timer.endTime - Date.now());
-				return message.reply(`Your timer will end in ${timeLeft}${timer.comment ? ` (${timer.comment})` : ''}.`);
+				if (!timer) throw new ChatError($T('COMMANDS.TIMER.NONE_RUNNING'));
+				const timeLeft = toHumanTime(timer.endTime - Date.now(), undefined, $T);
+				return message.reply($T('COMMANDS.TIMER.ENDS_IN', { timeLeft, comment: timer.comment ? ` (${timer.comment})` : '' }));
 			},
 		},
 		cancel: {
@@ -36,14 +36,14 @@ export const command: PSCommand = {
 			aliases: ['terminate', 'yeet', 'stop', 'end', 'kill'],
 			help: 'Cancels the ongoing timer',
 			syntax: 'CMD',
-			async run({ message }) {
+			async run({ message, $T }) {
 				const id = $.messageToId(message);
 				const timer = Timers[id];
-				if (!timer) throw new ChatError("You don't have a timer running!");
+				if (!timer) throw new ChatError($T('COMMANDS.TIMER.NONE_RUNNING'));
 				delete Timers[id];
 				timer.cancel();
-				const timeLeftText = toHumanTime(timer.endTime - Date.now());
-				return message.reply(`Your timer${timer.comment ? ` (${timer.comment})` : ''} was cancelled with ${timeLeftText} left.`);
+				const timeLeft = toHumanTime(timer.endTime - Date.now(), undefined, $T);
+				return message.reply($T('COMMANDS.TIMER.CANCELLED', { timeLeft, comment: timer.comment ? ` (${timer.comment})` : '' }));
 			},
 		},
 		run: {
@@ -51,34 +51,36 @@ export const command: PSCommand = {
 			aliases: ['runearly', 'execute'],
 			help: 'Makes the ongoing timer execute immediately',
 			syntax: 'CMD',
-			async run({ message }) {
+			async run({ message, $T }) {
 				const id = $.messageToId(message);
 				const timer = Timers[id];
-				if (!timer) throw new ChatError("You don't have a timer running!");
+				if (!timer) throw new ChatError($T('COMMANDS.TIMER.NONE_RUNNING'));
 				delete Timers[id];
 				timer.execute();
-				const timeLeftText = toHumanTime(timer.endTime - Date.now());
-				return message.reply(`(The timer would have ended in ${timeLeftText}.)`);
+				const timeLeftText = toHumanTime(timer.endTime - Date.now(), undefined, $T);
+				return message.reply($T('COMMANDS.TIMER.WOULD_HAVE_ENDED_IN', { timeLeftText }));
 			},
 		},
 	},
-	async run({ message, args, run }) {
+	async run({ message, args, run, $T }) {
 		const id = $.messageToId(message);
 		if (Timers[id]) return run('timer status');
 		const [timeText, ...commentLines] = args.join(' ').split('//');
 		const comment = commentLines.join('//').trim();
 		const timeToSet = fromHumanTime(timeText);
-		if (!timeToSet) throw new ChatError('Please specify a time for the timer! (Remember to include units)');
-		if (timeToSet > fromHumanTime('7 days')) throw new ChatError('Timers can be set for a maximum of one week.');
+		if (!timeToSet) throw new ChatError($T('COMMANDS.TIMER.INVALID_TIME'));
+		if (timeToSet > fromHumanTime('7 days')) throw new ChatError($T('COMMANDS.TIMER.MAX_TIME'));
 		Timers[id] = new Timer(
 			() => {
 				delete Timers[id];
-				message.reply(`${message.author.name}, your timer is up!${comment ? ` Reason: ${comment}` : ''}`);
+				message.reply(
+					$T(comment ? 'COMMANDS.TIMER.TIMER_END' : 'COMMANDS.TIMER.TIMER_END_WITH_COMMENT', { user: message.author.name, comment })
+				);
 			},
 			timeToSet,
 			comment
 		);
-		const humanFormat = toHumanTime(timeToSet);
-		message.reply(`Your timer has been set for ${humanFormat} from now.`);
+		const timeLeft = toHumanTime(timeToSet, undefined, $T);
+		message.reply($T('COMMANDS.TIMER.TIMER_SET', { timeLeft }));
 	},
 };

@@ -6,6 +6,7 @@ import { render } from '@/ps/games/othello/render';
 import { ChatError } from '@/utils/chatError';
 import { deepClone } from '@/utils/deepClone';
 
+import type { TranslatedText } from '@/i18n/types';
 import type { EndType } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
 import type { Board, RenderCtx, State, Turn, WinCtx } from '@/ps/games/othello/types';
@@ -112,7 +113,7 @@ export class Othello extends Game<State> {
 		return !this.hasMoves(turn);
 	}
 
-	onEnd(type?: EndType): string {
+	onEnd(type?: EndType): TranslatedText {
 		if (type) {
 			this.winCtx = { type };
 			if (type === 'dq') return this.$T('GAME.ENDED_AUTOMATICALLY', { game: this.meta.name, id: this.id });

@@ -4,15 +4,17 @@ export default {
 	},
 
 	ACCESS_DENIED: 'Access denied.',
-	BOOP: 'BOOP',
 	CANCELLED: 'This action was cancelled.',
 	CMD_NOT_FOUND: 'Command not found.',
 	CONFIRM: "Are you sure? Type 'confirm' to confirm.",
 	INVALID_ALIAS: 'Had an invalid alias for {{aliasFor}}.',
+	INVALID_ROOM_ID: 'Invalid room ID.',
 	NO_DMS_COMMAND: 'This command may not be run from private messages.',
 	PM_ONLY_COMMAND: 'This command may only be used in private messages.',
 	ROOM_ONLY_COMMAND: 'This command may only be used in a chatroom.',
 	WRONG_ROOM: 'Wrong room.',
+	NOT_IN_ROOM: 'You are not in that room.',
+	TOO_LATE: 'Too late!',
 
 	GAME: {
 		ALREADY_JOINED: 'You have already joined this game.',
@@ -49,13 +51,42 @@ export default {
 		SUB: '{{out}} has been subbed with {{in}}!',
 		WATCHING_NOTHING: "You don't seem to need to rejoin anything...",
 		WON_AGAINST: '{{winner}} won the game of {{game}} against {{loser}}{{ctx}}!',
-	},
-
-	QUOTES: {
-		NO_QUOTES_FOUND: 'No quotes found.',
+		WAITING: 'Waiting for you to play...',
+		NON_PLAYER_OR_SPEC: 'User not in players/spectators',
+		YOUR_TURN: 'Your turn!',
+		UPLOAD_FAILED: 'Failed to upload game {{id}}.',
+		TIMER: {
+			PRIVATE: "Psst it's your turn to play in {{game}} [{{id}}]",
+			PUBLIC: "{{user}} hasn't played in {{game}} [{{id}}] for {{time}}...",
+		},
 	},
 
 	COMMANDS: {
+		ALTS: 'Alts: {{alts}}',
+		BOOP: 'BOOP',
 		UPTIME: 'The Bot has been running for {{time}}.',
+		PONG: 'Pong!',
+		ROOM_NOT_GIVEN: 'Did not receive a room within a minute',
+
+		EVAL: {
+			SUCCESS: 'Command executed successfully.',
+			ERROR: 'Error in executing command: {{error}}',
+		},
+
+		QUOTES: {
+			NO_QUOTES_FOUND: 'No quotes found.',
+		},
+
+		TIMER: {
+			NONE_RUNNING: "You don't have a timer running!",
+			ENDS_IN: 'Your timer will end in {{timeLeft}}{{comment}}.',
+			WOULD_HAVE_ENDED_IN: '(The timer would have ended in {{timeLeft}}.)',
+			CANCELLED: 'Your timer{{comment}} was cancelled with {{timeLeft}} left.',
+			MAX_TIME: 'Timers can be set for a maximum of one week.',
+			INVALID_TIME: 'Please specify a time for the timer! (Remember to include units)',
+			TIMER_END: '{{user}}, your timer is up!',
+			TIMER_END_WITH_COMMENT: '{{user}}, your timer is up! Reason: {{comment}}',
+			TIMER_SET: 'Your timer has been set for {{timeLeft}} from now.',
+		},
 	},
-};
+} as const;

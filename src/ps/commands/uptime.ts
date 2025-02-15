@@ -7,6 +7,6 @@ export const command: PSCommand = {
 	help: 'Displays the current uptime.',
 	syntax: 'CMD',
 	async run({ broadcast, $T }) {
-		return broadcast($T('COMMANDS.UPTIME', { time: toHumanTime(process.uptime() * 1000) }));
+		return broadcast($T('COMMANDS.UPTIME', { time: toHumanTime(process.uptime() * 1000, undefined, $T) }));
 	},
 };

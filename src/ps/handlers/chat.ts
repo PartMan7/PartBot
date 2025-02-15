@@ -81,12 +81,12 @@ export function parseArgs(
 	return { command: commandObj, sourceCommand, commandSteps, cascade, context: context as PSCommandContext };
 }
 
-function spoofMessage(argData: string, message: PSMessage): PSMessage {
+function spoofMessage(argData: string, message: PSMessage, $T: TranslationFn): PSMessage {
 	const [roomId, newArgData] = argData.slice(1).lazySplit(' ', 1);
 	const room = message.parent.getRoom(roomId);
-	if (!room) throw new ChatError('Invalid room ID.');
+	if (!room) throw new ChatError($T('INVALID_ROOM_ID'));
 	const by = room.users.find(user => toId(user) === message.author.id);
-	if (!by) throw new ChatError('Not in room.');
+	if (!by) throw new ChatError($T('NOT_IN_ROOM'));
 	const [empty, _type, _from, rest] = message.raw.replace(new RegExp(`${prefix}@\\S* `), prefix).lazySplit('|', 3);
 	return new Message({
 		type: 'chat',
@@ -106,13 +106,13 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 	if (!message.content.startsWith(prefix)) return;
 	try {
 		const argData = message.content.substring(prefix.length);
+		const $T = i18n(); // TODO: Allow overriding translations
 		// Check if this is a spoof message. If so, spoof and pass to the room.
 		// Will only trigger commands with `flags.routePMs` enabled.
 		if (argData.startsWith('@')) {
-			const mockMessage = spoofMessage(argData, message);
+			const mockMessage = spoofMessage(argData, message, $T);
 			return chatHandler(mockMessage, message);
 		}
-		const $T = i18n(); // TODO: Allow overriding translations
 		const args = argData.split(/ +/);
 		const spacedArgs = argData.split(/( +)/);
 		const {

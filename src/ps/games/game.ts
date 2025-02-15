@@ -15,13 +15,11 @@ import { sample, useRNG } from '@/utils/random';
 import { Timer } from '@/utils/timer';
 
 import type { GameModel } from '@/database/games';
-import type { TranslationFn } from '@/i18n/types';
+import type { PSRoomTranslated, ToTranslate, TranslatedText, TranslationFn } from '@/i18n/types';
 import type { ActionResponse, BaseState, EndType, Meta, Player } from '@/ps/games/common';
 import type { EmbedBuilder } from 'discord.js';
-import type { Client, Room, User } from 'ps-client';
+import type { Client, User } from 'ps-client';
 import type { ReactElement } from 'react';
-
-export type ActionType = 'general' | 'pregame' | 'ingame' | 'postgame';
 
 const backupKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log', 'startedAt', 'createdAt'] as const;
 
@@ -31,7 +29,7 @@ export class Game<State extends BaseState> {
 	$T: TranslationFn;
 	seed: number = sample(1e12);
 	prng: () => number = useRNG(this.seed);
-	room: Room;
+	room: PSRoomTranslated;
 	parent: Client;
 	roomid: string;
 	// @ts-expect-error -- State isn't initialized yet
@@ -77,7 +75,7 @@ export class Game<State extends BaseState> {
 	onForfeitPlayer?(player: Player, ctx: string | User): ActionResponse;
 	onReplacePlayer?(turn: BaseState['turn'], withPlayer: User): ActionResponse<Player>;
 	onStart?(): ActionResponse;
-	onEnd(type?: EndType): string;
+	onEnd(type?: EndType): TranslatedText;
 	onEnd() {
 		return 'Game ended';
 	}
@@ -113,7 +111,7 @@ export class Game<State extends BaseState> {
 					case 'turn':
 					case 'turns':
 					case 'started': {
-						// @ts-expect-error -- TS is going absolutely wild; FIXME
+						// @ts-expect-error -- key isn't narrowed correctly
 						if (key in parsedBackup) this[key] = parsedBackup[key];
 						break;
 					}
@@ -157,7 +155,14 @@ export class Game<State extends BaseState> {
 		}
 		this.timer = new Timer(
 			() => {
-				this.room.send(`${player.name} hasn't played in ${this.meta.name} [${this.id}] for ${toHumanTime(timerLength)}...`);
+				this.room.send(
+					this.$T('GAME.TIMER.PUBLIC', {
+						user: player.name,
+						game: this.meta.name,
+						id: this.id,
+						time: toHumanTime(timerLength, undefined, this.$T),
+					})
+				);
 			},
 			this.timerLength,
 			`${comment} [${this.id}]`
@@ -165,8 +170,8 @@ export class Game<State extends BaseState> {
 		if (this.pokeTimerLength)
 			this.pokeTimer = new Timer(
 				() => {
-					this.room.privateSend(player, `Psst it's your turn to play in ${this.meta.name} [${this.id}]`);
-					this.room.send(`/notifyuser ${player.id}, ${this.meta.name}, Waiting for you to play...`);
+					this.room.privateSend(player, this.$T('GAME.TIMER.PRIVATE', { game: this.meta.name, id: this.id }));
+					this.room.send(`/notifyuser ${player.id}, ${this.meta.name}, ${this.$T('GAME.WAITING')}` as TranslatedText);
 					// TODO: Use ping when ps-client supports
 					// this.room.ping(player, { title: this.meta.name, label: 'Waiting for you to play...' });
 				},
@@ -248,7 +253,7 @@ export class Game<State extends BaseState> {
 	}
 
 	// ctx: string for DQ; ctx: User for self-leave
-	removePlayer(ctx: string | User): ActionResponse<{ message: string; cb?: () => void }> {
+	removePlayer(ctx: string | User): ActionResponse<{ message: TranslatedText; cb?: () => void }> {
 		const staffAction = typeof ctx === 'string';
 		const player = Object.values(this.players).find(p => p.id === (typeof ctx === 'string' ? ctx : ctx.id));
 		if (!player) return { success: false, error: this.$T('GAME.NOT_PLAYING') };
@@ -259,7 +264,9 @@ export class Game<State extends BaseState> {
 			return {
 				success: true,
 				data: {
-					message: staffAction ? `${player.name} has been disqualified from the game.` : 'You have forfeited the game.',
+					message: (staffAction
+						? `${player.name} has been disqualified from the game.`
+						: 'You have forfeited the game.') as ToTranslate,
 					cb: () => {
 						const playersLeft = Object.values(this.players).filter((player: Player) => !player.out);
 						if (playersLeft.length <= 1) this.end('dq');
@@ -274,12 +281,12 @@ export class Game<State extends BaseState> {
 		return {
 			success: true,
 			data: {
-				message: staffAction ? `${player.name} has been removed from the game.` : 'You have left the game',
+				message: (staffAction ? `${player.name} has been removed from the game.` : 'You have left the game') as ToTranslate,
 			},
 		};
 	}
 
-	replacePlayer(_turn: BaseState['turn'], withPlayer: User): ActionResponse<string> {
+	replacePlayer(_turn: BaseState['turn'], withPlayer: User): ActionResponse<TranslatedText> {
 		const turn = _turn as State['turn'];
 		if (Object.values(this.players).some((player: Player) => player.id === withPlayer.id))
 			throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
@@ -346,11 +353,11 @@ export class Game<State extends BaseState> {
 			const asPlayer = Object.values(this.players).find(player => player.id === user);
 			if (asPlayer) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
 			if (this.spectators.includes(user)) return this.sendHTML(user, this.render(null));
-			throw new ChatError('User not in players/spectators');
+			throw new ChatError(this.$T('GAME.NON_PLAYER_OR_SPEC'));
 		}
 		// TODO: Add ping to ps-client HTML opts
 		Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render(side)));
-		this.room.send(`/highlighthtmlpage ${this.players[this.turn!].id}, ${this.id}, Your turn!`);
+		this.room.send(`/highlighthtmlpage ${this.players[this.turn!].id}, ${this.id}, ${this.$T('GAME.YOUR_TURN')}` as TranslatedText);
 		if (this.spectators.length > 0) this.room.pageHTML(this.spectators, this.render(null), { name: this.id });
 	}
 
@@ -384,7 +391,7 @@ export class Game<State extends BaseState> {
 			};
 			uploadGame(model).catch(err => {
 				log(err);
-				this.room.send(`Failed to upload game ${this.id}`);
+				this.room.send(this.$T('GAME.UPLOAD_FAILED', { id: this.id }));
 			});
 		}
 		// Delete from cache
@@ -393,7 +400,15 @@ export class Game<State extends BaseState> {
 	}
 }
 
-export type BaseContext = { by: User; room: Room; id: string; meta: Meta; $T: TranslationFn; backup?: string; args: string[] };
+export type BaseContext = {
+	by: User;
+	room: PSRoomTranslated;
+	id: string;
+	meta: Meta;
+	$T: TranslationFn;
+	backup?: string;
+	args: string[];
+};
 
 export function createGrid<T>(x: number, y: number, fill: (x: number, y: number) => T) {
 	return Array.from({ length: x }).map((_, i) => Array.from({ length: y }).map((_, j) => fill(i, j)));

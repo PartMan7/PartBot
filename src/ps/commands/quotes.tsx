@@ -9,6 +9,7 @@ import { Username as UsernamePS } from '@/utils/components/ps';
 import { jsxToHTML } from '@/utils/jsxToHTML';
 import { escapeRegEx } from '@/utils/regexEscape';
 
+import type { TranslationFn } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { PSMessage } from '@/types/ps';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
@@ -30,7 +31,7 @@ const rawMeRegEx = new RegExp(`^((?:\\[(?:\\d{2}:){1,2}\\d{2}] )?• [${ranks}]?
 const jnlRegEx = /^(?:.*? (?:joined|left)(?:; )?){1,2}$/;
 const rawRegEx = /^(\[(?:\d{2}:){1,2}\d{2}] )?(.*)$/;
 
-async function getRoom(message: PSMessage): Promise<string> {
+async function getRoom(message: PSMessage, $T: TranslationFn): Promise<string> {
 	if (message.type === 'chat') return message.target.roomid;
 	const prefs = PSQuoteRoomPrefs[message.author.userid];
 	if (prefs && message.time - prefs.at.getTime() < fromHumanTime('1 hour')) return prefs.room;
@@ -40,7 +41,7 @@ async function getRoom(message: PSMessage): Promise<string> {
 			return msg.content.length > 0;
 		})
 		.catch(() => {
-			throw new ChatError('Did not receive a room within a minute');
+			throw new ChatError($T('COMMANDS.ROOM_NOT_GIVEN'));
 		});
 	const _room = toId(answer.content);
 	PSQuoteRoomPrefs[message.author.userid] = { room: _room, at: new Date() };
@@ -118,7 +119,6 @@ function FormatQuote({
 	quote,
 	psUsernameTag = true,
 	header,
-	children,
 }: {
 	quote: string;
 	psUsernameTag?: boolean;
@@ -245,9 +245,9 @@ export const command: PSCommand = {
 			help: 'Displays a random quote',
 			syntax: 'CMD',
 			async run({ message, broadcast, broadcastHTML, room: _room, $T }) {
-				const room: string = (_room as string) ?? (await getRoom(message));
+				const room: string = (_room as string) ?? (await getRoom(message, $T));
 				const [index, randQuote] = Object.entries(await getAllQuotes(room)).random();
-				if (!randQuote) return broadcast($T('QUOTES.NO_QUOTES_FOUND'));
+				if (!randQuote) return broadcast($T('COMMANDS.QUOTES.NO_QUOTES_FOUND'));
 				broadcastHTML(
 					<>
 						<hr />

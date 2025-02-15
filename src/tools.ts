@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import type { TranslationFn } from '@/i18n/types';
+
 export function toId(str: string): string {
 	return str.toLowerCase().replace(/[^a-z0-9]/g, '');
 }
@@ -17,7 +19,7 @@ type Entry = {
 	count?: number;
 };
 
-export function toHumanTime(timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' = 'f2s'): string {
+export function toHumanTime(timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' = 'f2s', $T: TranslationFn): string {
 	const timeList: (
 		| {
 				abbr: string;
@@ -107,7 +109,7 @@ export function toHumanTime(timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' =
 				.slice(firstIndex, firstIndex + 2)
 				.filter(entry => entry.count)
 				.map(entry => `${entry.count} ${entry.count === 1 ? entry.name : entry.plur}`)
-				.join(' and ');
+				.join(` ${$T('GRAMMAR.AND')} `);
 		}
 		case 'hhmmss': {
 			const [ms, s, m, h, d] = timeEntries.map(entry => entry.count);
@@ -121,7 +123,7 @@ export function toHumanTime(timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' =
 					.reverse()
 					.slice(0, 2)
 					.map(entry => `${entry.count} ${entry.count === 1 ? entry.name : entry.plur}`)
-					.join(' and ') || '0 ms'
+					.join(` ${$T('GRAMMAR.AND')} `) || '0 ms'
 			);
 		}
 	}

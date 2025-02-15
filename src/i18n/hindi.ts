@@ -1,11 +1,12 @@
-import type { Translations } from '@/i18n/types';
-import type { RecursivePartial } from '@/types/common';
+import type { AvailableTranslations } from '@/i18n/types';
 
-const translations: RecursivePartial<Translations> = {
+const translations: AvailableTranslations = {
 	GRAMMAR: {
 		AND: 'aur',
 	},
-	BOOP: 'Hindi wala BOOP',
+	COMMANDS: {
+		BOOP: 'Hindi wala BOOP',
+	},
 };
 
 export default translations;

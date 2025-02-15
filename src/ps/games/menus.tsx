@@ -4,11 +4,11 @@ import { prefix } from '@/config/ps';
 import { Button, Username } from '@/utils/components/ps';
 import { log } from '@/utils/logger';
 
+import type { PSRoomTranslated } from '@/i18n/types';
 import type { Meta, Player } from '@/ps/games/common';
-import type { Room } from 'ps-client';
 import type { ReactElement } from 'react';
 
-export function renderMenu(room: Room, meta: Meta, isStaff: boolean): ReactElement {
+export function renderMenu(room: PSRoomTranslated, meta: Meta, isStaff: boolean): ReactElement {
 	const games = Object.values(PSGames[meta.id] ?? {}).filter(game => game.roomid === room.id);
 	if (!games?.length) return <div>No games found.</div>;
 	return (
@@ -66,7 +66,7 @@ export function renderMenu(room: Room, meta: Meta, isStaff: boolean): ReactEleme
 	);
 }
 
-export function renderBackups(room: Room, meta: Meta): ReactElement {
+export function renderBackups(room: PSRoomTranslated, meta: Meta): ReactElement {
 	const stashedGames = gameCache.getByGame(room.roomid, meta.id).filter(game => !PSGames[meta.id]?.[game.id]);
 	return (
 		<>

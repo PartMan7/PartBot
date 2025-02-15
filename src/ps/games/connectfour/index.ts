@@ -6,6 +6,7 @@ import { Game, createGrid } from '@/ps/games/game';
 import { ChatError } from '@/utils/chatError';
 import { repeat } from '@/utils/repeat';
 
+import type { TranslatedText } from '@/i18n/types';
 import type { EndType } from '@/ps/games/common';
 import type { Board, RenderCtx, State, Turn, WinCtx } from '@/ps/games/connectfour/types';
 import type { BaseContext } from '@/ps/games/game';
@@ -81,7 +82,7 @@ export class ConnectFour extends Game<State> {
 		return false;
 	}
 
-	onEnd(type?: EndType): string {
+	onEnd(type?: EndType): TranslatedText {
 		if (type) {
 			this.winCtx = { type };
 			if (type === 'dq') return this.$T('GAME.ENDED_AUTOMATICALLY', { game: this.meta.name, id: this.id });

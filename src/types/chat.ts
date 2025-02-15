@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { TranslationFn } from '@/i18n/types';
+import type { PSMessageTranslated, TranslationFn } from '@/i18n/types';
 import type { DiscInteraction } from '@/types/discord';
 import type { Perms } from '@/types/perms';
-import type { PSMessage } from '@/types/ps';
 import type { SlashCommandBuilder } from 'discord.js';
 import type { HTMLopts } from 'ps-client/classes/common';
 import type { ReactElement } from 'react';
@@ -12,7 +11,7 @@ export type PSCommandContext = {
 	/**
 	 * The message this command is acting on
 	 */
-	message: PSMessage;
+	message: PSMessageTranslated;
 	/**
 	 * Name and args of the original command being passed
 	 */
@@ -37,7 +36,7 @@ export type PSCommandContext = {
 	/**
 	 * (Only on forwarded messages) The message the original command was called with
 	 */
-	calledFromMsg?: PSMessage;
+	calledFromMsg?: PSMessageTranslated;
 	/**
 	 * Translations function.
 	 */
@@ -49,7 +48,7 @@ export type PSCommandContext = {
 	 * @param ctxOverride Context to be passed to the called command function
 	 * @param msgOverride Overrides to be passed on the message
 	 */
-	run(cmd: string, ctxOverride?: Record<string, any>, msgOverride?: Partial<PSMessage>): Promise<any>;
+	run(cmd: string, ctxOverride?: Record<string, any>, msgOverride?: Partial<PSMessageTranslated>): Promise<any>;
 	/**
 	 * Function that executes when the command is run.
 	 * Same as run, but WILL BYPASS PERMISSION CHECKS.
@@ -57,7 +56,7 @@ export type PSCommandContext = {
 	 * @param ctxOverride Context to be passed to the called command function
 	 * @param msgOverride Overrides to be passed on the message
 	 */
-	unsafeRun(cmd: string, ctxOverride?: Record<string, any>, msgOverride?: Partial<PSMessage>): Promise<any>;
+	unsafeRun(cmd: string, ctxOverride?: Record<string, any>, msgOverride?: Partial<PSMessageTranslated>): Promise<any>;
 	/**
 	 * Conditionally broadcast a message based on the given permissions
 	 * @param message The message to broadcast
