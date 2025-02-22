@@ -101,7 +101,7 @@ function spoofMessage(argData: string, message: PSMessage, $T: TranslationFn): P
 }
 
 export default async function chatHandler(message: PSMessage, originalMessage?: PSMessage): Promise<void> {
-	if (message.isIntro || !message.author.userid || !message.target) return;
+	if (message.isIntro || !message.author?.userid || !message.target) return;
 	if (message.author.userid === message.parent.status.userid) return; // Botception!
 	if (!message.content.startsWith(prefix)) return;
 	try {
