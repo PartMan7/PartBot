@@ -15,7 +15,7 @@ import { sample, useRNG } from '@/utils/random';
 import { Timer } from '@/utils/timer';
 
 import type { GameModel } from '@/database/games';
-import type { PSRoomTranslated, ToTranslate, TranslatedText, TranslationFn } from '@/i18n/types';
+import type { NoTranslate, PSRoomTranslated, ToTranslate, TranslatedText, TranslationFn } from '@/i18n/types';
 import type { ActionResponse, BaseState, EndType, Meta, Player } from '@/ps/games/common';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
@@ -363,6 +363,11 @@ export class Game<State extends BaseState> {
 		if (this.spectators.length > 0) this.room.pageHTML(this.spectators, this.render(null), { name: this.id });
 	}
 
+	getURL(): string | null {
+		if (this.meta.players === 'single') return null;
+		return `${process.env.WEB_URL}/${this.meta.id}/${this.id.replace(/^#/, '')}`;
+	}
+
 	end(type?: EndType): void {
 		const message = this.onEnd(type);
 		this.clearTimer();
@@ -392,10 +397,15 @@ export class Game<State extends BaseState> {
 				ended: this.endedAt!,
 				winCtx: 'winCtx' in this ? this.winCtx : null,
 			};
-			uploadGame(model).catch(err => {
-				log(err);
-				this.room.send(this.$T('GAME.UPLOAD_FAILED', { id: this.id }));
-			});
+			uploadGame(model)
+				.then(() => {
+					const replay = this.getURL()!;
+					this.room.send(replay as NoTranslate);
+				})
+				.catch(err => {
+					log(err);
+					this.room.send(this.$T('GAME.UPLOAD_FAILED', { id: this.id }));
+				});
 		}
 		// Delete from cache
 		delete PSGames[this.meta.id]![this.id];

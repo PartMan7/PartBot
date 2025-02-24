@@ -150,7 +150,7 @@ export class Othello extends Game<State> {
 			.setColor('#008000')
 			.setAuthor({ name: 'Othello - Room Match' })
 			.setTitle(title)
-			.setURL(`${process.env.WEB_URL}/othello/${this.id.replace(/^#/, '')}`)
+			.setURL(this.getURL())
 			.addFields([
 				{
 					name: [count.B, count.W].join(' - '),
