@@ -1,0 +1,15 @@
+@layer base {
+	h1 {
+		@apply text-2xl;
+	}
+	h2 {
+		@apply text-xl;
+	}
+
+	button {
+		@apply bg-purple-700 border-purple-900 border px-2 py-1 m-2 rounded-xl font-bold;
+		&:hover {
+			@apply bg-purple-800;
+		}
+	}
+}

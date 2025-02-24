@@ -10,7 +10,9 @@
 		"notify-unpushed": "sh ./scripts/notify-unpushed.sh",
 		"prettify": "prettier -w",
 		"prepare": "sh ./scripts/setup.sh",
-		"start": "npm run webpack-server & ts-node --swc src/index.ts",
+		"servers": "npm run webpack-server & npm run tailwind-server",
+		"start": "npm run servers & ts-node --swc src/index.ts",
+		"tailwind-server": "npx @tailwindcss/cli -i ./src/web/styles/tailwind.css -o ./src/web/react/compiled/styles.css --watch",
 		"test": "npm run lint && npm run tsc",
 		"tsc": "tsc",
 		"webpack-server": "webpack -c src/web/webpack/webpack.config.ts --watch"
@@ -20,6 +22,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@swc/core": "^1.7.40",
+		"@tailwindcss/cli": "^4.0.8",
 		"axios": "^1.6.0",
 		"chokidar": "^3.5.3",
 		"discord.js": "^14.11.0",
@@ -30,6 +33,7 @@
 		"ps-client": "^4.4.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
+		"tailwindcss": "^4.0.8",
 		"ts-loader": "^9.5.2",
 		"ts-node": "^10.9.2",
 		"tsconfig-paths": "^4.2.0",

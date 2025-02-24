@@ -1,0 +1,15 @@
+.bg-primary {
+	@apply bg-zinc-50 dark:bg-zinc-900;
+}
+
+.text-primary {
+	@apply text-zinc-900 dark:text-white;
+}
+
+.text-secondary {
+	@apply text-zinc-700 dark:text-zinc-300;
+}
+
+.border-primary {
+	@apply border-zinc-800 dark:border-zinc-200;
+}

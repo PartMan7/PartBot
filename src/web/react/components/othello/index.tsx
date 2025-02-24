@@ -14,19 +14,19 @@ type OthelloLog = { action: 'play' | 'skip'; time: string; turn: 'W' | 'B'; ctx:
 type Board = (null | 'W' | 'B')[][];
 type GameState = { board: Board; sinceLast: number | null; at: Date; score: { W: number; B: number } };
 
-const roundStyles = { height: 24, width: 24, display: 'inline-block', borderRadius: 100, marginLeft: 3, marginTop: 3 };
-
 const Cell: CellRenderer<'W' | 'B' | null> = ({ cell }) => (
-	<td style={{ height: 30, width: 30, background: 'green', borderCollapse: 'collapse', border: '1px solid black' }}>
-		{cell ? <span style={{ ...roundStyles, background: cell === 'W' ? 'white' : 'black' }} /> : null}
+	<td className="h-8 w-8 bg-green-600 border-collapse border border-primary leading-0">
+		{cell ? <span className={`${cell === 'W' ? 'bg-white' : 'bg-black'} h-7 w-7 inline-block rounded-full m-0.5`} /> : null}
 	</td>
 );
 const Board = memo(({ state }: { state: GameState }) => (
 	<>
 		<Table<'W' | 'B' | null> board={state.board} rowLabel="1-9" colLabel="A-Z" Cell={Cell} />
-		{state.sinceLast
-			? `Played after ${state.sinceLast / 1000}s.`
-			: `Game started on ${state.at.toDateString()} at ${state.at.toLocaleTimeString()}.`}
+		<span className="text-secondary">
+			{state.sinceLast
+				? `Played after ${state.sinceLast / 1000}s.`
+				: `Game started on ${state.at.toDateString()} at ${state.at.toLocaleTimeString()}.`}
+		</span>
 	</>
 ));
 
@@ -83,17 +83,17 @@ const BoardWrapper = memo(({ states, game }: { states: GameState[]; game: GameMo
 	);
 
 	return (
-		<div style={{ display: 'flex', flexDirection: 'column', maxWidth: 800, alignItems: 'center' }}>
+		<div className="flex flex-col items-center max-w-3xl m-10">
 			<h1>
-				{game.players.B.name} (Black) vs {game.players.W.name} (White) <small style={{ color: 'dimgray' }}>in {game.room}</small>
+				{game.players.B.name} (Black) vs {game.players.W.name} (White) <small className="text-secondary">in {game.room}</small>
 			</h1>
-			<h2>{subHeading}</h2>
+			<h2 className="text-secondary">{subHeading}</h2>
 			<br />
-			<h2 style={currentTurn === 0 ? { color: 'dimgray' } : {}}>{currentTurn === 0 ? 'Game start' : `Turn #${currentTurn}`}</h2>
+			<h2 className={currentTurn === 0 ? 'text-secondary' : ''}>{currentTurn === 0 ? 'Game start' : `Turn #${currentTurn}`}</h2>
 			{controls}
 			<Board state={state} />
 			{controls}
-			<b style={{ margin: 10 }}>
+			<b className="m-3">
 				Score: {state.score.B} (Black) - {state.score.W} (White)
 			</b>
 		</div>

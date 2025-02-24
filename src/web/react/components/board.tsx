@@ -26,35 +26,30 @@ export function Table<T>({
 	const rowLabels = getLabels(board.length, rowLabel);
 	const colLabels = getLabels(board[0].length, colLabel);
 	return (
-		<table
-			style={{
-				borderCollapse: 'collapse',
-				margin: 20,
-			}}
-		>
+		<table className="border-collapse m-5">
 			<tbody>
 				<tr>
 					<th />
 					{colLabels.map(label => (
-						<th style={{ color: 'gray', height: 20 }}>{label}</th>
+						<th className="text-secondary h-5">{label}</th>
 					))}
 					<th />
 				</tr>
 
 				{board.map((row, i) => (
 					<tr>
-						<th style={{ color: 'gray', width: 20 }}>{rowLabels[i]}</th>
+						<th className="text-secondary w-5">{rowLabels[i]}</th>
 						{row.map((cell, j) => (
 							<Cell cell={cell} i={i} j={j} />
 						))}
-						<th style={{ color: 'gray', width: 20 }}>{rowLabels[i]}</th>
+						<th className="text-secondary w-5">{rowLabels[i]}</th>
 					</tr>
 				))}
 
 				<tr>
 					<th />
 					{colLabels.map(label => (
-						<th style={{ color: 'gray', height: 20 }}>{label}</th>
+						<th className="text-secondary h-5">{label}</th>
 					))}
 					<th />
 				</tr>
