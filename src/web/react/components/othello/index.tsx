@@ -1,4 +1,4 @@
-import { type ReactElement, memo, useCallback, useMemo, useState } from 'react';
+import { type ReactElement, memo, useCallback, useMemo, useState, useEffect } from 'react';
 
 import { Table } from '@/web/react/components/board';
 
@@ -40,6 +40,15 @@ const BoardWrapper = memo(({ states, game }: { states: GameState[]; game: GameMo
 	const canStart = currentTurn !== 0;
 	const end = useCallback(() => setCurrentTurn(states.length - 1), [states.length]);
 	const canEnd = currentTurn !== states.length - 1;
+
+	useEffect(() => {
+		const keyboardControls = (e: KeyboardEvent) => {
+			if (e.key === 'ArrowLeft' && canPrevious) previous();
+			if (e.key === 'ArrowRight' && canNext) next();
+		};
+		window.addEventListener('keydown', keyboardControls);
+		return () => window.removeEventListener('keydown', keyboardControls);
+	}, [previous, canPrevious, next, canNext]);
 
 	const state = states[currentTurn];
 
