@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { jsxToHTML } from '@/utils/jsxToHTML';
 import { renderTemplate } from '@/web/loaders/util';
 
-import type { Render } from '@/types/web';
+import type { GetBundle, Render } from '@/types/web';
 import type { NextFunction, Request, Response } from 'express';
 
 export function renderReact(req: Request, res: Response, next: NextFunction): void {
@@ -18,6 +18,12 @@ export function renderReact(req: Request, res: Response, next: NextFunction): vo
 		const page = await renderTemplate('react.html', { title, preHydrated, content: '???' });
 		return res.send(page);
 	};
-	Object.assign(res, { render });
+
+	const getBundle: GetBundle = async (bundle, title) => {
+		const template = await renderTemplate('react-bundled.html', { title, bundle });
+		return res.send(template);
+	};
+
+	Object.assign(res, { render, getBundle });
 	next();
 }

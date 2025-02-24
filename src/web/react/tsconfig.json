@@ -1,0 +1,10 @@
+{
+	"#": "This is to make sure we don't use custom prototype methods in UI pages.",
+	"extends": "../../../tsconfig.json",
+	"compilerOptions": {
+		"jsx": "react",
+		"lib": ["dom"]
+	},
+	"exclude": [],
+	"include": ["./typings.d.ts", "./components/**/*", "./pages/**/*"]
+}

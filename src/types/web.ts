@@ -3,7 +3,7 @@ import type { ReactElement } from 'react';
 
 export type UIRouteHandler = (
 	req: Request,
-	res: { [key in keyof Response as key extends 'render' ? never : key]: Response[key] } & { render: Render }
+	res: { [key in keyof Response as key extends 'render' ? never : key]: Response[key] } & { render: Render; getBundle: GetBundle }
 ) => void;
 
 // Note: This isn't the actual type that's imported, but since we override render to support JSX...
@@ -17,3 +17,4 @@ export type UIRoute = {
 };
 
 export type Render = (jsx: ReactElement, title: string, hydrate: boolean) => Promise<Response>;
+export type GetBundle = (filePath: string, title: string) => Promise<Response>;

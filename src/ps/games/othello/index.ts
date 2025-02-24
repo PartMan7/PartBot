@@ -54,7 +54,7 @@ export class Othello extends Game<State> {
 	play([i, j]: [number, number], turn: Turn, board: Board): boolean;
 	play([i, j]: [number, number], turn: Turn, board = this.state.board): Board | null | boolean {
 		const isActual = board === this.state.board;
-		const other = this.next(turn);
+		const other = this.getNext(turn);
 		if (isActual && this.turn !== turn) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
 
 		if (board[i][j]) return null;
@@ -126,17 +126,17 @@ export class Othello extends Game<State> {
 		}
 		const winningSide = scores.W > scores.B ? 'W' : 'B';
 		const winner = this.players[winningSide];
-		const loser = this.players[this.next(winningSide)];
+		const loser = this.players[this.getNext(winningSide)];
 		this.winCtx = {
 			type: 'win',
 			winner: { ...winner, score: scores[winningSide] },
-			loser: { ...loser, score: scores[this.next(winningSide)] },
+			loser: { ...loser, score: scores[this.getNext(winningSide)] },
 		};
 		return this.$T('GAME.WON_AGAINST', {
 			winner: `${winner.name} (${winningSide})`,
 			game: this.meta.name,
-			loser: `${loser.name} (${this.next(winningSide)})`,
-			ctx: ` [${scores[winningSide]}-${scores[this.next(winningSide)]}]`,
+			loser: `${loser.name} (${this.getNext(winningSide)})`,
+			ctx: ` [${scores[winningSide]}-${scores[this.getNext(winningSide)]}]`,
 		});
 	}
 

@@ -43,7 +43,7 @@ export class ConnectFour extends Game<State> {
 		this.log.push({ action: 'play', time: new Date(), turn, ctx: col });
 
 		if (this.won(col, turn)) {
-			const other = this.next(turn);
+			const other = this.getNext(turn);
 			this.winCtx = { type: 'win', winner: this.players[turn], loser: this.players[other] };
 			this.end();
 			return true;

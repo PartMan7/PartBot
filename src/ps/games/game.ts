@@ -261,6 +261,7 @@ export class Game<State extends BaseState> {
 			const forfeitPlayer = this.onForfeitPlayer?.(player, ctx);
 			if (forfeitPlayer?.success === false) return forfeitPlayer;
 			player.out = true;
+			this.log.push({ action: staffAction ? 'dq' : 'forfeit', turn: player.turn, time: new Date(), ctx: null });
 			return {
 				success: true,
 				data: {
@@ -317,7 +318,7 @@ export class Game<State extends BaseState> {
 	}
 
 	// Only gets next turn. No side effects.
-	next(current = this.turn): State['turn'] {
+	getNext(current = this.turn): State['turn'] {
 		const baseIndex = this.turns.indexOf(current!);
 		return this.turns[(baseIndex + 1) % this.turns.length];
 	}
@@ -326,7 +327,7 @@ export class Game<State extends BaseState> {
 	nextPlayer(): State['turn'] | null {
 		let current = this.turn;
 		do {
-			current = this.next(current);
+			current = this.getNext(current);
 			const currentPlayer = this.players[current];
 			if (!currentPlayer) throw new Error(`Could not find ${current} in ${Object.keys(this.players)} from ${this.turns}`);
 			if (currentPlayer.out) continue;
@@ -337,6 +338,7 @@ export class Game<State extends BaseState> {
 				this.setTimer('Next turn');
 				return current;
 			}
+			this.log.push({ action: 'skip', turn: current, time: new Date(), ctx: null });
 		} while (current !== this.turn);
 		this.clearTimer();
 		return null;
@@ -388,6 +390,7 @@ export class Game<State extends BaseState> {
 				created: this.createdAt,
 				started: this.startedAt!,
 				ended: this.endedAt!,
+				winCtx: 'winCtx' in this ? this.winCtx : null,
 			};
 			uploadGame(model).catch(err => {
 				log(err);

@@ -10,9 +10,10 @@
 		"notify-unpushed": "sh ./scripts/notify-unpushed.sh",
 		"prettify": "prettier -w",
 		"prepare": "sh ./scripts/setup.sh",
-		"start": "ts-node --swc src/index.ts",
+		"start": "npm run webpack-server & ts-node --swc src/index.ts",
 		"test": "npm run lint && npm run tsc",
-		"tsc": "tsc"
+		"tsc": "tsc",
+		"webpack-server": "webpack -c src/web/webpack/webpack.config.ts --watch"
 	},
 	"keywords": [],
 	"author": "PartMan7",
@@ -29,15 +30,19 @@
 		"ps-client": "^4.4.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
+		"ts-loader": "^9.5.2",
 		"ts-node": "^10.9.2",
 		"tsconfig-paths": "^4.2.0",
-		"typescript": "^5.1.6"
+		"typescript": "^5.1.6",
+		"webpack": "^5.98.0",
+		"webpack-cli": "^6.0.1"
 	},
 	"devDependencies": {
 		"@types/express": "^5.0.0",
 		"@types/node": "^20.4.4",
 		"@types/react": "^18.2.48",
 		"@types/react-dom": "^18.2.18",
+		"@types/webpack": "^5.28.5",
 		"@typescript-eslint/eslint-plugin": "^6.2.0",
 		"@typescript-eslint/parser": "^6.2.0",
 		"eslint": "^8.45.0",

@@ -7,11 +7,13 @@ import { cachebuster } from '@/utils/cachebuster';
 import { debounce } from '@/utils/debounce';
 import { fsPath } from '@/utils/fsPath';
 
+import type { FSWatcher } from 'chokidar';
+
 type ListenerType = 'commands' | 'games';
 type Register = { label: ListenerType; pattern: RegExp; reload: (filepaths: string[]) => Promise<void> | void; debounce?: number };
 type Listener = { label: ListenerType; pattern: RegExp; reload: (filepaths: string) => Promise<void> | void };
 
-interface EmitterEvents {
+export interface EmitterEvents {
 	trigger: [label: ListenerType, file: string];
 	start: [label: ListenerType, files: string[]];
 	complete: [label: ListenerType, files: string[]];
@@ -27,7 +29,7 @@ class Emitter extends EventEmitter {
 	}
 }
 
-export default function createSentinel() {
+export default function createSentinel(): { emitter: Emitter; sentinel: FSWatcher } {
 	const emitter = new Emitter();
 
 	const registers: Register[] = [

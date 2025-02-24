@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { type HydratedDocument } from 'mongoose';
 
 import type { Player } from '@/ps/games/common';
 
@@ -48,6 +48,7 @@ const schema = new mongoose.Schema({
 		default: Date.now,
 	},
 	log: [String],
+	winCtx: mongoose.Schema.Types.Mixed,
 });
 
 schema.index({ id: 1 });
@@ -61,9 +62,17 @@ export interface GameModel {
 	started: Date | null;
 	ended: Date;
 	log: string[];
+	winCtx?: unknown;
 }
 const model = mongoose.model('game', schema, 'games');
 
 export function uploadGame(game: GameModel): Promise<GameModel> {
 	return model.create(game);
+}
+
+export async function getGameById(gameType: string, gameId: string): Promise<HydratedDocument<GameModel>> {
+	const id = gameId.toUpperCase().replace(/^#?/, '#');
+	const game = await model.findOne({ game: gameType, id });
+	if (!game) throw new Error(`Unable to find a game of ${gameType} with ID ${id}.`);
+	return game;
 }
