@@ -146,21 +146,19 @@ export class Othello extends Game<State> {
 			.map(player => `${player.name} (${player.turn})${player.id === winner ? ` ${winnerIcon}` : ''}`)
 			.join(' vs ');
 		const count = this.count();
-		return (
-			new EmbedBuilder()
-				.setColor('#008000')
-				.setAuthor({ name: 'Othello - Room Match' })
-				.setTitle(title)
-				// .setURL // TODO: Link game logs on Web
-				.addFields([
-					{
-						name: [count.B, count.W].join(' - '),
-						value: this.state.board
-							.map(row => row.map(cell => (cell ? { B: ':black_circle:', W: ':white_circle:' }[cell] : ':green_circle:')).join(''))
-							.join('\n'),
-					},
-				])
-		);
+		return new EmbedBuilder()
+			.setColor('#008000')
+			.setAuthor({ name: 'Othello - Room Match' })
+			.setTitle(title)
+			.setURL(`${process.env.WEB_URL}/othello/${this.id.replace(/^#/, '')}`)
+			.addFields([
+				{
+					name: [count.B, count.W].join(' - '),
+					value: this.state.board
+						.map(row => row.map(cell => (cell ? { B: ':black_circle:', W: ':white_circle:' }[cell] : ':green_circle:')).join(''))
+						.join('\n'),
+				},
+			]);
 	}
 
 	render(side: Turn) {
