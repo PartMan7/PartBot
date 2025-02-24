@@ -5,7 +5,7 @@ import { gameCache } from '@/cache/games';
 import { prefix } from '@/config/ps';
 import { uploadGame } from '@/database/games';
 import Discord from '@/discord';
-import { botLogChannel } from '@/discord/constants/servers/boardgames';
+import { BOT_LOG_CHANNEL } from '@/discord/constants/servers/boardgames';
 import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { toHumanTime, toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
@@ -381,7 +381,7 @@ export class Game<State extends BaseState> {
 		if (this.started && this.renderEmbed && this.roomid === 'boardgames') {
 			const embed = this.renderEmbed();
 			// Send only for games from BG
-			const channel = Discord.channels.cache.get(botLogChannel);
+			const channel = Discord.channels.cache.get(BOT_LOG_CHANNEL);
 			if (channel && channel.type === ChannelType.GuildText) channel.send({ embeds: [embed] });
 		}
 		// Upload to DB

@@ -1,1 +1,1 @@
-export const winnerIcon = '<:winner:1307683576476602440>';
+export const WINNER_ICON = '<:winner:1307683576476602440>';

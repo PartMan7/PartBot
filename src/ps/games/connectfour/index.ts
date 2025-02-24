@@ -1,6 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 
-import { winnerIcon } from '@/discord/constants/emotes';
+import { WINNER_ICON } from '@/discord/constants/emotes';
 import { render } from '@/ps/games/connectfour/render';
 import { Game, createGrid } from '@/ps/games/game';
 import { ChatError } from '@/utils/chatError';
@@ -104,7 +104,7 @@ export class ConnectFour extends Game<State> {
 	renderEmbed(): EmbedBuilder {
 		const winner = this.winCtx && this.winCtx.type === 'win' ? this.winCtx.winner.id : null;
 		const title = Object.values(this.players)
-			.map(player => `${player.name} (${player.turn})${player.id === winner ? ` ${winnerIcon}` : ''}`)
+			.map(player => `${player.name} (${player.turn})${player.id === winner ? ` ${WINNER_ICON}` : ''}`)
 			.join(' vs ');
 		return (
 			new EmbedBuilder()

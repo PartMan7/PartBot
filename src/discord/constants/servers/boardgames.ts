@@ -1,4 +1,4 @@
-export const id = '576487087558098945';
+export const ID = '576487087558098945';
 
-export const botLogChannel = '576488243126599700';
-export const testingChannel = '762324232948023316';
+export const BOT_LOG_CHANNEL = '576488243126599700';
+export const TESTING_CHANNEL = '762324232948023316';
