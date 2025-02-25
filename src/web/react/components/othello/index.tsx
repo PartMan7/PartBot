@@ -1,4 +1,4 @@
-import { type ReactElement, memo, useCallback, useMemo, useState, useEffect } from 'react';
+import { type ReactElement, memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Table } from '@/web/react/components/board';
 
@@ -15,8 +15,11 @@ type Board = (null | 'W' | 'B')[][];
 type GameState = { board: Board; sinceLast: number | null; at: Date; score: { W: number; B: number } };
 
 const Cell: CellRenderer<'W' | 'B' | null> = ({ cell }) => (
-	<td className="h-8 w-8 bg-green-600 border-collapse border border-primary leading-0">
-		{cell ? <span className={`${cell === 'W' ? 'bg-white' : 'bg-black'} h-7 w-7 inline-block rounded-full m-0.5`} /> : null}
+	<td className="bg-green-600 border-collapse border border-primary leading-0">
+		<span
+			className="h-7 w-7 inline-block rounded-full m-0.5"
+			style={{ backgroundColor: cell ? (cell === 'W' ? 'white' : 'black') : undefined }}
+		/>
 	</td>
 );
 const Board = memo(({ state }: { state: GameState }) => (
@@ -71,7 +74,7 @@ const BoardWrapper = memo(({ states, game }: { states: GameState[]; game: GameMo
 				Start
 			</button>
 			<button onClick={previous} disabled={!canPrevious}>
-				Previous
+				Prev
 			</button>
 			<button onClick={next} disabled={!canNext}>
 				Next
@@ -83,7 +86,7 @@ const BoardWrapper = memo(({ states, game }: { states: GameState[]; game: GameMo
 	);
 
 	return (
-		<div className="flex flex-col items-center max-w-3xl m-10">
+		<div className="flex flex-col items-center m-10">
 			<h1>
 				{game.players.B.name} (Black) vs {game.players.W.name} (White) <small className="text-secondary">in {game.room}</small>
 			</h1>
