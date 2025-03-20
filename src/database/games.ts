@@ -51,8 +51,6 @@ const schema = new mongoose.Schema({
 	winCtx: mongoose.Schema.Types.Mixed,
 });
 
-schema.index({ id: 1 });
-
 export interface GameModel {
 	id: string;
 	game: string;

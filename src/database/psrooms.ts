@@ -15,7 +15,7 @@ const schema = new mongoose.Schema({
 	auth: Object,
 	tour: {
 		timer: {
-			type: [Boolean, [Number]],
+			type: [Number],
 		},
 	},
 	whitelist: [String],
@@ -44,7 +44,6 @@ const schema = new mongoose.Schema({
 	_assign: Object,
 });
 
-schema.index({ roomId: 1 });
 const model = mongoose.model('psroom', schema, 'psrooms');
 
 export function parseRoomConfig(config: UnparsedPSRoomConfig): PSRoomConfig {
@@ -57,12 +56,12 @@ export function parseRoomConfig(config: UnparsedPSRoomConfig): PSRoomConfig {
 }
 
 export async function getRoomConfig(roomId: string): Promise<PSRoomConfig | null> {
-	const res: UnparsedPSRoomConfig | null = await model.findOne({ roomId }).lean();
+	const res = await model.findOne({ roomId }).lean() as UnparsedPSRoomConfig | null;
 	if (!res) return null;
 	return parseRoomConfig(res);
 }
 
 export async function fetchRoomConfigs(): Promise<PSRoomConfig[]> {
-	const res: UnparsedPSRoomConfig[] = await model.find({}).lean();
+	const res = await model.find({}).lean() as UnparsedPSRoomConfig[];
 	return res.map(parseRoomConfig);
 }

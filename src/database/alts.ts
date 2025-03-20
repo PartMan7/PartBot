@@ -23,7 +23,6 @@ const schema = new mongoose.Schema({
 	},
 });
 
-schema.index({ id: 1 });
 interface Model {
 	id: string;
 	from: string;
