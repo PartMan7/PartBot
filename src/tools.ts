@@ -1,14 +1,7 @@
-import axios from 'axios';
-
 import type { TranslationFn } from '@/i18n/types';
 
 export function toId(str: string): string {
 	return str.toLowerCase().replace(/[^a-z0-9]/g, '');
-}
-
-export async function uploadToPastie(text: string): Promise<string> {
-	const res = await axios.post(`https://pastie.io/documents`, text);
-	return `https://pastie.io/raw/${res.data.key as string}`;
 }
 
 type Entry = {
