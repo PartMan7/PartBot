@@ -6,7 +6,7 @@ import type { PSMessage } from '@/types/ps';
 
 export default function interfaceHandler(message: PSMessage) {
 	// Ignore & messages
-	if (message.isIntro || !message.author.userid || !message.target) return;
+	if (message.isIntro || !message.author?.userid || !message.target) return;
 	if (message.author.userid === message.parent.status.userid) return;
 	if (message.type === 'pm') {
 		// Ignore page requests; the PS interface for this is horrible
