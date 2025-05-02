@@ -41,21 +41,24 @@ export async function loadCommands(): Promise<void> {
 	await Promise.all(
 		commands.map(async commandFile => {
 			const requirePath = fsPath('discord', 'commands', commandFile);
-			const { command }: { command: DiscCommand } = await import(requirePath);
-			if (!command) return;
-			[command.name, ...(command.aliases ?? [])].forEach((commandName, isAlias) => {
-				const slash = new SlashCommandBuilder().setName(commandName).setDescription(command.desc);
-				if (command.flags?.serverOnly) slash.setDMPermission(false); // TODO: This is deprecated?
-				if (command.args) command.args(slash);
+			const { command: commandEntries }: { command: DiscCommand | DiscCommand[] } = await import(requirePath);
+			if (!commandEntries) return;
+			const commands = Array.isArray(commandEntries) ? commandEntries : [commandEntries];
+			commands.forEach(command =>
+				[command.name, ...(command.aliases ?? [])].forEach((commandName, isAlias) => {
+					const slash = new SlashCommandBuilder().setName(commandName).setDescription(command.desc);
+					if (command.flags?.serverOnly) slash.setDMPermission(false); // TODO: This is deprecated?
+					if (command.args) command.args(slash);
 
-				DiscCommands[commandName] = {
-					...command,
-					name: commandName,
-					path: commandFile,
-					isAlias: !!isAlias,
-					slash,
-				};
-			});
+					DiscCommands[commandName] = {
+						...command,
+						name: commandName,
+						path: commandFile,
+						isAlias: !!isAlias,
+						slash,
+					};
+				})
+			);
 		})
 	);
 	await registerCommands();

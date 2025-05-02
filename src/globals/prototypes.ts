@@ -138,12 +138,12 @@ Object.defineProperties(Array.prototype, {
 		configurable: false,
 		value: function <T = unknown, S = unknown>(this: T[], spacer: S): (T | S)[] {
 			if (this.length === 0 || this.length === 1) return this;
-			return this.slice(1).reduce(
+			return this.slice(1).reduce<(T | S)[]>(
 				(acc, term) => {
 					acc.push(spacer, term);
 					return acc;
 				},
-				[this[0]] as (T | S)[]
+				[this[0]]
 			);
 		},
 	},

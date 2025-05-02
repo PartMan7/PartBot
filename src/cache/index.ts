@@ -1,3 +1,4 @@
+import type { JudgementGame } from '@/discord/commands/judgement';
 import type { Games } from '@/ps/games';
 import type { BaseGame } from '@/ps/games/game';
 import type { DiscCommand, PSCommand } from '@/types/chat';
@@ -23,3 +24,4 @@ export const PSGames: { [key in keyof Games]?: Record<string, BaseGame> } = {};
 
 // Discord
 export const DiscCommands: { [key: string]: DiscCommand & { path: string; isAlias?: boolean; slash: SlashCommandBuilder } } = {};
+export const DiscGames: { judgement: Record<string, JudgementGame> } = { judgement: {} };
