@@ -4,17 +4,15 @@ import { fromHumanTime } from '@/tools';
 import type { Meta } from '@/ps/games/common';
 
 export const meta = {
-	name: 'Connect Four',
-	id: GamesList.ConnectFour,
-	aliases: ['c4'],
+	name: 'Scrabble',
+	id: GamesList.Scrabble,
+	aliases: ['scrab'],
 	players: 'many',
 
-	turns: {
-		Y: 'Yellow',
-		R: 'Red',
-	},
+	minSize: 2,
+	maxSize: 4,
 
-	autostart: true,
-	pokeTimer: fromHumanTime('30 sec'),
-	timer: fromHumanTime('1 min'),
+	autostart: false,
+	pokeTimer: fromHumanTime('1 min'),
+	timer: fromHumanTime('2 min'),
 } satisfies Meta;

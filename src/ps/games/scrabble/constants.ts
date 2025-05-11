@@ -1,0 +1,17 @@
+export const BaseBoard: ('3W' | '2W' | '3L' | '2L' | '2*' | null)[][] = [
+	['3W', null, null, '2L', null, null, null, '3W', null, null, null, '2L', null, null, '3W'],
+	[null, '2W', null, null, null, '3L', null, null, null, '3L', null, null, null, '2W', null],
+	[null, null, '2W', null, null, null, '2L', null, '2L', null, null, null, '2W', null, null],
+	['2L', null, null, '2W', null, null, null, '2L', null, null, null, '2W', null, null, '2L'],
+	[null, null, null, null, '2W', null, null, null, null, null, '2W', null, null, null, null],
+	[null, '3L', null, null, null, '3L', null, null, null, '3L', null, null, null, '3L', null],
+	[null, null, '2L', null, null, null, '2L', null, '2L', null, null, null, '2L', null, null],
+	['3W', null, null, '2L', null, null, null, '2*', null, null, null, '2L', null, null, '3W'],
+	[null, null, '2L', null, null, null, '2L', null, '2L', null, null, null, '2L', null, null],
+	[null, '3L', null, null, null, '3L', null, null, null, '3L', null, null, null, '3L', null],
+	[null, null, null, null, '2W', null, null, null, null, null, '2W', null, null, null, null],
+	['2L', null, null, '2W', null, null, null, '2L', null, null, null, '2W', null, null, '2L'],
+	[null, null, '2W', null, null, null, '2L', null, '2L', null, null, null, '2W', null, null],
+	[null, '2W', null, null, null, '3L', null, null, null, '3L', null, null, null, '2W', null],
+	['3W', null, null, '2L', null, null, null, '3W', null, null, null, '2L', null, null, '3W'],
+];

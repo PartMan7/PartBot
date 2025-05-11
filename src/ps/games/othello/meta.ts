@@ -1,6 +1,8 @@
 import { GamesList } from '@/ps/games/common';
 import { fromHumanTime } from '@/tools';
 
+import type { Meta } from '@/ps/games/common';
+
 export const meta = {
 	name: 'Othello',
 	id: GamesList.Othello,
@@ -15,4 +17,4 @@ export const meta = {
 	autostart: true,
 	pokeTimer: fromHumanTime('30 sec'),
 	timer: fromHumanTime('1 min'),
-} as const;
+} satisfies Meta;

@@ -332,7 +332,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 			},
 			unwatch: {
 				name: 'unwatch',
-				aliases: ['uw', 'unspectate', 'uspec'],
+				aliases: ['uw', 'unspectate', 'uspec', 'unspec'],
 				help: 'Unwatches the given game.',
 				syntax: 'CMD [game ref]',
 				async run({ message, arg, $T }) {
