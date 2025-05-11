@@ -9,7 +9,7 @@ import type { SerializedInstance } from '@/types/common';
 
 export type GameModelAPI = SerializedInstance<Omit<GameModel, 'winCtx'> & { winCtx: Othello['winCtx'] }>;
 
-type OthelloLog = { action: 'play' | 'skip'; time: string; turn: 'W' | 'B'; ctx: [number, number] };
+type OthelloLog = { action: 'play' | 'skip'; time: string; turn: 'W' | 'B'; ctx: [number, number] | null };
 
 type Board = (null | 'W' | 'B')[][];
 type GameState = { board: Board; sinceLast: number | null; at: Date; score: { W: number; B: number } };
@@ -150,7 +150,7 @@ export const ViewOnlyOthello = memo(({ game }: { game: GameModelAPI }): ReactEle
 			(boards, entry) => {
 				const lastState = boards.at(-1)!;
 				const nextBoard = cloneBoard(lastState.board);
-				playOnBoard(nextBoard, entry.turn, ...entry.ctx);
+				if (entry.action === 'play') playOnBoard(nextBoard, entry.turn, ...entry.ctx!);
 				const playedAt = new Date(entry.time);
 				const nextState: GameState = {
 					board: nextBoard,
