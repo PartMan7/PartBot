@@ -58,7 +58,7 @@ const BoardWrapper = memo(({ states, game }: { states: GameState[]; game: GameMo
 	const winCtx = game.winCtx;
 	const subHeading = winCtx
 		? winCtx.type === 'win'
-			? `${winCtx.winner} won against ${winCtx.loser}.`
+			? `${winCtx.winner.name} won against ${winCtx.loser.name}.`
 			: winCtx.type === 'draw'
 				? `The game ended in a draw.`
 				: winCtx.type === 'force'
