@@ -148,17 +148,19 @@ export const ViewOnlyOthello = memo(({ game }: { game: GameModelAPI }): ReactEle
 	const boardsByTurn = useMemo(() => {
 		return log.reduce<GameState[]>(
 			(boards, entry) => {
-				const lastState = boards.at(-1)!;
-				const nextBoard = cloneBoard(lastState.board);
-				if (entry.action === 'play') playOnBoard(nextBoard, entry.turn, ...entry.ctx!);
-				const playedAt = new Date(entry.time);
-				const nextState: GameState = {
-					board: nextBoard,
-					sinceLast: playedAt.getTime() - lastState.at.getTime(),
-					at: playedAt,
-					score: getScore(nextBoard),
-				};
-				boards.push(nextState);
+				if (entry.action === 'play') {
+					const lastState = boards.at(-1)!;
+					const nextBoard = cloneBoard(lastState.board);
+					playOnBoard(nextBoard, entry.turn, ...entry.ctx!);
+					const playedAt = new Date(entry.time);
+					const nextState: GameState = {
+						board: nextBoard,
+						sinceLast: playedAt.getTime() - lastState.at.getTime(),
+						at: playedAt,
+						score: getScore(nextBoard),
+					};
+					boards.push(nextState);
+				}
 				return boards;
 			},
 			[{ board: getInitialBoard(), sinceLast: null, at: new Date(game.started), score: { W: 0, B: 0 } }]
