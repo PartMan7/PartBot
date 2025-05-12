@@ -23,6 +23,10 @@ import type { ReactElement } from 'react';
 
 const backupKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log', 'startedAt', 'createdAt'] as const;
 
+/**
+ * This is the shared code for all games. To check the game-specific code, refer to the
+ * extended constructor in `$game/index.ts` and go through the `action` method.
+ */
 export class Game<State extends BaseState> {
 	meta: Meta;
 	id: string;
@@ -73,7 +77,7 @@ export class Game<State extends BaseState> {
 	onAddPlayer?(user: User, ctx: string): ActionResponse<Record<string, unknown>>;
 	onLeavePlayer?(player: Player, ctx: string | User): ActionResponse;
 	onForfeitPlayer?(player: Player, ctx: string | User): ActionResponse;
-	onReplacePlayer?(turn: BaseState['turn'], withPlayer: User): ActionResponse<Player>;
+	onReplacePlayer?(turn: BaseState['turn'], withPlayer: User): ActionResponse<Partial<Player>>;
 	onStart?(): ActionResponse;
 	onEnd(type?: EndType): TranslatedText;
 	onEnd() {
@@ -301,6 +305,7 @@ export class Game<State extends BaseState> {
 		if (this.onReplacePlayer) {
 			const res = this.onReplacePlayer(turn, withPlayer);
 			if (!res.success) throw new ChatError(res.error);
+			// TODO: This shouldn't be needed anymore
 			if (res.data) Object.assign(assign, res.data);
 		}
 		const oldPlayer = this.players[turn];
@@ -317,6 +322,7 @@ export class Game<State extends BaseState> {
 		this.nextPlayer();
 		this.startedAt = new Date();
 		this.setTimer('Game started');
+		this.backup();
 		return { success: true, data: undefined };
 	}
 

@@ -1,7 +1,8 @@
 import type { BaseLog } from '@/ps/games/common';
 import type { DIRECTION } from '@/ps/games/scrabble/constants';
-import type { BoardTile } from '@/ps/games/scrabble/types';
+import type { BoardTile, Points } from '@/ps/games/scrabble/types';
 import type { Satisfies, SerializedInstance } from '@/types/common';
+import type { Point } from '@/utils/grid';
 
 export type Log = Satisfies<
 	BaseLog,
@@ -11,7 +12,7 @@ export type Log = Satisfies<
 	} & (
 		| {
 				action: 'play';
-				ctx: { points: number; tiles: BoardTile[]; dir: DIRECTION; x: number; y: number; newTiles: string[]; rack: string[] };
+				ctx: { points: Points; tiles: BoardTile[]; dir: DIRECTION; point: Point; newTiles: string[]; rack: string[] };
 		  }
 		| { action: 'exchange'; ctx: { tiles: string[]; newTiles: string[]; rack: string[] } }
 		| { action: 'pass'; ctx: { rack: string[] } }

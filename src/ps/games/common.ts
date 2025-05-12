@@ -5,6 +5,8 @@ export type Meta = {
 	name: string;
 	id: GamesList;
 	aliases?: readonly string[];
+	/** Only for single-player games. Required for those. */
+	abbr?: string;
 
 	players: 'single' | 'many';
 	turns?: Record<string, string>;

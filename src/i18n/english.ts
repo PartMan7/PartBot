@@ -50,6 +50,7 @@ export default {
 		STASHED: 'Successfully stashed game {{id}}.',
 		SUB: '{{out}} has been subbed with {{in}}!',
 		WATCHING_NOTHING: "You don't seem to need to rejoin anything...",
+		WON: '{{winner}} won!',
 		WON_AGAINST: '{{winner}} won the game of {{game}} against {{loser}}{{ctx}}!',
 		WAITING: 'Waiting for you to play...',
 		NON_PLAYER_OR_SPEC: 'User not in players/spectators',
@@ -70,6 +71,10 @@ export default {
 			INSUFFICIENT_LETTERS: 'You only have {{actual}} tiles of {{letter}} instead of the {{required}} needed.',
 			BAG_SIZE: 'There are {{amount}} tiles left in the bag.',
 			TOO_MUCH_PASSING: 'The game ended due to too many passes!',
+			FIRST_MOVE_CENTER: 'The first move must pass through the center of the board!',
+			FIRST_MOVE_MULTIPLE_TILES: 'You may not play a single tile on the first move.',
+			MUST_BE_CONNECTED: 'All moves in Scrabble must be connected to the rest of the tiles on the board!',
+			INVALID_WORD: '{{word}} is not a valid word.',
 		},
 	},
 

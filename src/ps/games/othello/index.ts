@@ -162,7 +162,7 @@ export class Othello extends Game<State> {
 			]);
 	}
 
-	render(side: Turn) {
+	render(side: Turn | null) {
 		const ctx: RenderCtx = {
 			board: this.state.board,
 			validMoves: side === this.turn ? this.validMoves() : [],

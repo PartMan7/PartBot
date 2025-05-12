@@ -1,4 +1,6 @@
-export const BaseBoard: ('3W' | '2W' | '3L' | '2L' | '2*' | null)[][] = [
+import type { BaseBoard as BaseBoardType } from '@/ps/games/scrabble/types';
+
+export const BaseBoard: BaseBoardType = [
 	['3W', null, null, '2L', null, null, null, '3W', null, null, null, '2L', null, null, '3W'],
 	[null, '2W', null, null, null, '3L', null, null, null, '3L', null, null, null, '2W', null],
 	[null, null, '2W', null, null, null, '2L', null, '2L', null, null, null, '2W', null, null],
@@ -15,6 +17,8 @@ export const BaseBoard: ('3W' | '2W' | '3L' | '2L' | '2*' | null)[][] = [
 	[null, '2W', null, null, null, '3L', null, null, null, '3L', null, null, null, '2W', null],
 	['3W', null, null, '2L', null, null, null, '3W', null, null, null, '2L', null, null, '3W'],
 ];
+
+export const RACK_SIZE = 7;
 
 export const LETTER_COUNTS = {
 	A: 9,

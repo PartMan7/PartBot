@@ -1,31 +1,44 @@
+import type { Point } from '@/utils/grid';
+
 export type BoardTile = {
 	letter: string;
 	blank?: boolean;
 	points: number;
+	pos: Point;
 };
 
+export type Bonus = '3W' | '2W' | '3L' | '2L' | '2*';
+
+export type BaseBoard = (Bonus | null)[][];
 export type Board = (null | BoardTile)[][];
 
 export type State = {
 	turn: string;
+	baseBoard: BaseBoard;
 	board: Board;
 	racks: Record<string, string[]>;
-	best: Record<string, { points: number; asText: string } | undefined>;
+	score: Record<string, number>;
 	bag: string[];
+	best: Record<string, { points: number; asText: string } | undefined>;
+};
+
+export type Points = {
+	total: number;
+	bingo: boolean;
+	words: Record<string, number>;
 };
 
 export type RenderCtx = {
 	id: string;
+	baseBoard: BaseBoard;
 	board: Board;
 	header?: string;
 	dimHeader?: boolean;
-	score: Record<string, number>;
-
-	player: boolean;
+	score: State['score'];
 	bag: number;
-	hand: string[];
-	selected?: [number, number] | false;
+	rack?: string[];
+	selected?: Point | null;
 };
-export type WinCtx =
-	| ({ type: 'win' } & Record<'winner' | 'loser', { name: string; id: string; turn: string; score: number }>)
-	| { type: 'draw' };
+export type WinCtx = { type: 'win'; winnerIds: string[]; score: State['score'] } | { type: 'draw' };
+
+export type Word = { word: string; baseScore: number; bonuses: Bonus[] };

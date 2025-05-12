@@ -11,6 +11,7 @@ import type { Log } from '@/ps/games/connectfour/logs';
 import type { Board, RenderCtx, State, Turn, WinCtx } from '@/ps/games/connectfour/types';
 import type { BaseContext } from '@/ps/games/game';
 import type { User } from 'ps-client';
+import type { ReactElement } from 'react';
 
 export { meta } from '@/ps/games/connectfour/meta';
 
@@ -124,7 +125,7 @@ export class ConnectFour extends Game<State> {
 		);
 	}
 
-	render(side: Turn) {
+	render(side: Turn | null): ReactElement {
 		const ctx: RenderCtx = {
 			board: this.state.board,
 			id: this.id,

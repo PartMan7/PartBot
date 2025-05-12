@@ -6,5 +6,6 @@ export const meta = {
 	name: 'Mastermind',
 	id: GamesList.Mastermind,
 	aliases: ['mm'],
+	abbr: 'mm',
 	players: 'single',
 } satisfies Meta;
