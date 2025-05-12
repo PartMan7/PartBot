@@ -16,7 +16,7 @@ import { Timer } from '@/utils/timer';
 
 import type { GameModel } from '@/database/games';
 import type { NoTranslate, PSRoomTranslated, ToTranslate, TranslatedText, TranslationFn } from '@/i18n/types';
-import type { ActionResponse, BaseState, EndType, Meta, Player } from '@/ps/games/common';
+import type { ActionResponse, BaseLog, BaseState, EndType, Meta, Player } from '@/ps/games/common';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
 import type { ReactElement } from 'react';
@@ -34,7 +34,7 @@ export class Game<State extends BaseState> {
 	roomid: string;
 	// @ts-expect-error -- State isn't initialized yet
 	state: State = {};
-	log: { action: string; time: Date; turn: State['turn'] | null; ctx: unknown }[] = [];
+	log: BaseLog[] = [];
 	sides: boolean;
 
 	startable?: boolean;
@@ -63,7 +63,7 @@ export class Game<State extends BaseState> {
 	render() {
 		return null as unknown as ReactElement;
 	}
-	renderEmbed?(): EmbedBuilder;
+	renderEmbed?(): EmbedBuilder | null;
 
 	action(user: User, ctx: string, reaction: boolean): void;
 	action() {}
@@ -80,6 +80,11 @@ export class Game<State extends BaseState> {
 		return 'Game ended';
 	}
 	trySkipPlayer?(turn: BaseState['turn']): boolean;
+
+	throw(msg?: Parameters<TranslationFn>[0], vars?: Parameters<TranslationFn>[1]): never {
+		if (!msg) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+		throw new ChatError(this.$T(msg, vars));
+	}
 
 	constructor(ctx: BaseContext) {
 		this.id = ctx.id;
@@ -195,7 +200,7 @@ export class Game<State extends BaseState> {
 
 	renderSignups?(): ReactElement;
 	signups(): void {
-		if (this.started) throw new ChatError(this.$T('GAME.ALREADY_STARTED'));
+		if (this.started) this.throw('GAME.ALREADY_STARTED');
 		const signupsHTML = (this.renderSignups ?? renderSignups).bind(this)();
 		if (signupsHTML) this.room.sendHTML(signupsHTML, { name: this.id });
 	}
@@ -207,12 +212,11 @@ export class Game<State extends BaseState> {
 
 	addPlayer(user: User, ctx: string | null): ActionResponse<{ started: boolean; as: BaseState['turn'] }> {
 		if (this.started) return { success: false, error: this.$T('GAME.ALREADY_STARTED') };
-		if (this.meta.players === 'single' && Object.keys(this.players).length >= 1) throw new Error(this.$T('GAME.IS_FULL'));
+		if (this.meta.players === 'single' && Object.keys(this.players).length >= 1) this.throw('GAME.IS_FULL');
 		const availableSlots: number | State['turn'][] = this.sides
 			? this.turns.filter(turn => !this.players[turn])
 			: this.meta.maxSize! - Object.keys(this.players).length;
-		if (Object.values(this.players).some((player: Player) => player.id === user.id))
-			throw new ChatError(this.$T('GAME.ALREADY_JOINED'));
+		if (Object.values(this.players).some((player: Player) => player.id === user.id)) this.throw('GAME.ALREADY_JOINED');
 		const newPlayer: Player = {
 			name: user.name,
 			id: user.id,
@@ -289,8 +293,7 @@ export class Game<State extends BaseState> {
 
 	replacePlayer(_turn: BaseState['turn'], withPlayer: User): ActionResponse<TranslatedText> {
 		const turn = _turn as State['turn'];
-		if (Object.values(this.players).some((player: Player) => player.id === withPlayer.id))
-			throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
+		if (Object.values(this.players).some((player: Player) => player.id === withPlayer.id)) this.throw('GAME.IMPOSTOR_ALERT');
 		const assign: Partial<Player> = {
 			name: withPlayer.name,
 			id: withPlayer.id,
@@ -355,7 +358,7 @@ export class Game<State extends BaseState> {
 			const asPlayer = Object.values(this.players).find(player => player.id === user);
 			if (asPlayer) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
 			if (this.spectators.includes(user)) return this.sendHTML(user, this.render(null));
-			throw new ChatError(this.$T('GAME.NON_PLAYER_OR_SPEC'));
+			this.throw('GAME.NON_PLAYER_OR_SPEC');
 		}
 		// TODO: Add ping to ps-client HTML opts
 		Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render(side)));
@@ -378,11 +381,13 @@ export class Game<State extends BaseState> {
 		}
 		this.endedAt = new Date();
 		this.room.send(message);
-		if (this.started && this.renderEmbed && this.roomid === 'boardgames') {
-			const embed = this.renderEmbed();
+		if (this.started && typeof this.renderEmbed === 'function' && this.roomid === 'boardgames') {
 			// Send only for games from BG
-			const channel = Discord.channels.cache.get(BOT_LOG_CHANNEL);
-			if (channel && channel.type === ChannelType.GuildText) channel.send({ embeds: [embed] });
+			const embed = this.renderEmbed();
+			if (embed) {
+				const channel = Discord.channels.cache.get(BOT_LOG_CHANNEL);
+				if (channel && channel.type === ChannelType.GuildText) channel.send({ embeds: [embed] });
+			}
 		}
 		// Upload to DB
 		if (this.meta.players !== 'single') {

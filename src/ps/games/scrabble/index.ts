@@ -2,19 +2,27 @@ import { EmbedBuilder } from 'discord.js';
 
 import { WINNER_ICON } from '@/discord/constants/emotes';
 import { Game, createGrid } from '@/ps/games/game';
+import { BaseBoard, DIRECTION, LETTER_POINTS, PLAY_ACTION_PATTERN, SELECT_ACTION_PATTERN } from '@/ps/games/scrabble/constants';
 import { render } from '@/ps/games/scrabble/render';
-import { ChatError } from '@/utils/chatError';
-import { deepClone } from '@/utils/deepClone';
 
 import type { TranslatedText } from '@/i18n/types';
 import type { EndType } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
+import type { Log } from '@/ps/games/scrabble/logs';
 import type { Board, BoardTile, RenderCtx, State, WinCtx } from '@/ps/games/scrabble/types';
 import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/scrabble/meta';
 
+function isLetter(char: string): boolean {
+	return /A-Z/.test(char);
+}
+
 export class Scrabble extends Game<State> {
+	points: Record<string, number> = LETTER_POINTS;
+	log: Log[] = [];
+	passCount: number | null = null;
+	selected: [number, number] | null = null;
 	winCtx?: WinCtx | { type: EndType };
 
 	constructor(ctx: BaseContext) {
@@ -22,90 +30,182 @@ export class Scrabble extends Game<State> {
 		super.persist(ctx);
 
 		if (ctx.backup) return;
-		this.state.board = createGrid<BoardTile | null>(8, 8, () => null);
+		this.state.board = createGrid<BoardTile | null>(BaseBoard.length, BaseBoard[0].length, () => null);
 	}
 
-	// ,scrabble boardgames c 1745753789294 4 7
-	// /msgroom boardgames,/botmsg partbotter,,@boardgames scrabble ! #ABCDE sA4d
-	// ,scrabble boardgames play 1745753789294 4,7 down WORD
-	action(user: User, ctx: string): void {
-		if (!this.started) throw new ChatError(this.$T('GAME.NOT_STARTED'));
-		if (user.id !== this.players[this.turn!].id) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
-		const [i, j] = ctx.split('-').map(num => parseInt(num));
-		if (isNaN(i) || isNaN(j)) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
-		const res = this.play([i, j], this.turn!);
-		if (!res) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+	parsePosition(str: string): [number, number] {
+		if (str.length !== 2) this.throw();
+		const coordinates = [str.charAt(0), str.charAt(1)].map(char => parseInt(char, 36)) as [number, number];
+		if (coordinates.some(coord => Number.isNaN(coord) || coord >= this.state.board.length)) this.throw();
+		return coordinates;
 	}
 
-	play([i, j]: [number, number], turn: Turn): Board | null;
-	play([i, j]: [number, number], turn: Turn, board: Board): boolean;
-	play([i, j]: [number, number], turn: Turn, board = this.state.board): Board | null | boolean {
-		const isActual = board === this.state.board;
-		const other = this.getNext(turn);
-		if (isActual && this.turn !== turn) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
-
-		if (board[i][j]) return null;
-
-		let flipped = false;
-		for (let X = -1; X <= 1; X++) {
-			for (let Y = -1; Y <= 1; Y++) {
-				if (!X && !Y) continue;
-				for (let m = i, n = j; m < 8 && n < 8 && m >= 0 && n >= 0; m += X, n += Y) {
-					if (m === i && n === j) continue;
-					if (!board[m][n]) break; // Gap
-					if (board[m][n] === other) continue; // Continue flipping!
-					for (let x = i, y = j; x < 8 && y < 8 && x >= 0 && y >= 0; x += X, y += Y) {
-						if (x === i && y === j) continue;
-						if (board[x][y] === other) {
-							flipped = true;
-							if (!isActual) return true;
-							else board[x][y] = turn;
-						} else break;
-					}
-				}
+	parseTiles(str: string): BoardTile[] {
+		let cursor = 0;
+		const tiles: BoardTile[] = [];
+		const nextChar = (): string => {
+			const char = str.at(cursor)!;
+			cursor++;
+			return char;
+		};
+		while (cursor < str.length) {
+			const char = nextChar();
+			if (isLetter(char)) tiles.push({ letter: char, points: this.points[char] });
+			if (char === ' ') continue;
+			if ('\'"‘’`'.includes(char)) {
+				const lastLetter = tiles.at(-1);
+				if (!lastLetter) this.throw();
+				lastLetter.blank = true;
+				lastLetter.points = 0;
+				continue;
 			}
+			if (char === '[') {
+				const letter = nextChar();
+				if (!isLetter(letter)) this.throw();
+				if (nextChar() !== ']') this.throw();
+				tiles.push({ letter, points: 0, blank: true });
+				continue;
+			}
+			if (char === '(') {
+				const letter = nextChar();
+				if (!isLetter(letter)) this.throw();
+				if (nextChar() !== ')') this.throw();
+				tiles.push({ letter, points: 0, blank: true });
+				continue;
+			}
+			this.throw();
 		}
-		if (!isActual) return false;
-		if (!flipped) return null;
-		board[i][j] = turn;
-		this.log.push({ action: 'play', time: new Date(), turn, ctx: [i, j] });
+		return tiles;
+	}
+
+	action(user: User, ctx: string): void {
+		if (!this.started) this.throw('GAME.NOT_STARTED');
+		if (user.id !== this.players[this.turn!].id) this.throw('GAME.IMPOSTOR_ALERT');
+		const [action, value] = ctx.lazySplit(' ', 1) as [string | undefined, string | undefined];
+		if (!action) this.throw();
+		switch (action.charAt(0)) {
+			// Select: sXY
+			case 's': {
+				const match = action.match(SELECT_ACTION_PATTERN);
+				if (!match) this.throw();
+				const pos = this.parsePosition(match.groups!.pos);
+				this.select(pos);
+				break;
+			}
+			// Play: pXYd WORD
+			case 'p': {
+				if (!value) this.throw();
+				const match = action.match(PLAY_ACTION_PATTERN);
+				if (!match) this.throw();
+				const pos = this.parsePosition(match.groups!.pos);
+				this.play(value.toUpperCase(), pos, match.groups!.dir === 'r' ? DIRECTION.RIGHT : DIRECTION.DOWN);
+				break;
+			}
+			// Exchange: x ABC
+			case 'x': {
+				if (!value) this.throw();
+				this.exchange(value);
+				break;
+			}
+			// Pass: -
+			case '-': {
+				this.pass();
+				break;
+			}
+			default:
+				this.throw();
+		}
+	}
+
+	select(pos: [number, number]): void {
+		const turn = this.turn!;
+		const player = this.players[turn];
+		if (!player) this.throw();
+		this.selected = pos;
+		this.update(turn);
+	}
+
+	play(word: string, [i, j]: [number, number], dir: DIRECTION): void {
+		if (!this.selected) this.throw('GAME.SCRABBLE.NO_SELECTED');
+		const board = this.state.board;
+		const turn = this.turn!;
+		const player = this.players[turn];
+		if (!player) throw new Error(`Couldn't find player ${turn} in ${JSON.stringify(this.players)}`);
+
+		const rack = this.state.racks[turn];
+		const rackCount = rack.count();
+		const tiles: BoardTile[] = this.parseTiles(word);
+		const tilesCount = tiles.count(true);
+
+		for (const [tile, count] of tilesCount.entries()) {
+			const letter = tile.blank ? '_' : tile.letter;
+			if (!rackCount[letter]) this.throw('GAME.SCRABBLE.MISSING_LETTER');
+			if (rackCount[letter] < count) this.throw('GAME.SCRABBLE.INSUFFICIENT_LETTERS');
+		}
+
+		// TODO
+		const points = 0;
+
+		const newTiles = this.state.bag.splice(0, tiles.length);
+		rack.push(...newTiles);
+
+		this.selected = null;
+		this.log.push({ action: 'play', time: new Date(), turn, ctx: { points, tiles, x: i, y: j, dir, rack, newTiles } });
+
+		if (this.state.bag.length === 0) this.end();
 
 		const next = this.nextPlayer();
 		if (!next) this.end();
-		return board;
 	}
 
-	hasMoves(turn = this.turn!): boolean {
-		const board = deepClone(this.state.board);
-		for (let i = 0; i < 8; i++) {
-			for (let j = 0; j < 8; j++) {
-				if (this.play([i, j], turn, board)) return true;
-			}
+	exchange(letterList: string): void {
+		const turn = this.turn!;
+		const player = this.players[turn];
+		if (!player) this.throw();
+		if (!letterList || letterList.length === 0) this.throw();
+
+		const letters = letterList
+			.toUpperCase()
+			.replace(/[^A-Z_]/g, '')
+			.split('');
+		if (!letters.length) this.throw();
+		const letterCount = letters.count();
+
+		if (this.state.bag.length < letters.length) this.throw('GAME.SCRABBLE.BAG_SIZE', { amount: this.state.bag.length });
+
+		const rack = this.state.racks[turn];
+		const rackCount = rack.count();
+
+		for (const [letter, required] of Object.entries(letterCount)) {
+			if (!rackCount[letter]) this.throw('GAME.SCRABBLE.MISSING_LETTER', { letter });
+			if (rackCount[letter] < required)
+				this.throw('GAME.SCRABBLE.INSUFFICIENT_LETTERS', { letter, actual: rackCount[letter], required });
 		}
-		return false;
+
+		letters.forEach(letter => rack.remove(letter));
+
+		const newTiles = this.state.bag.splice(0, letters.length, ...letters);
+		this.state.bag.shuffle(this.prng);
+		rack.push(...newTiles);
 	}
 
-	validMoves(): [number, number][] {
-		const board = deepClone(this.state.board);
-		const moves: [number, number][] = [];
-		for (let i = 0; i < 8; i++) {
-			for (let j = 0; j < 8; j++) {
-				if (this.play([i, j], this.turn!, board)) moves.push([i, j]);
-			}
+	pass(): void {
+		this.passCount ??= 0;
+		this.passCount++;
+		if (this.passCount > Object.keys(this.players).length) {
+			this.end('regular');
 		}
-		return moves;
-	}
-
-	trySkipPlayer(turn: Turn) {
-		return !this.hasMoves(turn);
+		this.nextPlayer();
 	}
 
 	onEnd(type?: EndType): TranslatedText {
 		if (type) {
 			this.winCtx = { type };
 			if (type === 'dq') return this.$T('GAME.ENDED_AUTOMATICALLY', { game: this.meta.name, id: this.id });
+			if (type === 'regular' && this.state.bag.length > 0) return this.$T('GAME.SCRABBLE.TOO_MUCH_PASSING');
 			return this.$T('GAME.ENDED', { game: this.meta.name, id: this.id });
 		}
+		// TODO
 		const scores = this.count();
 		if (scores.W === scores.B) {
 			this.winCtx = { type: 'draw' };
@@ -127,25 +227,16 @@ export class Scrabble extends Game<State> {
 		});
 	}
 
-	renderEmbed(): EmbedBuilder {
+	renderEmbed(): EmbedBuilder | null {
 		const winner = this.winCtx && this.winCtx.type === 'win' ? this.winCtx.winner.id : null;
-		const title = Object.values(this.players)
-			.map(player => `${player.name} (${player.turn})${player.id === winner ? ` ${WINNER_ICON}` : ''}`)
-			.join(' vs ');
-		const count = this.count();
-		return new EmbedBuilder()
-			.setColor('#008000')
-			.setAuthor({ name: 'Othello - Room Match' })
-			.setTitle(title)
-			.setURL(this.getURL())
-			.addFields([
-				{
-					name: [count.B, count.W].join(' - '),
-					value: this.state.board
-						.map(row => row.map(cell => (cell ? { B: ':black_circle:', W: ':white_circle:' }[cell] : ':green_circle:')).join(''))
-						.join('\n'),
-				},
-			]);
+		if (!winner) return null;
+		const winnerPlayer = this.players[winner];
+		if (!winnerPlayer) this.throw();
+		const winnerBest = this.state.best[winner];
+		if (!winnerBest) return null;
+		const title = `${winnerPlayer.name}: ${winnerBest.asText} [${winnerBest.points}]`;
+		return new EmbedBuilder().setColor('#CCC5A8').setAuthor({ name: 'Scrabble - Room Match' }).setTitle(title);
+		// .setURL(this.getURL()) // TODO
 	}
 
 	render(side: Turn) {

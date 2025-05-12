@@ -59,6 +59,18 @@ export default {
 			PRIVATE: "Psst it's your turn to play in {{game}} [{{id}}]",
 			PUBLIC: "{{user}} hasn't played in {{game}} [{{id}}] for {{time}}...",
 		},
+
+		MASTERMIND: {
+			ENDED: 'The game of Mastermind was ended for {{player}}.',
+			FAILED: '{{player}} was unable to guess {{solution}} in {{cap}} guesses.',
+		},
+		SCRABBLE: {
+			NO_SELECTED: 'You must select a cell to play from first. Please use the buttons!',
+			MISSING_LETTER: "You don't have any tiles for {{letter}}.",
+			INSUFFICIENT_LETTERS: 'You only have {{actual}} tiles of {{letter}} instead of the {{required}} needed.',
+			BAG_SIZE: 'There are {{amount}} tiles left in the bag.',
+			TOO_MUCH_PASSING: 'The game ended due to too many passes!',
+		},
 	},
 
 	COMMANDS: {

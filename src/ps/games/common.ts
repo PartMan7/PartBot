@@ -1,4 +1,5 @@
 import type { TranslatedText } from '@/i18n/types';
+import type { Satisfies } from '@/types/common';
 
 export type Meta = {
 	name: string;
@@ -34,3 +35,10 @@ export type BaseState = { board: unknown; turn: string };
 export type ActionResponse<T = undefined> = { success: true; data: T } | { success: false; error: TranslatedText };
 
 export type EndType = 'regular' | 'force' | 'dq' | 'loss';
+
+export type BaseLog = { action: string; time: Date; turn: string | null; ctx: unknown };
+
+export type CommonLog<Turn extends string = string> = Satisfies<
+	BaseLog,
+	{ action: 'dq' | 'forfeit'; time: Date; turn: Turn; ctx: null }
+>;

@@ -9,6 +9,9 @@ export type Board = (null | BoardTile)[][];
 export type State = {
 	turn: string;
 	board: Board;
+	racks: Record<string, string[]>;
+	best: Record<string, { points: number; asText: string } | undefined>;
+	bag: string[];
 };
 
 export type RenderCtx = {

@@ -3,18 +3,19 @@ import { EmbedBuilder } from 'discord.js';
 import { WINNER_ICON } from '@/discord/constants/emotes';
 import { Game, createGrid } from '@/ps/games/game';
 import { render } from '@/ps/games/othello/render';
-import { ChatError } from '@/utils/chatError';
 import { deepClone } from '@/utils/deepClone';
 
 import type { TranslatedText } from '@/i18n/types';
 import type { EndType } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
+import type { Log } from '@/ps/games/othello/logs';
 import type { Board, RenderCtx, State, Turn, WinCtx } from '@/ps/games/othello/types';
 import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/othello/meta';
 
 export class Othello extends Game<State> {
+	log: Log[] = [];
 	winCtx?: WinCtx | { type: EndType };
 	cache: Record<string, Record<Turn, number>> = {};
 	constructor(ctx: BaseContext) {
@@ -42,12 +43,12 @@ export class Othello extends Game<State> {
 	}
 
 	action(user: User, ctx: string): void {
-		if (!this.started) throw new ChatError(this.$T('GAME.NOT_STARTED'));
-		if (user.id !== this.players[this.turn!].id) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
+		if (!this.started) this.throw('GAME.NOT_STARTED');
+		if (user.id !== this.players[this.turn!].id) this.throw('GAME.IMPOSTOR_ALERT');
 		const [i, j] = ctx.split('-').map(num => parseInt(num));
-		if (isNaN(i) || isNaN(j)) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+		if (isNaN(i) || isNaN(j)) this.throw();
 		const res = this.play([i, j], this.turn!);
-		if (!res) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+		if (!res) this.throw();
 	}
 
 	play([i, j]: [number, number], turn: Turn): Board | null;
@@ -55,7 +56,7 @@ export class Othello extends Game<State> {
 	play([i, j]: [number, number], turn: Turn, board = this.state.board): Board | null | boolean {
 		const isActual = board === this.state.board;
 		const other = this.getNext(turn);
-		if (isActual && this.turn !== turn) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
+		if (isActual && this.turn !== turn) this.throw('GAME.IMPOSTOR_ALERT');
 
 		if (board[i][j]) return null;
 

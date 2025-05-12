@@ -14,6 +14,7 @@ declare global {
 		list($T?: TranslationFn | string): string;
 		space<S = unknown>(spacer: S): (T | S)[];
 		count(): Record<T & (string | number), number>;
+		count(map: true): Map<T, number>;
 	}
 	interface ReadonlyArray<T> {
 		random(rng?: RNGSource): T;
@@ -22,7 +23,8 @@ declare global {
 		unique(): T[];
 		list($T?: TranslationFn): string;
 		space<S = unknown>(spacer: S): (T | S)[];
-		count(): Record<T & string, number>;
+		count(): Record<T & (string | number), number>;
+		count(map: true): Map<T, number>;
 	}
 
 	interface String {
@@ -151,13 +153,22 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function <T extends string | number | symbol = unknown & (string | number)>(this: T[]): Record<T, number> {
-			const out = {} as Record<T, number>;
-			this.forEach(term => {
+		value: function <T extends string | number | symbol = unknown & (string | number)>(
+			this: T[],
+			map?: boolean
+		): Record<T & string, number> | Map<T, number> {
+			if (map) {
+				return this.reduce<Map<T, number>>((out, term) => {
+					if (!out.has(term)) out.set(term, 1);
+					else out.set(term, out.get(term)! + 1);
+					return out;
+				}, new Map());
+			}
+			return (this as string[]).reduce<Record<string, number>>((out, term) => {
 				out[term] ??= 0;
 				out[term]++;
-			});
-			return out;
+				return out;
+			}, {});
 		},
 	},
 });

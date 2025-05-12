@@ -3,11 +3,11 @@ import { EmbedBuilder } from 'discord.js';
 import { WINNER_ICON } from '@/discord/constants/emotes';
 import { render } from '@/ps/games/connectfour/render';
 import { Game, createGrid } from '@/ps/games/game';
-import { ChatError } from '@/utils/chatError';
 import { repeat } from '@/utils/repeat';
 
 import type { TranslatedText } from '@/i18n/types';
 import type { EndType } from '@/ps/games/common';
+import type { Log } from '@/ps/games/connectfour/logs';
 import type { Board, RenderCtx, State, Turn, WinCtx } from '@/ps/games/connectfour/types';
 import type { BaseContext } from '@/ps/games/game';
 import type { User } from 'ps-client';
@@ -15,6 +15,7 @@ import type { User } from 'ps-client';
 export { meta } from '@/ps/games/connectfour/meta';
 
 export class ConnectFour extends Game<State> {
+	log: Log[] = [];
 	winCtx?: WinCtx | { type: EndType };
 	cache: Record<string, Record<Turn, number>> = {};
 	constructor(ctx: BaseContext) {
@@ -26,16 +27,16 @@ export class ConnectFour extends Game<State> {
 	}
 
 	action(user: User, ctx: string): void {
-		if (!this.started) throw new ChatError(this.$T('GAME.NOT_STARTED'));
-		if (user.id !== this.players[this.turn!].id) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
+		if (!this.started) this.throw('GAME.NOT_STARTED');
+		if (user.id !== this.players[this.turn!].id) this.throw('GAME.IMPOSTOR_ALERT');
 		const col = parseInt(ctx);
-		if (isNaN(col)) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+		if (isNaN(col)) this.throw();
 		const res = this.play(col, this.turn!);
-		if (!res) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+		if (!res) this.throw();
 	}
 
 	play(col: number, turn: Turn): Board | null | boolean {
-		if (this.turn !== turn) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
+		if (this.turn !== turn) this.throw('GAME.IMPOSTOR_ALERT');
 		const board = this.state.board;
 
 		if (board[0][col]) return null;
