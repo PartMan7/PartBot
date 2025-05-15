@@ -1,5 +1,5 @@
 import type { CellRenderer } from '@/ps/games/render';
-import type { ReactElement } from 'react';
+import type { CSSProperties, ReactElement } from 'react';
 
 type Label = 'A-Z' | 'Z-A' | '1-9' | '9-1';
 
@@ -14,45 +14,49 @@ function getLabels(amount: number, label: Label): string[] {
 
 export function Table<T>({
 	board,
-	rowLabel,
-	colLabel,
+	style = {},
+	labels,
 	Cell,
 }: {
 	board: T[][];
-	rowLabel: Label;
-	colLabel: Label;
+	style?: CSSProperties;
+	labels: { row: Label; col: Label } | null;
 	Cell: CellRenderer<T>;
 }): ReactElement {
-	const rowLabels = getLabels(board.length, rowLabel);
-	const colLabels = getLabels(board[0].length, colLabel);
+	const rowLabels = labels ? getLabels(board.length, labels.row) : [];
+	const colLabels = labels ? getLabels(board[0].length, labels.col) : [];
 	return (
-		<table className="border-collapse m-5">
+		<table className="border-collapse m-5" style={style}>
 			<tbody>
-				<tr>
-					<th />
-					{colLabels.map(label => (
-						<th className="text-secondary h-5">{label}</th>
-					))}
-					<th />
-				</tr>
+				{labels ? (
+					<tr>
+						<th />
+						{colLabels.map(label => (
+							<th className="text-secondary h-5">{label}</th>
+						))}
+						<th />
+					</tr>
+				) : null}
 
 				{board.map((row, i) => (
 					<tr>
-						<th className="text-secondary w-5">{rowLabels[i]}</th>
+						{labels ? <th className="text-secondary w-5">{rowLabels[i]}</th> : null}
 						{row.map((cell, j) => (
 							<Cell cell={cell} i={i} j={j} />
 						))}
-						<th className="text-secondary w-5">{rowLabels[i]}</th>
+						{labels ? <th className="text-secondary w-5">{rowLabels[i]}</th> : null}
 					</tr>
 				))}
 
-				<tr>
-					<th />
-					{colLabels.map(label => (
-						<th className="text-secondary h-5">{label}</th>
-					))}
-					<th />
-				</tr>
+				{labels ? (
+					<tr>
+						<th />
+						{colLabels.map(label => (
+							<th className="text-secondary h-5">{label}</th>
+						))}
+						<th />
+					</tr>
+				) : null}
 			</tbody>
 		</table>
 	);

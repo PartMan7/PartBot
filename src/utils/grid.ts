@@ -21,7 +21,8 @@ export function rangePoints(from: Point, to: Point, length?: number): Point[] {
 		const xDist = to[0] - from[0];
 		const yDist = to[1] - from[1];
 		if (xDist && yDist) throw new TypeError(`length was not provided for a range between points ${from} -> ${to}`);
-		count = xDist || yDist;
+		if (xDist === 0 && yDist === 0) return [to];
+		count = (xDist || yDist) + 1;
 	}
 	const xRange = range(from[0], to[0], count!);
 	const yRange = range(from[1], to[1], count!);
@@ -33,7 +34,7 @@ export function stepPoint(point: Point, by: Point): Point {
 }
 
 export function multiStepPoint(point: Point, by: Point, steps: number): Point {
-	return [point[0] + by[0] * steps, point[1] + by[1] * steps];
+	return [point[0] + by[0] * (steps - 1), point[1] + by[1] * (steps - 1)];
 }
 
 export function flipPoint(point: Point): Point {

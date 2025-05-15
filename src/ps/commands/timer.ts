@@ -6,17 +6,14 @@ import { Timer } from '@/utils/timer';
 import type { PSCommand } from '@/types/chat';
 import type { PSMessage } from '@/types/ps';
 
-const $ = {
-	messageToId(message: PSMessage) {
-		return 'PS-' + message.target.id + '-' + message.author.id;
-	},
-};
+function messageToId(message: PSMessage): string {
+	return 'PS-' + message.target.id + '-' + message.author.id;
+}
 
 export const command: PSCommand = {
 	name: 'timer',
 	help: 'Sets a timer for the given interval (in human units!)',
 	syntax: 'CMD (time, written out) (// reason)?',
-	static: $,
 	children: {
 		status: {
 			name: 'status',
@@ -24,7 +21,7 @@ export const command: PSCommand = {
 			help: 'Displays the current timer status',
 			syntax: 'CMD',
 			async run({ message, $T }) {
-				const id = $.messageToId(message);
+				const id = messageToId(message);
 				const timer = Timers[id];
 				if (!timer) throw new ChatError($T('COMMANDS.TIMER.NONE_RUNNING'));
 				const timeLeft = toHumanTime(timer.endTime - Date.now(), undefined, $T);
@@ -37,7 +34,7 @@ export const command: PSCommand = {
 			help: 'Cancels the ongoing timer',
 			syntax: 'CMD',
 			async run({ message, $T }) {
-				const id = $.messageToId(message);
+				const id = messageToId(message);
 				const timer = Timers[id];
 				if (!timer) throw new ChatError($T('COMMANDS.TIMER.NONE_RUNNING'));
 				delete Timers[id];
@@ -52,7 +49,7 @@ export const command: PSCommand = {
 			help: 'Makes the ongoing timer execute immediately',
 			syntax: 'CMD',
 			async run({ message, $T }) {
-				const id = $.messageToId(message);
+				const id = messageToId(message);
 				const timer = Timers[id];
 				if (!timer) throw new ChatError($T('COMMANDS.TIMER.NONE_RUNNING'));
 				delete Timers[id];
@@ -63,7 +60,7 @@ export const command: PSCommand = {
 		},
 	},
 	async run({ message, args, run, $T }) {
-		const id = $.messageToId(message);
+		const id = messageToId(message);
 		if (Timers[id]) return run('timer status');
 		const [timeText, ...commentLines] = args.join(' ').split('//');
 		const comment = commentLines.join('//').trim();

@@ -47,7 +47,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				(game.sides && Object.keys(game.players).length < game.turns.length) || Object.keys(game.players).length < game.meta.maxSize!;
 			switch (ctx.action) {
 				case 'start':
-					return game.startable ?? false;
+					return game.startable() ?? false;
 				case 'join':
 					return !game.started && !hasJoined && hasSpace;
 				case 'play':
@@ -169,7 +169,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					const { game, ctx } = getGame(arg, { action: 'join', user: message.author.id }, { room: message.target, $T });
 					const res = game.addPlayer(message.author, ctx);
 					if (!res.success) throw new ChatError(res.error);
-					const turnMsg = 'turns' in Game.meta ? ` as ${Game.meta.turns[res.data!.as as keyof typeof Game.meta.turns]}` : '';
+					const turnMsg = Game.meta.turns ? ` as ${Game.meta.turns[res.data!.as]}` : '';
 					message.reply(
 						`${message.author.name} joined the game of ${Game.meta.name}${turnMsg}${
 							ctx === '-' ? ' (randomly chosen)' : ''
@@ -189,12 +189,29 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					game.action(message.author, ctx, false);
 				},
 			},
+			...(Game.meta.autostart === false
+				? ({
+						start: {
+							name: 'start',
+							aliases: ['s', 'go', 'g'],
+							help: 'Starts a game if it does not have an auto-start.',
+							syntax: 'CMD [id]',
+							perms: Symbol.for('games.create'),
+							async run({ message, arg, $T }): Promise<void> {
+								const { game } = getGame(arg, { action: 'start', user: message.author.id }, { room: message.target, $T });
+								if (!game.startable()) throw new ChatError($T('GAME.CANNOT_START'));
+								game.start();
+								game.closeSignups(false);
+							},
+						},
+					} satisfies PSCommand['children'])
+				: {}),
 			reaction: {
 				name: 'reaction',
 				aliases: ['x', '!!'],
 				help: 'Performs an out-of-turn action.',
 				syntax: 'CMD [id], [move]',
-				async run({ message, arg, $T }) {
+				async run({ message, arg, $T }): Promise<void> {
 					const { game, ctx } = getGame(arg, { action: 'reaction', user: message.author.id }, { room: message.target, $T });
 					game.action(message.author, ctx, true);
 				},
@@ -206,7 +223,8 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				async run({ message, arg, $T }) {
 					if (!('external' in Game.instance.prototype)) throw new ChatError($T('GAME.COMMAND_NOT_ENABLED'));
 					const { game, ctx } = getGame(arg, { action: 'audience', user: message.author.id }, { room: message.target, $T });
-					game.external!(message.author, ctx);
+					if (!game.external) throw new ChatError($T('CMD_NOT_FOUND'));
+					game.external(message.author, ctx);
 				},
 			},
 			end: {

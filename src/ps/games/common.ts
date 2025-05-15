@@ -13,6 +13,7 @@ export type Meta = {
 	minSize?: number;
 	maxSize?: number;
 
+	/** @default Assume true */
 	autostart?: boolean;
 	timer?: number | false;
 	pokeTimer?: number | false | undefined;

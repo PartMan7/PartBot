@@ -34,7 +34,8 @@ export type RenderCtx = {
 	board: Board;
 	header?: string;
 	dimHeader?: boolean;
-	score: State['score'];
+	players: Record<string, { score: number; name: string; rack: number }>;
+	getPoints: (tile: string) => number;
 	bag: number;
 	rack?: string[];
 	selected?: Point | null;

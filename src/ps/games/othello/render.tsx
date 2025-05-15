@@ -28,7 +28,7 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 		);
 	};
 
-	return <Table<Turn | null> board={ctx.board} rowLabel="1-9" colLabel="A-Z" Cell={Cell} />;
+	return <Table<Turn | null> board={ctx.board} labels={{ row: '1-9', col: 'A-Z' }} Cell={Cell} />;
 }
 
 export function render(this: This, ctx: RenderCtx): ReactElement {

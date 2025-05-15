@@ -24,7 +24,7 @@ const Cell: CellRenderer<'W' | 'B' | null> = ({ cell }) => (
 );
 const Board = memo(({ state }: { state: GameState }) => (
 	<>
-		<Table<'W' | 'B' | null> board={state.board} rowLabel="1-9" colLabel="A-Z" Cell={Cell} />
+		<Table<'W' | 'B' | null> board={state.board} labels={{ row: '1-9', col: 'A-Z' }} Cell={Cell} />
 		<span className="text-secondary">
 			{state.sinceLast
 				? `Played after ${state.sinceLast / 1000}s.`

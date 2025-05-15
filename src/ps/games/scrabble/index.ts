@@ -23,7 +23,7 @@ import type { User } from 'ps-client';
 export { meta } from '@/ps/games/scrabble/meta';
 
 function isLetter(char: string): boolean {
-	return /A-Z/.test(char);
+	return /[A-Z]/.test(char);
 }
 
 export class Scrabble extends Game<State> {
@@ -38,6 +38,9 @@ export class Scrabble extends Game<State> {
 		super.persist(ctx);
 
 		if (ctx.backup) return;
+	}
+
+	onStart(): ActionResponse {
 		this.state.baseBoard = BaseBoard;
 		this.state.board = createGrid<BoardTile | null>(BaseBoard.length, BaseBoard[0].length, () => null);
 		this.state.bag = Object.entries(LETTER_COUNTS)
@@ -50,6 +53,7 @@ export class Scrabble extends Game<State> {
 			this.state.score[player] = 0;
 			this.state.racks[player] = this.state.bag.splice(0, RACK_SIZE);
 		});
+		return { success: true, data: undefined };
 	}
 
 	action(user: User, ctx: string): void {
@@ -100,7 +104,6 @@ export class Scrabble extends Game<State> {
 	}
 
 	play(word: string, pos: Point, dir: DIRECTION): void {
-		if (!this.selected) this.throw('GAME.SCRABBLE.NO_SELECTED');
 		const board = this.state.board;
 		const turn = this.turn!;
 		const player = this.players[turn];
@@ -116,12 +119,15 @@ export class Scrabble extends Game<State> {
 			if (existingTile && existingTile.letter !== playedTile.letter) this.throw();
 			return !existingTile;
 		});
+		if (!playedTiles.length) this.throw('GAME.SCRABBLE.MUST_PLAY_TILES');
 		const playedTilesCount = playedTiles.count(true);
 
 		for (const [tile, count] of playedTilesCount.entries()) {
 			const letter = tile.blank ? '_' : tile.letter;
-			if (!rackCount[letter]) this.throw('GAME.SCRABBLE.MISSING_LETTER');
-			if (rackCount[letter] < count) this.throw('GAME.SCRABBLE.INSUFFICIENT_LETTERS');
+			if (!rackCount[letter]) this.throw('GAME.SCRABBLE.MISSING_LETTER', { letter });
+			if (rackCount[letter] < count) {
+				this.throw('GAME.SCRABBLE.INSUFFICIENT_LETTERS', { letter, actual: rackCount[letter], required: count });
+			}
 		}
 
 		let inlineStart = pos;
@@ -140,28 +146,27 @@ export class Scrabble extends Game<State> {
 			inlineEnd = nextTile;
 		}
 
-		const isFirstMove = board.flat(2).some(tile => tile);
+		const isFirstMove = !board.flat(2).some(tile => tile);
 
 		let connected = isFirstMove;
 
 		const inlineBonuses: Bonus[] = [];
-		const inlineData = rangePoints(inlineStart, inlineEnd).map((point, index) => {
+		const inlineTiles = rangePoints(inlineStart, inlineEnd).map((point, index) => {
 			const isPlayedTile = index >= prefixLength && index - prefixLength < tiles.length;
 			const boardTile = this.readFromBoard(point);
 			if (boardTile) {
 				if (!isPlayedTile) connected = true;
-				return { letter: boardTile.letter, points: boardTile.points };
+				return boardTile;
 			}
 			if (isPlayedTile) {
 				const bonus = this.state.baseBoard.access(point);
 				if (bonus) inlineBonuses.push(bonus);
-				const playedTile = tiles[index - prefixLength];
-				return { letter: playedTile.letter, points: playedTile.points };
+				return tiles[index - prefixLength];
 			}
 			this.throw();
 		});
-		const inlineWord = inlineData.map(tile => tile.letter).join('');
-		const inlineScore = inlineData.map(tile => tile.points).sum();
+		const inlineWord = inlineTiles.map(tile => tile.letter).join('');
+		const inlineScore = inlineTiles.map(tile => tile.points).sum();
 
 		if (isFirstMove && !inlineBonuses.includes('2*')) this.throw('GAME.SCRABBLE.FIRST_MOVE_CENTER');
 		if (isFirstMove && playedTiles.length < 2) this.throw('GAME.SCRABBLE.FIRST_MOVE_MULTIPLE_TILES');
@@ -182,18 +187,18 @@ export class Scrabble extends Game<State> {
 				crossEnd = nextTile;
 			}
 
-			const crossData = rangePoints(crossStart, crossEnd).map(point => {
+			const crossTiles = rangePoints(crossStart, crossEnd).map(point => {
 				const isPlayedTile = coincident(point, playedTile.pos);
 				if (!isPlayedTile) connected = true;
 				const tile = this.readFromBoard(point);
-				if (tile) return { letter: tile.letter, points: tile.points };
-				if (isPlayedTile) return { letter: playedTile.letter, points: playedTile.points };
+				if (tile) return tile;
+				if (isPlayedTile) return playedTile;
 				this.throw();
 			});
 
 			return {
-				word: crossData.map(tile => tile.letter).join(''),
-				baseScore: crossData.map(tile => tile.points).sum(),
+				word: crossTiles.map(tile => tile.letter).join(''),
+				baseScore: crossTiles.map(tile => tile.points).sum(),
 				bonus: this.state.baseBoard.access(playedTile.pos),
 			};
 		});
@@ -211,13 +216,18 @@ export class Scrabble extends Game<State> {
 
 		playedTiles.forEach(playedTile => {
 			board[playedTile.pos[0]][playedTile.pos[1]] = playedTile;
+			rack.remove(playedTile.letter);
 		});
 
 		const newTiles = this.state.bag.splice(0, playedTiles.length);
 		rack.push(...newTiles);
 
-		this.selected = null;
+		this.state.score[turn] += points.total;
+
+		// TODO: Log to chat
+
 		this.log.push({ action: 'play', time: new Date(), turn, ctx: { points, tiles, point: pos, dir, rack, newTiles } });
+		this.selected = null;
 
 		if (this.state.bag.length === 0) this.end();
 		const next = this.nextPlayer();
@@ -302,7 +312,18 @@ export class Scrabble extends Game<State> {
 			baseBoard: this.state.baseBoard,
 			board: this.state.board,
 			bag: this.state.bag.length,
-			score: this.state.score,
+			getPoints: tile => this.points[tile],
+			players: Object.fromEntries(
+				Object.values(this.players).map(({ id, name }) => [
+					id,
+					{
+						id,
+						name,
+						score: this.state.score[id],
+						rack: this.state.racks[id].length,
+					},
+				])
+			),
 		};
 		if (this.winCtx) {
 			ctx.header = 'Game ended.';
@@ -356,7 +377,10 @@ export class Scrabble extends Game<State> {
 		while (cursor < str.length) {
 			const char = nextChar();
 			const nextPos = multiStepPoint(pos, inlineStep, tiles.length);
-			if (isLetter(char)) tiles.push({ letter: char, points: this.points[char], pos: nextPos });
+			if (isLetter(char)) {
+				tiles.push({ letter: char, points: this.points[char], pos: nextPos });
+				continue;
+			}
 			if (char === ' ') continue;
 			if ('\'"‘’`'.includes(char)) {
 				const lastLetter = tiles.at(-1);

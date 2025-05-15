@@ -41,7 +41,6 @@ export class Game<State extends BaseState> {
 	log: BaseLog[] = [];
 	sides: boolean;
 
-	startable?: boolean;
 	started: boolean = false;
 	createdAt: Date = new Date();
 	startedAt?: Date;
@@ -152,8 +151,7 @@ export class Game<State extends BaseState> {
 
 	setTimer(comment: string): void {
 		if (!this.timerLength || !this.pokeTimerLength) return;
-		this.timer?.cancel();
-		this.pokeTimer?.cancel();
+		this.clearTimer();
 
 		const turn = this.turn!;
 		const timerLength = this.timerLength;
@@ -202,11 +200,17 @@ export class Game<State extends BaseState> {
 		gameCache.set({ id: this.id, room: this.roomid, game: this.meta.id, backup });
 	}
 
-	renderSignups?(): ReactElement;
+	renderSignups?(staff: boolean): ReactElement | null;
 	signups(): void {
 		if (this.started) this.throw('GAME.ALREADY_STARTED');
-		const signupsHTML = (this.renderSignups ?? renderSignups).bind(this)();
+		const signupRenderer = (this.renderSignups ?? renderSignups).bind(this);
+		const signupsHTML = signupRenderer(false);
 		if (signupsHTML) this.room.sendHTML(signupsHTML, { name: this.id });
+		if (this.meta.autostart === false) {
+			const staffHTML = signupRenderer(true);
+			// TODO: Sync this rank with games.create perms
+			if (staffHTML) this.room.sendHTML(staffHTML, { name: this.id, rank: '+', change: true });
+		}
 	}
 	renderCloseSignups?(): ReactElement;
 	closeSignups(change = true): void {
@@ -242,13 +246,6 @@ export class Game<State extends BaseState> {
 			const extraData = this.onAddPlayer(user, ctx as string);
 			if (!extraData.success) return extraData;
 			Object.assign(newPlayer, extraData.data);
-		}
-		if (this.turns) this.startable = Array.isArray(availableSlots) && availableSlots.length === 1;
-		else {
-			const playerCount = Object.keys(this.players).length;
-			if (playerCount <= this.meta.maxSize!) {
-				if (!this.meta.minSize || playerCount >= this.meta.minSize) this.startable = true;
-			}
 		}
 		this.players[newPlayer.turn] = newPlayer;
 		if (this.meta.players === 'single' || (Array.isArray(availableSlots) && availableSlots.length === 1) || availableSlots === 1) {
@@ -312,6 +309,18 @@ export class Game<State extends BaseState> {
 		this.players[turn] = { ...oldPlayer, ...assign };
 		this.spectators.remove(oldPlayer.id);
 		return { success: true, data: this.$T('GAME.SUB', { in: withPlayer.name, out: oldPlayer.name }) };
+	}
+
+	startable(): boolean {
+		if (this.started) return false;
+		if (this.turns?.length) return this.turns.every(turn => this.players[turn]);
+		else {
+			const playerCount = Object.keys(this.players).length;
+			if (playerCount <= this.meta.maxSize!) {
+				if (!this.meta.minSize || playerCount >= this.meta.minSize) return true;
+			}
+		}
+		return false;
 	}
 
 	start(): ActionResponse {
