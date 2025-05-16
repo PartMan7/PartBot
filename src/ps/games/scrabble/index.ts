@@ -221,7 +221,7 @@ export class Scrabble extends Game<State> {
 
 		playedTiles.forEach(playedTile => {
 			board[playedTile.pos[0]][playedTile.pos[1]] = playedTile;
-			rack.remove(playedTile.letter);
+			rack.remove(playedTile.blank ? '_' : playedTile.letter);
 		});
 
 		const newTiles = this.state.bag.splice(0, playedTiles.length);
