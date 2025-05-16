@@ -279,6 +279,8 @@ export class Scrabble extends Game<State> {
 		const logEntry: Log = { action: 'exchange', time: new Date(), turn, ctx: { tiles: letters, newTiles, rack } };
 		this.log.push(logEntry);
 		this.room.sendHTML(...renderMove(logEntry, this));
+
+		this.nextPlayer();
 	}
 
 	pass(): void {
