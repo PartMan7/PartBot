@@ -113,6 +113,6 @@ export async function evaluate(
 	}
 	return {
 		success: success,
-		output: formatValue(value!, mode),
+		output: formatValue(value, mode),
 	};
 }

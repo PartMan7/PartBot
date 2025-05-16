@@ -1,9 +1,11 @@
 import { GamesList } from '@/ps/games/common';
 
-export const meta = {
+import type { Meta } from '@/ps/games/common';
+
+export const meta: Meta = {
 	name: 'Mastermind',
 	id: GamesList.Mastermind,
 	aliases: ['mm'],
-	players: 'single',
 	abbr: 'mm',
-} as const;
+	players: 'single',
+};

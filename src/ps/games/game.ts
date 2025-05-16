@@ -16,13 +16,17 @@ import { Timer } from '@/utils/timer';
 
 import type { GameModel } from '@/database/games';
 import type { NoTranslate, PSRoomTranslated, ToTranslate, TranslatedText, TranslationFn } from '@/i18n/types';
-import type { ActionResponse, BaseState, EndType, Meta, Player } from '@/ps/games/common';
+import type { ActionResponse, BaseLog, BaseState, EndType, Meta, Player } from '@/ps/games/common';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
 import type { ReactElement } from 'react';
 
 const backupKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log', 'startedAt', 'createdAt'] as const;
 
+/**
+ * This is the shared code for all games. To check the game-specific code, refer to the
+ * extended constructor in `$game/index.ts` and go through the `action` method.
+ */
 export class Game<State extends BaseState> {
 	meta: Meta;
 	id: string;
@@ -34,10 +38,9 @@ export class Game<State extends BaseState> {
 	roomid: string;
 	// @ts-expect-error -- State isn't initialized yet
 	state: State = {};
-	log: { action: string; time: Date; turn: State['turn'] | null; ctx: unknown }[] = [];
+	log: BaseLog[] = [];
 	sides: boolean;
 
-	startable?: boolean;
 	started: boolean = false;
 	createdAt: Date = new Date();
 	startedAt?: Date;
@@ -63,7 +66,7 @@ export class Game<State extends BaseState> {
 	render() {
 		return null as unknown as ReactElement;
 	}
-	renderEmbed?(): EmbedBuilder;
+	renderEmbed?(): EmbedBuilder | null;
 
 	action(user: User, ctx: string, reaction: boolean): void;
 	action() {}
@@ -73,13 +76,18 @@ export class Game<State extends BaseState> {
 	onAddPlayer?(user: User, ctx: string): ActionResponse<Record<string, unknown>>;
 	onLeavePlayer?(player: Player, ctx: string | User): ActionResponse;
 	onForfeitPlayer?(player: Player, ctx: string | User): ActionResponse;
-	onReplacePlayer?(turn: BaseState['turn'], withPlayer: User): ActionResponse<Player>;
+	onReplacePlayer?(turn: BaseState['turn'], withPlayer: User): ActionResponse<Partial<Player>>;
 	onStart?(): ActionResponse;
 	onEnd(type?: EndType): TranslatedText;
 	onEnd() {
 		return 'Game ended';
 	}
 	trySkipPlayer?(turn: BaseState['turn']): boolean;
+
+	throw(msg?: Parameters<TranslationFn>[0], vars?: Parameters<TranslationFn>[1]): never {
+		if (!msg) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+		throw new ChatError(this.$T(msg, vars));
+	}
 
 	constructor(ctx: BaseContext) {
 		this.id = ctx.id;
@@ -143,8 +151,7 @@ export class Game<State extends BaseState> {
 
 	setTimer(comment: string): void {
 		if (!this.timerLength || !this.pokeTimerLength) return;
-		this.timer?.cancel();
-		this.pokeTimer?.cancel();
+		this.clearTimer();
 
 		const turn = this.turn!;
 		const timerLength = this.timerLength;
@@ -193,11 +200,17 @@ export class Game<State extends BaseState> {
 		gameCache.set({ id: this.id, room: this.roomid, game: this.meta.id, backup });
 	}
 
-	renderSignups?(): ReactElement;
+	renderSignups?(staff: boolean): ReactElement | null;
 	signups(): void {
-		if (this.started) throw new ChatError(this.$T('GAME.ALREADY_STARTED'));
-		const signupsHTML = (this.renderSignups ?? renderSignups).bind(this)();
+		if (this.started) this.throw('GAME.ALREADY_STARTED');
+		const signupRenderer = (this.renderSignups ?? renderSignups).bind(this);
+		const signupsHTML = signupRenderer(false);
 		if (signupsHTML) this.room.sendHTML(signupsHTML, { name: this.id });
+		if (this.meta.autostart === false) {
+			const staffHTML = signupRenderer(true);
+			// TODO: Sync this rank with games.create perms
+			if (staffHTML) this.room.sendHTML(staffHTML, { name: this.id, rank: '+', change: true });
+		}
 	}
 	renderCloseSignups?(): ReactElement;
 	closeSignups(change = true): void {
@@ -207,12 +220,11 @@ export class Game<State extends BaseState> {
 
 	addPlayer(user: User, ctx: string | null): ActionResponse<{ started: boolean; as: BaseState['turn'] }> {
 		if (this.started) return { success: false, error: this.$T('GAME.ALREADY_STARTED') };
-		if (this.meta.players === 'single' && Object.keys(this.players).length >= 1) throw new Error(this.$T('GAME.IS_FULL'));
+		if (this.meta.players === 'single' && Object.keys(this.players).length >= 1) this.throw('GAME.IS_FULL');
 		const availableSlots: number | State['turn'][] = this.sides
 			? this.turns.filter(turn => !this.players[turn])
 			: this.meta.maxSize! - Object.keys(this.players).length;
-		if (Object.values(this.players).some((player: Player) => player.id === user.id))
-			throw new ChatError(this.$T('GAME.ALREADY_JOINED'));
+		if (Object.values(this.players).some((player: Player) => player.id === user.id)) this.throw('GAME.ALREADY_JOINED');
 		const newPlayer: Player = {
 			name: user.name,
 			id: user.id,
@@ -234,13 +246,6 @@ export class Game<State extends BaseState> {
 			const extraData = this.onAddPlayer(user, ctx as string);
 			if (!extraData.success) return extraData;
 			Object.assign(newPlayer, extraData.data);
-		}
-		if (this.turns) this.startable = Array.isArray(availableSlots) && availableSlots.length === 1;
-		else {
-			const playerCount = Object.keys(this.players).length;
-			if (playerCount <= this.meta.maxSize!) {
-				if (!this.meta.minSize || playerCount >= this.meta.minSize) this.startable = true;
-			}
 		}
 		this.players[newPlayer.turn] = newPlayer;
 		if (this.meta.players === 'single' || (Array.isArray(availableSlots) && availableSlots.length === 1) || availableSlots === 1) {
@@ -289,8 +294,7 @@ export class Game<State extends BaseState> {
 
 	replacePlayer(_turn: BaseState['turn'], withPlayer: User): ActionResponse<TranslatedText> {
 		const turn = _turn as State['turn'];
-		if (Object.values(this.players).some((player: Player) => player.id === withPlayer.id))
-			throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
+		if (Object.values(this.players).some((player: Player) => player.id === withPlayer.id)) this.throw('GAME.IMPOSTOR_ALERT');
 		const assign: Partial<Player> = {
 			name: withPlayer.name,
 			id: withPlayer.id,
@@ -298,12 +302,25 @@ export class Game<State extends BaseState> {
 		if (this.onReplacePlayer) {
 			const res = this.onReplacePlayer(turn, withPlayer);
 			if (!res.success) throw new ChatError(res.error);
+			// TODO: This shouldn't be needed anymore
 			if (res.data) Object.assign(assign, res.data);
 		}
 		const oldPlayer = this.players[turn];
 		this.players[turn] = { ...oldPlayer, ...assign };
 		this.spectators.remove(oldPlayer.id);
 		return { success: true, data: this.$T('GAME.SUB', { in: withPlayer.name, out: oldPlayer.name }) };
+	}
+
+	startable(): boolean {
+		if (this.started) return false;
+		if (this.turns?.length) return this.turns.every(turn => this.players[turn]);
+		else {
+			const playerCount = Object.keys(this.players).length;
+			if (playerCount <= this.meta.maxSize!) {
+				if (!this.meta.minSize || playerCount >= this.meta.minSize) return true;
+			}
+		}
+		return false;
 	}
 
 	start(): ActionResponse {
@@ -314,6 +331,7 @@ export class Game<State extends BaseState> {
 		this.nextPlayer();
 		this.startedAt = new Date();
 		this.setTimer('Game started');
+		this.backup();
 		return { success: true, data: undefined };
 	}
 
@@ -355,7 +373,7 @@ export class Game<State extends BaseState> {
 			const asPlayer = Object.values(this.players).find(player => player.id === user);
 			if (asPlayer) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
 			if (this.spectators.includes(user)) return this.sendHTML(user, this.render(null));
-			throw new ChatError(this.$T('GAME.NON_PLAYER_OR_SPEC'));
+			this.throw('GAME.NON_PLAYER_OR_SPEC');
 		}
 		// TODO: Add ping to ps-client HTML opts
 		Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render(side)));
@@ -378,11 +396,13 @@ export class Game<State extends BaseState> {
 		}
 		this.endedAt = new Date();
 		this.room.send(message);
-		if (this.started && this.renderEmbed && this.roomid === 'boardgames') {
-			const embed = this.renderEmbed();
+		if (this.started && typeof this.renderEmbed === 'function' && this.roomid === 'boardgames') {
 			// Send only for games from BG
-			const channel = Discord.channels.cache.get(BOT_LOG_CHANNEL);
-			if (channel && channel.type === ChannelType.GuildText) channel.send({ embeds: [embed] });
+			const embed = this.renderEmbed();
+			if (embed) {
+				const channel = Discord.channels.cache.get(BOT_LOG_CHANNEL);
+				if (channel && channel.type === ChannelType.GuildText) channel.send({ embeds: [embed] });
+			}
 		}
 		// Upload to DB
 		if (this.meta.players !== 'single') {

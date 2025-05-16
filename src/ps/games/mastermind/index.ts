@@ -2,7 +2,6 @@ import { type ReactElement } from 'react';
 
 import { Game } from '@/ps/games/game';
 import { render, renderCloseSignups } from '@/ps/games/mastermind/render';
-import { ChatError } from '@/utils/chatError';
 import { sample } from '@/utils/random';
 
 import type { ToTranslate, TranslatedText } from '@/i18n/types';
@@ -21,7 +20,7 @@ export class Mastermind extends Game<State> {
 		super(ctx);
 
 		this.state.cap = parseInt(ctx.args.join(''));
-		if (this.state.cap > 12 || this.state.cap < 4) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+		if (this.state.cap > 12 || this.state.cap < 4) this.throw();
 		if (isNaN(this.state.cap)) this.state.cap = 10;
 		super.persist(ctx);
 
@@ -37,13 +36,13 @@ export class Mastermind extends Game<State> {
 
 	parseGuess(guess: string): Guess {
 		const guessStr = guess.replace(/\s/g, '');
-		if (!/^[0-7]{4}$/.test(guessStr)) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+		if (!/^[0-7]{4}$/.test(guessStr)) this.throw();
 		return guessStr.split('').map(n => +n) as Guess;
 	}
 
 	action(user: User, ctx: string): void {
-		if (!this.started) throw new ChatError(this.$T('GAME.NOT_STARTED'));
-		if (!(user.id in this.players)) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
+		if (!this.started) this.throw('GAME.NOT_STARTED');
+		if (!(user.id in this.players)) this.throw('GAME.IMPOSTOR_ALERT');
 
 		const guess = this.parseGuess(ctx);
 		const result = this.guess(guess);
@@ -76,10 +75,10 @@ export class Mastermind extends Game<State> {
 		}
 		return { exact, moved };
 	}
-	external(user: User, ctx: string) {
-		if (this.state.board.length > 0) throw new ChatError(this.$T('GAME.ALREADY_STARTED'));
-		if (this.setBy) throw new ChatError(this.$T('TOO_LATE'));
-		if (user.id in this.players) throw new ChatError(this.$T('GAME.IMPOSTOR_ALERT'));
+	external(user: User, ctx: string): void {
+		if (this.state.board.length > 0) this.throw('GAME.ALREADY_STARTED');
+		if (this.setBy) this.throw('TOO_LATE');
+		if (user.id in this.players) this.throw('GAME.IMPOSTOR_ALERT');
 
 		this.state.solution = this.parseGuess(ctx);
 		this.setBy = user;
@@ -89,17 +88,14 @@ export class Mastermind extends Game<State> {
 	onEnd(type: EndType): TranslatedText {
 		this.ended = true;
 		const player = Object.values(this.players)[0].name;
-		if (type === 'dq' || type === 'force') {
-			return `The game of Mastermind was ended for ${player}.` as ToTranslate;
-		}
-		if (type === 'loss') {
-			return `${player} was unable to guess ${this.state.solution.join('')} in ${this.state.cap} guesses.` as ToTranslate;
-		}
+		if (type === 'dq' || type === 'force') return this.$T('GAME.MASTERMIND.ENDED', { player });
+		if (type === 'loss')
+			return this.$T('GAME.MASTERMIND.FAILED', { player, solution: this.state.solution.join(''), cap: this.state.cap });
 		const guesses = this.state.board.length;
 		return `${player} guessed ${this.state.solution.join('')} in ${guesses} turn${guesses === 1 ? '' : 's'}!` as ToTranslate;
 	}
 
-	render(asPlayer: string | null) {
+	render(asPlayer: string | null): ReactElement {
 		return render.bind(this.renderCtx)(this.state, asPlayer ? (this.ended ? 'over' : 'playing') : 'spectator');
 	}
 }

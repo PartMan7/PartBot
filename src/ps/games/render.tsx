@@ -2,9 +2,11 @@ import { Button } from '@/utils/components/ps';
 
 import type { BaseState } from '@/ps/games/common';
 import type { Game } from '@/ps/games/game';
-import type { ReactElement, ReactNode } from 'react';
+import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
-export function renderSignups<State extends BaseState>(this: Game<State>): ReactElement {
+export function renderSignups<State extends BaseState>(this: Game<State>, staff: boolean): ReactElement | null {
+	const startable = this.meta.autostart === false && this.startable();
+	if (staff && !startable) return null;
 	return (
 		<>
 			<hr />
@@ -24,6 +26,11 @@ export function renderSignups<State extends BaseState>(this: Game<State>): React
 				</Button>
 			) : null}
 			{!this.sides ? <Button value={`${this.renderCtx.msg} join ${this.id}`}>Join</Button> : null}
+			{staff && startable ? (
+				<Button value={`${this.renderCtx.msg} start ${this.id}`} style={{ marginLeft: 8 }}>
+					Start
+				</Button>
+			) : null}
 			<hr />
 		</>
 	);
@@ -53,50 +60,55 @@ export type CellRenderer<T> = (props: { cell: T; i: number; j: number }) => Reac
 
 export function Table<T>({
 	board,
-	rowLabel,
-	colLabel,
+	style = {},
+	labels,
 	Cell,
 }: {
 	board: T[][];
-	rowLabel: Label;
-	colLabel: Label;
+	style?: CSSProperties;
+	labels: { row: Label; col: Label } | null;
 	Cell: CellRenderer<T>;
 }): ReactElement {
-	const rowLabels = getLabels(board.length, rowLabel);
-	const colLabels = getLabels(board[0].length, colLabel);
+	const rowLabels = labels ? getLabels(board.length, labels.row) : [];
+	const colLabels = labels ? getLabels(board[0].length, labels.col) : [];
 	return (
 		<table
 			style={{
 				borderCollapse: 'collapse',
 				margin: 20,
+				...style,
 			}}
 		>
 			<tbody>
-				<tr>
-					<th />
-					{colLabels.map(label => (
-						<th style={{ color: 'gray', height: 20 }}>{label}</th>
-					))}
-					<th />
-				</tr>
+				{labels ? (
+					<tr>
+						<th />
+						{colLabels.map(label => (
+							<th style={{ color: 'gray', height: 20 }}>{label}</th>
+						))}
+						<th />
+					</tr>
+				) : null}
 
 				{board.map((row, i) => (
 					<tr>
-						<th style={{ color: 'gray', width: 20 }}>{rowLabels[i]}</th>
+						{labels ? <th style={{ color: 'gray', width: 20 }}>{rowLabels[i]}</th> : null}
 						{row.map((cell, j) => (
 							<Cell cell={cell} i={i} j={j} />
 						))}
-						<th style={{ color: 'gray', width: 20 }}>{rowLabels[i]}</th>
+						{labels ? <th style={{ color: 'gray', width: 20 }}>{rowLabels[i]}</th> : null}
 					</tr>
 				))}
 
-				<tr>
-					<th />
-					{colLabels.map(label => (
-						<th style={{ color: 'gray', height: 20 }}>{label}</th>
-					))}
-					<th />
-				</tr>
+				{labels ? (
+					<tr>
+						<th />
+						{colLabels.map(label => (
+							<th style={{ color: 'gray', height: 20 }}>{label}</th>
+						))}
+						<th />
+					</tr>
+				) : null}
 			</tbody>
 		</table>
 	);

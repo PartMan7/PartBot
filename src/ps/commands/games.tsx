@@ -47,7 +47,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				(game.sides && Object.keys(game.players).length < game.turns.length) || Object.keys(game.players).length < game.meta.maxSize!;
 			switch (ctx.action) {
 				case 'start':
-					return game.startable ?? false;
+					return game.startable() ?? false;
 				case 'join':
 					return !game.started && !hasJoined && hasSpace;
 				case 'play':
@@ -142,13 +142,20 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				help: 'Creates a new game.',
 				syntax: 'CMD [mods?]',
 				perms: Game.meta.players === 'single' ? 'regular' : Symbol.for('games.create'),
-				async run({ message, args, $T }) {
+				async run({ message, args, $T, run }) {
 					if (Game.meta.players === 'single') {
 						if (Object.values(PSGames[gameId] ?? {}).find(game => message.author.id in game.players)) {
 							throw new ChatError($T('GAME.ALREADY_JOINED'));
 						}
 					}
-					const id = Game.meta.players === 'single' ? `#${Game.meta.abbr}-${message.author.id}` : generateId();
+					const id =
+						// TODO: Revert this bit once Scrabble is stable
+						Game.meta.id === 'scrabble'
+							? '#TEMP'
+							: Game.meta.players === 'single'
+								? `#${Game.meta.abbr}-${message.author.id}`
+								: generateId();
+					if (PSGames[gameId]?.[id]) throw new ChatError($T('GAME.ALREADY_STARTED'));
 					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T, args, by: message.author });
 					if (game.meta.players === 'many') {
 						message.reply(
@@ -169,7 +176,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					const { game, ctx } = getGame(arg, { action: 'join', user: message.author.id }, { room: message.target, $T });
 					const res = game.addPlayer(message.author, ctx);
 					if (!res.success) throw new ChatError(res.error);
-					const turnMsg = 'turns' in Game.meta ? ` as ${Game.meta.turns[res.data!.as as keyof typeof Game.meta.turns]}` : '';
+					const turnMsg = Game.meta.turns ? ` as ${Game.meta.turns[res.data!.as]}` : '';
 					message.reply(
 						`${message.author.name} joined the game of ${Game.meta.name}${turnMsg}${
 							ctx === '-' ? ' (randomly chosen)' : ''
@@ -186,15 +193,40 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				syntax: 'CMD [id], [move]',
 				async run({ message, arg, $T }) {
 					const { game, ctx } = getGame(arg, { action: 'play', user: message.author.id }, { room: message.target, $T });
-					game.action(message.author, ctx, false);
+					try {
+						game.action(message.author, ctx, false);
+					} catch (err) {
+						// Regenerate the HTML if given an invalid input
+						if (err instanceof ChatError) {
+							game.update(message.author.id);
+							throw err;
+						}
+					}
 				},
 			},
+			...(Game.meta.autostart === false
+				? ({
+						start: {
+							name: 'start',
+							aliases: ['s', 'go', 'g'],
+							help: 'Starts a game if it does not have an auto-start.',
+							syntax: 'CMD [id]',
+							perms: Symbol.for('games.create'),
+							async run({ message, arg, $T }): Promise<void> {
+								const { game } = getGame(arg, { action: 'start', user: message.author.id }, { room: message.target, $T });
+								if (!game.startable()) throw new ChatError($T('GAME.CANNOT_START'));
+								game.start();
+								game.closeSignups(false);
+							},
+						},
+					} satisfies PSCommand['children'])
+				: {}),
 			reaction: {
 				name: 'reaction',
 				aliases: ['x', '!!'],
 				help: 'Performs an out-of-turn action.',
 				syntax: 'CMD [id], [move]',
-				async run({ message, arg, $T }) {
+				async run({ message, arg, $T }): Promise<void> {
 					const { game, ctx } = getGame(arg, { action: 'reaction', user: message.author.id }, { room: message.target, $T });
 					game.action(message.author, ctx, true);
 				},
@@ -206,7 +238,8 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				async run({ message, arg, $T }) {
 					if (!('external' in Game.instance.prototype)) throw new ChatError($T('GAME.COMMAND_NOT_ENABLED'));
 					const { game, ctx } = getGame(arg, { action: 'audience', user: message.author.id }, { room: message.target, $T });
-					game.external!(message.author, ctx);
+					if (!game.external) throw new ChatError($T('CMD_NOT_FOUND'));
+					game.external(message.author, ctx);
 				},
 			},
 			end: {
@@ -332,7 +365,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 			},
 			unwatch: {
 				name: 'unwatch',
-				aliases: ['uw', 'unspectate', 'uspec'],
+				aliases: ['uw', 'unspectate', 'uspec', 'unspec'],
 				help: 'Unwatches the given game.',
 				syntax: 'CMD [game ref]',
 				async run({ message, arg, $T }) {

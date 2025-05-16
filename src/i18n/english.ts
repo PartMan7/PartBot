@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 export default {
 	GRAMMAR: {
 		AND: 'and',
@@ -42,6 +44,7 @@ export default {
 			'Prayer not found. Or something like that.',
 		],
 		NOT_STARTED: 'The game has not started yet.',
+		CANNOT_START: 'Cannot start the game! Check the players.',
 		NOT_WATCHING: "You aren't watching this game, though...",
 		NOW_WATCHING: 'You are now watching the game of {{game}} between {{players}}.',
 		NO_LONGER_WATCHING: 'You are no longer watching the game of {{game}} between {{players}}.',
@@ -50,6 +53,7 @@ export default {
 		STASHED: 'Successfully stashed game {{id}}.',
 		SUB: '{{out}} has been subbed with {{in}}!',
 		WATCHING_NOTHING: "You don't seem to need to rejoin anything...",
+		WON: '{{winner}} won!',
 		WON_AGAINST: '{{winner}} won the game of {{game}} against {{loser}}{{ctx}}!',
 		WAITING: 'Waiting for you to play...',
 		NON_PLAYER_OR_SPEC: 'User not in players/spectators',
@@ -58,6 +62,26 @@ export default {
 		TIMER: {
 			PRIVATE: "Psst it's your turn to play in {{game}} [{{id}}]",
 			PUBLIC: "{{user}} hasn't played in {{game}} [{{id}}] for {{time}}...",
+		},
+
+		MASTERMIND: {
+			ENDED: 'The game of Mastermind was ended for {{player}}.',
+			FAILED: '{{player}} was unable to guess {{solution}} in {{cap}} guesses.',
+		},
+		SCRABBLE: {
+			NO_SELECTED: 'You must select a cell to play from first. Please use the buttons!',
+			TILE_MISMATCH: "That move doesn't seem to line up with the tiles on the board - tried to place {{placed}} on {{actual}}.",
+			MISSING_LETTER: "You don't have any tiles for {{letter}}.",
+			INSUFFICIENT_LETTERS: 'You only have {{actual}} tiles of {{letter}} instead of the {{required}} needed.',
+			BAG_SIZE: 'There are {{amount}} tiles left in the bag.',
+			TOO_MUCH_PASSING: 'The game ended due to too many passes!',
+			FIRST_MOVE_CENTER: 'The first move must pass through the center of the board!',
+			FIRST_MOVE_MULTIPLE_TILES: 'You may not play a single tile on the first move.',
+			MUST_BE_CONNECTED: 'All moves in Scrabble must be connected to the rest of the tiles on the board!',
+			MUST_PLAY_TILES: 'Your move must play at least one tile.',
+			INVALID_WORD: '{{word}} is not a valid word.',
+			HOW_TO_BLANK:
+				"Hi, you've drawn a blank tile! A blank tile can be used as any letter, but the tile awards 0 points. You can type `BL[A]NK` (for example) to use the blank as an A. Other syntaxes supported are `BL(A)NK`, or adding an apostrophe after the blanked letter (eg: `BLA'NK`).",
 		},
 	},
 

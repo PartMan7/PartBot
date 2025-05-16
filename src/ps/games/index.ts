@@ -2,6 +2,7 @@ import { GamesList } from '@/ps/games/common';
 import { ConnectFour, meta as ConnectFourMeta } from '@/ps/games/connectfour';
 import { Mastermind, meta as MastermindMeta } from '@/ps/games/mastermind';
 import { Othello, meta as OthelloMeta } from '@/ps/games/othello';
+import { Scrabble, meta as ScrabbleMeta } from '@/ps/games/scrabble';
 
 export const Games = {
 	[GamesList.Othello]: {
@@ -15,6 +16,10 @@ export const Games = {
 	[GamesList.ConnectFour]: {
 		meta: ConnectFourMeta,
 		instance: ConnectFour,
+	},
+	[GamesList.Scrabble]: {
+		meta: ScrabbleMeta,
+		instance: Scrabble,
 	},
 };
 export type Games = typeof Games;

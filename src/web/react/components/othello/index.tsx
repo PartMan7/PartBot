@@ -4,14 +4,14 @@ import { Table } from '@/web/react/components/board';
 
 import type { GameModel } from '@/database/games';
 import type { Othello } from '@/ps/games/othello';
+import type { APILog } from '@/ps/games/othello/logs';
+import type { Turn } from '@/ps/games/othello/types';
 import type { CellRenderer } from '@/ps/games/render';
 import type { SerializedInstance } from '@/types/common';
 
 export type GameModelAPI = SerializedInstance<Omit<GameModel, 'winCtx'> & { winCtx: Othello['winCtx'] }>;
 
-type OthelloLog = { action: 'play' | 'skip'; time: string; turn: 'W' | 'B'; ctx: [number, number] | null };
-
-type Board = (null | 'W' | 'B')[][];
+type Board = (null | Turn)[][];
 type GameState = { board: Board; sinceLast: number | null; at: Date; score: { W: number; B: number } };
 
 const Cell: CellRenderer<'W' | 'B' | null> = ({ cell }) => (
@@ -24,7 +24,7 @@ const Cell: CellRenderer<'W' | 'B' | null> = ({ cell }) => (
 );
 const Board = memo(({ state }: { state: GameState }) => (
 	<>
-		<Table<'W' | 'B' | null> board={state.board} rowLabel="1-9" colLabel="A-Z" Cell={Cell} />
+		<Table<'W' | 'B' | null> board={state.board} labels={{ row: '1-9', col: 'A-Z' }} Cell={Cell} />
 		<span className="text-secondary">
 			{state.sinceLast
 				? `Played after ${state.sinceLast / 1000}s.`
@@ -144,7 +144,7 @@ const getScore = (board: Board): { W: number; B: number } =>
 	);
 
 export const ViewOnlyOthello = memo(({ game }: { game: GameModelAPI }): ReactElement => {
-	const log = useMemo(() => game.log.map<OthelloLog>(entry => JSON.parse(entry)), [game.log]);
+	const log = useMemo(() => game.log.map<APILog>(entry => JSON.parse(entry)), [game.log]);
 	const boardsByTurn = useMemo(() => {
 		return log.reduce<GameState[]>(
 			(boards, entry) => {
