@@ -10,14 +10,14 @@ import {
 	RACK_SIZE,
 	SELECT_ACTION_PATTERN,
 } from '@/ps/games/scrabble/constants';
-import { render } from '@/ps/games/scrabble/render';
+import { render, renderMove } from '@/ps/games/scrabble/render';
 import { type Point, coincident, flipPoint, multiStepPoint, rangePoints, stepPoint } from '@/utils/grid';
 
 import type { TranslatedText } from '@/i18n/types';
 import type { ActionResponse, EndType, Player } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
 import type { Log } from '@/ps/games/scrabble/logs';
-import type { BoardTile, Bonus, Points, RenderCtx, State, WinCtx, Word } from '@/ps/games/scrabble/types';
+import type { BoardTile, Bonus, BonusReducer, Points, RenderCtx, State, WinCtx, Word } from '@/ps/games/scrabble/types';
 import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/scrabble/meta';
@@ -116,7 +116,9 @@ export class Scrabble extends Game<State> {
 		const tiles: BoardTile[] = this.parseTiles(word, pos, inlineStep);
 		const playedTiles = tiles.filter((playedTile, index) => {
 			const existingTile = this.readFromBoard(multiStepPoint(pos, inlineStep, index));
-			if (existingTile && existingTile.letter !== playedTile.letter) this.throw();
+			if (existingTile && existingTile.letter !== playedTile.letter) {
+				this.throw('GAME.SCRABBLE.TILE_MISMATCH', { placed: playedTile.letter, actual: existingTile.letter });
+			}
 			return !existingTile;
 		});
 		if (!playedTiles.length) this.throw('GAME.SCRABBLE.MUST_PLAY_TILES');
@@ -131,59 +133,61 @@ export class Scrabble extends Game<State> {
 		}
 
 		let inlineStart = pos;
-		let prefixLength = 0;
 		const backstep = flipPoint(inlineStep);
 		while (true) {
 			const oneBefore = stepPoint(inlineStart, backstep);
-			if (!this.readFromBoard(oneBefore)) break;
-			prefixLength++;
+			if (!this.readFromBoard(oneBefore, true)) break;
 			inlineStart = oneBefore;
 		}
-		let inlineEnd = multiStepPoint(pos, inlineStep, tiles.length);
+		let inlineEnd = multiStepPoint(pos, inlineStep, tiles.length - 1);
 		while (true) {
 			const nextTile = stepPoint(inlineEnd, inlineStep);
-			if (!this.readFromBoard(nextTile)) break;
+			if (!this.readFromBoard(nextTile, true)) break;
 			inlineEnd = nextTile;
 		}
 
 		const isFirstMove = !board.flat(2).some(tile => tile);
 
 		let connected = isFirstMove;
+		let coversCenter = false;
 
-		const inlineBonuses: Bonus[] = [];
-		const inlineTiles = rangePoints(inlineStart, inlineEnd).map((point, index) => {
-			const isPlayedTile = index >= prefixLength && index - prefixLength < tiles.length;
+		const inlineBonuses: BonusReducer[] = [];
+		const inlineTiles = rangePoints(inlineStart, inlineEnd).map(point => {
+			const playedTile = playedTiles.find(tile => coincident(tile.pos, point));
 			const boardTile = this.readFromBoard(point);
 			if (boardTile) {
-				if (!isPlayedTile) connected = true;
+				connected = true;
 				return boardTile;
 			}
-			if (isPlayedTile) {
+			if (playedTile) {
 				const bonus = this.state.baseBoard.access(point);
-				if (bonus) inlineBonuses.push(bonus);
-				return tiles[index - prefixLength];
+				if (bonus) inlineBonuses.push(this.parseBonus(bonus, playedTile));
+				if (bonus === '2*') coversCenter = true;
+				return playedTile;
 			}
 			this.throw();
 		});
-		const inlineWord = inlineTiles.map(tile => tile.letter).join('');
+		const inlineWordValue = inlineTiles.map(tile => tile.letter).join('');
 		const inlineScore = inlineTiles.map(tile => tile.points).sum();
 
-		if (isFirstMove && !inlineBonuses.includes('2*')) this.throw('GAME.SCRABBLE.FIRST_MOVE_CENTER');
+		if (isFirstMove && !coversCenter) this.throw('GAME.SCRABBLE.FIRST_MOVE_CENTER');
 		if (isFirstMove && playedTiles.length < 2) this.throw('GAME.SCRABBLE.FIRST_MOVE_MULTIPLE_TILES');
+
+		const inlineWord: Word = { word: inlineWordValue, baseScore: inlineScore, bonuses: inlineBonuses };
 
 		const crossStep: Point = dir === DIRECTION.RIGHT ? [1, 0] : [0, 1];
 		const crossBackstep = flipPoint(crossStep);
-		const crossWords = playedTiles.map(playedTile => {
+		const crossWords = playedTiles.map<Word>(playedTile => {
 			let crossStart = playedTile.pos;
 			while (true) {
 				const backstep = stepPoint(crossStart, crossBackstep);
-				if (!this.readFromBoard(backstep)) break;
+				if (!this.readFromBoard(backstep, true)) break;
 				crossStart = backstep;
 			}
 			let crossEnd = playedTile.pos;
 			while (true) {
 				const nextTile = stepPoint(crossEnd, crossStep);
-				if (!this.readFromBoard(nextTile)) break;
+				if (!this.readFromBoard(nextTile, true)) break;
 				crossEnd = nextTile;
 			}
 
@@ -196,19 +200,18 @@ export class Scrabble extends Game<State> {
 				this.throw();
 			});
 
+			const bonus = this.parseBonus(this.state.baseBoard.access(playedTile.pos), playedTile);
+
 			return {
 				word: crossTiles.map(tile => tile.letter).join(''),
 				baseScore: crossTiles.map(tile => tile.points).sum(),
-				bonus: this.state.baseBoard.access(playedTile.pos),
+				bonuses: bonus ? [bonus] : [],
 			};
 		});
 
 		if (!connected) this.throw('GAME.SCRABBLE.MUST_BE_CONNECTED');
 
-		const words: Word[] = [
-			{ word: inlineWord, baseScore: inlineScore, bonuses: inlineBonuses },
-			...crossWords.map(({ word, baseScore, bonus }) => ({ word, baseScore, bonuses: bonus ? [bonus] : [] })),
-		].filter(entry => entry.word.length > 1);
+		const words: Word[] = [inlineWord, ...crossWords].filter(entry => entry.word.length > 1);
 
 		if (!words.length) this.throw();
 
@@ -221,12 +224,18 @@ export class Scrabble extends Game<State> {
 
 		const newTiles = this.state.bag.splice(0, playedTiles.length);
 		rack.push(...newTiles);
+		if (newTiles.includes('_')) this.room.privateSend(turn, this.$T('GAME.SCRABBLE.HOW_TO_BLANK'));
 
 		this.state.score[turn] += points.total;
 
-		// TODO: Log to chat
-
-		this.log.push({ action: 'play', time: new Date(), turn, ctx: { points, tiles, point: pos, dir, rack, newTiles } });
+		const logEntry: Log = {
+			action: 'play',
+			time: new Date(),
+			turn,
+			ctx: { points, tiles, point: pos, dir, rack, newTiles, words: words.map(word => word.word) },
+		};
+		this.log.push(logEntry);
+		this.room.sendHTML(...renderMove(logEntry, this));
 		this.selected = null;
 
 		if (this.state.bag.length === 0) this.end();
@@ -263,15 +272,20 @@ export class Scrabble extends Game<State> {
 		const newTiles = this.state.bag.splice(0, letters.length, ...letters);
 		this.state.bag.shuffle(this.prng);
 		rack.push(...newTiles);
+		if (newTiles.includes('_')) this.room.privateSend(turn, this.$T('GAME.SCRABBLE.HOW_TO_BLANK'));
 
-		this.log.push({ action: 'exchange', time: new Date(), turn, ctx: { tiles: letters, newTiles, rack } });
+		const logEntry: Log = { action: 'exchange', time: new Date(), turn, ctx: { tiles: letters, newTiles, rack } };
+		this.log.push(logEntry);
+		this.room.sendHTML(...renderMove(logEntry, this));
 	}
 
 	pass(): void {
 		const turn = this.turn!;
 		this.passCount ??= 0;
 		this.passCount++;
-		this.log.push({ action: 'pass', time: new Date(), turn, ctx: { rack: this.state.racks[turn] } });
+		const logEntry: Log = { action: 'pass', time: new Date(), turn, ctx: { rack: this.state.racks[turn] } };
+		this.log.push(logEntry);
+		this.room.sendHTML(...renderMove(logEntry, this));
 		if (this.passCount > Object.keys(this.players).length) {
 			this.end('regular');
 		}
@@ -324,6 +338,9 @@ export class Scrabble extends Game<State> {
 					},
 				])
 			),
+			side,
+			turn: this.turn!,
+			selected: side && side === this.turn ? this.selected : null,
 		};
 		if (this.winCtx) {
 			ctx.header = 'Game ended.';
@@ -354,8 +371,11 @@ export class Scrabble extends Game<State> {
 		// .setURL(this.getURL()) // TODO
 	}
 
-	readFromBoard([x, y]: Point): BoardTile | null {
-		if (x < 0 || y < 0 || x >= this.state.board.length || y >= this.state.board[0].length) this.throw();
+	readFromBoard([x, y]: Point, safe?: boolean): BoardTile | null {
+		if (x < 0 || y < 0 || x >= this.state.board.length || y >= this.state.board[0].length) {
+			if (safe) return null;
+			this.throw();
+		}
 		return this.state.board[x][y];
 	}
 
@@ -408,6 +428,15 @@ export class Scrabble extends Game<State> {
 		return tiles;
 	}
 
+	parseBonus(bonus: Bonus | null, tile: BoardTile): BonusReducer {
+		return score => {
+			if (!bonus) return score;
+			const modifier = +bonus.charAt(0);
+			const additive = bonus.charAt(1) === 'L';
+			return additive ? score + modifier * tile.points : score * modifier;
+		};
+	}
+
 	checkWord(word: string): [number, number] | null {
 		// TODO handle mods here
 		// TODO Add dictionary
@@ -422,7 +451,7 @@ export class Scrabble extends Game<State> {
 			words.map(word => {
 				const scoring = this.checkWord(word.word);
 				if (!scoring) this.throw('GAME.SCRABBLE.INVALID_WORD');
-				return [word.word, word.baseScore * scoring[0] + scoring[1]];
+				return [word.word, word.bonuses.reduce((score, bonus) => bonus(score), word.baseScore * scoring[0] + scoring[1])];
 			})
 		);
 		return { total: Object.values(wordsPoints).sum() + bingoPoints, bingo, words: wordsPoints };

@@ -142,13 +142,20 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				help: 'Creates a new game.',
 				syntax: 'CMD [mods?]',
 				perms: Game.meta.players === 'single' ? 'regular' : Symbol.for('games.create'),
-				async run({ message, args, $T }) {
+				async run({ message, args, $T, run }) {
 					if (Game.meta.players === 'single') {
 						if (Object.values(PSGames[gameId] ?? {}).find(game => message.author.id in game.players)) {
 							throw new ChatError($T('GAME.ALREADY_JOINED'));
 						}
 					}
-					const id = Game.meta.players === 'single' ? `#${Game.meta.abbr}-${message.author.id}` : generateId();
+					const id =
+						// TODO: Revert this bit once Scrabble is stable
+						Game.meta.id === 'scrabble'
+							? '#TEMP'
+							: Game.meta.players === 'single'
+								? `#${Game.meta.abbr}-${message.author.id}`
+								: generateId();
+					if (PSGames[gameId]?.[id]) throw new ChatError($T('GAME.ALREADY_STARTED'));
 					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T, args, by: message.author });
 					if (game.meta.players === 'many') {
 						message.reply(
@@ -186,7 +193,15 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				syntax: 'CMD [id], [move]',
 				async run({ message, arg, $T }) {
 					const { game, ctx } = getGame(arg, { action: 'play', user: message.author.id }, { room: message.target, $T });
-					game.action(message.author, ctx, false);
+					try {
+						game.action(message.author, ctx, false);
+					} catch (err) {
+						// Regenerate the HTML if given an invalid input
+						if (err instanceof ChatError) {
+							game.update(message.author.id);
+							throw err;
+						}
+					}
 				},
 			},
 			...(Game.meta.autostart === false

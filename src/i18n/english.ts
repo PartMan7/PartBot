@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 export default {
 	GRAMMAR: {
 		AND: 'and',
@@ -68,6 +70,7 @@ export default {
 		},
 		SCRABBLE: {
 			NO_SELECTED: 'You must select a cell to play from first. Please use the buttons!',
+			TILE_MISMATCH: "That move doesn't seem to line up with the tiles on the board - tried to place {{placed}} on {{actual}}.",
 			MISSING_LETTER: "You don't have any tiles for {{letter}}.",
 			INSUFFICIENT_LETTERS: 'You only have {{actual}} tiles of {{letter}} instead of the {{required}} needed.',
 			BAG_SIZE: 'There are {{amount}} tiles left in the bag.',
@@ -77,6 +80,8 @@ export default {
 			MUST_BE_CONNECTED: 'All moves in Scrabble must be connected to the rest of the tiles on the board!',
 			MUST_PLAY_TILES: 'Your move must play at least one tile.',
 			INVALID_WORD: '{{word}} is not a valid word.',
+			HOW_TO_BLANK:
+				"Hi, you've drawn a blank tile! A blank tile can be used as any letter, but the tile awards 0 points. You can type `BL[A]NK` (for example) to use the blank as an A. Other syntaxes supported are `BL(A)NK`, or adding an apostrophe after the blanked letter (eg: `BLA'NK`).",
 		},
 	},
 

@@ -26,7 +26,11 @@ export function renderSignups<State extends BaseState>(this: Game<State>, staff:
 				</Button>
 			) : null}
 			{!this.sides ? <Button value={`${this.renderCtx.msg} join ${this.id}`}>Join</Button> : null}
-			{staff && startable ? <Button value={`${this.renderCtx.msg} start ${this.id}`}>Start</Button> : null}
+			{staff && startable ? (
+				<Button value={`${this.renderCtx.msg} start ${this.id}`} style={{ marginLeft: 8 }}>
+					Start
+				</Button>
+			) : null}
 			<hr />
 		</>
 	);

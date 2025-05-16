@@ -12,7 +12,7 @@ export type Log = Satisfies<
 	} & (
 		| {
 				action: 'play';
-				ctx: { points: Points; tiles: BoardTile[]; dir: DIRECTION; point: Point; newTiles: string[]; rack: string[] };
+				ctx: { points: Points; tiles: BoardTile[]; dir: DIRECTION; point: Point; newTiles: string[]; rack: string[]; words: string[] };
 		  }
 		| { action: 'exchange'; ctx: { tiles: string[]; newTiles: string[]; rack: string[] } }
 		| { action: 'pass'; ctx: { rack: string[] } }

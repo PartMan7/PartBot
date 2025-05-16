@@ -34,7 +34,7 @@ export function stepPoint(point: Point, by: Point): Point {
 }
 
 export function multiStepPoint(point: Point, by: Point, steps: number): Point {
-	return [point[0] + by[0] * (steps - 1), point[1] + by[1] * (steps - 1)];
+	return [point[0] + by[0] * steps, point[1] + by[1] * steps];
 }
 
 export function flipPoint(point: Point): Point {
