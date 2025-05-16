@@ -3,7 +3,9 @@ import { EmbedBuilder } from 'discord.js';
 import { Game, createGrid } from '@/ps/games/game';
 import {
 	BaseBoard,
+	DICTIONARY,
 	DIRECTION,
+	Dictionaries,
 	LETTER_COUNTS,
 	LETTER_POINTS,
 	PLAY_ACTION_PATTERN,
@@ -437,11 +439,18 @@ export class Scrabble extends Game<State> {
 		};
 	}
 
-	checkWord(word: string): [number, number] | null {
+	onCheckWord?(word: string, dict: DICTIONARY): ActionResponse<[number, number] | null>;
+	checkWord(word: string, dict: DICTIONARY = DICTIONARY.CSW21): [number, number] | null {
 		// TODO handle mods here
-		// TODO Add dictionary
+		if (this.onCheckWord) {
+			const intercepted = this.onCheckWord(word, dict);
+			if (intercepted.success) return intercepted.data;
+		}
 		if (!word) return null;
-		return [1, 0];
+		const dictionary = Dictionaries[dict];
+		if (!dictionary) throw new Error(`Unrecognized dictionary ${dict}`);
+		if (word in dictionary) return [1, 0];
+		return null;
 	}
 
 	score(words: Word[], bingo: boolean): Points {

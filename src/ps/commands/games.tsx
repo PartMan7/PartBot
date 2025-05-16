@@ -142,7 +142,7 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 				help: 'Creates a new game.',
 				syntax: 'CMD [mods?]',
 				perms: Game.meta.players === 'single' ? 'regular' : Symbol.for('games.create'),
-				async run({ message, args, $T, run }) {
+				async run({ message, args, $T }) {
 					if (Game.meta.players === 'single') {
 						if (Object.values(PSGames[gameId] ?? {}).find(game => message.author.id in game.players)) {
 							throw new ChatError($T('GAME.ALREADY_JOINED'));

@@ -1,3 +1,7 @@
+import Clabbers from '@/static/words/clabbers.json';
+import CSW19 from '@/static/words/csw19.json';
+import CSW21 from '@/static/words/csw21.json';
+
 import type { BaseBoard as BaseBoardType } from '@/ps/games/scrabble/types';
 
 export const BaseBoard: BaseBoardType = [
@@ -87,3 +91,16 @@ export enum DIRECTION {
 	RIGHT = 'right',
 	DOWN = 'down',
 }
+
+export enum DICTIONARY {
+	CSW19 = 'csw19',
+	CSW21 = 'csw21',
+	CLABBERS = 'clabbers',
+}
+
+export const Dictionaries = {
+	[DICTIONARY.CSW19]: CSW19,
+	[DICTIONARY.CSW21]: CSW21,
+	[DICTIONARY.CLABBERS]: Clabbers,
+	// TypeScript gets its pants in a twirl here with JSON stuff
+} as unknown as Record<DICTIONARY, Record<string, boolean>>;

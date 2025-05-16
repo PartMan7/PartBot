@@ -8,6 +8,7 @@
 		"skipLibCheck": true,
 		"module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
 		"esModuleInterop": true, // Allow default-importing stuff like path
+		"resolveJsonModule": true, // Allow importing JSON files
 		"strict": true,
 		"paths": {
 			"@/secrets/*": ["./secrets/src/*"],
