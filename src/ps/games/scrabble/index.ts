@@ -449,7 +449,7 @@ export class Scrabble extends Game<State> {
 		if (!word) return null;
 		const dictionary = Dictionaries[dict];
 		if (!dictionary) throw new Error(`Unrecognized dictionary ${dict}`);
-		if (word in dictionary) return [1, 0];
+		if (word.toLowerCase() in dictionary) return [1, 0];
 		return null;
 	}
 
@@ -459,7 +459,7 @@ export class Scrabble extends Game<State> {
 		const wordsPoints = Object.fromEntries(
 			words.map(word => {
 				const scoring = this.checkWord(word.word);
-				if (!scoring) this.throw('GAME.SCRABBLE.INVALID_WORD');
+				if (!scoring) this.throw('GAME.SCRABBLE.INVALID_WORD', { word: word.word });
 				return [word.word, word.bonuses.reduce((score, bonus) => bonus(score), word.baseScore * scoring[0] + scoring[1])];
 			})
 		);
