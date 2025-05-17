@@ -61,7 +61,7 @@ export function renderMove(
 
 type This = { msg: string };
 
-const LETTER_HEX = '#dc6';
+const LETTER_HEX = '#da5';
 const BASE_MARGIN = 12;
 const BASE_PADDING = 8;
 
@@ -76,13 +76,13 @@ function getBackgroundHex(bonus: Bonus | null): string {
 	switch (bonus) {
 		case '2*':
 		case '2W':
-			return '#fba';
+			return '#ecc';
 		case '2L':
-			return '#bcd';
+			return '#bdd';
 		case '3W':
-			return '#f65';
+			return '#e65';
 		case '3L':
-			return '#59a';
+			return '#49a';
 		default:
 			return '#cca';
 	}
@@ -144,7 +144,7 @@ function renderBoard(this: This, ctx: RenderCtx) {
 	};
 
 	return (
-		<Table<BoardTile | null> board={ctx.board} labels={null} Cell={Cell} style={{ background: '#220', borderCollapse: undefined }} />
+		<Table<BoardTile | null> board={ctx.board} labels={null} Cell={Cell} style={{ background: '#dde', borderCollapse: undefined }} />
 	);
 }
 
