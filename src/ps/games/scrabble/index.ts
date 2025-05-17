@@ -325,32 +325,29 @@ export class Scrabble extends Game<State> {
 	}
 
 	render(side: string | null) {
+		const isActive = !!side && side === this.turn;
 		const ctx: RenderCtx = {
 			id: this.id,
 			baseBoard: this.state.baseBoard,
 			board: this.state.board,
 			bag: this.state.bag.length,
 			getPoints: tile => this.points[tile],
+			rack: side ? this.state.racks[side] : undefined,
 			players: Object.fromEntries(
-				Object.values(this.players).map(({ id, name }) => [
+				Object.values(this.players).map(({ id, name, out }) => [
 					id,
-					{
-						id,
-						name,
-						score: this.state.score[id],
-						rack: this.state.racks[id].length,
-					},
+					{ id, name, score: this.state.score[id], rack: this.state.racks[id].length, out },
 				])
 			),
+			isActive,
 			side,
 			turn: this.turn!,
 			selected: side && side === this.turn ? this.selected : null,
 		};
 		if (this.winCtx) {
 			ctx.header = 'Game ended.';
-		} else if (side && side === this.turn) {
+		} else if (isActive) {
 			ctx.header = 'Your turn!';
-			ctx.rack = this.state.racks[side];
 		} else if (side) {
 			ctx.header = `Waiting for ${this.players[this.turn!]?.name}...`;
 			ctx.dimHeader = true;

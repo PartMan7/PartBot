@@ -23,6 +23,7 @@ export const BaseBoard: BaseBoardType = [
 ];
 
 export const RACK_SIZE = 7;
+export const WIDE_LETTERS = ['Q', 'W', 'Z'];
 
 export const LETTER_COUNTS = {
 	A: 9,

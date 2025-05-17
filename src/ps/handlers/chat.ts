@@ -1,6 +1,6 @@
-import { Message } from 'ps-client';
+import { Message, type Room } from 'ps-client';
 
-import { PSAliases, PSCommands } from '@/cache';
+import { PSAliases, PSCommands, PSGames } from '@/cache';
 import { prefix } from '@/config/ps';
 import { i18n } from '@/i18n';
 import { checkPermissions } from '@/ps/handlers/permissions';
@@ -82,8 +82,22 @@ export function parseArgs(
 }
 
 function spoofMessage(argData: string, message: PSMessage, $T: TranslationFn): PSMessage {
-	const [roomId, newArgData] = argData.slice(1).lazySplit(' ', 1);
-	const room = message.parent.getRoom(roomId);
+	let [roomId, newArgData] = argData.lazySplit(' ', 1);
+	let room: Room | undefined;
+	if (roomId.startsWith('#')) {
+		// This logic is game-specific handling, since the room and game type are available from ID
+		// Messages will look something like `,@#GAME subcommand args`
+		// This needs to be interpreted as `,@GAME.ROOM GAME.TYPE subcommand GAME.ID, args`
+		const [gameId, subcommand, args] = argData.lazySplit(' ', 2);
+		const game = Object.values(PSGames)
+			.flatMap(games => Object.values(games))
+			.find(game => game.id === gameId);
+		if (!game) throw new ChatError($T('INVALID_ROOM_ID'));
+		if (!subcommand) throw new ChatError($T('GAME.INVALID_INPUT'));
+		room = game.room;
+		newArgData = `${game.meta.id} ${subcommand} ${game.id}, ${args ?? ''}`;
+	}
+	if (!room) room = message.parent.getRoom(roomId);
 	if (!room) throw new ChatError($T('INVALID_ROOM_ID'));
 	const by = room.users.find(user => toId(user) === message.author.id);
 	if (!by) throw new ChatError($T('NOT_IN_ROOM'));
@@ -110,7 +124,7 @@ export default async function chatHandler(message: PSMessage, originalMessage?: 
 		// Check if this is a spoof message. If so, spoof and pass to the room.
 		// Will only trigger commands with `flags.routePMs` enabled.
 		if (argData.startsWith('@')) {
-			const mockMessage = spoofMessage(argData, message, $T);
+			const mockMessage = spoofMessage(argData.slice(1), message, $T);
 			return chatHandler(mockMessage, message);
 		}
 		const args = argData.split(/ +/);

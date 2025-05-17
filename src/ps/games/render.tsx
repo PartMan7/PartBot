@@ -15,19 +15,20 @@ export function renderSignups<State extends BaseState>(this: Game<State>, staff:
 				? Object.entries(this.meta.turns!)
 						.filter(([turn]) => !this.players[turn])
 						.map(([side, sideName]) => (
-							<Button key={side} value={`${this.renderCtx.msg} join ${this.id}, ${side}`} style={{ margin: 5 }}>
+							<Button key={side} value={`${this.renderCtx.msg} join ${side}`} style={{ margin: 5 }}>
 								{sideName}
 							</Button>
 						))
 				: null}
+			{/* TODO Disable this in validation for 1 side left */}
 			{this.sides && this.turns.length - Object.keys(this.players).length > 1 ? (
-				<Button value={`${this.renderCtx.msg} join ${this.id}, -`} style={{ margin: 5 }}>
+				<Button value={`${this.renderCtx.msg} join -`} style={{ margin: 5 }}>
 					Random
 				</Button>
 			) : null}
-			{!this.sides ? <Button value={`${this.renderCtx.msg} join ${this.id}`}>Join</Button> : null}
+			{!this.sides ? <Button value={`${this.renderCtx.msg} join`}>Join</Button> : null}
 			{staff && startable ? (
-				<Button value={`${this.renderCtx.msg} start ${this.id}`} style={{ marginLeft: 8 }}>
+				<Button value={`${this.renderCtx.msg} start`} style={{ marginLeft: 8 }}>
 					Start
 				</Button>
 			) : null}
@@ -41,7 +42,7 @@ export function renderCloseSignups<State extends BaseState>(this: Game<State>): 
 		<>
 			<hr />
 			<h1>{this.meta.name} Signups have closed.</h1>
-			<Button value={`${this.renderCtx.msg} watch ${this.id}`}>Watch</Button>
+			<Button value={`${this.renderCtx.msg} watch`}>Watch</Button>
 			<hr />
 		</>
 	);

@@ -12,7 +12,7 @@ export function renderCloseSignups(this: Mastermind): ReactElement {
 		<>
 			<hr />
 			{player} is playing a round of {this.meta.name}!
-			<Button value={`${this.renderCtx.msg} watch ${this.id}`} style={{ marginLeft: 16 }}>
+			<Button value={`${this.renderCtx.msg} watch`} style={{ marginLeft: 16 }}>
 				Watch
 			</Button>
 			{this.setBy || !hasGuessed ? (
@@ -24,7 +24,7 @@ export function renderCloseSignups(this: Mastermind): ReactElement {
 			{this.setBy ? (
 				`${this.setBy.name} has set a code for ${player}.`
 			) : !hasGuessed ? (
-				<Form value={`${this.renderCtx.msg} audience ${this.id}, {code}`}>
+				<Form value={`${this.renderCtx.msg} audience, {code}`}>
 					<label htmlFor="choosecode">Set Code: </label>
 					<input type="text" id="choosecode" name="code" style={{ width: 30 }} /> &nbsp;&nbsp;
 					<input type="submit" value="Set" />
@@ -48,7 +48,7 @@ const COLORS: { color: string; text: string; index: number }[] = [
 
 const scale = 3.5;
 
-type This = { msg: string };
+type This = { msg: string; simpleMsg: string };
 function Pin({ red, white }: { red?: boolean; white?: boolean }): ReactElement {
 	return (
 		<div
@@ -196,7 +196,7 @@ export function render(this: This, data: State, mode: 'playing' | 'over' | 'spec
 			{mode !== 'spectator' ? (
 				<div style={{ border: '1px solid', padding: 20, display: 'inline-block', verticalAlign: 'top' }}>
 					{mode === 'over' ? (
-						<Button value={`${this.msg} create ${data.cap}`}>Play Again</Button>
+						<Button value={`${this.simpleMsg} create ${data.cap}`}>Play Again</Button>
 					) : (
 						<Form value={`${this.msg} play {guess}`}>
 							<input type="text" name="guess" placeholder="Your guess!" />

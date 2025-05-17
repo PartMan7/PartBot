@@ -18,7 +18,7 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 					<span style={{ ...roundStyles, background: cell === 'W' ? 'white' : 'black' }} />
 				) : action ? (
 					<Button
-						value={`${this.msg} play ${ctx.id}, ${i}-${j}`}
+						value={`${this.msg} play ${i}-${j}`}
 						style={{ ...roundStyles, border: '1px dashed black', background: '#6666' }}
 					>
 						{' '}

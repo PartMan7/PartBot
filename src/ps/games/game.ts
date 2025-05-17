@@ -55,7 +55,10 @@ export class Game<State extends BaseState> {
 	turns: State['turn'][] = [];
 
 	renderCtx: {
+		// Automatically include info like room and game ID in the command
 		msg: string;
+		// Remove game ID handling and use the generic message instead
+		simpleMsg: string;
 	};
 
 	players: Record<BaseState['turn'], Player> = {};
@@ -97,7 +100,10 @@ export class Game<State extends BaseState> {
 		this.$T = ctx.$T;
 
 		this.meta = ctx.meta;
-		this.renderCtx = { msg: `/msgroom ${ctx.room.id},/botmsg ${this.parent.status.userid},${prefix}@${ctx.room.id} ${ctx.meta.id}` };
+		this.renderCtx = {
+			msg: `/msgroom ${ctx.room.id},/botmsg ${this.parent.status.userid},${prefix}@${ctx.id}`,
+			simpleMsg: `/msgroom ${ctx.room.id},/botmsg ${this.parent.status.userid},${prefix}@${ctx.room.id} ${ctx.meta.id}`,
+		};
 
 		if (ctx.meta.turns) this.turns = Object.keys(ctx.meta.turns);
 		this.sides = !!ctx.meta.turns;
@@ -376,7 +382,9 @@ export class Game<State extends BaseState> {
 			this.throw('GAME.NON_PLAYER_OR_SPEC');
 		}
 		// TODO: Add ping to ps-client HTML opts
-		Object.keys(this.players).forEach(side => this.sendHTML(this.players[side].id, this.render(side)));
+		Object.entries(this.players).forEach(([side, player]) => {
+			if (!player.out) this.sendHTML(player.id, this.render(side));
+		});
 		this.room.send(`/highlighthtmlpage ${this.players[this.turn!].id}, ${this.id}, ${this.$T('GAME.YOUR_TURN')}` as TranslatedText);
 		if (this.spectators.length > 0) this.room.pageHTML(this.spectators, this.render(null), { name: this.id });
 	}

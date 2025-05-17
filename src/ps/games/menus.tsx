@@ -20,7 +20,10 @@ export function renderMenu(room: PSRoomTranslated, meta: Meta, isStaff: boolean)
 						{game.started ? (
 							<>
 								{Object.values(game.players)
-									.map(player => <Username name={player.name} />)
+									.map(player => {
+										const username = <Username name={player.name} />;
+										return player.out ? <s>{username}</s> : username;
+									})
 									.space('/')}
 								<Button value={`${cmd} watch`} style={{ marginLeft: 10 }}>
 									Watch
@@ -50,6 +53,11 @@ export function renderMenu(room: PSRoomTranslated, meta: Meta, isStaff: boolean)
 						)}
 						{isStaff ? (
 							<>
+								{game.meta.autostart === false && game.startable() ? (
+									<Button value={`${cmd} start ${game.id}`} style={{ marginLeft: 20 }}>
+										Start
+									</Button>
+								) : null}
 								<Button value={`${cmd} end ${game.id}`} style={{ marginLeft: 20 }}>
 									End
 								</Button>

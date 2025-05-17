@@ -7,14 +7,15 @@ import type { CellRenderer } from '@/ps/games/render';
 import type { Scrabble } from '@/ps/games/scrabble';
 import type { Log } from '@/ps/games/scrabble/logs';
 import type { BoardTile, Bonus, RenderCtx } from '@/ps/games/scrabble/types';
-import type { ReactElement, ReactNode } from 'react';
+import type { CSSProperties, ReactElement, ReactNode } from 'react';
+import { WIDE_LETTERS } from '@/ps/games/scrabble/constants';
 
 export function renderMove(logEntry: Log, { id, players, $T, renderCtx: { msg } }: Scrabble): [ReactElement, { name: string }] {
 	const Wrapper = ({ children }: { children: ReactNode }): ReactElement => (
 		<>
 			<hr />
 			{children}
-			<Button name="send" value={`${msg} watch ${id}`} style={{ float: 'right' }}>
+			<Button name="send" value={`${msg} watch`} style={{ float: 'right' }}>
 				Watch!
 			</Button>
 			<hr />
@@ -92,6 +93,12 @@ function renderBoard(this: This, ctx: RenderCtx) {
 	const Cell: CellRenderer<BoardTile | null> = ({ cell, i, j }): ReactElement => {
 		const baseCell = ctx.baseBoard[i][j];
 		const isSelected = !!ctx.selected && coincident([i, j], ctx.selected);
+		const buttonStyles: CSSProperties = {
+			border: !isSelected ? 'none' : undefined,
+			background: 'none',
+			height: 20,
+			width: 20,
+		};
 		return (
 			<td
 				style={{
@@ -103,15 +110,13 @@ function renderBoard(this: This, ctx: RenderCtx) {
 			>
 				{cell ? (
 					<Button
-						value={`${this.msg} ! ${ctx.id},s${encodePos([i, j])}`}
+						value={`${this.msg} ! s${encodePos([i, j])}`}
 						style={{
-							color: cell.blank ? 'grey' : '#000',
+							...buttonStyles,
+							color: cell.blank ? '#333' : '#000',
 							padding: 0,
-							border: !isSelected ? 'none' : undefined,
-							background: 'none',
-							height: 20,
-							width: 20,
 							fontSize: 16,
+							overflow: WIDE_LETTERS.includes(cell.letter) && cell.points ? 'hidden' : undefined,
 						}}
 					>
 						<b>
@@ -122,14 +127,18 @@ function renderBoard(this: This, ctx: RenderCtx) {
 				) : null}
 				{!cell && clickable ? (
 					<Button
-						value={`${this.msg} ! ${ctx.id},s${encodePos([i, j])}`}
+						value={`${this.msg} ! s${encodePos([i, j])}`}
 						style={{
-							border: !isSelected ? 'none' : undefined,
-							background: 'none',
-							height: 20,
-							width: 20,
-							fontSize: 16,
-							...(baseCell === '2*' ? { color: '#000', padding: 0, lineHeight: '15px' } : {}),
+							...buttonStyles,
+							...(baseCell === '2*'
+								? {
+										color: '#000',
+										padding: 0,
+										fontSize: 16,
+										textAlign: 'center',
+										lineHeight: '18px',
+									}
+								: {}),
 						}}
 					>
 						{baseCell === '2*' ? '★' : ' '}
@@ -167,9 +176,10 @@ function Letter({ letter, points }: { letter: string; points: number }): ReactEl
 
 function Scores({ players }: { players: RenderCtx['players'] }): ReactElement[] {
 	return Object.values(players).map(player => {
+		const username = <Username name={player.name} />;
 		return (
 			<div>
-				<Username name={player.name} />: {player.score}p ({player.rack} tiles in rack)
+				{player.out ? <s>{username}</s> : username}: {player.score} ({player.rack} tile(s) in rack)
 			</div>
 		);
 	});
@@ -177,31 +187,39 @@ function Scores({ players }: { players: RenderCtx['players'] }): ReactElement[] 
 
 function renderInput(this: This, ctx: RenderCtx): ReactElement | null {
 	// ctx.selected is only passed for the active player
-	if (!ctx.selected) {
-		if (ctx.side && ctx.side === ctx.turn) return <h3>Select a tile to play from.</h3>;
-		return null;
-	}
+	if (!ctx.isActive) return null;
 	return (
 		<>
-			<br />
-			<Form value={`${this.msg} ! ${ctx.id},p${encodePos(ctx.selected)}{dir} {word}`}>
-				<center style={{ display: 'inline-block' }}>
-					<input name="word" type="text" width="200" placeholder="Your word here" />
-					<br />
-					<button>Play!</button>
-				</center>
+			{ctx.selected ? (
+				<Form value={`${this.msg} ! p${encodePos(ctx.selected)}{dir} {word}`} style={{ display: 'inline-block', margin: '0 8px' }}>
+					<center style={{ display: 'inline-block' }}>
+						<input name="word" type="text" width="200" placeholder="Your word here" />
+						<br />
+						<div style={{ textAlign: 'left', margin: '4px 0' }}>
+							<select name="dir">
+								<option value="r">Right</option>
+								<option value="d">Down</option>
+							</select>
+							<button style={{ float: 'right' }}>Go!</button>
+						</div>
+					</center>
+				</Form>
+			) : (
+				<h3>Select a tile to play from!</h3>
+			)}
+			{
 				<div style={{ display: 'inline-block' }}>
-					<label>
-						<input type="radio" name="dir" value="r" style={{ position: 'relative', top: 2 }} required checked />
-						Right
-					</label>
-					<br />
-					<label>
-						<input type="radio" name="dir" value="d" style={{ position: 'relative', top: 2 }} />
-						Down
-					</label>
+					<div style={{ textAlign: 'right' }}>
+						<Button name="send" value={`${this.msg} ! -`}>
+							Pass
+						</Button>
+					</div>
+					<Form value={`${this.msg} ! x {tiles}`} style={{ margin: '4px 0' }}>
+						<input name="tiles" placeholder="Exchange tiles" width="100" style={{ marginRight: 4 }} />
+						<button>Exchange</button>
+					</Form>
 				</div>
-			</Form>
+			}
 		</>
 	);
 }
