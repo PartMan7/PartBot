@@ -3,21 +3,20 @@ import { Button, Form, Username } from '@/utils/components/ps';
 import { type Point, coincident } from '@/utils/grid';
 import { log } from '@/utils/logger';
 
-import type { TranslationFn } from '@/i18n/types';
-import type { Player } from '@/ps/games/common';
 import type { CellRenderer } from '@/ps/games/render';
+import type { Scrabble } from '@/ps/games/scrabble';
 import type { Log } from '@/ps/games/scrabble/logs';
 import type { BoardTile, Bonus, RenderCtx } from '@/ps/games/scrabble/types';
 import type { ReactElement, ReactNode } from 'react';
 
-export function renderMove(
-	logEntry: Log,
-	{ id, players, $T }: { id: string; players: Record<string, Player>; $T: TranslationFn }
-): [ReactElement, { name: string }] {
+export function renderMove(logEntry: Log, { id, players, $T, renderCtx: { msg } }: Scrabble): [ReactElement, { name: string }] {
 	const Wrapper = ({ children }: { children: ReactNode }): ReactElement => (
 		<>
 			<hr />
 			{children}
+			<Button name="send" value={`${msg} watch ${id}`} style={{ float: 'right' }}>
+				Watch!
+			</Button>
 			<hr />
 		</>
 	);
@@ -144,7 +143,7 @@ function renderBoard(this: This, ctx: RenderCtx) {
 	};
 
 	return (
-		<Table<BoardTile | null> board={ctx.board} labels={null} Cell={Cell} style={{ background: '#dde', borderCollapse: undefined }} />
+		<Table<BoardTile | null> board={ctx.board} labels={null} Cell={Cell} style={{ background: '#220', borderCollapse: undefined }} />
 	);
 }
 
