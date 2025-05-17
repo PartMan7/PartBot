@@ -86,6 +86,8 @@ export class Game<State extends BaseState> {
 		return 'Game ended';
 	}
 	trySkipPlayer?(turn: BaseState['turn']): boolean;
+	moddable?(): boolean;
+	applyMod?(mod: string): ActionResponse<TranslatedText>;
 
 	throw(msg?: Parameters<TranslationFn>[0], vars?: Parameters<TranslationFn>[1]): never {
 		if (!msg) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
@@ -218,6 +220,7 @@ export class Game<State extends BaseState> {
 			if (staffHTML) this.room.sendHTML(staffHTML, { name: this.id, rank: '+', change: true });
 		}
 	}
+	// TODO: Handle max players state
 	renderCloseSignups?(): ReactElement;
 	closeSignups(change = true): void {
 		const closeSignupsHTML = (this.renderCloseSignups ?? renderCloseSignups).bind(this)();
@@ -293,7 +296,7 @@ export class Game<State extends BaseState> {
 		return {
 			success: true,
 			data: {
-				message: (staffAction ? `${player.name} has been removed from the game.` : 'You have left the game') as ToTranslate,
+				message: (staffAction ? `${player.name} has been removed from the game.` : 'You have left the game.') as ToTranslate,
 			},
 		};
 	}

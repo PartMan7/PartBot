@@ -1,25 +1,26 @@
 import { EmbedBuilder } from 'discord.js';
 
 import { Game, createGrid } from '@/ps/games/game';
+import { checkWord } from '@/ps/games/scrabble/checker';
 import {
 	BaseBoard,
-	DICTIONARY,
 	DIRECTION,
-	Dictionaries,
 	LETTER_COUNTS,
 	LETTER_POINTS,
 	PLAY_ACTION_PATTERN,
 	RACK_SIZE,
 	SELECT_ACTION_PATTERN,
 } from '@/ps/games/scrabble/constants';
+import { ScrabbleModData } from '@/ps/games/scrabble/mods';
 import { render, renderMove } from '@/ps/games/scrabble/render';
 import { type Point, coincident, flipPoint, multiStepPoint, rangePoints, stepPoint } from '@/utils/grid';
 
 import type { TranslatedText } from '@/i18n/types';
 import type { ActionResponse, EndType, Player } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
+import type { ScrabbleMods } from '@/ps/games/scrabble/constants';
 import type { Log } from '@/ps/games/scrabble/logs';
-import type { BoardTile, Bonus, BonusReducer, Points, RenderCtx, State, WinCtx, Word } from '@/ps/games/scrabble/types';
+import type { BoardTile, Bonus, BonusReducer, Points, RenderCtx, State, WinCtx, Word, WordScore } from '@/ps/games/scrabble/types';
 import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/scrabble/meta';
@@ -34,12 +35,25 @@ export class Scrabble extends Game<State> {
 	passCount: number | null = null;
 	selected: Point | null = null;
 	winCtx?: WinCtx | { type: EndType };
+	mod: ScrabbleMods | null = null;
 
 	constructor(ctx: BaseContext) {
 		super(ctx);
 		super.persist(ctx);
 
 		if (ctx.backup) return;
+	}
+
+	moddable() {
+		if (!this.started) return true;
+		const isEmptyBoard = !this.state.board.some(row => row.some(Boolean));
+		if (isEmptyBoard) return true;
+		return false;
+	}
+
+	applyMod(mod: ScrabbleMods): ActionResponse<TranslatedText> {
+		this.mod = mod;
+		return { success: true, data: this.$T('GAME.APPLIED_MOD', { mod: ScrabbleModData[mod].name, id: this.id }) };
 	}
 
 	onStart(): ActionResponse {
@@ -240,7 +254,7 @@ export class Scrabble extends Game<State> {
 		this.room.sendHTML(...renderMove(logEntry, this));
 		this.selected = null;
 
-		if (this.state.bag.length === 0) this.end();
+		if (rack.length === 0) this.end();
 		const next = this.nextPlayer();
 		if (!next) this.end();
 	}
@@ -304,16 +318,23 @@ export class Scrabble extends Game<State> {
 			return this.$T('GAME.ENDED', { game: this.meta.name, id: this.id });
 		}
 
-		const winners = Object.entries(this.state.score).map(([id, score]) => ({
-			...this.players[id],
-			score,
-		}));
+		const winners = Object.entries(this.state.score)
+			.map(([id, score]) => ({
+				...this.players[id],
+				score,
+			}))
+			.sortBy(entry => entry.score, 'desc')
+			.filter((entry, _, list) => entry.score === list[0].score);
+
+		Object.keys(this.players).forEach(playerId => {
+			this.state.score[playerId] -= this.state.racks[playerId].map(tile => this.points[tile]).sum();
+		});
 		this.winCtx = {
 			type: 'win',
 			winnerIds: winners.map(winner => winner.id),
 			score: this.state.score,
 		};
-		return this.$T('GAME.WON', { winner: `${winners.list(this.$T)}` });
+		return this.$T('GAME.WON', { winner: `${winners.map(winner => winner.name).list(this.$T)}` });
 	}
 
 	onReplacePlayer(oldPlayer: string, withPlayer: User): ActionResponse<Partial<Player>> {
@@ -434,34 +455,29 @@ export class Scrabble extends Game<State> {
 			if (!bonus) return score;
 			const modifier = +bonus.charAt(0);
 			const additive = bonus.charAt(1) === 'L';
-			return additive ? score + modifier * tile.points : score * modifier;
+			return additive ? score + (modifier - 1) * tile.points : score * modifier;
 		};
 	}
 
-	onCheckWord?(word: string, dict: DICTIONARY): ActionResponse<[number, number] | null>;
-	checkWord(word: string, dict: DICTIONARY = DICTIONARY.CSW21): [number, number] | null {
-		// TODO handle mods here
-		if (this.onCheckWord) {
-			const intercepted = this.onCheckWord(word, dict);
-			if (intercepted.success) return intercepted.data;
-		}
+	checkWord(word: string): WordScore | null {
 		if (!word) return null;
-		const dictionary = Dictionaries[dict];
-		if (!dictionary) throw new Error(`Unrecognized dictionary ${dict}`);
-		if (word.toLowerCase() in dictionary) return [1, 0];
-		return null;
+		return checkWord(word, this.mod);
 	}
 
 	score(words: Word[], bingo: boolean): Points {
-		// TODO handle mods here
 		const bingoPoints = bingo ? 50 : 0;
-		const wordsPoints = Object.fromEntries(
-			words.map(word => {
-				const scoring = this.checkWord(word.word);
-				if (!scoring) this.throw('GAME.SCRABBLE.INVALID_WORD', { word: word.word });
-				return [word.word, word.bonuses.reduce((score, bonus) => bonus(score), word.baseScore * scoring[0] + scoring[1])];
-			})
-		);
+		const wordData = words.map<[string, number | null]>(word => {
+			const scoring = this.checkWord(word.word);
+			if (!scoring) return [word.word, null];
+			return [word.word, word.bonuses.reduce((score, bonus) => bonus(score), word.baseScore) * scoring[0] + scoring[1]];
+		});
+		const invalidWords = wordData.filter(entry => entry[1] === null).map(entry => entry[0]);
+		if (invalidWords.length > 0) {
+			this.throw(invalidWords.length === 1 ? 'GAME.SCRABBLE.INVALID_WORD' : 'GAME.SCRABBLE.INVALID_WORDS', {
+				wordList: invalidWords.list(this.$T),
+			});
+		}
+		const wordsPoints = Object.fromEntries(wordData as [string, number][]);
 		return { total: Object.values(wordsPoints).sum() + bingoPoints, bingo, words: wordsPoints };
 	}
 }

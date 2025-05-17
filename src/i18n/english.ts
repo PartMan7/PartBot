@@ -36,7 +36,7 @@ export default {
 		INVALID_SIDE: 'Invalid side chosen! Valid sides are: {{sides}}',
 		IN_PROGRESS: 'This game is already in progress. Weeb.',
 		IS_FULL: 'The game has no more space for players.',
-		NOT_FOUND: 'Could not find the game you meant...',
+		NOT_FOUND: "Couldn't find the game you meant...",
 		NOT_PLAYING: [
 			"You're not a player!",
 			"You're not playing, weeb.",
@@ -59,6 +59,9 @@ export default {
 		NON_PLAYER_OR_SPEC: 'User not in players/spectators',
 		YOUR_TURN: 'Your turn!',
 		UPLOAD_FAILED: 'Failed to upload game {{id}}.',
+		MOD_NOT_FOUND: "Could not find a mod called '{{mod}}'.",
+		CANNOT_MOD: 'Mods cannot be applied to this game now.',
+		APPLIED_MOD: '{{mod}} has been applied to game {{id}}.',
 		TIMER: {
 			PRIVATE: "Psst it's your turn to play in {{game}} [{{id}}]",
 			PUBLIC: "{{user}} hasn't played in {{game}} [{{id}}] for {{time}}...",
@@ -79,7 +82,9 @@ export default {
 			FIRST_MOVE_MULTIPLE_TILES: 'You may not play a single tile on the first move.',
 			MUST_BE_CONNECTED: 'All moves in Scrabble must be connected to the rest of the tiles on the board!',
 			MUST_PLAY_TILES: 'Your move must play at least one tile.',
-			INVALID_WORD: '{{word}} is not a valid word.',
+			INVALID_WORD: '{{wordList}} is not a valid word.',
+			INVALID_WORDS: '{{wordList}} are not valid words.',
+			VALID_WORD: '{{word}} is a valid word in {{mod}}.',
 			HOW_TO_BLANK:
 				"Hi, you've drawn a blank tile! A blank tile can be used as any letter, but the tile awards 0 points. You can type `BL[A]NK` (for example) to use the blank as an A. Other syntaxes supported are `BL(A)NK`, or adding an apostrophe after the blanked letter (eg: `BLA'NK`).",
 		},

@@ -105,3 +105,11 @@ export const Dictionaries = {
 	[DICTIONARY.CLABBERS]: Clabbers,
 	// TypeScript gets its pants in a twirl here with JSON stuff
 } as unknown as Record<DICTIONARY, Record<string, boolean>>;
+
+export enum ScrabbleMods {
+	CSW19 = 'csw19',
+	CSW21 = 'csw21',
+	CLABBERS = 'clabbers',
+	POKEMON = 'pokemon',
+	CRAZYMONS = 'crazymons',
+}

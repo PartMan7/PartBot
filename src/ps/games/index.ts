@@ -1,4 +1,4 @@
-import { GamesList } from '@/ps/games/common';
+import { GamesList, type Meta } from '@/ps/games/common';
 import { ConnectFour, meta as ConnectFourMeta } from '@/ps/games/connectfour';
 import { Mastermind, meta as MastermindMeta } from '@/ps/games/mastermind';
 import { Othello, meta as OthelloMeta } from '@/ps/games/othello';
@@ -21,5 +21,5 @@ export const Games = {
 		meta: ScrabbleMeta,
 		instance: Scrabble,
 	},
-};
+} satisfies Readonly<Record<GamesList, Readonly<{ meta: Meta; instance: unknown }>>>;
 export type Games = typeof Games;

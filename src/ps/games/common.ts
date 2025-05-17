@@ -1,7 +1,8 @@
 import type { TranslatedText } from '@/i18n/types';
+import type { ModData, ModEnum } from '@/ps/games/mods';
 import type { Satisfies } from '@/types/common';
 
-export type Meta = {
+export type Meta = Readonly<{
 	name: string;
 	id: GamesList;
 	aliases?: readonly string[];
@@ -9,15 +10,17 @@ export type Meta = {
 	abbr?: string;
 
 	players: 'single' | 'many';
-	turns?: Record<string, string>;
+	turns?: Readonly<Record<string, string>>;
 	minSize?: number;
 	maxSize?: number;
+
+	mods?: Readonly<{ list: ModEnum<string>; data: ModData<string> }>;
 
 	/** @default Assume true */
 	autostart?: boolean;
 	timer?: number | false;
 	pokeTimer?: number | false | undefined;
-};
+}>;
 
 export enum GamesList {
 	Othello = 'othello',

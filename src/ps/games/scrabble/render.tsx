@@ -99,6 +99,7 @@ function renderBoard(this: This, ctx: RenderCtx) {
 			height: 20,
 			width: 20,
 		};
+		const ButtonIfNeeded = clickable ? Button : 'div';
 		return (
 			<td
 				style={{
@@ -109,7 +110,7 @@ function renderBoard(this: This, ctx: RenderCtx) {
 				}}
 			>
 				{cell ? (
-					<Button
+					<ButtonIfNeeded
 						value={`${this.msg} ! s${encodePos([i, j])}`}
 						style={{
 							...buttonStyles,
@@ -123,7 +124,7 @@ function renderBoard(this: This, ctx: RenderCtx) {
 							{cell.letter}
 							{cell.points ? <sub style={{ fontSize: '0.6em' }}>{cell.points}</sub> : null}
 						</b>
-					</Button>
+					</ButtonIfNeeded>
 				) : null}
 				{!cell && clickable ? (
 					<Button

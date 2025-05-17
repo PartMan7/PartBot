@@ -2,6 +2,7 @@ import { PSGames } from '@/cache';
 import { gameCache } from '@/cache/games';
 import { Games } from '@/ps/games';
 import { renderBackups, renderMenu } from '@/ps/games/menus';
+import { parseMod } from '@/ps/games/mods';
 import { generateId } from '@/ps/games/utils';
 import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
@@ -11,7 +12,6 @@ import type { BaseGame } from '@/ps/games/game';
 import type { PSCommand } from '@/types/chat';
 import type { Room } from 'ps-client';
 import type { HTMLopts } from 'ps-client/classes/common';
-import type { ReactElement } from 'react';
 
 type SearchContext =
 	| { action: 'start'; user: string }
@@ -23,11 +23,12 @@ type SearchContext =
 	| { action: 'sub'; user1?: string; user2?: string }
 	| { action: 'watch'; user: string }
 	| { action: 'unwatch'; user: string }
+	| { action: 'mod'; user: string }
 	| { action: 'any' };
 
 type RoomContext = { room: Room; $T: TranslationFn };
 
-const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
+export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 	const gameId = _gameId as keyof Games;
 
 	type GameFilter = (game: BaseGame) => boolean;
@@ -62,6 +63,8 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					return game.started && !hasJoined && !game.spectators.includes(ctx.user);
 				case 'unwatch':
 					return game.started && !hasJoined && game.spectators.includes(ctx.user);
+				case 'mod':
+					return game.moddable?.() ?? false;
 				default:
 					return true;
 			}
@@ -384,6 +387,24 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 					message.reply(`/closehtmlpage ${message.author.id}, ${game.id}` as NoTranslate);
 				},
 			},
+			...(Game.meta.mods
+				? ({
+						mod: {
+							name: 'mod',
+							aliases: ['#'],
+							help: 'Modifies a given game.',
+							syntax: 'CMD [game ref] (mod)',
+							async run({ message, arg, $T }) {
+								const { game, ctx } = getGame(arg, { action: 'mod', user: message.author.id }, { room: message.target, $T });
+								if (!game.moddable?.() || !game.applyMod) throw new ChatError($T('GAME.CANNOT_MOD'));
+								const mod = parseMod(ctx, Game.meta.mods!.list, Game.meta.mods!.data);
+								if (!mod) throw new ChatError($T('GAME.MOD_NOT_FOUND', { mod: ctx }));
+								const applied = game.applyMod(mod);
+								if (applied.success) message.reply(applied.data);
+							},
+						},
+					} satisfies PSCommand['children'])
+				: {}),
 			menu: {
 				name: 'menu',
 				aliases: ['m', 'list'],
@@ -453,54 +474,3 @@ const gameCommands = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 		},
 	};
 });
-
-const metaCommands: PSCommand = {
-	name: 'games',
-	help: 'Metacommands for games.',
-	syntax: 'CMD [menu]',
-	perms: Symbol.for('games.manage'),
-	async run({ run }) {
-		return run('games menu');
-	},
-	children: {
-		menu: {
-			name: 'menu',
-			aliases: ['list', 'm'],
-			help: 'Displays a menu of all games currently active.',
-			syntax: 'CMD',
-			async run({ message, broadcastHTML }) {
-				const Menu = ({ staff }: { staff?: boolean }): ReactElement => (
-					<>
-						<hr />
-						{Object.values(Games)
-							.map(Game => (
-								<>
-									<h3>{Game.meta.name}</h3>
-									{renderMenu(message.target, Game.meta, !!staff)}
-								</>
-							))
-							.space(<hr />)}
-						<br />
-						<hr />
-					</>
-				);
-				const opts: HTMLopts = { name: 'games-menu' };
-				broadcastHTML(<Menu />, opts);
-				message.target.sendHTML(<Menu staff />, { ...opts, rank: '%' });
-			},
-		},
-	},
-};
-
-export const command: PSCommand[] = [
-	...gameCommands,
-	metaCommands,
-	{
-		name: 'othellosequence',
-		help: 'Sequence of fastest game in Othello.',
-		syntax: 'CMD',
-		async run({ broadcastHTML }) {
-			broadcastHTML([['e6', 'f4'], ['e3', 'f6'], ['g5', 'd6'], ['e7', 'f5'], ['c5']].map(turns => turns.join(', ')).join('<br />'));
-		},
-	},
-];

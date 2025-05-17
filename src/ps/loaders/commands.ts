@@ -1,8 +1,9 @@
 import { promises as fs } from 'fs';
+import path from 'path';
 
 import { PSAliases, PSCommands } from '@/cache';
 import { resetCache } from '@/cache/reset';
-import getSecretCommands from '@/secrets/commands/ps';
+import getSecretCommands from '@/secrets/ps';
 import { cachebuster } from '@/utils/cachebuster';
 import { fsPath } from '@/utils/fsPath';
 
@@ -20,11 +21,14 @@ function addAlias(command: PSCommand, stack: string[], aliasAs: string[]) {
 
 export async function loadCommands(): Promise<void> {
 	// Load command data
-	const commands = [...(await fs.readdir(fsPath('ps', 'commands'))), ...getSecretCommands()];
+	const commands = [
+		...(await fs.readdir(fsPath('ps', 'commands'), { recursive: true, withFileTypes: true }))
+			.filter(entry => entry.isFile())
+			.map(entry => path.join(entry.parentPath, entry.name)),
+		...getSecretCommands().map(command => fsPath('secrets', 'src', 'ps', 'commands', command)),
+	];
 	await Promise.all(
-		commands.map(async commandFileName => {
-			const requirePath = fsPath('ps', 'commands', commandFileName);
-
+		commands.map(async requirePath => {
 			const { command }: { command: PSCommand | PSCommand[] } = await import(requirePath);
 			if (!command) return;
 
