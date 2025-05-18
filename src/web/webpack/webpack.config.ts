@@ -7,7 +7,7 @@ const reactDir = path.join(__dirname, '..', 'react');
 const pagesDir = path.join(reactDir, 'pages');
 
 const config: Webpack.Configuration = {
-	mode: 'development',
+	mode: 'production',
 	entry: Object.fromEntries(
 		fs
 			.readdirSync(pagesDir, { recursive: true, encoding: 'utf8', withFileTypes: true })

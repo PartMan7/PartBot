@@ -11,12 +11,12 @@
 		"secrets-check": "sh scripts/secrets_check.sh",
 		"prettify": "prettier -w",
 		"prepare": "sh ./scripts/setup.sh",
-		"servers": "npm run webpack-server & npm run tailwind-server",
-		"start": "npm run servers & ts-node --swc src/index.ts",
-		"tailwind-server": "npx @tailwindcss/cli -i ./src/web/styles/tailwind.css -o ./src/web/react/compiled/styles.css --watch",
+		"prestart": "npm run webpack && npm run tailwind",
+		"start": "ts-node --swc src/index.ts",
+		"tailwind": "npx @tailwindcss/cli -i ./src/web/styles/tailwind.css -o ./src/web/react/compiled/styles.css",
 		"test": "npm run lint && npm run tsc",
 		"tsc": "tsc",
-		"webpack-server": "webpack -c src/web/webpack/webpack.config.ts --watch"
+		"webpack": "webpack -c src/web/webpack/webpack.config.ts"
 	},
 	"keywords": [],
 	"author": "PartMan7",
