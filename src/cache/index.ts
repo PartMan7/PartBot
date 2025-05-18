@@ -1,6 +1,7 @@
 import type { JudgementGame } from '@/discord/commands/judgement';
 import type { Games } from '@/ps/games';
 import type { BaseGame } from '@/ps/games/game';
+import type { PSCronJobManager } from '@/ps/handlers/cron';
 import type { DiscCommand, PSCommand } from '@/types/chat';
 import type { PSRoomConfig } from '@/types/ps';
 import type { Timer } from '@/utils/timer';
@@ -18,6 +19,7 @@ export const PSAltCache: { [key: string]: { from: string; to: string; at: Date }
 export const PSSeenCache: { [key: string]: { at: Date; in: string[] } } = {};
 
 export const PSQuoteRoomPrefs: { [key: string]: { room: string; at: Date } } = {};
+export const PSCronJobs: { manager: PSCronJobManager | null } = { manager: null };
 
 // Games
 export const PSGames: { [key in keyof Games]?: Record<string, BaseGame> } = {};

@@ -1,5 +1,7 @@
 import { CronJob } from 'cron';
 
+import { PSCronJobs } from '@/cache';
+
 import type { Client } from 'ps-client';
 
 // Timezones
@@ -9,16 +11,11 @@ enum TimeZone {
 	GMT = 'Etc/GMT',
 }
 
-class PSCronJobManager {
-	client: Client;
+export class PSCronJobManager {
 	readonly #jobs: Record<string, CronJob> = {};
 
-	constructor(client: Client) {
-		this.client = client;
-	}
-
 	register(id: string, cronTime: string, timeZone: TimeZone, callback: () => void): void {
-		this.#jobs[id] = CronJob.from({ name: id, cronTime, onTick: callback, timeZone });
+		this.#jobs[id] = CronJob.from({ name: id, cronTime, start: true, onTick: callback, timeZone });
 	}
 	kill(): void {
 		for (const jobId in this.#jobs) {
@@ -27,8 +24,8 @@ class PSCronJobManager {
 	}
 }
 
-export function startCron(client: Client): PSCronJobManager {
-	const Jobs = new PSCronJobManager(client);
+export function startPSCron(client: Client): PSCronJobManager {
+	const Jobs = new PSCronJobManager();
 
 	// TODO Move back to Hindi and remove 'CRON:'
 	Jobs.register('hindi-automodchat-enable', '0 0 * * *', TimeZone.IST, () => {
@@ -39,6 +36,10 @@ export function startCron(client: Client): PSCronJobManager {
 		room?.send('CRON: /modchat ac');
 		room?.send('CRON: /automodchat off');
 	});
+
+	// Kill existing cron jobs
+	PSCronJobs.manager?.kill();
+	PSCronJobs.manager = Jobs;
 
 	return Jobs;
 }

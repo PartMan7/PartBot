@@ -3,6 +3,7 @@ import { Client } from 'ps-client';
 import { password, rooms, username } from '@/config/ps';
 import autoResHandler from '@/ps/handlers/autores';
 import chatHandler from '@/ps/handlers/chat';
+import { startPSCron } from '@/ps/handlers/cron';
 import { transformHTML } from '@/ps/handlers/html';
 import interfaceHandler from '@/ps/handlers/interface';
 import { joinHandler, leaveHandler, nickHandler } from '@/ps/handlers/joins';
@@ -23,5 +24,7 @@ PS.on('message', pageHandler);
 PS.on('join', joinHandler);
 PS.on('name', nickHandler);
 PS.on('leave', leaveHandler);
+
+startPSCron(PS);
 
 export default PS;
