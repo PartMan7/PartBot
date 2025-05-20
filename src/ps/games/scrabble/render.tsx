@@ -27,9 +27,14 @@ export function renderMove(logEntry: Log, { id, players, $T, renderCtx: { msg } 
 
 	switch (logEntry.action) {
 		case 'play':
+			const words = Object.entries(logEntry.ctx.words);
 			return [
 				<Wrapper>
-					<Username name={playerName} /> played {logEntry.ctx.words.list($T)} for {logEntry.ctx.points.total} points!
+					<Username name={playerName} /> played{' '}
+					{words.length === 1 && !logEntry.ctx.points.bingo
+						? words[0][0]
+						: words.map(([word, points]) => `${word} (${points})`).list($T)}{' '}
+					for {logEntry.ctx.points.total} points!
 					{logEntry.ctx.points.bingo ? ' BINGO!' : null}
 				</Wrapper>,
 				opts,

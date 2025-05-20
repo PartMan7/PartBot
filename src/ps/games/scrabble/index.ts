@@ -248,7 +248,7 @@ export class Scrabble extends Game<State> {
 			action: 'play',
 			time: new Date(),
 			turn,
-			ctx: { points, tiles, point: pos, dir, rack, newTiles, words: words.map(word => word.word) },
+			ctx: { points, tiles, point: pos, dir, rack, newTiles, words: points.words },
 		};
 		this.log.push(logEntry);
 		this.room.sendHTML(...renderMove(logEntry, this));
