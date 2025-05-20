@@ -2,6 +2,7 @@ import express, { json, urlencoded } from 'express';
 
 import { port } from '@/config/web';
 import connection from '@/database';
+import { IS_ENABLED } from '@/enabled';
 import { log } from '@/utils/logger';
 import loadAPI from '@/web/loaders/api';
 import loadBundles from '@/web/loaders/bundles';
@@ -13,8 +14,8 @@ const app = express();
 app.use(urlencoded({ extended: true }));
 app.use(json());
 
-if (process.env.USE_WEB) {
-	connection
+if (IS_ENABLED.WEB) {
+	Promise.resolve(connection)
 		.then(() => loadStatic(app))
 		.then(() => loadAPI(app))
 		.then(() => loadUI(app))

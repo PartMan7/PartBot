@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+import { IS_ENABLED } from '@/enabled';
 import { toId } from '@/tools';
 
 const schema = new mongoose.Schema({
@@ -34,6 +35,7 @@ const model = mongoose.model('alt', schema, 'alts');
 const DEFAULT_ALTS_CAP = 50;
 
 export async function rename(from: string, to: string): Promise<Model | undefined> {
+	if (!IS_ENABLED.DB) return;
 	const userFromId = toId(from),
 		userToId = toId(to),
 		id = `${userFromId}-${userToId}`;
@@ -43,6 +45,7 @@ export async function rename(from: string, to: string): Promise<Model | undefine
 }
 
 export async function getAlts(user: string, limit: number = DEFAULT_ALTS_CAP): Promise<string[]> {
+	if (!IS_ENABLED.DB) return [];
 	const userId = toId(user);
 	const altsList = await model.find({ $or: [{ from: userId }, { to: userId }] }, null, limit ? { limit } : {});
 	return altsList
@@ -53,5 +56,6 @@ export async function getAlts(user: string, limit: number = DEFAULT_ALTS_CAP): P
 }
 
 export async function fetchAllAlts(): Promise<Model[]> {
+	if (!IS_ENABLED.DB) return [];
 	return model.find({}).maxTimeMS(30_000).lean();
 }

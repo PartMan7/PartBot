@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import { IS_ENABLED } from '@/enabled';
+
 import type { PSRoomConfig, UnparsedPSRoomConfig } from '@/types/ps';
 
 const schema = new mongoose.Schema({
@@ -56,12 +58,14 @@ export function parseRoomConfig(config: UnparsedPSRoomConfig): PSRoomConfig {
 }
 
 export async function getRoomConfig(roomId: string): Promise<PSRoomConfig | null> {
-	const res = await model.findOne({ roomId }).lean() as UnparsedPSRoomConfig | null;
+	if (!IS_ENABLED.DB) return null;
+	const res = (await model.findOne({ roomId }).lean()) as UnparsedPSRoomConfig | null;
 	if (!res) return null;
 	return parseRoomConfig(res);
 }
 
 export async function fetchRoomConfigs(): Promise<PSRoomConfig[]> {
-	const res = await model.find({}).lean() as UnparsedPSRoomConfig[];
+	if (!IS_ENABLED.DB) return [];
+	const res = (await model.find({}).lean()) as UnparsedPSRoomConfig[];
 	return res.map(parseRoomConfig);
 }

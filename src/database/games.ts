@@ -1,5 +1,7 @@
 import mongoose, { type HydratedDocument } from 'mongoose';
 
+import { IS_ENABLED } from '@/enabled';
+
 import type { Player } from '@/ps/games/common';
 
 const schema = new mongoose.Schema({
@@ -64,11 +66,13 @@ export interface GameModel {
 }
 const model = mongoose.model('game', schema, 'games');
 
-export function uploadGame(game: GameModel): Promise<GameModel> {
+export async function uploadGame(game: GameModel): Promise<GameModel | null> {
+	if (!IS_ENABLED.DB) return null;
 	return model.create(game);
 }
 
-export async function getGameById(gameType: string, gameId: string): Promise<HydratedDocument<GameModel>> {
+export async function getGameById(gameType: string, gameId: string): Promise<HydratedDocument<GameModel> | null> {
+	if (!IS_ENABLED.DB) return null;
 	const id = gameId.toUpperCase().replace(/^#?/, '#');
 	const game = await model.findOne({ game: gameType, id });
 	if (!game) throw new Error(`Unable to find a game of ${gameType} with ID ${id}.`);

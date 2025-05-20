@@ -6,6 +6,7 @@ import { prefix } from '@/config/ps';
 import { uploadGame } from '@/database/games';
 import Discord from '@/discord';
 import { BOT_LOG_CHANNEL } from '@/discord/constants/servers/boardgames';
+import { IS_ENABLED } from '@/enabled';
 import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { toHumanTime, toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
@@ -416,7 +417,7 @@ export class Game<State extends BaseState> {
 			}
 		}
 		// Upload to DB
-		if (this.meta.players !== 'single') {
+		if (IS_ENABLED.DB && this.meta.players !== 'single') {
 			const model: GameModel = {
 				id: this.id,
 				game: this.meta.id,

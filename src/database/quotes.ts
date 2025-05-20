@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+import { IS_ENABLED } from '@/enabled';
 import { toId } from '@/tools';
 
 const schema = new mongoose.Schema({
@@ -49,25 +50,29 @@ interface Model {
 }
 const model = mongoose.model('quote', schema, 'quotes');
 
-export function addQuote(quote: string, room: string, by: string): Promise<Model> {
+export async function addQuote(quote: string, room: string, by: string): Promise<Model | null> {
+	if (!IS_ENABLED.DB) return null;
 	return model.create({ quote, room, addedBy: by });
 }
 
-export function getAllQuotes(room: string): Promise<Model[]> {
+export async function getAllQuotes(room: string): Promise<Model[]> {
+	if (!IS_ENABLED.DB) return [];
 	return model.find({ room }).sort({ at: 1 }).lean();
 }
 
 export async function getQuoteByIndex(index: number, room: string): Promise<Model | null> {
+	if (!IS_ENABLED.DB) return null;
 	const quotes = await getAllQuotes(room);
 	return quotes[index] ?? null;
 }
 
-export function searchQuotes(
+export async function searchQuotes(
 	room: string,
 	filter: Partial<Omit<Model, 'room' | 'quote' | 'rawText'>> & {
 		quote?: RegExp;
 	}
 ): Promise<Model[]> {
+	if (!IS_ENABLED.DB) return [];
 	return model
 		.find({ room, ...filter, quote: undefined, rawText: filter.quote })
 		.sort({ at: 1 })

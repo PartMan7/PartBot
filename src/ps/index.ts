@@ -1,6 +1,7 @@
 import { Client } from 'ps-client';
 
 import { password, rooms, username } from '@/config/ps';
+import { IS_ENABLED } from '@/enabled';
 import autoResHandler from '@/ps/handlers/autores';
 import chatHandler from '@/ps/handlers/chat';
 import { startPSCron } from '@/ps/handlers/cron';
@@ -14,7 +15,7 @@ import { log } from '@/utils/logger';
 const PS = new Client({ username, password, rooms, transformHTML });
 PS.on('login', () => log(`Connected to PS! [${username}]`));
 
-if (process.env.USE_PS) loadPS().then(() => PS.connect());
+if (IS_ENABLED.PS) loadPS().then(() => PS.connect());
 
 PS.on('message', chatHandler);
 PS.on('message', interfaceHandler);
