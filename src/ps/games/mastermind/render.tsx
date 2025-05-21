@@ -12,7 +12,7 @@ export function renderCloseSignups(this: Mastermind): ReactElement {
 		<>
 			<hr />
 			{player} is playing a round of {this.meta.name}!
-			<Button value={`${this.renderCtx.msg} watch`} style={{ marginLeft: 16 }}>
+			<Button value={`${this.renderCtx.simpleMsg} watch`} style={{ marginLeft: 16 }}>
 				Watch
 			</Button>
 			{this.setBy || !hasGuessed ? (
@@ -24,7 +24,7 @@ export function renderCloseSignups(this: Mastermind): ReactElement {
 			{this.setBy ? (
 				`${this.setBy.name} has set a code for ${player}.`
 			) : !hasGuessed ? (
-				<Form value={`${this.renderCtx.msg} audience, {code}`}>
+				<Form value={`${this.renderCtx.simpleMsg} audience {code}`}>
 					<label htmlFor="choosecode">Set Code: </label>
 					<input type="text" id="choosecode" name="code" style={{ width: 30 }} /> &nbsp;&nbsp;
 					<input type="submit" value="Set" />
@@ -198,7 +198,7 @@ export function render(this: This, data: State, mode: 'playing' | 'over' | 'spec
 					{mode === 'over' ? (
 						<Button value={`${this.simpleMsg} create ${data.cap}`}>Play Again</Button>
 					) : (
-						<Form value={`${this.msg} play {guess}`}>
+						<Form value={`${this.simpleMsg} play {guess}`}>
 							<input type="text" name="guess" placeholder="Your guess!" />
 							<br />
 							<br />
