@@ -95,6 +95,7 @@ export default {
 		ALTS: 'Alts: {{alts}}',
 		BOOP: 'BOOP',
 		UPTIME: 'The Bot has been running for {{time}}.',
+		RANK: 'Your rank is {{rank}}.',
 		PONG: 'Pong!',
 		ROOM_NOT_GIVEN: 'Did not receive a room within a minute',
 
