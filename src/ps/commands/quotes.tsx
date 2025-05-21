@@ -203,6 +203,7 @@ export const command: PSCommand = {
 	aliases: ['q', 'quote'],
 	help: null,
 	syntax: 'CMD',
+	category: ['utility'],
 	children: {
 		help: {
 			name: 'help',

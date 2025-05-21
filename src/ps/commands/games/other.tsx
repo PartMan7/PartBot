@@ -13,6 +13,7 @@ export const command: PSCommand[] = [
 		help: 'Checks the legality of a word according to the Scrabble dictionary.',
 		syntax: 'CMD word[, mod]',
 		aliases: ['cw'],
+		category: ['game'],
 		async run({ broadcast, arg, $T }) {
 			const [word, input = ScrabbleMods.CSW21] = arg.lazySplit(',', 1);
 			const mod = parseMod(input, ScrabbleMods, ScrabbleModData);
@@ -26,6 +27,7 @@ export const command: PSCommand[] = [
 		name: 'othellosequence',
 		help: 'Sequence of fastest game in Othello.',
 		syntax: 'CMD',
+		category: ['game'],
 		async run({ broadcastHTML }) {
 			broadcastHTML([['e6', 'f4'], ['e3', 'f6'], ['g5', 'd6'], ['e7', 'f5'], ['c5']].map(turns => turns.join(', ')).join('<br />'));
 		},

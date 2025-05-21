@@ -7,6 +7,8 @@ import type { SlashCommandBuilder } from 'discord.js';
 import type { HTMLopts } from 'ps-client/classes/common';
 import type { ReactElement } from 'react';
 
+export type PSCommandCategory = 'game' | 'points' | 'utility' | 'casual';
+
 export type PSCommandContext = {
 	/**
 	 * The message this command is acting on
@@ -83,6 +85,10 @@ export type PSCommand = {
 	 * Name of the command.
 	 */
 	name: string;
+	/**
+	 * A list of categories that this command falls under.
+	 */
+	category?: PSCommandCategory[];
 	/**
 	 * Flags to define metadata for the command.
 	 */

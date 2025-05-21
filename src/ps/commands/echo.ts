@@ -9,6 +9,7 @@ export const command: PSCommand = {
 	syntax: 'CMD (text)',
 	aliases: ['do'],
 	perms: 'voice',
+	category: ['casual'],
 	async run({ message, originalCommand: [originalCommand], arg, $T, checkPermissions }) {
 		if (originalCommand === 'do') {
 			if (!checkPermissions('admin')) throw new ChatError($T('ACCESS_DENIED'));
