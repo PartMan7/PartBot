@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import '@/globals/prototypes';
+import '@/globals';
 
 import { log } from '@/utils/logger';
 
