@@ -78,6 +78,14 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 		restCtx: string
 	): BaseGame | null {
 		if (!PSGames[gameId]) return null;
+		if (Game.meta.players === 'single') {
+			const inferredSpecifier = typeof specifier === 'string' ? `#${Game.meta.abbr}-${toId(specifier)}` : specifier;
+			if (typeof inferredSpecifier === 'string' && /^#/.test(inferredSpecifier)) {
+				const game = PSGames[gameId][inferredSpecifier];
+				if (game) return game;
+			}
+		}
+
 		if (typeof specifier === 'string' && /^#/.test(specifier)) {
 			const game = PSGames[gameId][specifier.toUpperCase()] ?? PSGames[gameId][specifier];
 			if (!game) throw new ChatError(roomCtx.$T('GAME.NOT_FOUND'));
