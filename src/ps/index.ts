@@ -3,7 +3,7 @@ import { Client } from 'ps-client';
 import { password, rooms, username } from '@/config/ps';
 import { IS_ENABLED } from '@/enabled';
 import autoResHandler from '@/ps/handlers/autores';
-import chatHandler from '@/ps/handlers/chat';
+import commandHandler from '@/ps/handlers/commands';
 import { startPSCron } from '@/ps/handlers/cron';
 import { transformHTML } from '@/ps/handlers/html';
 import interfaceHandler from '@/ps/handlers/interface';
@@ -17,7 +17,7 @@ PS.on('login', () => log(`Connected to PS! [${username}]`));
 
 if (IS_ENABLED.PS) loadPS().then(() => PS.connect());
 
-PS.on('message', chatHandler);
+PS.on('message', commandHandler);
 PS.on('message', interfaceHandler);
 PS.on('message', autoResHandler);
 PS.on('message', pageHandler);
@@ -26,6 +26,6 @@ PS.on('join', joinHandler);
 PS.on('name', nickHandler);
 PS.on('leave', leaveHandler);
 
-startPSCron(PS);
+if (IS_ENABLED.PS) startPSCron(PS);
 
 export default PS;

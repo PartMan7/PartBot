@@ -3,17 +3,17 @@ import type { Message } from 'ps-client';
 
 export type PSMessage = Message;
 
-type AuthKey = Perms & string;
+export type AuthKey = Perms & string;
 
 export type PSRoomConfig = {
 	roomId: string;
 	roomName?: string;
-	auth?: { [key in AuthKey]: string[] } | null;
+	auth?: { [key in AuthKey]?: string[] } | null;
 	tour?: {
 		timer?: [bool: number] | [autoStart: number, autoDQ: number] | null;
 	} | null;
-	whitelist?: RegExp[] | null;
-	blacklist?: RegExp[] | null;
+	whitelist?: string[] | null;
+	blacklist?: string[] | null;
 	aliases?: string[] | null;
 	private?: true | null;
 	ignore?: true | null;
@@ -40,9 +40,4 @@ export type PSRoomConfig = {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		[key: string]: any;
 	} | null;
-};
-
-export type UnparsedPSRoomConfig = Omit<PSRoomConfig, 'whitelist' | 'blacklist'> & {
-	whitelist?: string[] | null;
-	blacklist?: string[] | null;
 };

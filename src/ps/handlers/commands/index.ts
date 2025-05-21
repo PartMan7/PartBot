@@ -1,8 +1,8 @@
 import { prefix } from '@/config/ps';
 import { i18n } from '@/i18n';
-import { parseArgs } from '@/ps/handlers/chat/parse';
-import { checkPermissions } from '@/ps/handlers/chat/permissions';
-import { spoofMessage } from '@/ps/handlers/chat/spoof';
+import { parseArgs } from '@/ps/handlers/commands/parse';
+import { checkPermissions } from '@/ps/handlers/commands/permissions';
+import { spoofMessage } from '@/ps/handlers/commands/spoof';
 import { ChatError } from '@/utils/chatError';
 import { log } from '@/utils/logger';
 

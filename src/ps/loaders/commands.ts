@@ -42,7 +42,9 @@ export async function loadCommands(): Promise<void> {
 			// And now for extended aliases
 			commands.forEach(command => {
 				if (command.extendedAliases) {
-					const newEntryAliases = Object.entries(command.extendedAliases).map(([key, value]) => [key, value.join(' ')]);
+					const newEntryAliases = Object.fromEntries(
+						Object.entries(command.extendedAliases).map(([key, value]) => [key, value.join(' ')])
+					);
 					Object.assign(PSAliases, newEntryAliases);
 				}
 			});

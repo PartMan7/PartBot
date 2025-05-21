@@ -1,9 +1,9 @@
 import { PSRoomConfigs } from '@/cache';
 import { admins } from '@/config/ps';
-import customPerms from '@/ps/handlers/chat/customPerms';
+import customPerms from '@/ps/handlers/commands/customPerms';
 
 import type { Perms } from '@/types/perms';
-import type { PSMessage } from '@/types/ps';
+import type { AuthKey, PSMessage } from '@/types/ps';
 
 const knownRankMappings: Record<string, Perms & string> = {
 	'‽': 'locked',
@@ -36,6 +36,19 @@ export function getRank(symbol: string, unrecognizedRank: Perms & string = 'regu
 	return unrecognizedRank;
 }
 
+function getConfigRank(message: PSMessage): AuthKey | null {
+	if (message.type !== 'chat') return null;
+	const roomConfig = PSRoomConfigs[message.target.id];
+	if (!roomConfig) return null;
+	if (roomConfig.auth) {
+		for (const key in roomConfig.auth) {
+			const authKey = key as AuthKey;
+			if (roomConfig.auth[authKey]?.includes(message.author.id)) return authKey;
+		}
+	}
+	return null;
+}
+
 function baseCheckPermissions(perm: Exclude<Perms, symbol>, message: PSMessage): boolean {
 	// Admin overrides
 	const isAdmin = admins.includes(message.author.userid);
@@ -43,7 +56,10 @@ function baseCheckPermissions(perm: Exclude<Perms, symbol>, message: PSMessage):
 	// Other overrides are applied only on rank and [scope, rank], not functions
 	switch (typeof perm) {
 		case 'string': {
-			return rankOrder.indexOf(getRank(message.msgRank ?? ' ')) >= rankOrder.indexOf(perm);
+			const roomConfigRank = getConfigRank(message);
+			const roomConfigIndex = roomConfigRank ? rankOrder.indexOf(roomConfigRank) : -1;
+			const regularIndex = rankOrder.indexOf(getRank(message.msgRank ?? ' '));
+			return Math.max(roomConfigIndex, regularIndex) >= rankOrder.indexOf(perm);
 		}
 		case 'object': {
 			const [level, rank] = perm;
@@ -52,7 +68,10 @@ function baseCheckPermissions(perm: Exclude<Perms, symbol>, message: PSMessage):
 			if (level === 'global' || message.type === 'pm') return rankOrder.indexOf(getRank(globalRank)) >= permIndex;
 			const roomAuth = message.target.auth;
 			const roomRank = Object.keys(roomAuth ?? {}).find(rank => roomAuth?.[rank].includes(message.author.userid)) ?? ' ';
-			const roomIndex = rankOrder.indexOf(getRank(roomRank));
+			const roomConfigRank = getConfigRank(message);
+			const roomConfigIndex = roomConfigRank ? rankOrder.indexOf(roomConfigRank) : -1;
+			const regularRoomIndex = rankOrder.indexOf(getRank(roomRank));
+			const roomIndex = Math.max(roomConfigIndex, regularRoomIndex);
 			if (level === 'room') return roomIndex >= permIndex;
 			else return Math.max(roomIndex, rankOrder.indexOf(getRank(globalRank))) >= permIndex;
 		}

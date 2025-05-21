@@ -1,4 +1,4 @@
-import { rankOrder } from '@/ps/handlers/chat/permissions';
+import { rankOrder } from '@/ps/handlers/commands/permissions';
 
 import type { PSCommand } from '@/types/chat';
 

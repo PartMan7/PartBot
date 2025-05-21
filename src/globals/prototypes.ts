@@ -40,6 +40,7 @@ declare global {
 
 	interface Number {
 		toLetter(): string;
+		times(callback: (i: number) => void): void;
 	}
 }
 
@@ -261,9 +262,17 @@ Object.defineProperties(Number.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function (this: number) {
+		value: function (this: number): string {
 			const aCode = 'A'.charCodeAt(0);
 			return String.fromCharCode(aCode + this - 1);
+		},
+	},
+	times: {
+		enumerable: false,
+		writable: false,
+		configurable: false,
+		value: function (this: number, callback: (i: number) => void): void {
+			for (let i = 0; i < this; i++) callback(i);
 		},
 	},
 });

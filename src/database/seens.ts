@@ -35,6 +35,7 @@ interface Model {
 }
 const model = mongoose.model('seen', schema, 'seens');
 
+// TODO: Debounce calls to this
 export function seeUser(user: string, rooms: string[] = []): Promise<Model> {
 	const userId = toId(user);
 	return model.findOneAndUpdate({ id: userId }, { id: userId, name: user, seenIn: rooms }, { upsert: true, new: true });

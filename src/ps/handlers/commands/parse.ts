@@ -46,7 +46,6 @@ export function parseArgs(
 		broadcastHTML: undefined,
 	};
 	const sourceCommand = PSCommands[command.shift()!];
-	spaceCapturedArgs.splice(0, 2);
 	let commandObj: PSCommand = sourceCommand;
 	if (!commandObj) throw new Error($T('INVALID_ALIAS', { aliasFor: context.command![0] }));
 
@@ -54,7 +53,7 @@ export function parseArgs(
 		flags: commandObj.flags ?? {},
 		perms: commandObj.perms ?? 'regular',
 	};
-	while (command.length && commandObj) {
+	while (command.length > 0 && commandObj) {
 		const next: PSCommand | undefined = commandObj.children?.[command[0]];
 		if (!next) break;
 		if (next.flags) {
@@ -64,8 +63,9 @@ export function parseArgs(
 		}
 		if (next.perms) cascade.perms = next.perms;
 		commandObj = next;
-		spaceCapturedArgs.splice(0, 2);
+		command.shift();
 	}
+	originalCommand.length.times(() => spaceCapturedArgs.splice(0, 2));
 	context.args = [...command, ...args];
 	context.arg = `${command.length ? command.map(cmd => `${cmd} `).join('') : ''}${spaceCapturedArgs.join('')}`;
 	return { command: commandObj, sourceCommand, cascade, context: context as PSCommandContext };
