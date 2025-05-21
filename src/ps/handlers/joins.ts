@@ -31,6 +31,6 @@ export function leaveHandler(this: Client, room: string, user: string, isIntro: 
 	if (Date.now() - PSSeenCache[userId]?.at.getTime() < fromHumanTime('5 seconds')) return;
 	const userObj = this.getUser(user);
 	const rooms = userObj && userObj.rooms ? Object.keys(userObj.rooms).map(room => room.replace(/^[^a-z0-9]/, '')) : [room];
-	PSSeenCache[userId] = { at: new Date(), in: rooms };
+	PSSeenCache[userId] = { id: toId(user), name: user, at: new Date(), seenIn: rooms };
 	seeUser(user, rooms);
 }

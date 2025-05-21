@@ -1,12 +1,12 @@
-import { PSAltCache } from '@/cache';
-import { fetchAllAlts } from '@/database/alts';
+import { PSSeenCache } from '@/cache';
+import { fetchAllSeens } from '@/database/seens';
 import { log } from '@/utils/logger';
 
-export async function loadAlts(): Promise<void> {
-	const fetched = await fetchAllAlts();
+export async function loadSeens(): Promise<void> {
+	const fetched = await fetchAllSeens();
 	fetched.forEach(entry => {
-		const { id, from, to, at } = entry;
-		PSAltCache[id] = { from, to, at };
+		const { id, name, at, seenIn } = entry;
+		PSSeenCache[id] = { id, name, at, seenIn };
 	});
 	log('Loaded alts!');
 }

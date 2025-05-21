@@ -16,7 +16,7 @@ export const PSCommands: { [key: string]: PSCommand & { path: string } } = {};
 export const PSAliases: { [key: string]: string } = {};
 export const PSNoPrefixHelp: { [key: string]: Date } = {};
 export const PSAltCache: { [key: string]: { from: string; to: string; at: Date } } = {};
-export const PSSeenCache: { [key: string]: { at: Date; in: string[] } } = {};
+export const PSSeenCache: { [key: string]: { id: string; name: string; at: Date; seenIn: string[] } } = {};
 
 export const PSQuoteRoomPrefs: { [key: string]: { room: string; at: Date } } = {};
 export const PSCronJobs: { manager: PSCronJobManager | null } = { manager: null };

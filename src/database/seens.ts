@@ -16,7 +16,11 @@ const schema = new mongoose.Schema({
 		required: true,
 		default: Date.now,
 	},
-	in: {
+	name: {
+		type: String,
+		required: true,
+	},
+	seenIn: {
 		type: [String],
 		required: true,
 		default: [],
@@ -26,13 +30,14 @@ const schema = new mongoose.Schema({
 interface Model {
 	id: string;
 	at: Date;
-	in: string[];
+	name: string;
+	seenIn: string[];
 }
 const model = mongoose.model('seen', schema, 'seens');
 
 export function seeUser(user: string, rooms: string[] = []): Promise<Model> {
 	const userId = toId(user);
-	return model.findOneAndUpdate({ id: userId }, { id: userId, in: rooms }, { upsert: true, new: true });
+	return model.findOneAndUpdate({ id: userId }, { id: userId, name: user, seenIn: rooms }, { upsert: true, new: true });
 }
 
 export function lastSeen(user: string): Promise<Model | null> {
