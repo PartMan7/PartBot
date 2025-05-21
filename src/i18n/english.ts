@@ -12,11 +12,12 @@ export default {
 	INVALID_ALIAS: 'Had an invalid alias for {{aliasFor}}.',
 	INVALID_ROOM_ID: 'Invalid room ID.',
 	NO_DMS_COMMAND: 'This command may not be run from private messages.',
+	NOT_IN_ROOM: 'You are not in that room.',
 	PM_ONLY_COMMAND: 'This command may only be used in private messages.',
 	ROOM_ONLY_COMMAND: 'This command may only be used in a chatroom.',
-	WRONG_ROOM: 'Wrong room.',
-	NOT_IN_ROOM: 'You are not in that room.',
 	TOO_LATE: 'Too late!',
+	USER_NOT_FOUND: 'User not found!',
+	WRONG_ROOM: 'Wrong room.',
 
 	GAME: {
 		ALREADY_JOINED: 'You have already joined this game.',

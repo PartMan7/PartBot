@@ -1,4 +1,3 @@
-import { checkPermissions } from '@/ps/handlers/permissions';
 import { ChatError } from '@/utils/chatError';
 
 import type { NoTranslate } from '@/i18n/types';
@@ -9,11 +8,11 @@ export const command: PSCommand = {
 	help: 'Echoes the given text',
 	syntax: 'CMD (text)',
 	aliases: ['do'],
-	perms: ['room', 'voice'],
-	async run({ message, originalCommand: [originalCommand], arg, $T }) {
+	perms: 'voice',
+	async run({ message, originalCommand: [originalCommand], arg, $T, checkPermissions }) {
 		if (originalCommand === 'do') {
-			if (checkPermissions('admin', message)) message.reply(arg as NoTranslate);
-			else throw new ChatError($T('ACCESS_DENIED'));
+			if (!checkPermissions('admin')) throw new ChatError($T('ACCESS_DENIED'));
+			message.reply(arg as NoTranslate);
 		} else message.reply(`[[ ]]${arg}` as NoTranslate);
 	},
 };

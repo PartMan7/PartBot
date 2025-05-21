@@ -29,10 +29,10 @@ export type PSCommandContext = {
 	 */
 	arg: string;
 	/**
-	 * (Only on forwarded messages) The original command this command was called from, delimited by '.'
-	 * @example calledFrom: 'quote.add'
+	 * (Only on forwarded messages) The original command this command was called from
+	 * @example calledFrom: ['quote', 'add']
 	 */
-	calledFrom?: string;
+	calledFrom?: string[];
 	/**
 	 * (Only on forwarded messages) The message the original command was called with
 	 */
@@ -42,6 +42,10 @@ export type PSCommandContext = {
 	 */
 	$T: TranslationFn;
 	/**
+	 * Checks whether the user meets some permissions.
+	 */
+	checkPermissions(perm: Perms): boolean;
+	/**
 	 * Executor function for command
 	 * Allows commands to run other commands
 	 * @param cmd Command to run (including arguments)
@@ -50,6 +54,7 @@ export type PSCommandContext = {
 	 */
 	run(cmd: string, ctxOverride?: Record<string, any>, msgOverride?: Partial<PSMessageTranslated>): Promise<any>;
 	/**
+	 * WARNING
 	 * Function that executes when the command is run.
 	 * Same as run, but WILL BYPASS PERMISSION CHECKS.
 	 * @param cmd Command to run (including arguments)

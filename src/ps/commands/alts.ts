@@ -1,5 +1,4 @@
 import { getAlts } from '@/database/alts';
-import { checkPermissions } from '@/ps/handlers/permissions';
 import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
 
@@ -10,10 +9,10 @@ export const command: PSCommand = {
 	help: 'Testing command',
 	syntax: 'CMD USERNAME?',
 	aliases: ['getalts'],
-	async run({ message, arg, $T }) {
+	async run({ message, arg, $T, checkPermissions }) {
 		let lookup = message.author.userid;
 		if (arg) {
-			if (!checkPermissions(['room', 'driver'], message)) throw new ChatError($T('ACCESS_DENIED'));
+			if (!checkPermissions(['room', 'driver'])) throw new ChatError($T('ACCESS_DENIED'));
 			lookup = toId(arg);
 		}
 		const altsList = await getAlts(lookup);
