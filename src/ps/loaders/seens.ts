@@ -8,5 +8,5 @@ export async function loadSeens(): Promise<void> {
 		const { id, name, at, seenIn } = entry;
 		PSSeenCache[id] = { id, name, at, seenIn };
 	});
-	log('Loaded alts!');
+	log('Loaded seens!');
 }
