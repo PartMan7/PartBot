@@ -87,10 +87,10 @@ export default async function chatHandler(message: PSMessage, indirect: Indirect
 		const calledFrom = { command: context.command, message };
 		// TODO: Support overriding messages
 		context.run = function (command: string, ctx: Partial<PSCommandContext> = {}) {
-			return chatHandler(message, { type: 'run', command, calledFrom, ctx });
+			return chatHandler(message, { type: 'run', command: `${prefix}${command}`, calledFrom, ctx });
 		};
 		context.unsafeRun = function (command: string, ctx: Partial<PSCommandContext> = {}) {
-			return chatHandler(message, { type: 'run', command, bypassPerms: true, calledFrom, ctx });
+			return chatHandler(message, { type: 'run', command: `${prefix}${command}`, bypassPerms: true, calledFrom, ctx });
 		};
 
 		await commandObj.run({ ...context, message });
