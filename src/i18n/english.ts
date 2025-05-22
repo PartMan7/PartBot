@@ -18,6 +18,7 @@ export default {
 	TOO_LATE: 'Too late!',
 	USER_NOT_FOUND: 'User not found!',
 	WRONG_ROOM: 'Wrong room.',
+	INVALID_ARGUMENTS: 'Invalid number of arguments.',
 
 	GAME: {
 		ALREADY_JOINED: 'You have already joined this game.',
