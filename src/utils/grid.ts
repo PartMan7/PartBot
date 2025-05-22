@@ -7,6 +7,12 @@ import { range } from '@/utils/range';
 
 export type Point = [number, number];
 
+export function parsePoint(input: string): Point | null {
+	const matched = input.match(/^(\d+)\s*(?:x|,|\s)*(\d+)$/);
+	if (!matched) return null;
+	return [+matched[1], +matched[2]];
+}
+
 export function coincident(point1: Point, point2: Point): boolean {
 	return point1[0] === point2[0] && point1[1] === point2[1];
 }

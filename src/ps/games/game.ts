@@ -87,6 +87,7 @@ export class Game<State extends BaseState> {
 	trySkipPlayer?(turn: BaseState['turn']): boolean;
 	moddable?(): boolean;
 	applyMod?(mod: string): ActionResponse<TranslatedText>;
+	canBroadcastFinish?(): boolean;
 
 	throw(msg?: Parameters<TranslationFn>[0], vars?: Parameters<TranslationFn>[1]): never {
 		if (!msg) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
@@ -400,7 +401,7 @@ export class Game<State extends BaseState> {
 		const message = this.onEnd(type);
 		this.clearTimer();
 		this.update();
-		if (this.started && this.meta.players !== 'single') {
+		if (this.started && (this.meta.players === 'many' || this.canBroadcastFinish?.())) {
 			// TODO: Revisit broadcasting logic for single-player games
 			this.room.sendHTML(this.render(null));
 		}

@@ -69,6 +69,9 @@ export default {
 			PUBLIC: "{{user}} hasn't played in {{game}} [{{id}}] for {{time}}...",
 		},
 
+		LIGHTS_OUT: {
+			INVALID_SIZE: 'Lights Out may only be from 3x5 to 9x10.',
+		},
 		MASTERMIND: {
 			ENDED: 'The game of Mastermind was ended for {{player}}.',
 			FAILED: '{{player}} was unable to guess {{solution}} in {{cap}} guesses.',
