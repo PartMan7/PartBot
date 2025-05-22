@@ -1,11 +1,9 @@
-import { ChannelType } from 'discord.js';
-
 import { PSGames } from '@/cache';
 import { gameCache } from '@/cache/games';
 import { prefix } from '@/config/ps';
 import { uploadGame } from '@/database/games';
-import Discord from '@/discord';
 import { BOT_LOG_CHANNEL } from '@/discord/constants/servers/boardgames';
+import { getChannel } from '@/discord/loaders/channels';
 import { IS_ENABLED } from '@/enabled';
 import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { toHumanTime, toId } from '@/tools';
@@ -412,8 +410,8 @@ export class Game<State extends BaseState> {
 			// Send only for games from BG
 			const embed = this.renderEmbed();
 			if (embed) {
-				const channel = Discord.channels.cache.get(BOT_LOG_CHANNEL);
-				if (channel && channel.type === ChannelType.GuildText) channel.send({ embeds: [embed] });
+				const channel = getChannel(BOT_LOG_CHANNEL);
+				channel?.send({ embeds: [embed] });
 			}
 		}
 		// Upload to DB

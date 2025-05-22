@@ -1,6 +1,6 @@
 import type { PSMessage } from '@/types/ps';
 
-export default function pageHandler(message: PSMessage) {
+export function pageHandler(message: PSMessage) {
 	// Do stuff
 	if (message.isIntro || !message.author?.userid || !message.target) return;
 	if (message.type !== 'pm') return;

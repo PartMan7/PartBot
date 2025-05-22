@@ -25,7 +25,7 @@ type IndirectCtx =
 			message: PSMessage;
 	  };
 
-export default async function chatHandler(message: PSMessage, indirect: IndirectCtx | null = null): Promise<void> {
+export async function commandHandler(message: PSMessage, indirect: IndirectCtx | null = null): Promise<void> {
 	if (message.isIntro || !message.author?.userid || !message.target) return;
 	if (message.author.userid === message.parent.status.userid) return; // Botception!
 
@@ -46,7 +46,7 @@ export default async function chatHandler(message: PSMessage, indirect: Indirect
 		// Will only trigger commands with `flags.routePMs` enabled.
 		if (!indirect && argData.startsWith('@')) {
 			const mockMessage = spoofMessage(argData.slice(1), message, $T);
-			return chatHandler(mockMessage, { type: 'spoof', message: message });
+			return commandHandler(mockMessage, { type: 'spoof', message: message });
 		}
 		const args = argData.split(/ +/);
 		const spacedArgs = argData.split(/( +)/);
@@ -87,10 +87,10 @@ export default async function chatHandler(message: PSMessage, indirect: Indirect
 		const calledFrom = { command: context.command, message };
 		// TODO: Support overriding messages
 		context.run = function (command: string, ctx: Partial<PSCommandContext> = {}) {
-			return chatHandler(message, { type: 'run', command: `${prefix}${command}`, calledFrom, ctx });
+			return commandHandler(message, { type: 'run', command: `${prefix}${command}`, calledFrom, ctx });
 		};
 		context.unsafeRun = function (command: string, ctx: Partial<PSCommandContext> = {}) {
-			return chatHandler(message, { type: 'run', command: `${prefix}${command}`, bypassPerms: true, calledFrom, ctx });
+			return commandHandler(message, { type: 'run', command: `${prefix}${command}`, bypassPerms: true, calledFrom, ctx });
 		};
 
 		await commandObj.run({ ...context, message });
