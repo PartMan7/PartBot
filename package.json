@@ -31,7 +31,7 @@
 		"express": "^5.0.1",
 		"flat-cache": "^6.1.1",
 		"mongoose": "^8.12.1",
-		"ps-client": "^4.4.1",
+		"ps-client": "^4.5.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"tailwindcss": "^4.0.8",
