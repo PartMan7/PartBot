@@ -59,7 +59,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 							perms,
 							async run({ message, arg, checkPermissions, $T }) {
 								const userList = arg.split(',');
-								const users = userList.map(toId);
+								const users = userList.map(toId).filter(Boolean);
 								if (!users.length) throw new ChatError('Who do you want to promote?' as ToTranslate);
 								const roomConfig = PSRoomConfigs[message.target.id];
 								if (roomConfig?.auth) {
@@ -93,7 +93,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 				category: ['utility'],
 				async run({ message, arg, checkPermissions, $T }) {
 					const userList = arg.split(',');
-					const users = userList.map(toId);
+					const users = userList.map(toId).filter(Boolean);
 					if (!users.length) throw new ChatError('Who do you want to promote?' as ToTranslate);
 					const roomConfig = PSRoomConfigs[message.target.id];
 					if (roomConfig?.auth) {
