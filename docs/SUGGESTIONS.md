@@ -20,9 +20,10 @@ Some things to keep in mind while making a suggestion:
 - PartBot is limited in terms of what it can and cannot do on PS - particularly on the UI front, it can only accept
   user input in one of three ways:
   <br/><br/>
-  _ The user types out and sends a message to PartBot.
-  _ The user clicks a button that is programmed to send a hardcoded message to PartBot. \* The user submits an HTML form (eg: with textboxes) and the context of the form is forwarded as-is to PartBot.<br><br/>
-  Because of this, user actions such as 'drag and drop' are not usable for inputs.
+  - The user types out and sends a message to PartBot.
+  - The user clicks a button that is programmed to send a hardcoded message to PartBot.
+  - The user submits an HTML form (eg: with textboxes) and the context of the form is forwarded as-is to PartBot.<br><br/>
+    Because of this, user actions such as 'drag and drop' are not usable for inputs.
 
 ---
 
