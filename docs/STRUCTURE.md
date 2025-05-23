@@ -24,15 +24,13 @@ The PS module has three parts - `commands`, `handlers`, and `loaders`.
 ### Commands
 
 The `commands` directory stores all PS commands. A single file can export one or multiple commands, and each
-command has configuration options. By convention, 'barrel' commands (such as `GAMES.tsx`) that export multiple
-commands are named with capital letters.
+command has configuration options. Folders can be used when a single source has too much complexity to be one
+file (eg: games).
 
 Commands may be either `.ts` or `.tsx` files - the `.tsx` extension is required to enable JSX syntax in the code.
 
-Please note that **JSX syntax that is not inside another JSX function/call will be converted to a string**. This is
-applicable to all `tsx` files inside the `ps` folder - so patterns like `message.replyHTML(<b>Access denied.</b>)` can
-be used. This is reflected in both `tsc` checks as well as the actual chatbot with `npm start`, but IDEs like WebStorm
-and Visual Studio Code have slight differencess due to needing a custom Language Service Plugin.
+Commands that output JSX must use one of the `*HTML` methods to work! `message.reply(JSX)` will not work; use
+`message.replyHTML(JSX)` instead.
 
 ### Handlers
 
@@ -41,9 +39,8 @@ more details.
 
 ### Loaders
 
-The `loaders` directory contains code to load data from a database into cache. This lets the bot synchronize data such as
-alts and roomconfigs. It also contains the TypeScript plugin to convert JSX into HTML within the `ps` folder by injecting
-a `jsxToHTML` call.
+The `loaders` directory contains code to load data into cache (such as entries from a database, or command cache).
+This lets the bot synchronize data such as alts and roomconfigs.
 
 ---
 
