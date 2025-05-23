@@ -8,14 +8,13 @@ import { Username } from '@/utils/components';
 import type { ToTranslate } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { Perms } from '@/types/perms';
-import { log } from '@/utils/logger';
 
 type PromotableAuthKey = 'whitelist' | 'voice' | 'driver' | 'mod';
 type AuthValue = { alias: string[]; perms: Perms };
 
 const ranksMapping: Record<PromotableAuthKey, AuthValue> = {
 	whitelist: {
-		alias: ['wl', 'whitelist'],
+		alias: ['whitelist', 'wl'],
 		perms: 'driver',
 	},
 	voice: {
@@ -42,11 +41,14 @@ export const command: PSCommand[] = IS_ENABLED.DB
 					roomOnly: true,
 				},
 				category: ['utility'],
-				extendedAliases: Object.fromEntries(
-					(Object.entries(ranksMapping) as [PromotableAuthKey, AuthValue][]).flatMap(([rank, { alias: aliases }]) =>
-						aliases.map<[string, string[]]>(alias => [alias, ['promote', rank]])
-					)
-				),
+				extendedAliases: {
+					...Object.fromEntries(
+						(Object.entries(ranksMapping) as [PromotableAuthKey, AuthValue][]).flatMap(([rank, { alias: aliases }]) =>
+							aliases.map<[string, string[]]>(alias => [alias, ['promote', rank]])
+						)
+					),
+					apl: ['whitelist', 'list'],
+				},
 				async run({ run }) {
 					return run('help promote');
 				},
@@ -63,7 +65,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 									name: 'list',
 									help: 'Lists the current users at the given rank.',
 									syntax: 'CMD',
-									async run({ message, broadcastHTML, arg }) {
+									async run({ message, broadcastHTML }) {
 										const roomConfig = PSRoomConfigs[message.target.id];
 										if (!roomConfig?.auth?.[rank]) return broadcastHTML(<>None at that rank!</>);
 										return broadcastHTML(<>{roomConfig.auth[rank].map(user => <Username name={user} />).space(', ')}</>);
