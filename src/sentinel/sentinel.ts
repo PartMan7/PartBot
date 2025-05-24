@@ -1,24 +1,12 @@
 import { watch } from 'chokidar';
 import EventEmitter from 'events';
-import { promises as fs } from 'fs';
 
-import { reloadCommands } from '@/ps/loaders/commands';
-import { cachebuster } from '@/utils/cachebuster';
+import { registers } from '@/sentinel/registers';
 import { debounce } from '@/utils/debounce';
 import { fsPath } from '@/utils/fsPath';
 
+import type { EmitterEvents, Listener, Register } from '@/sentinel/types';
 import type { FSWatcher } from 'chokidar';
-
-type ListenerType = 'commands' | 'games';
-type Register = { label: ListenerType; pattern: RegExp; reload: (filepaths: string[]) => Promise<void> | void; debounce?: number };
-type Listener = { label: ListenerType; pattern: RegExp; reload: (filepaths: string) => Promise<void> | void };
-
-export interface EmitterEvents {
-	trigger: [label: ListenerType, file: string];
-	start: [label: ListenerType, files: string[]];
-	complete: [label: ListenerType, files: string[]];
-	error: [error: Error, label: ListenerType, files: string[]];
-}
 
 class Emitter extends EventEmitter {
 	emit<K extends keyof EmitterEvents>(event: K, ...args: EmitterEvents[K]): boolean {
@@ -32,39 +20,7 @@ class Emitter extends EventEmitter {
 export default function createSentinel(): { emitter: Emitter; sentinel: FSWatcher } {
 	const emitter = new Emitter();
 
-	const registers: Register[] = [
-		{
-			label: 'commands',
-			pattern: /\/ps\/commands\//,
-			reload: async filepaths => {
-				filepaths.forEach(cachebuster);
-				return reloadCommands();
-			},
-			debounce: 1000,
-		},
-		{
-			label: 'games',
-			pattern: /\/ps\/games\//,
-			reload: async filepaths => {
-				['common', 'game', 'index', 'render'].forEach(file => cachebuster(`@/ps/games/${file}`));
-				const games = filepaths.reduce<string[]>((acc, filepath) => {
-					const match = filepath.match(/\/ps\/games\/([^/]*)\//);
-					if (match) acc.push(match[1]);
-					return acc;
-				}, []);
-				await Promise.all(
-					games.map(async game => {
-						const files = await fs.readdir(fsPath('ps', 'games', game));
-						files.forEach(file => cachebuster(fsPath('ps', 'games', game, file)));
-					})
-				);
-				// TODO: Regenerate games commands if needed
-			},
-			debounce: 1000,
-		},
-	];
-
-	const listeners: Listener[] = registers
+	const listeners: Listener[] = registers.list
 		.map(
 			// Add debouncing
 			(listener: Register): Register => {
@@ -79,7 +35,7 @@ export default function createSentinel(): { emitter: Emitter; sentinel: FSWatche
 				};
 				return {
 					...listener,
-					reload: listener.debounce ? debounce(start, listener.debounce) : start,
+					reload: listener.debounce === 0 ? debounce(start, listener.debounce ?? 1_000) : start,
 				};
 			}
 		)

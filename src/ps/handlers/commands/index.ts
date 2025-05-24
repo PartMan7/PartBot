@@ -1,8 +1,6 @@
 import { prefix } from '@/config/ps';
 import { i18n } from '@/i18n';
-import { parseArgs } from '@/ps/handlers/commands/parse';
-import { checkPermissions } from '@/ps/handlers/commands/permissions';
-import { spoofMessage } from '@/ps/handlers/commands/spoof';
+import { LivePS } from '@/sentinel/live';
 import { ChatError } from '@/utils/chatError';
 import { log } from '@/utils/logger';
 
@@ -32,12 +30,15 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 	const messageContent = indirect?.type === 'run' ? indirect.command : message.content;
 
 	if (!messageContent.startsWith(prefix)) return;
+
+	const { parse, permissions, spoof } = LivePS.commands;
+
 	try {
-		const usePermissions: typeof checkPermissions = (...args) => {
+		const usePermissions: typeof permissions = (...args) => {
 			const [perm] = args;
-			if (perm === 'admin') return checkPermissions(...args); // Don't bypass for admin stuff. Just in case.
+			if (perm === 'admin') return permissions(...args); // Don't bypass for admin stuff. Just in case.
 			if (indirect?.type === 'run' && indirect.bypassPerms) return true;
-			return checkPermissions(...args);
+			return permissions(...args);
 		};
 
 		const argData = messageContent.substring(prefix.length);
@@ -45,13 +46,13 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 		// Check if this is a spoof message. If so, spoof and pass to the room.
 		// Will only trigger commands with `flags.routePMs` enabled.
 		if (!indirect && argData.startsWith('@')) {
-			const mockMessage = spoofMessage(argData.slice(1), message, $T);
+			const mockMessage = spoof(argData.slice(1), message, $T);
 			return commandHandler(mockMessage, { type: 'spoof', message: message });
 		}
 		const args = argData.split(/ +/);
 		const spacedArgs = argData.split(/( +)/);
 
-		const { command: commandObj, sourceCommand, cascade, context: parsedCtx } = parseArgs(args, spacedArgs, $T);
+		const { command: commandObj, sourceCommand, cascade, context: parsedCtx } = parse(args, spacedArgs, $T);
 		const context = {
 			...parsedCtx,
 			...(indirect?.type === 'run'

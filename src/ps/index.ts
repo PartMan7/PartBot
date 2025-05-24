@@ -13,15 +13,15 @@ PS.on('login', () => log(`Connected to PS! [${username}]`));
 
 if (IS_ENABLED.PS) loadPS().then(() => PS.connect());
 
-PS.on('message', LivePS.commandHandler.bind(PS));
-PS.on('message', LivePS.interfaceHandler.bind(PS));
-PS.on('message', LivePS.autoResHandler.bind(PS));
-PS.on('message', LivePS.pageHandler.bind(PS));
+PS.on('message', (...args) => LivePS.commands.commandHandler.call(PS, ...args));
+PS.on('message', (...args) => LivePS.interfaceHandler.call(PS, ...args));
+PS.on('message', (...args) => LivePS.autoResHandler.call(PS, ...args));
+PS.on('message', (...args) => LivePS.pageHandler.call(PS, ...args));
 
-PS.on('join', LivePS.joinHandler.bind(PS));
-PS.on('name', LivePS.nickHandler.bind(PS));
-PS.on('leave', LivePS.leaveHandler.bind(PS));
-PS.on('raw', LivePS.rawHandler.bind(PS));
+PS.on('join', (...args) => LivePS.joinHandler.call(PS, ...args));
+PS.on('name', (...args) => LivePS.nickHandler.call(PS, ...args));
+PS.on('leave', (...args) => LivePS.leaveHandler.call(PS, ...args));
+PS.on('raw', (...args) => LivePS.rawHandler.call(PS, ...args));
 
 if (IS_ENABLED.PS) startPSCron.bind(PS);
 

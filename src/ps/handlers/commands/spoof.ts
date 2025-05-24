@@ -8,7 +8,7 @@ import { ChatError } from '@/utils/chatError';
 import type { TranslationFn } from '@/i18n/types';
 import type { PSMessage } from '@/types/ps';
 
-export function spoofMessage(argData: string, message: PSMessage, $T: TranslationFn): PSMessage {
+export function spoof(argData: string, message: PSMessage, $T: TranslationFn): PSMessage {
 	let [roomId, newArgData] = argData.lazySplit(' ', 1);
 	let room: Room | undefined;
 	if (roomId.startsWith('#')) {

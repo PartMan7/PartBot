@@ -6,7 +6,7 @@ import type { PSCommand, PSCommandContext } from '@/types/chat';
 
 type Cascade = { flags: NonNullable<PSCommand['flags']>; perms: NonNullable<PSCommand['perms']> };
 
-export function parseArgs(
+export function parse(
 	aliasArgs: string[],
 	spaceCapturedArgs: string[],
 	$T: TranslationFn
