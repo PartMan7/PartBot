@@ -24,15 +24,15 @@ export class PSCronJobManager {
 	}
 }
 
-export function startPSCron(client: Client): PSCronJobManager {
+export function startPSCron(this: Client): PSCronJobManager {
 	const Jobs = new PSCronJobManager();
 
 	// TODO Move back to Hindi and remove 'CRON:'
 	Jobs.register('hindi-automodchat-enable', '0 0 * * *', TimeZone.IST, () => {
-		client.rooms.get('botdevelopment')?.send('CRON: /automodchat 10, +');
+		this.rooms.get('botdevelopment')?.send('CRON: /automodchat 10, +');
 	});
 	Jobs.register('hindi-automodchat-disable', '0 7 * * *', TimeZone.IST, () => {
-		const room = client.rooms.get('botdevelopment');
+		const room = this.rooms.get('botdevelopment');
 		room?.send('CRON: /modchat ac');
 		room?.send('CRON: /automodchat off');
 	});
