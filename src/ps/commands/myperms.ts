@@ -1,4 +1,4 @@
-import { rankOrder } from '@/ps/handlers/commands/permissions';
+import { RANK_ORDER } from '@/ps/constants';
 
 import type { PSCommand } from '@/types/chat';
 
@@ -9,7 +9,7 @@ export const command: PSCommand = {
 	aliases: ['me'],
 	category: ['utility'],
 	async run({ message, broadcast, checkPermissions, $T }) {
-		const highestRank = rankOrder.findLast(rank => checkPermissions(rank));
+		const highestRank = RANK_ORDER.findLast(rank => checkPermissions(rank));
 		if (!highestRank) throw new Error(`You are the lowest of the low. This shouldn't have happened for you, ${message.author.name}.`);
 		broadcast($T('COMMANDS.RANK', { rank: highestRank }));
 	},
