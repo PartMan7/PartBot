@@ -1,15 +1,16 @@
 import { Table } from '@/ps/games/render';
 import { Button, Form } from '@/utils/components/ps';
 
-import type { RenderCtx } from '@/ps/games/chess/types';
+import type { RenderCtx, Turn } from '@/ps/games/chess/types';
 import type { CellRenderer } from '@/ps/games/render';
 import type { Chess, Square } from 'chess.js';
 import type { ReactElement } from 'react';
 
 type This = { msg: string };
 
-function getSquare(x: number, y: number): Square {
-	return ((y + 1).toLetter().toLowerCase() + (8 - x)) as Square;
+function getSquare(x: number, y: number, side: Turn | null): Square {
+	const flip = side === 'B';
+	return ((flip ? 8 - y : y + 1).toLetter().toLowerCase() + (flip ? x + 1 : 8 - x)) as Square;
 }
 
 type BoardCell = ReturnType<Chess['board']>[number][number];
@@ -29,11 +30,16 @@ const PIECE_IMAGES: Record<string, string> = {
 	bp: 'https://partbot.partman.dev/public/chess/BP.png',
 };
 
+function adaptBoard(board: BoardCell[][], side: Turn | null): BoardCell[][] {
+	if (side !== 'B') return board;
+	return board.map(row => row.toReversed()).reverse();
+}
+
 export function renderBoard(this: This, ctx: RenderCtx) {
 	const size = ctx.small ? 30 : 45;
 
 	const Cell: CellRenderer<BoardCell> = ({ cell, i, j }) => {
-		const square = getSquare(i, j);
+		const square = getSquare(i, j, ctx.side);
 		const action = ctx.showMoves.find(move => move.to === square);
 		// Use the form during promotions instead
 		const clickable =
@@ -64,7 +70,7 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 		);
 	};
 
-	return <Table<BoardCell> board={ctx.board} labels={{ row: '9-1', col: 'A-Z' }} Cell={Cell} />;
+	return <Table<BoardCell> board={adaptBoard(ctx.board, ctx.side)} labels={{ row: '9-1', col: 'A-Z' }} Cell={Cell} />;
 }
 
 export function render(this: This, ctx: RenderCtx): ReactElement {

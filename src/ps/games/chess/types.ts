@@ -18,6 +18,7 @@ export type ThemeColours = {
 
 export type RenderCtx = {
 	id: string;
+	side: Turn | null;
 	turn: Turn;
 	board: ReturnType<Chess['board']>;
 	selected?: Square | null;
