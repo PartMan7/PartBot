@@ -1,5 +1,3 @@
-import { log } from '@/utils/logger';
-
 export type RNGSource = null | undefined | number | (() => number);
 
 function PRNG(seed: number): () => number {
@@ -44,7 +42,6 @@ function sample(input: null | number | [number, number] | Record<string, number>
 		const lookup = totalWeight * RNG();
 		return thresholds.find(([, weight]) => lookup < weight)![0];
 	}
-	log(`Called sample() with input`, input);
 	return RNG();
 }
 
