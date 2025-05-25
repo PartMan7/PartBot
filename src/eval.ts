@@ -6,6 +6,7 @@ import * as _cache from '@/cache';
 import * as _Tools from '@/tools';
 import { ansiToHtml } from '@/utils/ansiToHtml';
 import { cachebuster as _cachebuster } from '@/utils/cachebuster';
+import { $ as _$ } from '@/utils/child_process';
 import { fsPath as _fsPath } from '@/utils/fsPath';
 import { log as _log } from '@/utils/logger';
 
@@ -21,9 +22,10 @@ const fsPath = _fsPath;
 const log = _log;
 const path = _path;
 const Tools = _Tools;
+const $ = _$;
 
 // Storing in context for eval()
-const _evalContext = [cache, cachebuster, fs, fsSync, fsPath, log, path, Tools];
+const _evalContext = [cache, cachebuster, fs, fsSync, fsPath, log, path, Tools, $];
 
 export type EvalModes = 'COLOR_OUTPUT' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
 export type EvalOutput = {

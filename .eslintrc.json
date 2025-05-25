@@ -48,7 +48,7 @@
 		"no-console": "error",
 		"no-restricted-imports": ["error", { "patterns": [".*"] }],
 		"no-unreachable": "error",
-		"no-unused-expressions": "error",
+		"no-unused-expressions": ["error", { "allowTaggedTemplates": true }],
 		"no-var": "error",
 		"prefer-const": [
 			"error",
