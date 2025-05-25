@@ -31,7 +31,7 @@ the environment variable. The full list of supported env variables is below:
 - `PS_OWNER`: The username of the Bot owner. Only affects the default help message and credits.
 - `PS_ADMINS`: A comma-separated list of users on PS to give admin access to.
 - `DISCORD_TOKEN`: The login token to use for the Discord account. Leave blank to disable Discord.
-- `MONGO_URL`: The MongoDB connection URL. Leave blank to disable database access/usage.
+- `DB_MONGO_URL`: The MongoDB connection URL. Leave blank to disable database access/usage.
 
 ## Running
 
