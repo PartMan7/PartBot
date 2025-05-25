@@ -7,12 +7,18 @@ import type { RequestHandler } from 'express';
 
 export const verb = 'post';
 
+function gitHubHash(body: unknown): string {
+	return crypto
+		.createHmac('sha256', process.env.WEB_GITHUB_SECRET ?? 'No key provided.')
+		.update(JSON.stringify(body))
+		.digest('hex');
+}
+
 export const handler: RequestHandler = async (req, _res) => {
-	const { payload } = req.body as { payload: string };
 	const signature = req.header('X-Hub-Signature-256');
-	log({ req, body: req.body, payload, signature });
+	const checksum = gitHubHash(req.body);
+	log({ req, body: req.body, checksum, signature });
 	if (!signature) throw new WebError('Signature not provided.');
-	const SHA256 = crypto.createHash('sha256').update(req.body).digest('hex');
-	if (signature !== SHA256) throw new WebError('Signature invalid.');
+	if (signature !== checksum) throw new WebError('Signature invalid.');
 	throw new WebError('Not added yet');
 };
