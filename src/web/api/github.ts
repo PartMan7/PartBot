@@ -5,6 +5,7 @@ import { WebError } from '@/utils/webError';
 
 import type { RequestHandler } from 'express';
 
+// TODO: Remove this; testing triggers on webhooks
 export const handler: RequestHandler = async (req, _res) => {
 	const { payload } = req.body as { payload: string };
 	const signature = req.header('X-Hub-Signature-256');
