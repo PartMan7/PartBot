@@ -47,7 +47,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 							aliases.map<[string, string[]]>(alias => [alias, ['promote', rank]])
 						)
 					),
-					apl: ['whitelist', 'list'],
+					apl: ['promote', 'whitelist', 'list'],
 				},
 				async run({ run }) {
 					return run('help promote');
