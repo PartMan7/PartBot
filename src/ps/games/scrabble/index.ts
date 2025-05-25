@@ -338,10 +338,12 @@ export class Scrabble extends Game<State> {
 	}
 
 	onReplacePlayer(oldPlayer: string, withPlayer: User): ActionResponse<Partial<Player>> {
-		[this.state.score, this.state.racks, this.state.best].forEach(state => {
-			state[withPlayer.id] = state[oldPlayer];
-			delete state[oldPlayer];
-		});
+		if (this.started) {
+			[this.state.score, this.state.racks, this.state.best].forEach(state => {
+				state[withPlayer.id] = state[oldPlayer];
+				delete state[oldPlayer];
+			});
+		}
 		return { success: true, data: {} };
 	}
 
