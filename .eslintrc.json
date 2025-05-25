@@ -21,7 +21,8 @@
 		"@typescript-eslint/no-unused-vars": [
 			"error",
 			{
-				"varsIgnorePattern": "^_"
+				"varsIgnorePattern": "^_",
+				"argsIgnorePattern": "^_"
 			}
 		],
 		"@typescript-eslint/consistent-type-imports": "error",
