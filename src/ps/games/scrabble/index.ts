@@ -16,7 +16,7 @@ import { render, renderMove } from '@/ps/games/scrabble/render';
 import { type Point, coincident, flipPoint, multiStepPoint, rangePoints, stepPoint } from '@/utils/grid';
 
 import type { TranslatedText } from '@/i18n/types';
-import type { ActionResponse, EndType, Player } from '@/ps/games/common';
+import type { ActionResponse, EndType } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
 import type { ScrabbleMods } from '@/ps/games/scrabble/constants';
 import type { Log } from '@/ps/games/scrabble/logs';
@@ -254,9 +254,9 @@ export class Scrabble extends Game<State> {
 		this.room.sendHTML(...renderMove(logEntry, this));
 		this.selected = null;
 
-		if (rack.length === 0) this.end();
+		if (rack.length === 0) return this.end();
 		const next = this.nextPlayer();
-		if (!next) this.end();
+		if (!next) return this.end();
 	}
 
 	exchange(letterList: string): void {
@@ -305,7 +305,7 @@ export class Scrabble extends Game<State> {
 		this.log.push(logEntry);
 		this.room.sendHTML(...renderMove(logEntry, this));
 		if (this.passCount > Object.keys(this.players).length) {
-			this.end('regular');
+			return this.end('regular');
 		}
 		this.nextPlayer();
 	}
@@ -337,14 +337,14 @@ export class Scrabble extends Game<State> {
 		return this.$T('GAME.WON', { winner: `${winners.map(winner => winner.name).list(this.$T)}` });
 	}
 
-	onReplacePlayer(oldPlayer: string, withPlayer: User): ActionResponse<Partial<Player>> {
+	onReplacePlayer(oldPlayer: string, withPlayer: User): ActionResponse<null> {
 		if (this.started) {
 			[this.state.score, this.state.racks, this.state.best].forEach(state => {
 				state[withPlayer.id] = state[oldPlayer];
 				delete state[oldPlayer];
 			});
 		}
-		return { success: true, data: {} };
+		return { success: true, data: null };
 	}
 
 	render(side: string | null) {

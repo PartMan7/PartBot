@@ -162,7 +162,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 					}
 					const id =
 						// TODO: Revert this bit once Scrabble is stable
-						Game.meta.id === 'scrabble'
+						['scrabble', 'chess'].includes(Game.meta.id)
 							? '#TEMP'
 							: Game.meta.players === 'single'
 								? `#${Game.meta.abbr}-${message.author.id}`

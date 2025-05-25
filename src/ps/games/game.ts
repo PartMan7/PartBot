@@ -78,7 +78,7 @@ export class Game<State extends BaseState> {
 	onAddPlayer?(user: User, ctx: string): ActionResponse<Record<string, unknown>>;
 	onLeavePlayer?(player: Player, ctx: string | User): ActionResponse;
 	onForfeitPlayer?(player: Player, ctx: string | User): ActionResponse;
-	onReplacePlayer?(turn: BaseState['turn'], withPlayer: User): ActionResponse<Partial<Player>>;
+	onReplacePlayer?(turn: BaseState['turn'], withPlayer: User): ActionResponse<null>;
 	onStart?(): ActionResponse;
 	onEnd(type?: EndType): TranslatedText;
 	onEnd() {
@@ -260,9 +260,11 @@ export class Game<State extends BaseState> {
 		if (this.meta.players === 'single' || (Array.isArray(availableSlots) && availableSlots.length === 1) || availableSlots === 1) {
 			// Join was successful and game is now full
 			if (this.meta.players === 'single' || this.meta.autostart) this.start();
+			this.backup();
 			return { success: true, data: { started: true, as: newPlayer.turn } };
 			// TODO: Maybe add a hint to start game?
 		}
+		this.backup();
 		return { success: true, data: { started: false, as: newPlayer.turn } };
 	}
 
@@ -286,6 +288,7 @@ export class Game<State extends BaseState> {
 						const playersLeft = Object.values(this.players).filter((player: Player) => !player.out);
 						if (playersLeft.length <= 1) this.end('dq');
 						else if (this.turn === player.turn) this.nextPlayer(); // Needs to be run AFTER consumer has finished DQing
+						this.backup();
 					},
 				},
 			};
@@ -311,12 +314,11 @@ export class Game<State extends BaseState> {
 		if (this.onReplacePlayer) {
 			const res = this.onReplacePlayer(turn, withPlayer);
 			if (!res.success) throw new ChatError(res.error);
-			// TODO: This shouldn't be needed anymore
-			if (res.data) Object.assign(assign, res.data);
 		}
 		const oldPlayer = this.players[turn];
 		this.players[turn] = { ...oldPlayer, ...assign };
 		this.spectators.remove(oldPlayer.id);
+		this.backup();
 		return { success: true, data: this.$T('GAME.SUB', { in: withPlayer.name, out: oldPlayer.name }) };
 	}
 

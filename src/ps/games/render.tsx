@@ -2,7 +2,7 @@ import { Button } from '@/utils/components/ps';
 
 import type { BaseState } from '@/ps/games/common';
 import type { Game } from '@/ps/games/game';
-import type { CSSProperties, ReactElement, ReactNode } from 'react';
+import type { CSSProperties, HTMLProps, ReactElement, ReactNode } from 'react';
 
 export function renderSignups<State extends BaseState>(this: Game<State>, staff: boolean): ReactElement | null {
 	const startable = this.meta.autostart === false && this.startable();
@@ -64,12 +64,14 @@ export function Table<T>({
 	style = {},
 	labels,
 	Cell,
+	children: _children,
+	...props
 }: {
 	board: T[][];
 	style?: CSSProperties;
 	labels: { row: Label; col: Label } | null;
 	Cell: CellRenderer<T>;
-}): ReactElement {
+} & HTMLProps<HTMLTableElement>): ReactElement {
 	const rowLabels = labels ? getLabels(board.length, labels.row) : [];
 	const colLabels = labels ? getLabels(board[0].length, labels.col) : [];
 	return (
@@ -79,6 +81,7 @@ export function Table<T>({
 				margin: 20,
 				...style,
 			}}
+			{...props}
 		>
 			<tbody>
 				{labels ? (
