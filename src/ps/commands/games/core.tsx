@@ -160,13 +160,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 							throw new ChatError($T('GAME.ALREADY_JOINED'));
 						}
 					}
-					const id =
-						// TODO: Revert this bit once Scrabble is stable
-						['scrabble', 'chess'].includes(Game.meta.id)
-							? '#TEMP'
-							: Game.meta.players === 'single'
-								? `#${Game.meta.abbr}-${message.author.id}`
-								: generateId();
+					const id = Game.meta.players === 'single' ? `#${Game.meta.abbr}-${message.author.id}` : generateId();
 					if (PSGames[gameId]?.[id]) throw new ChatError($T('GAME.ALREADY_STARTED'));
 					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T, args, by: message.author });
 					if (game.meta.players === 'many') {
