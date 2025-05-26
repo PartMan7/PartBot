@@ -7,12 +7,18 @@ import { fsPath } from '@/utils/fsPath';
 
 // eslint-disable-next-line @typescript-eslint/no-namespace -- Looks better with dot notation
 export namespace PokemonGO {
+	export type Stats = {
+		atk: number;
+		def: number;
+		sta: number;
+	};
+
 	export type Pokemon = {
 		_id: string;
 		name: string;
 		num: number;
 		types: string[];
-		baseStats: { atk: number; def: number; sta: number };
+		baseStats: Stats;
 		heightm: number;
 		weightkg: number;
 		prevo?: string;

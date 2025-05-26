@@ -6,6 +6,7 @@ export default {
 	},
 
 	ACCESS_DENIED: 'Access denied.',
+	SCREW_YOU: ['Yeah no', 'Buzz off!', 'Screw you.'],
 	CANCELLED: 'This action was cancelled.',
 	CMD_NOT_FOUND: 'Command not found.',
 	CONFIRM: "Are you sure? Type 'confirm' to confirm.",
@@ -19,6 +20,7 @@ export default {
 	USER_NOT_FOUND: 'User not found!',
 	WRONG_ROOM: 'Wrong room.',
 	INVALID_ARGUMENTS: 'Invalid number of arguments.',
+	ENTRY_NOT_FOUND: 'Entry not found.',
 
 	GAME: {
 		ALREADY_JOINED: 'You have already joined this game.',
