@@ -13,7 +13,7 @@ export const command: PSCommand = {
 		const nums =
 			originalCommand[0] === 'random'
 				? Array.from({ length: count }, () => sample(max) + 1)
-				: Array.from({ length: count }, (_, index) => index + 1).sample(count);
-		broadcast(nums.join(', '));
+				: Array.from({ length: max }, (_, index) => index + 1).sample(count);
+		broadcast(nums.sortBy(num => num, 'asc').join(', '));
 	},
 };
