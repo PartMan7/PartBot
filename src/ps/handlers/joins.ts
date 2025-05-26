@@ -1,4 +1,4 @@
-import { PSAltCache, PSSeenCache } from '@/cache';
+import { PSAltCache, PSGames, PSSeenCache } from '@/cache';
 import { rename } from '@/database/alts';
 import { seeUser } from '@/database/seens';
 import { fromHumanTime, toId } from '@/tools';
@@ -10,6 +10,15 @@ export function joinHandler(this: Client, room: string, user: string, isIntro: b
 	// Joinphrases
 	// 'Stalking'
 	// (Kinda creepy name for the feature, but it CAN be used in creepy ways so make sure it's regulated!)
+
+	// Check if there's any relevant games
+	const roomGames = Object.values(PSGames)
+		.flatMap(gamesList => Object.values(gamesList))
+		.filter(game => game.roomid === room);
+
+	roomGames.forEach(game => {
+		if (game.hasPlayerOrSpectator(user)) game.update(toId(user));
+	});
 }
 
 export function nickHandler(this: Client, room: string, newName: string, oldName: string, isIntro: boolean): void {

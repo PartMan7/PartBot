@@ -322,6 +322,16 @@ export class Game<State extends BaseState> {
 		return { success: true, data: this.$T('GAME.SUB', { in: withPlayer.name, out: oldPlayer.name }) };
 	}
 
+	hasPlayer(name: string): boolean {
+		const userId = toId(name);
+		return Object.values(this.players).some(player => player.id === userId);
+	}
+
+	hasPlayerOrSpectator(name: string): boolean {
+		const userId = toId(name);
+		return this.hasPlayer(userId) || this.spectators.includes(userId);
+	}
+
 	startable(): boolean {
 		if (this.started) return false;
 		if (this.turns?.length) return this.turns.every(turn => this.players[turn]);

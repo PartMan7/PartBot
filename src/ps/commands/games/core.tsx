@@ -36,14 +36,14 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 	function getByContext(ctx: SearchContext): GameFilter {
 		return game => {
 			if (ctx.action === 'sub') {
-				const hasUser1 = Object.values(game.players).some(player => player.id === ctx.user1);
+				const hasUser1 = !!ctx.user1 && game.hasPlayer(ctx.user1);
 				const onlineUser1 = game.room.users.some(user => toId(user) === ctx.user1);
-				const hasUser2 = Object.values(game.players).some(player => player.id === ctx.user2);
+				const hasUser2 = !!ctx.user2 && game.hasPlayer(ctx.user2);
 				const onlineUser2 = game.room.users.some(user => toId(user) === ctx.user2);
 				return (hasUser1 && onlineUser1 && !hasUser2) || (hasUser2 && onlineUser2 && !hasUser1);
 			}
 			if (ctx.action === 'any') return true;
-			const hasJoined = Object.values(game.players).some(player => player.id === ctx.user);
+			const hasJoined = !!ctx.user && game.hasPlayer(ctx.user);
 			const hasSpace =
 				(game.sides && Object.keys(game.players).length < game.turns.length) || Object.keys(game.players).length < game.meta.maxSize!;
 			switch (ctx.action) {
@@ -332,18 +332,9 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				syntax: 'CMD',
 				async run({ message, $T }) {
 					const allGames = gameId in PSGames ? Object.values(PSGames[gameId]!) : [];
-					const rejoinGames = allGames.filter(game => {
-						// Filter with a side effect!
-						// I'm sorry, superstar64
-						if (
-							Object.values(game.players).some(player => player.id === message.author.id) ||
-							game.spectators.includes(message.author.id)
-						) {
-							game.update(message.author.id);
-							return true;
-						} else return false;
-					});
+					const rejoinGames = allGames.filter(game => game.hasPlayerOrSpectator(message.author.id));
 					if (!rejoinGames.length) throw new ChatError($T('GAME.WATCHING_NOTHING'));
+					rejoinGames.forEach(game => game.update(message.author.id));
 				},
 			},
 			watch: {
@@ -353,8 +344,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				syntax: 'CMD [game ref]',
 				async run({ message, arg, $T }) {
 					const { game } = getGame(arg, { action: 'watch', user: message.author.id }, { room: message.target, $T });
-					if (Object.values(game.players).some(player => player.id === message.author.id))
-						throw new ChatError($T('GAME.ALREADY_JOINED'));
+					if (game.hasPlayer(message.author.id)) throw new ChatError($T('GAME.ALREADY_JOINED'));
 					if (game.spectators.includes(message.author.id)) throw new ChatError($T('GAME.ALREADY_WATCHING'));
 					// TODO: watch context, eg: side
 					game.spectators.push(message.author.id);

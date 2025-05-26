@@ -5,8 +5,6 @@ import type { LightsOut } from '@/ps/games/lightsout/index';
 import type { State } from '@/ps/games/lightsout/types';
 import type { ReactElement } from 'react';
 
-type GameMode = 'playing' | 'over' | 'spectator';
-
 export function renderCloseSignups(this: LightsOut): ReactElement {
 	const player = Object.values(this.players)[0].name;
 	return (
