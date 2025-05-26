@@ -15,7 +15,7 @@ declare global {
 		remove(...toRemove: T[]): T[];
 		sample(amount: number, rng?: RNGSource): T[];
 		shuffle(rng?: RNGSource): T[];
-		sortBy(getSort: (term: T, thisArray: T[]) => unknown, dir?: 'asc' | 'desc'): T[];
+		sortBy(getSort: ((term: T, thisArray: T[]) => unknown) | null, dir?: 'asc' | 'desc'): T[];
 		space<S = unknown>(spacer: S): (T | S)[];
 		sum(): T;
 		unique(): T[];
@@ -160,13 +160,15 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function <T, W = number>(this: T[], getSort: (term: T, thisArray: T[]) => W, dir?: 'asc' | 'desc'): T[] {
+		value: function <T, W = number>(this: T[], getSort: ((term: T, thisArray: T[]) => W) | null, dir?: 'asc' | 'desc'): T[] {
 			const cache = this.reduce<Map<T, W>>((map, term) => {
-				map.set(term, getSort(term, this));
+				map.set(term, getSort ? getSort(term, this) : (term as unknown as W));
 				return map;
 			}, new Map());
 			// TODO: Check if this order is right
-			return this.sort((a, b) => ((dir === 'desc' ? cache.get(a)! > cache.get(b)! : cache.get(b)! < cache.get(a)!) ? 1 : -1));
+			return this.sort((a, b) =>
+				cache.get(a)! === cache.get(b)! ? 0 : (dir === 'desc' ? cache.get(a)! < cache.get(b)! : cache.get(b)! < cache.get(a)!) ? 1 : -1
+			);
 		},
 	},
 	space: {
@@ -190,7 +192,7 @@ Object.defineProperties(Array.prototype, {
 		configurable: false,
 		// Types here intentionally don't include string because gah
 		value: function (this: number[]): number {
-			return this.reduce((sum, term) => sum + term);
+			return this.reduce((sum, term) => sum + term, 0);
 		},
 	},
 	unique: {
