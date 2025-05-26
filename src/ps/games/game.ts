@@ -432,8 +432,8 @@ export class Game<State extends BaseState> {
 			};
 			uploadGame(model)
 				.then(() => {
-					const replay = this.getURL()!;
-					this.room.send(replay as NoTranslate);
+					const replay = this.getURL();
+					if (replay) this.room.send(replay as NoTranslate);
 				})
 				.catch(err => {
 					log(err);

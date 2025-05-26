@@ -205,8 +205,8 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 						// Regenerate the HTML if given an invalid input
 						if (err instanceof ChatError) {
 							game.update(message.author.id);
-							throw err;
 						}
+						throw err;
 					}
 				},
 			},
