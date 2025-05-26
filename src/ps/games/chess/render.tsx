@@ -8,8 +8,7 @@ import type { ReactElement } from 'react';
 
 type This = { msg: string };
 
-function getSquare(x: number, y: number, side: Turn | null): Square {
-	const flip = side === 'B';
+function getSquare(x: number, y: number, flip: boolean): Square {
 	return ((flip ? 8 - y : y + 1).toLetter().toLowerCase() + (flip ? x + 1 : 8 - x)) as Square;
 }
 
@@ -30,16 +29,17 @@ const PIECE_IMAGES: Record<string, string> = {
 	bp: 'https://partbot.partman.dev/public/chess/BP.png',
 };
 
-function adaptBoard(board: BoardCell[][], side: Turn | null): BoardCell[][] {
-	if (side !== 'B') return board;
+function adaptBoard(board: BoardCell[][], flip: boolean): BoardCell[][] {
+	if (!flip) return board;
 	return board.map(row => row.toReversed()).reverse();
 }
 
 export function renderBoard(this: This, ctx: RenderCtx) {
 	const size = ctx.small ? 30 : 45;
+	const flip = ctx.side === 'B';
 
 	const Cell: CellRenderer<BoardCell> = ({ cell, i, j }) => {
-		const square = getSquare(i, j, ctx.side);
+		const square = getSquare(i, j, flip);
 		const action = ctx.showMoves.find(move => move.to === square);
 		// Use the form during promotions instead
 		const clickable =
@@ -70,7 +70,13 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 		);
 	};
 
-	return <Table<BoardCell> board={adaptBoard(ctx.board, ctx.side)} labels={{ row: '9-1', col: 'A-Z' }} Cell={Cell} />;
+	return (
+		<Table<BoardCell>
+			board={adaptBoard(ctx.board, flip)}
+			labels={{ row: flip ? '1-9' : '9-1', col: flip ? 'Z-A' : 'A-Z' }}
+			Cell={Cell}
+		/>
+	);
 }
 
 export function render(this: This, ctx: RenderCtx): ReactElement {
