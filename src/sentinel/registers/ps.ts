@@ -1,10 +1,12 @@
 import { promises as fs } from 'fs';
 
+import { Games } from '@/ps/games';
 import { reloadCommands } from '@/ps/loaders/commands';
 import { LivePS } from '@/sentinel/live';
 import { cachebuster } from '@/utils/cachebuster';
 import { fsPath } from '@/utils/fsPath';
 
+import type { GamesList, Meta } from '@/ps/games/common';
 import type { Register } from '@/sentinel/types';
 
 const PS_EVENT_HANDLERS = {
@@ -30,18 +32,29 @@ export const PS_REGISTERS: Register[] = [
 		pattern: /\/ps\/games\//,
 		reload: async filepaths => {
 			['common', 'game', 'index', 'render'].forEach(file => cachebuster(`@/ps/games/${file}`));
-			const games = filepaths.reduce<string[]>((acc, filepath) => {
-				const match = filepath.match(/\/ps\/games\/([^/]*)\//);
-				if (match) acc.push(match[1]);
-				return acc;
-			}, []);
+			const games = filepaths
+				.reduce<GamesList[]>((acc, filepath) => {
+					const match = filepath.match(/\/ps\/games\/([^/]*)\//);
+					if (match) acc.push(match[1] as GamesList);
+					return acc;
+				}, [])
+				.unique();
 			await Promise.all(
 				games.map(async game => {
 					const files = await fs.readdir(fsPath('ps', 'games', game));
 					files.forEach(file => cachebuster(fsPath('ps', 'games', game, file)));
+
+					const gameImport = await import(`@/ps/games/${game}`);
+					const { meta }: { meta: Meta } = gameImport;
+					const { [meta.name.replaceAll(' ', '')]: instance } = gameImport;
+
+					Games[game] = { meta, instance };
 				})
 			);
-			// TODO: Regenerate games commands if needed
+
+			const gameCommands = await fs.readdir(fsPath('ps', 'commands', 'games'));
+			gameCommands.forEach(commandFile => cachebuster(fsPath('ps', 'commands', 'games', commandFile)));
+			await reloadCommands();
 		},
 	},
 

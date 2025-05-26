@@ -3,6 +3,7 @@ import type { ModData, ModEnum } from '@/ps/games/mods';
 import type { Satisfies } from '@/types/common';
 
 export type Meta = Readonly<{
+	// The name of the game must match the exported class after removing spaces
 	name: string;
 	id: GamesList;
 	aliases?: readonly string[];
@@ -22,6 +23,7 @@ export type Meta = Readonly<{
 	pokeTimer?: number | false | undefined;
 }>;
 
+// Note: The values here MUST match the folder name!
 export enum GamesList {
 	Chess = 'chess',
 	ConnectFour = 'connectfour',
