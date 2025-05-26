@@ -3,4 +3,5 @@ export const IS_ENABLED = {
 	DISCORD: process.env.USE_DISCORD === 'true',
 	DB: process.env.USE_DB === 'true',
 	WEB: process.env.USE_WEB === 'true',
+	SHEETS: process.env.USE_SHEETS === 'true',
 };

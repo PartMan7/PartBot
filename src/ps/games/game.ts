@@ -262,7 +262,6 @@ export class Game<State extends BaseState> {
 			if (this.meta.players === 'single' || this.meta.autostart) this.start();
 			this.backup();
 			return { success: true, data: { started: true, as: newPlayer.turn } };
-			// TODO: Maybe add a hint to start game?
 		}
 		this.backup();
 		return { success: true, data: { started: false, as: newPlayer.turn } };
@@ -414,7 +413,6 @@ export class Game<State extends BaseState> {
 		this.clearTimer();
 		this.update();
 		if (this.started && (this.meta.players === 'many' || this.canBroadcastFinish?.())) {
-			// TODO: Revisit broadcasting logic for single-player games
 			this.room.sendHTML(this.render(null));
 		}
 		this.endedAt = new Date();

@@ -165,7 +165,6 @@ Object.defineProperties(Array.prototype, {
 				map.set(term, getSort ? getSort(term, this) : (term as unknown as W));
 				return map;
 			}, new Map());
-			// TODO: Check if this order is right
 			return this.sort((a, b) =>
 				cache.get(a)! === cache.get(b)! ? 0 : (dir === 'desc' ? cache.get(a)! < cache.get(b)! : cache.get(b)! < cache.get(a)!) ? 1 : -1
 			);

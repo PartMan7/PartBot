@@ -20,7 +20,6 @@ export function renderSignups<State extends BaseState>(this: Game<State>, staff:
 							</Button>
 						))
 				: null}
-			{/* TODO Disable this in validation for 1 side left */}
 			{this.sides && this.turns.length - Object.keys(this.players).length > 1 ? (
 				<Button value={`${this.renderCtx.msg} join -`} style={{ margin: 5 }}>
 					Random
