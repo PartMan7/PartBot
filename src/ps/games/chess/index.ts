@@ -1,4 +1,5 @@
 import { Chess as ChessLib } from 'chess.js';
+import { EmbedBuilder } from 'discord.js';
 
 import { render } from '@/ps/games/chess/render';
 import { Game } from '@/ps/games/game';
@@ -168,9 +169,16 @@ export class Chess extends Game<State> {
 		return this.lichessURL;
 	}
 
-	// renderEmbed(): EmbedBuilder {
-	// 	// TODO
-	// }
+	async renderEmbed(): Promise<EmbedBuilder> {
+		return new EmbedBuilder()
+			.setColor('#9C5624')
+			.setAuthor({
+				name: 'Chess - Room Match',
+				iconURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Chess_tile_kl.svg/1200px-Chess_tile_kl.svg.png',
+			})
+			.setTitle(`${this.players.W.name} vs ${this.players.B.name}`)
+			.setURL(this.lichessURL);
+	}
 
 	render(side: Turn | null) {
 		const ctx: RenderCtx = {
