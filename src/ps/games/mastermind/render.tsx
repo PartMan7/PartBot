@@ -55,7 +55,7 @@ function Pin({ red, white }: { red?: boolean; white?: boolean }): ReactElement {
 			style={{
 				width: 3 * scale,
 				height: 3 * scale,
-				background: red ? '#E60000' : white ? 'white' : 'none',
+				background: red ? '#e60000' : white ? 'white' : 'none',
 				verticalAlign: 'middle',
 				display: 'inline-block',
 				borderRadius: '50%',
@@ -71,7 +71,7 @@ function Pin({ red, white }: { red?: boolean; white?: boolean }): ReactElement {
 					left: '30%',
 					borderRadius: '50%',
 					border: 'none',
-					background: red ? '#800000' : white ? '#B3B3B3' : '#4D4D4D',
+					background: red ? '#800000' : white ? '#b3b3b3' : '#4d4d4d',
 					position: 'relative',
 				}}
 			/>

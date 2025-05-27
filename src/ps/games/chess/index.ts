@@ -113,7 +113,7 @@ export class Chess extends Game<State> {
 			this.throw();
 		}
 
-		if (this.lib.isGameOver()) return this.end(); // TODO
+		if (this.lib.isGameOver()) return this.end();
 
 		this.cleanup();
 		this.state.pgn = this.lib.pgn();
@@ -140,7 +140,6 @@ export class Chess extends Game<State> {
 			if (type === 'dq') return this.$T('GAME.ENDED_AUTOMATICALLY', { game: this.meta.name, id: this.id });
 			return this.$T('GAME.ENDED', { game: this.meta.name, id: this.id });
 		}
-		// TODO: Upload to Lichess
 		if (this.lib.isDraw()) {
 			this.winCtx = { type: 'draw' };
 			return this.$T('GAME.DRAW', { players: [this.players.w.name, this.players.b.name].list(this.$T) });
@@ -171,7 +170,7 @@ export class Chess extends Game<State> {
 
 	async renderEmbed(): Promise<EmbedBuilder> {
 		return new EmbedBuilder()
-			.setColor('#9C5624')
+			.setColor('#9c5624')
 			.setAuthor({
 				name: 'Chess - Room Match',
 				iconURL: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Chess_tile_kl.svg/1200px-Chess_tile_kl.svg.png',

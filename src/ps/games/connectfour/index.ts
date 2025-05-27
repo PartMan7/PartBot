@@ -110,7 +110,7 @@ export class ConnectFour extends Game<State> {
 			.join(' vs ');
 		return (
 			new EmbedBuilder()
-				.setColor('#0080FF')
+				.setColor('#0080ff')
 				.setAuthor({ name: 'Connect Four - Room Match' })
 				.setTitle(title)
 				// .setURL // TODO: Link game logs on Web

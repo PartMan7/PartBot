@@ -6,8 +6,8 @@ import type { ReactElement } from 'react';
 
 type This = { msg: string };
 function getColor(cell: Turn | null): string {
-	if (cell === 'Y') return '#FF0';
-	if (cell === 'R') return '#E00';
+	if (cell === 'Y') return '#ff0';
+	if (cell === 'R') return '#e00';
 	return '#111';
 }
 function Column({ data }: { data: (Turn | null)[] }): ReactElement {
@@ -29,7 +29,7 @@ function Column({ data }: { data: (Turn | null)[] }): ReactElement {
 }
 function renderBoard(this: This, ctx: RenderCtx): ReactElement {
 	return (
-		<div style={{ backgroundColor: '#0080FF', borderRadius: 16, display: 'inline-block', padding: 2 }}>
+		<div style={{ backgroundColor: '#0080ff', borderRadius: 16, display: 'inline-block', padding: 2 }}>
 			{repeat(null, ctx.board[0].length).map((_, col) => {
 				const column = ctx.board.map(row => row[col]);
 				return column[0] ? (
