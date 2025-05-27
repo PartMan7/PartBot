@@ -1,4 +1,4 @@
-import mongoose, { type Model } from 'mongoose';
+import mongoose from 'mongoose';
 
 import { PSRoomConfigs } from '@/cache';
 import { IS_ENABLED } from '@/enabled';
@@ -6,7 +6,7 @@ import { toId } from '@/tools';
 
 import type { AuthKey, PSRoomConfig } from '@/types/ps';
 
-const schema = new mongoose.Schema({
+const schema = new mongoose.Schema<PSRoomConfig>({
 	roomId: {
 		type: String,
 		required: true,
@@ -25,27 +25,28 @@ const schema = new mongoose.Schema({
 	private: Boolean,
 	ignore: Boolean,
 	permissions: Object,
+
 	points: {
-		types: [
-			{
-				name: String,
-				plur: String,
-				symbol: {
-					value: String,
-					ascii: String,
-				},
+		types: {
+			type: Map,
+			of: {
+				id: { type: String, required: true },
+				singular: { type: String, required: true },
+				plural: { type: String, required: true },
+				symbol: { type: String, required: true },
 			},
-		],
-		render: {
-			template: String,
-			override: [String],
+			required: true,
 		},
-		roomId: String,
+		pointsPriority: {
+			type: [String],
+			required: true,
+		},
+		format: String,
 	},
 	_assign: Object,
 });
 
-const model = mongoose.model('psroom', schema, 'psrooms') as Model<PSRoomConfig>;
+const model = mongoose.model<PSRoomConfig>('psroom', schema, 'psrooms', { overwriteModels: true });
 
 export async function updateAuth(users: string[], authKey: AuthKey, roomId: string): Promise<boolean> {
 	if (!IS_ENABLED.DB) return false;

@@ -22,22 +22,19 @@ export type PSRoomConfig = {
 		[key: string]: Perms;
 	} | null;
 	points?: {
-		types: {
-			name: string;
-			plur: string;
-			symbol: {
-				value?: string | null;
-				ascii: string;
-			};
-		}[];
-		render: {
-			template?: string | null;
-			override?: string[] | null;
-		};
-		roomId: string;
+		types: Record<
+			string,
+			{
+				id: string;
+				singular: string;
+				plural: string;
+				symbol: string;
+			}
+		>;
+		pointsPriority: string[];
+		format: string;
 	} | null;
 	_assign?: {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		[key: string]: any;
+		[key: string]: unknown;
 	} | null;
 };

@@ -64,7 +64,7 @@ export interface GameModel {
 	log: string[];
 	winCtx?: unknown;
 }
-const model = mongoose.model('game', schema, 'games');
+const model = mongoose.model('game', schema, 'games', { overwriteModels: true });
 
 export async function uploadGame(game: GameModel): Promise<GameModel | null> {
 	if (!IS_ENABLED.DB) return null;

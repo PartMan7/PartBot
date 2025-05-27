@@ -3,7 +3,14 @@ import mongoose from 'mongoose';
 import { IS_ENABLED } from '@/enabled';
 import { toId } from '@/tools';
 
-const schema = new mongoose.Schema({
+interface Model {
+	id: string;
+	from: string;
+	to: string;
+	at: Date;
+}
+
+const schema = new mongoose.Schema<Model>({
 	id: {
 		type: String,
 		required: true,
@@ -24,13 +31,7 @@ const schema = new mongoose.Schema({
 	},
 });
 
-interface Model {
-	id: string;
-	from: string;
-	to: string;
-	at: Date;
-}
-const model = mongoose.model('alt', schema, 'alts');
+const model = mongoose.model<Model>('alt', schema, 'alts', { overwriteModels: true });
 
 const DEFAULT_ALTS_CAP = 50;
 

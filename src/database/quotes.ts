@@ -48,7 +48,7 @@ interface Model {
 	addedById: string;
 	at: Date;
 }
-const model = mongoose.model('quote', schema, 'quotes');
+const model = mongoose.model('quote', schema, 'quotes', { overwriteModels: true });
 
 export async function addQuote(quote: string, room: string, by: string): Promise<Model | null> {
 	if (!IS_ENABLED.DB) return null;

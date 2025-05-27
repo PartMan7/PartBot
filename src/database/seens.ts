@@ -5,7 +5,14 @@ import { toId } from '@/tools';
 // We don't really care about storing joins (since we can just use their 'online' status)
 // Instead, we store the last time they were seen online; i.e. their leave time, not join
 
-const schema = new mongoose.Schema({
+interface Model {
+	id: string;
+	at: Date;
+	name: string;
+	seenIn: string[];
+}
+
+const schema = new mongoose.Schema<Model>({
 	id: {
 		type: String,
 		required: true,
@@ -27,13 +34,7 @@ const schema = new mongoose.Schema({
 	},
 });
 
-interface Model {
-	id: string;
-	at: Date;
-	name: string;
-	seenIn: string[];
-}
-const model = mongoose.model('seen', schema, 'seens');
+const model = mongoose.model<Model>('seen', schema, 'seens', { overwriteModels: true });
 
 // TODO: Debounce calls to this
 export function seeUser(user: string, rooms: string[] = []): Promise<Model> {
