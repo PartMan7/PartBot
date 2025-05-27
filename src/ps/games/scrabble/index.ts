@@ -69,7 +69,7 @@ export class Scrabble extends Game<State> {
 			this.state.score[player] = 0;
 			this.state.racks[player] = this.state.bag.splice(0, RACK_SIZE);
 		});
-		return { success: true, data: undefined };
+		return { success: true, data: null };
 	}
 
 	action(user: User, ctx: string): void {
@@ -380,7 +380,7 @@ export class Scrabble extends Game<State> {
 		return render.bind(this.renderCtx)(ctx);
 	}
 
-	renderEmbed(): EmbedBuilder | null {
+	async renderEmbed(): Promise<EmbedBuilder | null> {
 		const winners = this.winCtx && this.winCtx.type === 'win' ? this.winCtx.winnerIds : null;
 		if (!winners) return null;
 		const winnerPlayers = winners.map(winner => ({ ...this.players[winner], best: this.state.best[winner] }));

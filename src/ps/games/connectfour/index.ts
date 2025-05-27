@@ -103,7 +103,7 @@ export class ConnectFour extends Game<State> {
 		throw new Error(`winCtx not defined for C4 - ${JSON.stringify(this.winCtx)}`);
 	}
 
-	renderEmbed(): EmbedBuilder {
+	async renderEmbed(): Promise<EmbedBuilder> {
 		const winner = this.winCtx && this.winCtx.type === 'win' ? this.winCtx.winner.id : null;
 		const title = Object.values(this.players)
 			.map(player => `${player.name} (${player.turn})${player.id === winner ? ` ${WINNER_ICON}` : ''}`)

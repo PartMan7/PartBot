@@ -68,7 +68,7 @@ export class Game<State extends BaseState> {
 	render() {
 		return null as unknown as ReactElement;
 	}
-	renderEmbed?(): EmbedBuilder | null;
+	renderEmbed?(): Promise<EmbedBuilder | null>;
 
 	action(user: User, ctx: string, reaction: boolean): void;
 	action() {}
@@ -352,7 +352,7 @@ export class Game<State extends BaseState> {
 		this.startedAt = new Date();
 		this.setTimer('Game started');
 		this.backup();
-		return { success: true, data: undefined };
+		return { success: true, data: null };
 	}
 
 	// Only gets next turn. No side effects.
@@ -403,7 +403,7 @@ export class Game<State extends BaseState> {
 		if (this.spectators.length > 0) this.room.pageHTML(this.spectators, this.render(null), { name: this.id });
 	}
 
-	getURL(): string | null {
+	getURL(): Promise<string | null> | string | null {
 		if (this.meta.players === 'single') return null;
 		return `${process.env.WEB_URL}/${this.meta.id}/${this.id.replace(/^#/, '')}`;
 	}
@@ -419,11 +419,12 @@ export class Game<State extends BaseState> {
 		this.room.send(message);
 		if (this.started && typeof this.renderEmbed === 'function' && this.roomid === 'boardgames') {
 			// Send only for games from BG
-			const embed = this.renderEmbed();
-			if (embed) {
-				const channel = getChannel(BOT_LOG_CHANNEL);
-				channel?.send({ embeds: [embed] });
-			}
+			this.renderEmbed().then(embed => {
+				if (embed) {
+					const channel = getChannel(BOT_LOG_CHANNEL);
+					channel?.send({ embeds: [embed] });
+				}
+			});
 		}
 		// Upload to DB
 		if (IS_ENABLED.DB && this.meta.players !== 'single') {
@@ -439,8 +440,8 @@ export class Game<State extends BaseState> {
 				winCtx: 'winCtx' in this ? this.winCtx : null,
 			};
 			uploadGame(model)
-				.then(() => {
-					const replay = this.getURL();
+				.then(async () => {
+					const replay = await this.getURL();
 					if (replay) this.room.send(replay as NoTranslate);
 				})
 				.catch(err => {

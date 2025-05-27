@@ -141,7 +141,7 @@ export class Othello extends Game<State> {
 		});
 	}
 
-	renderEmbed(): EmbedBuilder {
+	async renderEmbed(): Promise<EmbedBuilder> {
 		const winner = this.winCtx && this.winCtx.type === 'win' ? this.winCtx.winner.id : null;
 		const title = Object.values(this.players)
 			.map(player => `${player.name} (${player.turn})${player.id === winner ? ` ${WINNER_ICON}` : ''}`)
@@ -151,7 +151,7 @@ export class Othello extends Game<State> {
 			.setColor('#008000')
 			.setAuthor({ name: 'Othello - Room Match' })
 			.setTitle(title)
-			.setURL(this.getURL())
+			.setURL(await this.getURL())
 			.addFields([
 				{
 					name: [count.B, count.W].join(' - '),

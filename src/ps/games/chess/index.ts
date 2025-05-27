@@ -28,6 +28,7 @@ export class Chess extends Game<State> {
 	log: Log[] = [];
 	winCtx?: WinCtx | { type: EndType };
 	cache: Record<string, Record<Turn, number>> = {};
+	lichessURL: string | null = null;
 
 	theme: ThemeColours = {
 		W: '#fff',
@@ -45,6 +46,17 @@ export class Chess extends Game<State> {
 		if (ctx.backup) {
 			this.lib.loadPgn(this.state.pgn);
 		}
+
+		this.lib.setHeader('Event', `Room Match ${this.id}`);
+		this.lib.setHeader('Site', 'https://play.pokemonshowdown.com/boardgames');
+	}
+
+	onStart(): ActionResponse {
+		this.lib.setHeader('Date', new Date().toDateString());
+		this.lib.setHeader('White', this.players.W.name);
+		this.lib.setHeader('Black', this.players.B.name);
+
+		return { success: true, data: null };
 	}
 
 	action(user: User, ctx: string): void {
@@ -115,8 +127,9 @@ export class Chess extends Game<State> {
 		this.drawOffered = null;
 	}
 
-	onReplacePlayer(): ActionResponse<null> {
+	onReplacePlayer(turn: Turn, withPlayer: User): ActionResponse<null> {
 		this.cleanup();
+		this.lib.setHeader(turn === 'W' ? 'White' : 'Black', withPlayer.name);
 		return { success: true, data: null };
 	}
 
@@ -139,6 +152,20 @@ export class Chess extends Game<State> {
 			return this.$T('GAME.WON_AGAINST', { winner: winner.name, game: this.meta.name, loser: loser.name, ctx: '' });
 		}
 		this.throw();
+	}
+
+	async getURL(): Promise<string | null> {
+		if (this.lichessURL) return this.lichessURL;
+
+		this.lichessURL = await fetch('https://lichess.org/api/import', {
+			method: 'POST',
+			body: JSON.stringify({ pgn: this.state.pgn }),
+			headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+		})
+			.then(res => res.json())
+			.then(res => (res as { url: string }).url);
+
+		return this.lichessURL;
 	}
 
 	// renderEmbed(): EmbedBuilder {
