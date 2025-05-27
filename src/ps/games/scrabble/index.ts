@@ -263,6 +263,7 @@ export class Scrabble extends Game<State> {
 		const turn = this.turn!;
 		const player = this.players[turn];
 		if (!player) this.throw();
+		if (this.state.bag.length < RACK_SIZE) this.throw('GAME.SCRABBLE.BAG_SIZE', { amount: this.state.bag.length });
 		if (!letterList || letterList.length === 0) this.throw();
 
 		const letters = letterList
@@ -271,8 +272,6 @@ export class Scrabble extends Game<State> {
 			.split('');
 		if (!letters.length) this.throw();
 		const letterCount = letters.count();
-
-		if (this.state.bag.length < letters.length) this.throw('GAME.SCRABBLE.BAG_SIZE', { amount: this.state.bag.length });
 
 		const rack = this.state.racks[turn];
 		const rackCount = rack.count();
