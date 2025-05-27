@@ -2,26 +2,35 @@ import type { TranslatedText } from '@/i18n/types';
 import type { ModData, ModEnum } from '@/ps/games/mods';
 import type { Satisfies } from '@/types/common';
 
-export type Meta = Readonly<{
-	// The name of the game must match the exported class after removing spaces
+export type Theme<Colors extends Partial<Record<string, string | null>> = Partial<Record<string, string | null>>> = {
+	id: string;
 	name: string;
-	id: GamesList;
-	aliases?: readonly string[];
-	/** Only for single-player games. Required for those. */
-	abbr?: string;
+	aliases: string[];
+	colors: Colors;
+};
 
-	players: 'single' | 'many';
-	turns?: Readonly<Record<string, string>>;
-	minSize?: number;
-	maxSize?: number;
+export type Meta = Readonly<
+	{
+		// The name of the game must match the exported class after removing spaces
+		name: string;
+		id: GamesList;
+		aliases?: readonly string[];
+		/** Only for single-player games. Required for those. */
+		abbr?: string;
 
-	mods?: Readonly<{ list: ModEnum<string>; data: ModData<string> }>;
+		players: 'single' | 'many';
+		turns?: Readonly<Record<string, string>>;
+		minSize?: number;
+		maxSize?: number;
 
-	/** @default Assume true */
-	autostart?: boolean;
-	timer?: number | false;
-	pokeTimer?: number | false | undefined;
-}>;
+		mods?: Readonly<{ list: ModEnum<string>; data: ModData<string> }>;
+
+		/** @default Assume true */
+		autostart?: boolean;
+		timer?: number | false;
+		pokeTimer?: number | false | undefined;
+	} & ({ themes: Record<string, Theme>; defaultTheme: string } | { themes?: undefined; defaultTheme?: undefined })
+>;
 
 // Note: The values here MUST match the folder name!
 export enum GamesList {

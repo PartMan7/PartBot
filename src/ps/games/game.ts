@@ -20,7 +20,7 @@ import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
 import type { ReactElement } from 'react';
 
-const backupKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'log', 'startedAt', 'createdAt'] as const;
+const backupKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'theme', 'log', 'startedAt', 'createdAt'] as const;
 
 /**
  * This is the shared code for all games. To check the game-specific code, refer to the
@@ -62,6 +62,8 @@ export class Game<State extends BaseState> {
 
 	players: Record<BaseState['turn'], Player> = {};
 	spectators: string[] = [];
+
+	theme?: string;
 
 	// Game-provided methods:
 	render(side: State['turn'] | null): ReactElement;
@@ -114,6 +116,8 @@ export class Game<State extends BaseState> {
 			this.timerLength = ctx.meta.timer;
 			this.pokeTimerLength = ctx.meta.pokeTimer ?? ctx.meta.timer;
 		}
+
+		if (ctx.meta.defaultTheme) this.theme = ctx.meta.defaultTheme;
 	}
 	persist(ctx: BaseContext) {
 		if (!PSGames[this.meta.id]) PSGames[this.meta.id] = {};
@@ -206,6 +210,17 @@ export class Game<State extends BaseState> {
 	backup(): void {
 		const backup = this.serialize();
 		gameCache.set({ id: this.id, room: this.roomid, game: this.meta.id, backup });
+	}
+
+	setTheme(input: string): TranslatedText {
+		if (!this.meta.themes) this.throw('GAME.NO_THEME_SUPPORT', { game: this.meta.name });
+		const themeId = toId(input);
+		const allThemes = Object.values(this.meta.themes);
+		const selectedTheme = allThemes.find(theme => toId(theme.name) === themeId || theme.aliases.includes(themeId));
+		if (!selectedTheme) this.throw('GAME.INVALID_THEME', { themes: allThemes.map(theme => theme.name).list(this.$T) });
+		this.theme = selectedTheme.id;
+		this.update();
+		return this.$T('GAME.SET_THEME', { theme: selectedTheme.name });
 	}
 
 	renderSignups?(staff: boolean): ReactElement | null;

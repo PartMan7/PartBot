@@ -66,6 +66,9 @@ export default {
 		MOD_NOT_FOUND: "Could not find a mod called '{{mod}}'.",
 		CANNOT_MOD: 'Mods cannot be applied to this game now.',
 		APPLIED_MOD: '{{mod}} has been applied to game {{id}}.',
+		NO_THEME_SUPPORT: '{{game}} does not support themes.',
+		INVALID_THEME: 'Invalid theme. Valid themes are: {{themes}}.',
+		SET_THEME: 'The theme has been set to {{theme}}.',
 		TIMER: {
 			PRIVATE: "Psst it's your turn to play in {{game}} [{{id}}]",
 			PUBLIC: "{{user}} hasn't played in {{game}} [{{id}}] for {{time}}...",

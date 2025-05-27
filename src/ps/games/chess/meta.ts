@@ -1,3 +1,4 @@
+import { CHESS_THEMES, defaultTheme } from '@/ps/games/chess/themes';
 import { GamesList } from '@/ps/games/common';
 import { fromHumanTime } from '@/tools';
 
@@ -17,4 +18,7 @@ export const meta: Meta = {
 	autostart: true,
 	pokeTimer: fromHumanTime('30 sec'),
 	timer: fromHumanTime('1 min'),
+
+	themes: CHESS_THEMES,
+	defaultTheme,
 };

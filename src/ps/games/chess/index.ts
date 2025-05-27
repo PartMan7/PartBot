@@ -8,7 +8,7 @@ import { pick } from '@/utils/pick';
 import type { TranslatedText } from '@/i18n/types';
 import type { Log } from '@/ps/games/chess/logs';
 import type { RenderCtx, State, ThemeColours, Turn, WinCtx } from '@/ps/games/chess/types';
-import type { ActionResponse, EndType } from '@/ps/games/common';
+import type { ActionResponse, EndType, Meta, Theme } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
 import type { Move, Square } from 'chess.js';
 import type { User } from 'ps-client';
@@ -31,13 +31,7 @@ export class Chess extends Game<State> {
 	cache: Record<string, Record<Turn, number>> = {};
 	lichessURL: string | null = null;
 
-	theme: ThemeColours = {
-		W: '#fff',
-		B: '#9c5624',
-		sel: '#87cefa',
-		hl: '#adff2fa5',
-		last: '#ff330019',
-	};
+	declare meta: Omit<Meta, 'themes'> & { themes: Record<string, Theme<ThemeColours>>; defaultTheme: string };
 
 	constructor(ctx: BaseContext) {
 		super(ctx);
@@ -188,7 +182,7 @@ export class Chess extends Game<State> {
 			side,
 			id: this.id,
 			turn: this.turn!,
-			theme: this.theme,
+			theme: this.meta.themes[this.theme!].colors,
 			small: false,
 		};
 		if (this.winCtx) {

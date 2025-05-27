@@ -30,26 +30,23 @@ export const PS_REGISTERS: Register[] = [
 	{
 		label: 'games',
 		pattern: /\/ps\/games\//,
-		reload: async filepaths => {
+		reload: async () => {
 			['common', 'game', 'index', 'render'].forEach(file => cachebuster(`@/ps/games/${file}`));
-			const games = filepaths
-				.reduce<GamesList[]>((acc, filepath) => {
-					const match = filepath.match(/\/ps\/games\/([^/]*)\//);
-					if (match) acc.push(match[1] as GamesList);
-					return acc;
-				}, [])
-				.unique();
+			const games = await fs.readdir(fsPath('ps', 'games'), { withFileTypes: true });
 			await Promise.all(
-				games.map(async game => {
-					const files = await fs.readdir(fsPath('ps', 'games', game));
-					files.forEach(file => cachebuster(fsPath('ps', 'games', game, file)));
+				games
+					.filter(game => game.isDirectory())
+					.map(async game => {
+						const gameDir = game.name as GamesList;
+						const files = await fs.readdir(fsPath('ps', 'games', gameDir));
+						files.forEach(file => cachebuster(fsPath('ps', 'games', gameDir, file)));
 
-					const gameImport = await import(`@/ps/games/${game}`);
-					const { meta }: { meta: Meta } = gameImport;
-					const { [meta.name.replaceAll(' ', '')]: instance } = gameImport;
+						const gameImport = await import(`@/ps/games/${gameDir}`);
+						const { meta }: { meta: Meta } = gameImport;
+						const { [meta.name.replaceAll(' ', '')]: instance } = gameImport;
 
-					Games[game] = { meta, instance };
-				})
+						Games[gameDir] = { meta, instance };
+					})
 			);
 
 			const gameCommands = await fs.readdir(fsPath('ps', 'commands', 'games'));

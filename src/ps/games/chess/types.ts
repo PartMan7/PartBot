@@ -12,8 +12,8 @@ export type ThemeColours = {
 	W: string;
 	B: string;
 	sel: string;
-	hl?: string;
-	last?: string;
+	hl: string | null;
+	last: string | null;
 };
 
 export type RenderCtx = {

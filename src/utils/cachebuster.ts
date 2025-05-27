@@ -5,6 +5,7 @@ export function cachebuster(_filepath: string): boolean {
 	const cache = require.cache[filepath];
 	if (!cache) return false;
 	emptyObject(cache.exports);
+	cache.children.length = 0;
 	emptyObject(cache);
 	delete require.cache[filepath];
 	return true;
