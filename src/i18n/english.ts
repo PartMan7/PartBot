@@ -22,6 +22,10 @@ export default {
 	INVALID_ARGUMENTS: 'Invalid number of arguments.',
 	ENTRY_NOT_FOUND: 'Entry not found.',
 
+	DISABLED: {
+		DB: 'The database is currently disabled.',
+	},
+
 	GAME: {
 		ALREADY_JOINED: 'You have already joined this game.',
 		ALREADY_STARTED: 'The game has already started!',
@@ -111,6 +115,10 @@ export default {
 		EVAL: {
 			SUCCESS: 'Command executed successfully.',
 			ERROR: 'Error in executing command: {{error}}',
+		},
+
+		POINTS: {
+			ROOM_NO_POINTS: '{{room}} does not have points enabled.',
 		},
 
 		QUOTES: {

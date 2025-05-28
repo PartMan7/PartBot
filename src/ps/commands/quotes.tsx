@@ -204,6 +204,9 @@ export const command: PSCommand = {
 	help: null,
 	syntax: 'CMD',
 	category: ['utility'],
+	extendedAliases: {
+		addquote: ['quotes', 'add'],
+	},
 	children: {
 		help: {
 			name: 'help',

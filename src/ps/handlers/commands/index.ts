@@ -49,18 +49,31 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 			const mockMessage = spoof(argData.slice(1), message, $T);
 			return commandHandler(mockMessage, { type: 'spoof', message: message });
 		}
-		const args = argData.split(/ +/);
-		const spacedArgs = argData.split(/( +)/);
 
-		const { command: commandObj, sourceCommand, cascade, context: parsedCtx } = parse(args, spacedArgs, $T);
+		let commandObj, sourceCommand, cascade, parsedCtx;
+		const baseArgs = argData.split(/ +/);
+		const baseSpacedArgs = argData.split(/( +)/);
+		try {
+			({ command: commandObj, sourceCommand, cascade, context: parsedCtx } = parse(baseArgs, baseSpacedArgs, $T));
+		} catch (originalError) {
+			try {
+				// Custom 'commands' with `,add*`. Try parsing `,addpoints abc def` as `,add points, abc, def`.
+				if (!argData.startsWith('add')) throw new ChatError($T('CMD_NOT_FOUND'));
+				const pointsType = baseSpacedArgs.shift()!.toLowerCase().replace(/^add/, '');
+				const newArgData = `add ${pointsType}, ${baseSpacedArgs.join('')}`;
+				const args = newArgData.split(/ +/);
+				const spacedArgs = newArgData.split(/( +)/);
+				({ command: commandObj, sourceCommand, cascade, context: parsedCtx } = parse(args, spacedArgs, $T));
+			} catch (err) {
+				if (err instanceof ChatError) throw originalError;
+				throw err;
+			}
+		}
+
 		const context = {
 			...parsedCtx,
 			...(indirect?.type === 'run'
-				? {
-						calledFrom: indirect.calledFrom.command,
-						calledFromMsg: indirect.calledFrom.message,
-						...indirect.ctx,
-					}
+				? { calledFrom: indirect.calledFrom.command, calledFromMsg: indirect.calledFrom.message, ...indirect.ctx }
 				: {}),
 		};
 

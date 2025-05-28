@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { PSMessageTranslated, TranslationFn } from '@/i18n/types';
+import type { PSMessageTranslated, TranslatedText, TranslationFn } from '@/i18n/types';
 import type { DiscInteraction } from '@/types/discord';
 import type { Perms } from '@/types/perms';
 import type { SlashCommandBuilder } from 'discord.js';
@@ -69,7 +69,7 @@ export type PSCommandContext = {
 	 * @param message The message to broadcast
 	 * @param perm The required permission to broadcast instead of privateReply. Defaults to 'voice'
 	 */
-	broadcast(message: string, perm?: Perms): void;
+	broadcast(message: TranslatedText, perm?: Perms): void;
 	/**
 	 * Conditionally broadcast HTML output based on the given permissions
 	 * @param html The HTML to broadcast

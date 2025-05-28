@@ -1,3 +1,4 @@
+import type { NoTranslate } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 
 export const command: PSCommand = {
@@ -6,6 +7,6 @@ export const command: PSCommand = {
 	syntax: 'CMD',
 	category: ['utility'],
 	async run({ broadcast }) {
-		broadcast('https://github.com/PartMan7/PartBotter');
+		broadcast('https://github.com/PartMan7/PartBotter' as NoTranslate);
 	},
 };

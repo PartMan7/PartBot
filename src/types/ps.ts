@@ -29,9 +29,10 @@ export type PSRoomConfig = {
 				singular: string;
 				plural: string;
 				symbol: string;
+				aliases?: string[];
 			}
 		>;
-		pointsPriority: string[];
+		priority: string[];
 		format: string;
 	} | null;
 	_assign?: {

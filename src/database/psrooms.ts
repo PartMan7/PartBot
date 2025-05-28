@@ -34,10 +34,11 @@ const schema = new mongoose.Schema<PSRoomConfig>({
 				singular: { type: String, required: true },
 				plural: { type: String, required: true },
 				symbol: { type: String, required: true },
+				aliases: [String],
 			},
 			required: true,
 		},
-		pointsPriority: {
+		priority: {
 			type: [String],
 			required: true,
 		},
