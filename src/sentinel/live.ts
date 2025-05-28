@@ -8,6 +8,7 @@ import { permissions } from '@/ps/handlers/commands/permissions';
 import { spoof } from '@/ps/handlers/commands/spoof';
 import { interfaceHandler } from '@/ps/handlers/interface';
 import { joinHandler, leaveHandler, nickHandler } from '@/ps/handlers/joins';
+import { notifyHandler } from '@/ps/handlers/notifications';
 import { pageHandler } from '@/ps/handlers/page';
 import { rawHandler } from '@/ps/handlers/raw';
 
@@ -37,6 +38,7 @@ export const LivePS = {
 	joinHandler,
 	leaveHandler,
 	nickHandler,
+	notifyHandler,
 	pageHandler,
 	rawHandler,
 };

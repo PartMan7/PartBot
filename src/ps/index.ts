@@ -21,6 +21,7 @@ PS.on('message', (...args) => LivePS.pageHandler.call(PS, ...args));
 PS.on('join', (...args) => LivePS.joinHandler.call(PS, ...args));
 PS.on('name', (...args) => LivePS.nickHandler.call(PS, ...args));
 PS.on('leave', (...args) => LivePS.leaveHandler.call(PS, ...args));
+PS.on('notify', (...args) => LivePS.notifyHandler.call(PS, ...args));
 PS.on('raw', (...args) => LivePS.rawHandler.call(PS, ...args));
 
 if (IS_ENABLED.PS) startPSCron.bind(PS);
