@@ -248,11 +248,12 @@ export class Scrabble extends Game<State> {
 			action: 'play',
 			time: new Date(),
 			turn,
-			ctx: { points, tiles, point: pos, dir, rack, newTiles, words: points.words },
+			ctx: { points, tiles, point: pos, dir, rack: rack.slice(), newTiles, words: points.words },
 		};
 		this.log.push(logEntry);
 		this.room.sendHTML(...renderMove(logEntry, this));
 		this.selected = null;
+		this.passCount = 0;
 
 		if (rack.length === 0) return this.end();
 		const next = this.nextPlayer();
@@ -289,7 +290,8 @@ export class Scrabble extends Game<State> {
 		rack.push(...newTiles);
 		if (newTiles.includes('_')) this.room.privateSend(turn, this.$T('GAME.SCRABBLE.HOW_TO_BLANK'));
 
-		const logEntry: Log = { action: 'exchange', time: new Date(), turn, ctx: { tiles: letters, newTiles, rack } };
+		this.passCount = 0;
+		const logEntry: Log = { action: 'exchange', time: new Date(), turn, ctx: { tiles: letters, newTiles, rack: rack.slice() } };
 		this.log.push(logEntry);
 		this.room.sendHTML(...renderMove(logEntry, this));
 
@@ -300,7 +302,7 @@ export class Scrabble extends Game<State> {
 		const turn = this.turn!;
 		this.passCount ??= 0;
 		this.passCount++;
-		const logEntry: Log = { action: 'pass', time: new Date(), turn, ctx: { rack: this.state.racks[turn] } };
+		const logEntry: Log = { action: 'pass', time: new Date(), turn, ctx: { rack: this.state.racks[turn].slice() } };
 		this.log.push(logEntry);
 		this.room.sendHTML(...renderMove(logEntry, this));
 		if (this.passCount > Object.keys(this.players).length) {
@@ -356,10 +358,9 @@ export class Scrabble extends Game<State> {
 			getPoints: tile => this.points[tile],
 			rack: side ? this.state.racks[side] : undefined,
 			players: Object.fromEntries(
-				Object.values(this.players).map(({ id, name, out }) => [
-					id,
-					{ id, name, score: this.state.score[id], rack: this.state.racks[id].length, out },
-				])
+				this.turns
+					.map(turn => this.players[turn])
+					.map(({ id, name, out }) => [id, { id, name, score: this.state.score[id], rack: this.state.racks[id].length, out }])
 			),
 			isActive,
 			side,
@@ -378,6 +379,10 @@ export class Scrabble extends Game<State> {
 			ctx.header = `Waiting for ${current.name}${this.sides ? ` (${this.turn})` : ''}...`;
 		}
 		return render.bind(this.renderCtx)(ctx);
+	}
+
+	getURL() {
+		return null;
 	}
 
 	async renderEmbed(): Promise<EmbedBuilder | null> {
