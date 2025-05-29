@@ -5,6 +5,14 @@ export type PSMessage = Message;
 
 export type AuthKey = Perms & string;
 
+export type PSPointsType = {
+	id: string;
+	singular: string;
+	plural: string;
+	symbol: string;
+	aliases?: string[];
+};
+
 export type PSRoomConfig = {
 	roomId: string;
 	roomName?: string;
@@ -22,16 +30,7 @@ export type PSRoomConfig = {
 		[key: string]: Perms;
 	} | null;
 	points?: {
-		types: Record<
-			string,
-			{
-				id: string;
-				singular: string;
-				plural: string;
-				symbol: string;
-				aliases?: string[];
-			}
-		>;
+		types: Record<string, PSPointsType>;
 		priority: string[];
 		format: string;
 	} | null;

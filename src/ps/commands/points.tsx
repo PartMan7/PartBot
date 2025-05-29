@@ -1,5 +1,5 @@
 import { PSRoomConfigs } from '@/cache';
-import { bulkAddPoints } from '@/database/points';
+import { type Model as PointsModel, bulkAddPoints, getPoints, getRank, queryPoints } from '@/database/points';
 import { IS_ENABLED } from '@/enabled';
 import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
@@ -7,8 +7,19 @@ import { pluralize } from '@/utils/pluralize';
 
 import type { ToTranslate, TranslatedText } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
+import type { PSPointsType, PSRoomConfig } from '@/types/ps';
 
 const NUM_PATTERN = /^-?\d+$/;
+
+function getPointsType(input: string, roomPoints: NonNullable<PSRoomConfig['points']>): PSPointsType | null {
+	const pointsId = toId(input);
+	return (
+		Object.values(roomPoints.types).find(
+			({ id, aliases, singular, plural, symbol }) =>
+				id === pointsId || aliases?.includes(pointsId) || toId(singular) === pointsId || toId(plural) === pointsId || symbol === input
+		) ?? null
+	);
+}
 
 export const command: PSCommand[] = [
 	{
@@ -17,7 +28,7 @@ export const command: PSCommand[] = [
 		syntax: 'CMD [points], [...users]',
 		flags: { roomOnly: true },
 		perms: Symbol.for('points.manage'),
-		aliases: ['addp', 'add'],
+		aliases: ['addp', 'add', 'removep', 'remove', 'removepoints'],
 		async run(ctx) {
 			const { message, arg, $T, originalCommand, broadcast } = ctx;
 			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
@@ -25,22 +36,16 @@ export const command: PSCommand[] = [
 			if (!roomConfig.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS', { room: message.target.title }));
 
 			const args = arg.split(',').map(term => term.trim());
-			const pointsTypeInput = originalCommand.join('.') === 'add' ? args.shift() : roomConfig.points.priority[0];
+			// If command is not explicitly 'add' or 'remove', use the first declared points type
+			const pointsTypeInput = ['add', 'remove'].includes(originalCommand.join('.')) ? args.shift() : roomConfig.points.priority[0];
 			if (!pointsTypeInput) throw new ChatError('Specify a points type!' as ToTranslate);
-			const pointsId = toId(pointsTypeInput);
-			const pointsType = Object.values(roomConfig.points.types).find(
-				({ id, aliases, singular, plural, symbol }) =>
-					id === pointsId ||
-					aliases?.includes(pointsId) ||
-					toId(singular) === pointsId ||
-					toId(plural) === pointsId ||
-					symbol === pointsTypeInput
-			);
+
+			const pointsType = getPointsType(pointsTypeInput, roomConfig.points);
 			if (!pointsType) throw new ChatError(`Couldn't find a points type matching ${pointsTypeInput}.` as ToTranslate);
 
 			const numVals = args.filter(arg => NUM_PATTERN.test(arg));
 			if (numVals.length !== 1) throw new ChatError(`How many points? ${numVals.join('/')}` as ToTranslate);
-			const pointsAmount = parseInt(numVals[0]);
+			const pointsAmount = (originalCommand.join('.').includes('remove') ? -1 : 1) * parseInt(numVals[0]);
 			if (Math.abs(pointsAmount) > 1e6) throw new ChatError($T('SCREW_YOU'));
 
 			const users = args.filter(arg => !NUM_PATTERN.test(arg));
@@ -57,6 +62,87 @@ export const command: PSCommand[] = [
 			broadcast(
 				`Added ${pluralize<TranslatedText>(pointsAmount, pointsType)} to ${res.map(entry => entry.name).list($T)}.` as ToTranslate
 			);
+		},
+	},
+	{
+		name: 'atm',
+		help: "Displays a user's current points.",
+		syntax: 'CMD [user?]',
+		aliases: ['points'],
+		async run({ message, $T, args, broadcast }) {
+			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
+			const room = message.parent.getRoom(message.type === 'chat' ? message.target.id : (args.shift() ?? ''));
+			if (!room) throw new ChatError($T('INVALID_ROOM_ID'));
+			const roomConfig = PSRoomConfigs[room.id];
+			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS'));
+			const target = args.join(' ').trim() || message.author.id;
+			const targetPoints = await getPoints(target, room.id);
+			if (!targetPoints) throw new ChatError($T('COMMANDS.POINTS.USER_NO_POINTS'));
+			const roomPoints = roomConfig.points;
+			return broadcast(
+				$T('COMMANDS.POINTS.USER_POINTS', {
+					user: targetPoints.name,
+					roomName: room.title,
+					pointsList: roomPoints.priority
+						.map(type => pluralize<TranslatedText>(targetPoints.points[type], roomPoints.types[type]))
+						.list($T),
+				})
+			);
+		},
+	},
+	{
+		name: 'rank',
+		help: "Displays a user's rank on the leaderboard.",
+		syntax: 'CMD [user?]',
+		async run({ message, $T, args, broadcast }) {
+			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
+			const room = message.parent.getRoom(message.type === 'chat' ? message.target.id : (args.shift() ?? ''));
+			if (!room) throw new ChatError($T('INVALID_ROOM_ID'));
+			const roomConfig = PSRoomConfigs[room.id];
+			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS'));
+			const roomPoints = roomConfig.points;
+			const target = args.join(' ').trim() || message.author.id;
+			const targetPoints = await getRank(target, room.id, roomPoints.priority);
+			if (!targetPoints) throw new ChatError($T('COMMANDS.POINTS.USER_NO_POINTS'));
+			return broadcast(
+				$T('COMMANDS.POINTS.USER_POINTS_RANKED', {
+					user: targetPoints.name,
+					rank: targetPoints.rank,
+					roomName: room.title,
+					pointsList: roomPoints.priority
+						.map(type => pluralize<TranslatedText>(targetPoints.points[type], roomPoints.types[type]))
+						.list($T),
+				})
+			);
+		},
+	},
+	{
+		name: 'leaderboard',
+		help: 'Shows the leaderboard!',
+		syntax: 'CMD [cap/priority]',
+		aliases: ['lb'],
+		async run({ message, $T, args, broadcastHTML }) {
+			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
+			// TODO: Maybe have some helper function to parse room name if not given
+			const room = message.parent.getRoom(message.type === 'chat' ? message.target.id : (args.shift() ?? ''));
+			if (!room) throw new ChatError($T('INVALID_ROOM_ID'));
+			const roomConfig = PSRoomConfigs[room.id];
+			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS'));
+			const roomPoints = roomConfig.points;
+
+			let queryData: PointsModel[] | undefined;
+			const arg = args.join('').trim();
+			if (NUM_PATTERN.test(arg)) queryData = await queryPoints(room.id, roomPoints.priority, +arg);
+			else if (arg) {
+				const sortBy = getPointsType(arg, roomPoints)?.id;
+				if (!sortBy) throw new ChatError($T('INVALID_ARGUMENTS'));
+				queryData = await queryPoints(room.id, [sortBy, ...roomPoints.priority.filter(type => type !== sortBy)]);
+			} else queryData = await queryPoints(room.id, roomPoints.priority);
+
+			if (!queryData) throw new Error(`Somehow I didn't manage to get any data! Send help please (${room.id}, ${args})`);
+
+			// TODO: Render board
+			broadcastHTML(<>{JSON.stringify(queryData, null, 2)}</>);
 		},
 	},
 ];

@@ -119,6 +119,9 @@ export default {
 
 		POINTS: {
 			ROOM_NO_POINTS: '{{room}} does not have points enabled.',
+			USER_NO_POINTS: '[[]]{{user}} has no points in the room.',
+			USER_POINTS: '[[]]{{user}} has {{pointsList}} in {{roomName}}.',
+			USER_POINTS_RANKED: '[[]]{{user}} is ranked #{{rank}} with {{pointsList}} in {{roomName}}.',
 		},
 
 		QUOTES: {

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { IS_ENABLED } from '@/enabled';
 import { toId } from '@/tools';
 
-type Model = { id: string; userId: string; name: string; roomId: string; points: Record<string, number> };
+export type Model = { id: string; userId: string; name: string; roomId: string; points: Record<string, number> };
 type MapModel = Omit<Model, 'points'> & { points: Map<string, number> };
 
 const schema = new mongoose.Schema<MapModel>({
@@ -86,7 +86,7 @@ export async function queryPoints(roomId: string, order: string[], cap = DEFAULT
 		.lean();
 }
 
-export async function getRank(user: string, roomId: string, order: string[]): Promise<number | null | undefined> {
+export async function getRank(user: string, roomId: string, order: string[]): Promise<(Model & { rank: number }) | null | undefined> {
 	if (!IS_ENABLED.DB) return;
 	const currentPoints = await getPoints(user, roomId);
 	if (!currentPoints) return null;
@@ -96,5 +96,5 @@ export async function getRank(user: string, roomId: string, order: string[]): Pr
 		.sort(order.map(pointType => [`points.${pointType}`, 'desc'] as [string, 'desc']))
 		.gt(`points.${order[0]}`, currentPoints.points[order[0]])
 		.lean();
-	return behindUsers.length + 1;
+	return { ...currentPoints, rank: behindUsers.length + 1 };
 }
