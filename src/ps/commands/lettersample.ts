@@ -15,12 +15,10 @@ export const command: PSCommand = {
 		const input = arg ? parsePoint(arg) : [5, 5];
 		if (!input) throw new ChatError($T('INVALID_ARGUMENTS'));
 		const [vowelCount, consonantCount] = input;
-		const vowels = Array.from({ length: vowelCount }, () => VOWELS.random())
-			.sort()
-			.list($T);
-		const consonants = Array.from({ length: consonantCount }, () => CONSONANTS.random())
-			.sort()
-			.list($T);
-		broadcast(`${vowels} ${consonants}` as NoTranslate);
+		const letters = [
+			...Array.from({ length: vowelCount }, () => VOWELS.random()),
+			...Array.from({ length: consonantCount }, () => CONSONANTS.random()),
+		];
+		broadcast(letters.sort().join('/') as NoTranslate);
 	},
 };
