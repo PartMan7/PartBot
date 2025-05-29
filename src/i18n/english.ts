@@ -26,6 +26,10 @@ export default {
 		DB: 'The database is currently disabled.',
 	},
 
+	MONS: {
+		NOT_FOUND: 'Pokémon {{name}} not found.',
+	},
+
 	GAME: {
 		ALREADY_JOINED: 'You have already joined this game.',
 		ALREADY_STARTED: 'The game has already started!',
