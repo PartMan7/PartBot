@@ -330,7 +330,9 @@ export class Game<State extends BaseState> {
 			if (!res.success) throw new ChatError(res.error);
 		}
 		const oldPlayer = this.players[turn];
-		this.players[turn] = { ...oldPlayer, ...assign };
+		delete this.players[oldPlayer.id];
+		const newTurn = this.meta.turns ? turn : withPlayer.id;
+		this.players[newTurn] = { ...oldPlayer, ...assign, turn: newTurn };
 		this.spectators.remove(oldPlayer.id);
 		this.backup();
 		return { success: true, data: this.$T('GAME.SUB', { in: withPlayer.name, out: oldPlayer.name }) };
