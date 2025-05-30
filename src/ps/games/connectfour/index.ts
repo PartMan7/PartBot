@@ -2,7 +2,7 @@ import { EmbedBuilder } from 'discord.js';
 
 import { WINNER_ICON } from '@/discord/constants/emotes';
 import { render } from '@/ps/games/connectfour/render';
-import { Game, createGrid } from '@/ps/games/game';
+import { BaseGame, createGrid } from '@/ps/games/game';
 import { repeat } from '@/utils/repeat';
 
 import type { TranslatedText } from '@/i18n/types';
@@ -15,7 +15,7 @@ import type { ReactElement } from 'react';
 
 export { meta } from '@/ps/games/connectfour/meta';
 
-export class ConnectFour extends Game<State> {
+export class ConnectFour extends BaseGame<State> {
 	log: Log[] = [];
 	winCtx?: WinCtx | { type: EndType };
 	cache: Record<string, Record<Turn, number>> = {};

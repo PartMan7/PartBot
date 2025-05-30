@@ -1,6 +1,6 @@
 import { type ReactElement } from 'react';
 
-import { Game, createGrid } from '@/ps/games/game';
+import { BaseGame, createGrid } from '@/ps/games/game';
 import { render, renderCloseSignups } from '@/ps/games/lightsout/render';
 import { deepClone } from '@/utils/deepClone';
 import { type Point, parsePoint, stepPoint } from '@/utils/grid';
@@ -13,7 +13,7 @@ import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/lightsout/meta';
 
-export class LightsOut extends Game<State> {
+export class LightsOut extends BaseGame<State> {
 	ended = false;
 	size: [number, number];
 	setBy: User | null = null;

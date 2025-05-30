@@ -1,7 +1,7 @@
 import { EmbedBuilder } from 'discord.js';
 
 import { WINNER_ICON } from '@/discord/constants/emotes';
-import { Game, createGrid } from '@/ps/games/game';
+import { BaseGame, createGrid } from '@/ps/games/game';
 import { render } from '@/ps/games/othello/render';
 import { deepClone } from '@/utils/deepClone';
 
@@ -14,7 +14,7 @@ import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/othello/meta';
 
-export class Othello extends Game<State> {
+export class Othello extends BaseGame<State> {
 	log: Log[] = [];
 	winCtx?: WinCtx | { type: EndType };
 	cache: Record<string, Record<Turn, number>> = {};

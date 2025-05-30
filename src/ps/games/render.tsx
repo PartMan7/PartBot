@@ -1,10 +1,10 @@
 import { Button } from '@/utils/components/ps';
 
 import type { BaseState } from '@/ps/games/common';
-import type { Game } from '@/ps/games/game';
+import type { BaseGame } from '@/ps/games/game';
 import type { CSSProperties, HTMLProps, ReactElement, ReactNode } from 'react';
 
-export function renderSignups<State extends BaseState>(this: Game<State>, staff: boolean): ReactElement | null {
+export function renderSignups<State extends BaseState>(this: BaseGame<State>, staff: boolean): ReactElement | null {
 	const startable = this.meta.autostart === false && this.startable();
 	if (staff && !startable) return null;
 	return (
@@ -36,7 +36,7 @@ export function renderSignups<State extends BaseState>(this: Game<State>, staff:
 	);
 }
 
-export function renderCloseSignups<State extends BaseState>(this: Game<State>): ReactElement {
+export function renderCloseSignups<State extends BaseState>(this: BaseGame<State>): ReactElement {
 	return (
 		<>
 			<hr />

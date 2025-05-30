@@ -1,6 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 
-import { Game, createGrid } from '@/ps/games/game';
+import { BaseGame, createGrid } from '@/ps/games/game';
 import { checkWord } from '@/ps/games/scrabble/checker';
 import {
 	BaseBoard,
@@ -29,7 +29,7 @@ function isLetter(char: string): boolean {
 	return /[A-Z]/.test(char);
 }
 
-export class Scrabble extends Game<State> {
+export class Scrabble extends BaseGame<State> {
 	points: Record<string, number> = LETTER_POINTS;
 	log: Log[] = [];
 	passCount: number | null = null;

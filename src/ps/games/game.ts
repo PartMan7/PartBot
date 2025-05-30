@@ -26,7 +26,7 @@ const backupKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'the
  * This is the shared code for all games. To check the game-specific code, refer to the
  * extended constructor in `$game/index.ts` and go through the `action` method.
  */
-export class Game<State extends BaseState> {
+export class BaseGame<State extends BaseState> {
 	meta: Meta;
 	id: string;
 	$T: TranslationFn;
@@ -121,9 +121,9 @@ export class Game<State extends BaseState> {
 	}
 	persist(ctx: BaseContext) {
 		if (!PSGames[this.meta.id]) PSGames[this.meta.id] = {};
-		PSGames[this.meta.id]![this.id] = this as BaseGame;
+		PSGames[this.meta.id]![this.id] = this as CommonGame;
 		if (ctx.backup) {
-			const parsedBackup: Pick<BaseGame, (typeof backupKeys)[number]> = JSON.parse(ctx.backup);
+			const parsedBackup: Pick<CommonGame, (typeof backupKeys)[number]> = JSON.parse(ctx.backup);
 			backupKeys.forEach(key => {
 				switch (key) {
 					case 'log':
@@ -486,4 +486,5 @@ export function createGrid<T>(x: number, y: number, fill: (x: number, y: number)
 	return Array.from({ length: x }).map((_, i) => Array.from({ length: y }).map((_, j) => fill(i, j)));
 }
 
-export type BaseGame = Game<BaseState>;
+/** Non-generic type representing only the things all games have in common */
+export type CommonGame = BaseGame<BaseState>;

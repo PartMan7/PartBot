@@ -2,7 +2,7 @@ import { Chess as ChessLib } from 'chess.js';
 import { EmbedBuilder } from 'discord.js';
 
 import { render } from '@/ps/games/chess/render';
-import { Game } from '@/ps/games/game';
+import { BaseGame } from '@/ps/games/game';
 import { pick } from '@/utils/pick';
 
 import type { TranslatedText } from '@/i18n/types';
@@ -19,7 +19,7 @@ function isValidSquare(input: string): input is Square {
 	return /^[a-h][1-9]$/.test(input);
 }
 
-export class Chess extends Game<State> {
+export class Chess extends BaseGame<State> {
 	selected: Square | null = null;
 	showMoves: Move[] = [];
 	drawOffered: null | string = null;

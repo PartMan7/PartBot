@@ -1,6 +1,6 @@
 import { type ReactElement } from 'react';
 
-import { Game } from '@/ps/games/game';
+import { BaseGame } from '@/ps/games/game';
 import { render, renderCloseSignups } from '@/ps/games/mastermind/render';
 import { sample } from '@/utils/random';
 
@@ -12,7 +12,7 @@ import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/mastermind/meta';
 
-export class Mastermind extends Game<State> {
+export class Mastermind extends BaseGame<State> {
 	ended = false;
 	setBy: User | null = null;
 

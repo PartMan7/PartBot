@@ -8,7 +8,7 @@ import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
 
 import type { NoTranslate, ToTranslate, TranslationFn } from '@/i18n/types';
-import type { BaseGame } from '@/ps/games/game';
+import type { CommonGame } from '@/ps/games/game';
 import type { PSCommand } from '@/types/chat';
 import type { Room } from 'ps-client';
 import type { HTMLopts } from 'ps-client/classes/common';
@@ -31,7 +31,7 @@ type RoomContext = { room: Room; $T: TranslationFn };
 export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]): PSCommand => {
 	const gameId = _gameId as keyof Games;
 
-	type GameFilter = (game: BaseGame) => boolean;
+	type GameFilter = (game: CommonGame) => boolean;
 
 	function getByContext(ctx: SearchContext): GameFilter {
 		return game => {
@@ -76,7 +76,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 		searchCtx: SearchContext,
 		roomCtx: RoomContext,
 		restCtx: string
-	): BaseGame | null {
+	): CommonGame | null {
 		if (!PSGames[gameId]) return null;
 		if (Game.meta.players === 'single') {
 			const inferredSpecifier = typeof specifier === 'string' ? `#${Game.meta.abbr}-${toId(specifier)}` : specifier;
@@ -125,7 +125,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 		return null;
 	}
 
-	function getGame(feed: string, searchCtx: SearchContext, roomCtx: RoomContext): { game: BaseGame; ctx: string } {
+	function getGame(feed: string, searchCtx: SearchContext, roomCtx: RoomContext): { game: CommonGame; ctx: string } {
 		const { $T } = roomCtx;
 		const [fullSpec, fullCtx] = feed.lazySplit(/\s*,\s*/, 1);
 		const fullGame = gameFromContext(fullSpec, searchCtx, roomCtx, fullCtx);
