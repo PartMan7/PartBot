@@ -10,6 +10,8 @@ import type { ToTranslate, TranslatedText } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { PSPointsType, PSRoomConfig } from '@/types/ps';
 import type { CSSProperties, ReactElement } from 'react';
+import { uploadToPastie } from 'ps-client/tools';
+import { log } from '@/utils/logger';
 
 const NUM_PATTERN = /^-?\d+$/;
 
@@ -243,6 +245,13 @@ export const command: PSCommand[] = [
 				.catch(() => {
 					throw new ChatError($T('NOT_CONFIRMED'));
 				});
+
+			const currentData = await queryPoints(message.target.id, roomPoints.priority, Infinity);
+			if (currentData?.length) {
+				const backupURL = await uploadToPastie(JSON.stringify(currentData, null, 2));
+				log(`Backup for ${message.target.id}, reset ${pointsToReset} by ${message.author.id}: ${backupURL}`);
+				message.target.send(`/modnote ${backupURL}`);
+			}
 
 			await resetPoints(message.target.id, typeof pointsToReset === 'boolean' ? pointsToReset : pointsToReset.id);
 			if (pointsToReset === true) return message.reply('Leaderboard has been reset!' as ToTranslate);
