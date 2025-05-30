@@ -77,6 +77,7 @@ export default {
 		NO_THEME_SUPPORT: '{{game}} does not support themes.',
 		INVALID_THEME: 'Invalid theme. Valid themes are: {{themes}}.',
 		SET_THEME: 'The theme has been set to {{theme}}.',
+		CANNOT_LEAVE: "You can't forfeit a game by closing it! Try ``{{prefix}}{{game}} forfeit`` instead.",
 		TIMER: {
 			PRIVATE: "Psst it's your turn to play in {{game}} [{{id}}]",
 			PUBLIC: "{{user}} hasn't played in {{game}} [{{id}}] for {{time}}...",

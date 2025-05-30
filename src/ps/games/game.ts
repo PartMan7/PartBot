@@ -444,7 +444,7 @@ export class BaseGame<State extends BaseState> {
 			});
 		}
 		// Upload to DB
-		if (IS_ENABLED.DB && this.meta.players !== 'single') {
+		if (IS_ENABLED.DB && this.started && this.meta.players !== 'single') {
 			const model: GameModel = {
 				id: this.id,
 				game: this.meta.id,

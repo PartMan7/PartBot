@@ -365,7 +365,6 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				help: 'Unwatches the given game.',
 				syntax: 'CMD [game ref]',
 				async run({ message, arg, $T }) {
-					// TODO: Hook closehtmlpage events to this
 					const { game } = getGame(arg, { action: 'unwatch', user: message.author.id }, { room: message.target, $T });
 					if (!game.spectators.includes(message.author.id)) throw new ChatError($T('GAME.NOT_WATCHING'));
 					game.spectators.remove(message.author.id);
