@@ -1,5 +1,5 @@
 import { PSRoomConfigs } from '@/cache';
-import { type Model as PointsModel, bulkAddPoints, getPoints, getRank, queryPoints } from '@/database/points';
+import { type Model as PointsModel, bulkAddPoints, getPoints, getRank, queryPoints, resetPoints } from '@/database/points';
 import { IS_ENABLED } from '@/enabled';
 import { LB_COMMON_STYLES as COMMON_STYLES, LB_STYLES } from '@/ps/other/leaderboardStyles';
 import { toId } from '@/tools';
@@ -53,7 +53,7 @@ function Board({
 						</tr>
 					</thead>
 					<tbody>
-						{data.map((row, rowIndex) => (
+						{(data.length > 0 ? data : [headers.map(() => '-')]).map((row, rowIndex) => (
 							<tr>
 								{row.map(cell => (
 									<td
@@ -82,6 +82,7 @@ export const command: PSCommand[] = [
 		flags: { roomOnly: true },
 		perms: Symbol.for('points.manage'),
 		aliases: ['addp', 'add', 'removep', 'remove', 'removepoints'],
+		category: ['points'],
 		async run(ctx) {
 			const { message, arg, $T, originalCommand, broadcast } = ctx;
 			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
@@ -122,12 +123,13 @@ export const command: PSCommand[] = [
 		help: "Displays a user's current points.",
 		syntax: 'CMD [user?]',
 		aliases: ['points'],
+		category: ['points'],
 		async run({ message, $T, args, broadcast }) {
 			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
 			const room = message.parent.getRoom(message.type === 'chat' ? message.target.id : (args.shift() ?? ''));
 			if (!room) throw new ChatError($T('INVALID_ROOM_ID'));
 			const roomConfig = PSRoomConfigs[room.id];
-			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS'));
+			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS', { room: room.title }));
 			const target = args.join(' ').trim() || message.author.id;
 			const targetPoints = await getPoints(target, room.id);
 			if (!targetPoints) throw new ChatError($T('COMMANDS.POINTS.USER_NO_POINTS'));
@@ -147,12 +149,13 @@ export const command: PSCommand[] = [
 		name: 'rank',
 		help: "Displays a user's rank on the leaderboard.",
 		syntax: 'CMD [user?]',
+		category: ['points'],
 		async run({ message, $T, args, broadcast }) {
 			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
 			const room = message.parent.getRoom(message.type === 'chat' ? message.target.id : (args.shift() ?? ''));
 			if (!room) throw new ChatError($T('INVALID_ROOM_ID'));
 			const roomConfig = PSRoomConfigs[room.id];
-			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS'));
+			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS', { room: room.title }));
 			const roomPoints = roomConfig.points;
 			const target = args.join(' ').trim() || message.author.id;
 			const targetPoints = await getRank(target, room.id, roomPoints.priority);
@@ -174,13 +177,14 @@ export const command: PSCommand[] = [
 		help: 'Shows the leaderboard!',
 		syntax: 'CMD [cap/priority]',
 		aliases: ['lb'],
+		category: ['points'],
 		async run({ message, $T, args, broadcastHTML }) {
 			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
 			// TODO: Maybe have some helper function to parse room name if not given
 			const room = message.parent.getRoom(message.type === 'chat' ? message.target.id : (args.shift() ?? ''));
 			if (!room) throw new ChatError($T('INVALID_ROOM_ID'));
 			const roomConfig = PSRoomConfigs[room.id];
-			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS'));
+			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS', { room: room.title }));
 			const roomPoints = roomConfig.points;
 
 			let queryData: PointsModel[] | undefined;
@@ -215,6 +219,35 @@ export const command: PSCommand[] = [
 
 			const roomStyles = LB_STYLES[roomConfig.points.format] ?? {};
 			broadcastHTML(<Board headers={headers} data={data} styles={roomStyles} />);
+		},
+	},
+	{
+		name: 'resetleaderboard',
+		help: 'Resets the leaderboard (either of a specific type, or all)',
+		syntax: 'CMD [pointsType?]',
+		perms: ['room', 'owner'],
+		flags: { roomOnly: true },
+		aliases: ['resetlb', 'leaderboardreset', 'lbreset', 'reset'],
+		category: ['points'],
+		async run({ message, $T, arg, run }) {
+			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
+			const roomConfig = PSRoomConfigs[message.target.id];
+			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS', { room: message.target.title }));
+			const roomPoints = roomConfig.points;
+			const pointsToReset = !arg || toId(arg) === 'all' ? true : getPointsType(arg, roomPoints);
+			if (!pointsToReset) throw new ChatError(`Couldn't find a points type matching ${arg}.` as ToTranslate);
+
+			message.privateReply($T('CONFIRM'));
+			await message.target
+				.waitFor(message => toId(message.content) === 'confirm')
+				.catch(() => {
+					throw new ChatError($T('NOT_CONFIRMED'));
+				});
+
+			await resetPoints(message.target.id, typeof pointsToReset === 'boolean' ? pointsToReset : pointsToReset.id);
+			if (pointsToReset === true) return message.reply('Leaderboard has been reset!' as ToTranslate);
+			message.reply(`Reset all users' ${pointsToReset.plural} to 0.` as ToTranslate);
+			run('leaderboard');
 		},
 	},
 ];

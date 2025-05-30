@@ -10,6 +10,7 @@ export default {
 	CANCELLED: 'This action was cancelled.',
 	CMD_NOT_FOUND: 'Command not found.',
 	CONFIRM: "Are you sure? Type 'confirm' to confirm.",
+	NOT_CONFIRMED: 'Did not receive confirmation in time.',
 	INVALID_ALIAS: 'Had an invalid alias for {{aliasFor}}.',
 	INVALID_ROOM_ID: 'Invalid room ID.',
 	NO_DMS_COMMAND: 'This command may not be run from private messages.',

@@ -98,3 +98,17 @@ export async function getRank(user: string, roomId: string, order: string[]): Pr
 		.lean();
 	return { ...currentPoints, rank: behindUsers.length + 1 };
 }
+
+export async function resetPoints(roomId: string, pointsType: string | true): Promise<void> {
+	if (!IS_ENABLED.DB) return;
+
+	if (pointsType === true) {
+		await model.deleteMany({ roomId });
+		return;
+	}
+
+	const users = await model.find({ roomId });
+	users.forEach(user => user.points.set(pointsType, 0));
+
+	await model.bulkSave(users);
+}
