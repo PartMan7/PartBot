@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-import { hotpatch } from '@/sentinel/hotpatch';
+import Sentinel from '@/sentinel';
 import { WebError } from '@/utils/webError';
 
 import type { RequestHandler } from 'express';
@@ -23,6 +23,6 @@ export const handler: RequestHandler = async (req, res) => {
 	// TODO: Maybe use crypto.timingSafeEqual? Honestly just looks way too cluttered
 	if (signature !== checksum) throw new WebError('Signature invalid.');
 
-	await hotpatch('code', Symbol.for('GitHub'));
+	await Sentinel.hotpatch('code', Symbol.for('GitHub'));
 	res.send('Code updated.');
 };

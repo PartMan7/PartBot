@@ -4,7 +4,7 @@ import { promises as fs } from 'fs';
 import { DiscCommands } from '@/cache';
 import { resetCache } from '@/cache/reset';
 import { clientId, token } from '@/config/discord';
-import { cachebuster } from '@/utils/cachebuster';
+import { cachebust } from '@/utils/cachebust';
 import { fsPath } from '@/utils/fsPath';
 import { log } from '@/utils/logger';
 
@@ -66,7 +66,7 @@ export async function loadCommands(): Promise<void> {
 
 export function unloadCommands(): void {
 	// Delete require cache for commands
-	Object.values(DiscCommands).forEach(({ path }) => cachebuster(path));
+	Object.values(DiscCommands).forEach(({ path }) => cachebust(path));
 	resetCache('DiscCommands');
 }
 

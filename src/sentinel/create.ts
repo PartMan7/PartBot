@@ -1,25 +1,12 @@
-import { watch } from 'chokidar';
-import EventEmitter from 'events';
+import { type FSWatcher, watch } from 'chokidar';
 
 import { registers } from '@/sentinel/registers';
 import { debounce } from '@/utils/debounce';
 import { fsPath } from '@/utils/fsPath';
 
-import type { EmitterEvents, Listener, Register } from '@/sentinel/types';
-import type { FSWatcher } from 'chokidar';
+import type { Emitter, Listener, Register } from '@/sentinel/types';
 
-class Emitter extends EventEmitter {
-	emit<K extends keyof EmitterEvents>(event: K, ...args: EmitterEvents[K]): boolean {
-		return super.emit(event, ...args);
-	}
-	on<K extends keyof EmitterEvents>(event: K, listener: (...args: EmitterEvents[K]) => void): this {
-		return super.on(event, listener);
-	}
-}
-
-export default function createSentinel(): { emitter: Emitter; sentinel: FSWatcher } {
-	const emitter = new Emitter();
-
+export function create(emitter: Emitter): FSWatcher {
 	const listeners: Listener[] = registers.list
 		.map(
 			// Add debouncing
@@ -52,5 +39,5 @@ export default function createSentinel(): { emitter: Emitter; sentinel: FSWatche
 	sentinel.on('all', async (event, filepath) => {
 		listeners.find(({ pattern }) => pattern.test(filepath))?.reload(filepath);
 	});
-	return { emitter, sentinel };
+	return sentinel;
 }

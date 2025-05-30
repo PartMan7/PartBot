@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import { Games } from '@/ps/games';
 import { reloadCommands } from '@/ps/loaders/commands';
 import { LivePS } from '@/sentinel/live';
-import { cachebuster } from '@/utils/cachebuster';
+import { cachebust } from '@/utils/cachebust';
 import { fsPath } from '@/utils/fsPath';
 
 import type { GamesList, Meta } from '@/ps/games/common';
@@ -23,7 +23,7 @@ export const PS_REGISTERS: Register[] = [
 		label: 'commands',
 		pattern: /\/ps\/commands\//,
 		reload: async filepaths => {
-			filepaths.forEach(cachebuster);
+			filepaths.forEach(cachebust);
 			return reloadCommands();
 		},
 	},
@@ -32,7 +32,7 @@ export const PS_REGISTERS: Register[] = [
 		label: 'games',
 		pattern: /\/ps\/games\//,
 		reload: async () => {
-			['common', 'game', 'index', 'render'].forEach(file => cachebuster(`@/ps/games/${file}`));
+			['common', 'game', 'index', 'render'].forEach(file => cachebust(`@/ps/games/${file}`));
 			const games = await fs.readdir(fsPath('ps', 'games'), { withFileTypes: true });
 			await Promise.all(
 				games
@@ -40,7 +40,7 @@ export const PS_REGISTERS: Register[] = [
 					.map(async game => {
 						const gameDir = game.name as GamesList;
 						const files = await fs.readdir(fsPath('ps', 'games', gameDir));
-						files.forEach(file => cachebuster(fsPath('ps', 'games', gameDir, file)));
+						files.forEach(file => cachebust(fsPath('ps', 'games', gameDir, file)));
 
 						const gameImport = await import(`@/ps/games/${gameDir}`);
 						const { meta }: { meta: Meta } = gameImport;
@@ -51,7 +51,7 @@ export const PS_REGISTERS: Register[] = [
 			);
 
 			const gameCommands = await fs.readdir(fsPath('ps', 'commands', 'games'));
-			gameCommands.forEach(commandFile => cachebuster(fsPath('ps', 'commands', 'games', commandFile)));
+			gameCommands.forEach(commandFile => cachebust(fsPath('ps', 'commands', 'games', commandFile)));
 			await reloadCommands();
 		},
 	},
@@ -63,17 +63,17 @@ export const PS_REGISTERS: Register[] = [
 			await Promise.all(
 				(<const>['parse', 'permissions', 'spoof']).map(async file => {
 					const importPath = `@/ps/handlers/commands/${file}`;
-					cachebuster(importPath);
+					cachebust(importPath);
 					const hotHandler = await import(importPath);
 					LivePS.commands[file] = hotHandler[file];
 				})
 			);
 
-			cachebuster('@/ps/handlers/commands/customPerms');
+			cachebust('@/ps/handlers/commands/customPerms');
 			const { GROUPED_PERMS: newGroupedPerms } = await import('@/ps/handlers/commands/customPerms');
 			LivePS.commands.GROUPED_PERMS = newGroupedPerms;
 
-			cachebuster('@/ps/handlers/commands');
+			cachebust('@/ps/handlers/commands');
 			const { commandHandler } = await import('@/ps/handlers/commands');
 			LivePS.commands.commandHandler = commandHandler;
 		},
@@ -84,7 +84,7 @@ export const PS_REGISTERS: Register[] = [
 		label,
 		pattern: new RegExp(`\\/ps\\/handlers\\/${handlerData.fileName}`),
 		reload: async () => {
-			cachebuster(handlerData.importPath);
+			cachebust(handlerData.importPath);
 			const hotHandler = await import(handlerData.importPath);
 			handlerData.imports.forEach(namedImport => (LivePS[namedImport] = hotHandler[namedImport]));
 		},

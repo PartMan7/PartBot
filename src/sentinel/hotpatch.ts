@@ -1,15 +1,18 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { update } from 'ps-client/tools';
+import { update as updatePSData } from 'ps-client/tools';
 
 import { registers } from '@/sentinel/registers';
+import { cachebust, cachebustDir } from '@/utils/cachebust';
 import { $ } from '@/utils/child_process';
 import { fsPath } from '@/utils/fsPath';
 import { errorLog, log } from '@/utils/logger';
 
+import type { Sentinel } from '@/sentinel/types';
+
 export type HotpatchType = 'code' | 'data' | string;
 
-export async function hotpatch(hotpatchType: HotpatchType, by: string | symbol): Promise<void> {
+export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: string | symbol): Promise<void> {
 	if (!hotpatchType) throw new TypeError('Missing hotpatchType');
 	try {
 		// Hardcoded variants
@@ -19,8 +22,16 @@ export async function hotpatch(hotpatchType: HotpatchType, by: string | symbol):
 				break;
 			}
 			case 'data': {
-				await update();
+				await updatePSData();
 				// TODO: cachebust
+				break;
+			}
+			case 'sentinel': {
+				cachebust('@/sentinel/create');
+				await cachebustDir(fsPath('sentinel', 'registers'));
+				const newSentinel = await import('@/sentinel/create');
+				this.sentinel.close();
+				this.sentinel = newSentinel.create(this.emitter);
 				break;
 			}
 			default:

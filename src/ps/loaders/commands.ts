@@ -4,7 +4,7 @@ import path from 'path';
 import { PSAliases, PSCommands } from '@/cache';
 import { resetCache } from '@/cache/reset';
 import getSecretCommands from '@/secrets/ps';
-import { cachebuster } from '@/utils/cachebuster';
+import { cachebust } from '@/utils/cachebust';
 import { fsPath } from '@/utils/fsPath';
 
 import type { PSCommand } from '@/types/chat';
@@ -67,7 +67,7 @@ export async function loadCommands(): Promise<void> {
 
 export function unloadCommands(): void {
 	// Delete cached commands
-	Object.values(PSCommands).forEach(({ path }) => cachebuster(path));
+	Object.values(PSCommands).forEach(({ path }) => cachebust(path));
 	// Delete command data and aliases
 	resetCache('PSCommands', 'PSAliases');
 }
