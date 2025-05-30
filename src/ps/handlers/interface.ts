@@ -10,7 +10,7 @@ export function interfaceHandler(message: PSMessage) {
 	if (message.author.userid === message.parent.status.userid) return;
 	if (message.type === 'pm') {
 		// Ignore page requests; the PS interface for this is horrible
-		if (message.content.startsWith('|requestpage|')) return;
+		if (message.content.startsWith('|requestpage|') || message.content.startsWith('|closepage|')) return;
 
 		/* Challenges and battle-related handlers */
 
