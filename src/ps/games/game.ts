@@ -208,6 +208,7 @@ export class BaseGame<State extends BaseState> {
 		return JSON.stringify(sparseGame);
 	}
 	backup(): void {
+		if (this.meta.players === 'single') return; // Don't back up single-player games
 		const backup = this.serialize();
 		gameCache.set({ id: this.id, room: this.roomid, game: this.meta.id, backup });
 	}

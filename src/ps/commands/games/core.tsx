@@ -442,44 +442,48 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 					message.reply($T('GAME.STASHED', { id: game.id }));
 				},
 			},
-			backups: {
-				name: 'backups',
-				aliases: ['bu', 'b'],
-				help: 'Shows a list of currently available backups.',
-				perms: Symbol.for('games.manage'),
-				syntax: 'CMD',
-				async run({ message }) {
-					const HTML = renderBackups(message.target, Game.meta);
-					message.sendHTML(HTML, { name: `${gameId}-backups` });
-				},
-			},
-			restore: {
-				name: 'restore',
-				aliases: ['r', 'unstash', 'unyeet'],
-				help: 'Restores a game from stash/backups.',
-				perms: Symbol.for('games.manage'),
-				syntax: 'CMD [id]',
-				async run({ message, arg, $T }) {
-					const id = arg.trim().toUpperCase();
-					if (!/^#\w+$/.test(id)) throw new ChatError($T('GAME.INVALID_INPUT'));
-					if (PSGames[gameId]?.[id]) throw new ChatError($T('GAME.IN_PROGRESS'));
-					const lookup = gameCache.get(id);
-					if (lookup.room !== message.target.roomid) throw new ChatError($T('WRONG_ROOM'));
-					if (lookup.game !== gameId) throw new ChatError($T('GAME.RESTORING_WRONG_TYPE'));
-					const game = new Game.instance({
-						id: lookup.id,
-						meta: Game.meta,
-						room: message.target,
-						$T,
-						by: message.author,
-						backup: lookup.backup,
-						args: [],
-					});
-					message.reply($T('GAME.RESTORED', { id: game.id }));
-					if (game.started) game.update();
-					else game.signups();
-				},
-			},
+			...(Game.meta.players === 'many'
+				? {
+						backups: {
+							name: 'backups',
+							aliases: ['bu', 'b'],
+							help: 'Shows a list of currently available backups.',
+							perms: Symbol.for('games.manage'),
+							syntax: 'CMD',
+							async run({ message }) {
+								const HTML = renderBackups(message.target, Game.meta);
+								message.sendHTML(HTML, { name: `${gameId}-backups` });
+							},
+						},
+						restore: {
+							name: 'restore',
+							aliases: ['r', 'unstash', 'unyeet'],
+							help: 'Restores a game from stash/backups.',
+							perms: Symbol.for('games.manage'),
+							syntax: 'CMD [id]',
+							async run({ message, arg, $T }) {
+								const id = arg.trim().toUpperCase();
+								if (!/^#\w+$/.test(id)) throw new ChatError($T('GAME.INVALID_INPUT'));
+								if (PSGames[gameId]?.[id]) throw new ChatError($T('GAME.IN_PROGRESS'));
+								const lookup = gameCache.get(id);
+								if (lookup.room !== message.target.roomid) throw new ChatError($T('WRONG_ROOM'));
+								if (lookup.game !== gameId) throw new ChatError($T('GAME.RESTORING_WRONG_TYPE'));
+								const game = new Game.instance({
+									id: lookup.id,
+									meta: Game.meta,
+									room: message.target,
+									$T,
+									by: message.author,
+									backup: lookup.backup,
+									args: [],
+								});
+								message.reply($T('GAME.RESTORED', { id: game.id }));
+								if (game.started) game.update();
+								else game.signups();
+							},
+						},
+					}
+				: {}),
 		},
 	};
 });
