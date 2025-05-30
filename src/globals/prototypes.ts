@@ -9,7 +9,7 @@ declare global {
 		access<V = ArrayAtom<T>>(pos: number[]): V;
 		count(): Record<T & (string | number), number>;
 		count(map: true): Map<T, number>;
-		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
+		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X[];
 		list($T?: TranslationFn | string): string;
 		random(rng?: RNGSource): T;
 		remove(...toRemove: T[]): T[];
@@ -24,7 +24,7 @@ declare global {
 		access<V = ArrayAtom<T>>(pos: number[]): V;
 		count(): Record<T & (string | number), number>;
 		count(map: true): Map<T, number>;
-		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X | undefined;
+		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X[];
 		list($T?: TranslationFn): string;
 		random(rng?: RNGSource): T;
 		sample(amount: number, rng?: RNGSource): T[];
@@ -80,15 +80,14 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function <X, T = unknown>(
-			this: T[],
-			callback: (element: T, index: number, thisArray: T[]) => X | undefined
-		): X | undefined {
+		value: function <X, T = unknown>(this: T[], callback: (element: T, index: number, thisArray: T[]) => X | undefined): X[] {
+			const results: X[] = [];
 			for (let i = 0; i < this.length; i++) {
 				const result = callback(this[i], i, this);
 				if (result === undefined) continue;
-				return result;
+				results.push(result);
 			}
+			return results;
 		},
 	},
 	list: {
