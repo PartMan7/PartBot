@@ -15,7 +15,8 @@ const PS_EVENT_HANDLERS = {
 	'joins-handler': { imports: ['joinHandler', 'leaveHandler', 'nickHandler'], importPath: '@/ps/handlers/joins', fileName: 'joins' },
 	'page-handler': { imports: ['pageHandler'], importPath: '@/ps/handlers/page', fileName: 'page' },
 	'raw-handler': { imports: ['rawHandler'], importPath: '@/ps/handlers/raw', fileName: 'raw' },
-} satisfies Record<string, { imports: (keyof typeof LivePS)[]; importPath: string; fileName: string }>;
+	'notify-handler': { imports: ['notifyHandler'], importPath: '@/ps/handlers/notifications', fileName: 'notifications' },
+} satisfies Record<string, { imports: (keyof typeof LivePS)[]; importPath: string; fileName: string /* TODO: remove fileName */ }>;
 
 export const PS_REGISTERS: Register[] = [
 	{
