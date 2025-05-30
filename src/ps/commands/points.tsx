@@ -1,6 +1,7 @@
 import { PSRoomConfigs } from '@/cache';
 import { type Model as PointsModel, bulkAddPoints, getPoints, getRank, queryPoints } from '@/database/points';
 import { IS_ENABLED } from '@/enabled';
+import { LB_COMMON_STYLES as COMMON_STYLES, LB_STYLES } from '@/ps/other/leaderboardStyles';
 import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
 import { pluralize } from '@/utils/pluralize';
@@ -8,6 +9,7 @@ import { pluralize } from '@/utils/pluralize';
 import type { ToTranslate, TranslatedText } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { PSPointsType, PSRoomConfig } from '@/types/ps';
+import type { CSSProperties, ReactElement } from 'react';
 
 const NUM_PATTERN = /^-?\d+$/;
 
@@ -18,6 +20,57 @@ function getPointsType(input: string, roomPoints: NonNullable<PSRoomConfig['poin
 			({ id, aliases, singular, plural, symbol }) =>
 				id === pointsId || aliases?.includes(pointsId) || toId(singular) === pointsId || toId(plural) === pointsId || symbol === input
 		) ?? null
+	);
+}
+
+function Board({
+	headers,
+	data,
+	styles,
+}: {
+	headers: string[];
+	data: (string | number)[][];
+	styles: { header?: CSSProperties; odd?: CSSProperties; even?: CSSProperties };
+}): ReactElement {
+	return (
+		<div style={{ maxHeight: 320, overflowY: 'scroll' }}>
+			<center>
+				<table style={{ borderCollapse: 'collapse', borderSpacing: 0, borderColor: '#aaa' }}>
+					<colgroup>
+						{/* widths: 40, 160, 150/remaining */}
+						{headers.map((_title, index) => {
+							// TODO: This can almost certainly be better. Probably revisit when we have flex.
+							if (index === 0) return <col width={40} />;
+							if (index === 1) return <col width={160} />;
+							return <col width={150 / (headers.length - 2)} />;
+						})}
+					</colgroup>
+					<thead>
+						<tr>
+							{headers.map(title => (
+								<th style={{ ...COMMON_STYLES.header, ...styles.header }}>{title}</th>
+							))}
+						</tr>
+					</thead>
+					<tbody>
+						{data.map((row, rowIndex) => (
+							<tr>
+								{row.map(cell => (
+									<td
+										style={{
+											...COMMON_STYLES.row,
+											...(rowIndex % 2 === 1 ? { ...COMMON_STYLES.odd, ...styles.odd } : { ...COMMON_STYLES.even, ...styles.even }),
+										}}
+									>
+										{cell}
+									</td>
+								))}
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</center>
+		</div>
 	);
 }
 
@@ -132,17 +185,36 @@ export const command: PSCommand[] = [
 
 			let queryData: PointsModel[] | undefined;
 			const arg = args.join('').trim();
+
+			let pointsList = roomPoints.priority;
 			if (NUM_PATTERN.test(arg)) queryData = await queryPoints(room.id, roomPoints.priority, +arg);
 			else if (arg) {
 				const sortBy = getPointsType(arg, roomPoints)?.id;
 				if (!sortBy) throw new ChatError($T('INVALID_ARGUMENTS'));
-				queryData = await queryPoints(room.id, [sortBy, ...roomPoints.priority.filter(type => type !== sortBy)]);
+				pointsList = [sortBy, ...roomPoints.priority.filter(type => type !== sortBy)];
+				queryData = await queryPoints(room.id, pointsList);
 			} else queryData = await queryPoints(room.id, roomPoints.priority);
 
 			if (!queryData) throw new Error(`Somehow I didn't manage to get any data! Send help please (${room.id}, ${args})`);
 
-			// TODO: Render board
-			broadcastHTML(<>{JSON.stringify(queryData, null, 2)}</>);
+			const headers = ['#', $T('COMMANDS.POINTS.HEADERS.USER'), ...pointsList.map(pointsType => roomPoints.types[pointsType].symbol)];
+			const data = queryData.map((user, index, data) => {
+				let rank = index;
+
+				const getPointsKey = (points: PointsModel['points']): string => pointsList.map(pointsType => points[pointsType]).join(',');
+				const userPointsKey = getPointsKey(user.points);
+
+				while (rank > 0) {
+					const prev = data[rank - 1];
+					if (getPointsKey(prev.points) !== userPointsKey) break;
+					rank--;
+				}
+
+				return [rank + 1, user.name, ...pointsList.map(pointsType => user.points[pointsType])];
+			});
+
+			const roomStyles = LB_STYLES[roomConfig.points.format] ?? {};
+			broadcastHTML(<Board headers={headers} data={data} styles={roomStyles} />);
 		},
 	},
 ];

@@ -6,7 +6,7 @@ import * as _cache from '@/cache';
 import _Sentinel from '@/sentinel';
 import * as _Tools from '@/tools';
 import { ansiToHtml } from '@/utils/ansiToHtml';
-import { cachebust as _cachebuster } from '@/utils/cachebust';
+import { cachebust as _cachebust } from '@/utils/cachebust';
 import { $ as _$ } from '@/utils/child_process';
 import { fsPath as _fsPath } from '@/utils/fsPath';
 import { log as _log } from '@/utils/logger';
@@ -16,7 +16,7 @@ import type { PSMessage } from '@/types/ps';
 
 // Exporting into side variables for eval lookup; this gets garbage-collected otherwise
 const cache = _cache;
-const cachebuster = _cachebuster;
+const cachebust = _cachebust;
 const fs = _fs;
 const fsSync = _fsSync;
 const fsPath = _fsPath;
@@ -27,7 +27,7 @@ const $ = _$;
 const Sentinel = _Sentinel;
 
 // Storing in context for eval()
-const _evalContext = [cache, cachebuster, fs, fsSync, fsPath, log, path, Tools, $, Sentinel];
+const _evalContext = [cache, cachebust, fs, fsSync, fsPath, log, path, Tools, $, Sentinel];
 
 export type EvalModes = 'COLOR_OUTPUT' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
 export type EvalOutput = {

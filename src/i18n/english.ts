@@ -127,6 +127,9 @@ export default {
 			USER_NO_POINTS: '[[]]{{user}} has no points in the room.',
 			USER_POINTS: '[[]]{{user}} has {{pointsList}} in {{roomName}}.',
 			USER_POINTS_RANKED: '[[]]{{user}} is ranked #{{rank}} with {{pointsList}} in {{roomName}}.',
+			HEADERS: {
+				USER: 'User',
+			},
 		},
 
 		QUOTES: {
