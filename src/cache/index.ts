@@ -14,12 +14,13 @@ export const Timers: { [key: string]: Timer } = {};
 export const PSRoomConfigs: { [key: string]: PSRoomConfig } = {};
 export const PSCommands: { [key: string]: PSCommand & { path: string } } = {};
 export const PSAliases: { [key: string]: string } = {};
-export const PSNoPrefixHelp: { [key: string]: Date } = {};
 export const PSAltCache: { [key: string]: { from: string; to: string; at: Date } } = {};
 export const PSSeenCache: { [key: string]: { id: string; name: string; at: Date; seenIn: string[] } } = {};
-
-export const PSQuoteRoomPrefs: { [key: string]: { room: string; at: Date } } = {};
 export const PSCronJobs: { manager: PSCronJobManager | null } = { manager: null };
+
+export const PSNoPrefixHelp: { [key: string]: Date } = {};
+export const PSQuoteRoomPrefs: { [key: string]: { room: string; at: Date } } = {};
+export const PSKuncInProgress: { [key: string]: boolean } = {};
 
 // Games
 export const PSGames: { [key in keyof Games]?: Record<string, CommonGame> } = {};

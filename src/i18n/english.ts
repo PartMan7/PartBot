@@ -3,6 +3,7 @@
 export default {
 	GRAMMAR: {
 		AND: 'and',
+		OR: 'or',
 	},
 
 	ACCESS_DENIED: 'Access denied.',

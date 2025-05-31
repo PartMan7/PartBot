@@ -152,7 +152,7 @@ export type PSCommand = {
 	 * Function that executes when the command is run.
 	 * @param context Relevant context for the command
 	 */
-	run(context: PSCommandContext): Promise<any>;
+	run(context: PSCommandContext): Promise<unknown>;
 };
 
 // Will need to update this to work with slash commands

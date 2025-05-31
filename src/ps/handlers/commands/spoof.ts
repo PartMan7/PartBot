@@ -1,4 +1,4 @@
-import { Message, type Room } from 'ps-client';
+import { type Client, Message, type Room } from 'ps-client';
 
 import { PSGames } from '@/cache';
 import { prefix } from '@/config/ps';
@@ -40,3 +40,26 @@ export function spoof(argData: string, message: PSMessage, $T: TranslationFn): P
 		parent: message.parent,
 	});
 }
+
+// TODO
+export const getSpoofMessage = (text: string, room: string, PS: Client, partial?: Partial<PSMessage>): PSMessage => {
+	const time = new Date();
+
+	const message = new Message({
+		by: '#Spoof',
+		text,
+		time: time.getTime(),
+		type: 'chat',
+		target: room,
+		raw: `|c:|${Math.round(time.getTime() / 1000)}|#Spoof|${text}`,
+		parent: PS,
+		isIntro: false,
+	});
+
+	if (!partial) return message;
+
+	Object.entries(partial).forEach(<Key extends keyof PSMessage & string>([key, value]: [key: string, value: PSMessage[Key]]) => {
+		message[key as Key] = value;
+	});
+	return message;
+};

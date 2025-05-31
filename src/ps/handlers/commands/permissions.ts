@@ -24,7 +24,7 @@ function getConfigRank(message: PSMessage): AuthKey | null {
 	return null;
 }
 
-function baseCheckPermissions(perm: Exclude<Perms, symbol>, message: PSMessage): boolean {
+function baseCheckPermissions(perm: Exclude<Perms, symbol>, command: string[] | null, message: PSMessage): boolean {
 	// Admin overrides
 	const isAdmin = admins.includes(message.author.userid);
 	if (isAdmin) return true;
@@ -51,7 +51,7 @@ function baseCheckPermissions(perm: Exclude<Perms, symbol>, message: PSMessage):
 			else return Math.max(roomIndex, RANK_ORDER.indexOf(getRank(globalRank))) >= permIndex;
 		}
 		case 'function': {
-			return perm(message);
+			return perm(message, staticPerm => permissions(staticPerm, command, message));
 		}
 		default:
 			return false;
@@ -59,7 +59,7 @@ function baseCheckPermissions(perm: Exclude<Perms, symbol>, message: PSMessage):
 }
 
 export function permissions(perm: Perms, command: string[] | null, message: PSMessage): boolean {
-	if (perm === 'admin') return baseCheckPermissions(perm, message); // Don't allow overriding admin perms in any way or form
+	if (perm === 'admin') return baseCheckPermissions(perm, command, message); // Don't allow overriding admin perms in any way or form
 	const lookup = command?.join('.') ?? null;
 	const roomConfig = message.type === 'chat' ? PSRoomConfigs[message.target.id] : null;
 	if (lookup) {
@@ -70,8 +70,8 @@ export function permissions(perm: Perms, command: string[] | null, message: PSMe
 		if (perm in groupedPerms) {
 			const symbolName = Symbol.keyFor(perm)!;
 			if (roomConfig?.permissions?.[symbolName]) return permissions(roomConfig.permissions[symbolName], null, message);
-			return baseCheckPermissions(groupedPerms[perm], message);
+			return baseCheckPermissions(groupedPerms[perm], command, message);
 		}
 		return false;
-	} else return baseCheckPermissions(perm, message);
+	} else return baseCheckPermissions(perm, command, message);
 }

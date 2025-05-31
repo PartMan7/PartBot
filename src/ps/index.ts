@@ -24,6 +24,6 @@ PS.on('leave', (...args) => LivePS.leaveHandler.call(PS, ...args));
 PS.on('notify', (...args) => LivePS.notifyHandler.call(PS, ...args));
 PS.on('raw', (...args) => LivePS.rawHandler.call(PS, ...args));
 
-if (IS_ENABLED.PS) startPSCron.bind(PS);
+if (IS_ENABLED.PS) startPSCron.bind(PS)();
 
 export default PS;

@@ -23,7 +23,7 @@ type IndirectCtx =
 			message: PSMessage;
 	  };
 
-export async function commandHandler(message: PSMessage, indirect: IndirectCtx | null = null): Promise<void> {
+export async function commandHandler(message: PSMessage, indirect: IndirectCtx | null = null): Promise<unknown> {
 	if (message.isIntro || !message.author?.userid || !message.target) return;
 	if (message.author.userid === message.parent.status.userid) return; // Botception!
 
@@ -107,11 +107,12 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 			return commandHandler(message, { type: 'run', command: `${prefix}${command}`, bypassPerms: true, calledFrom, ctx });
 		};
 
-		await commandObj.run({ ...context, message });
+		return commandObj.run({ ...context, message });
 	} catch (_err) {
 		const err = _err as Error;
 		message.privateReply(err.message as string);
 
 		if (err.name !== 'ChatError') log(err);
+		return null;
 	}
 }

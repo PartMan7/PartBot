@@ -9,6 +9,7 @@
 		"module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
 		"esModuleInterop": true, // Allow default-importing stuff like path
 		"resolveJsonModule": true, // Allow importing JSON files
+		"exactOptionalPropertyTypes": true, // Stricter checks!
 		"strict": true,
 		"paths": {
 			"@/secrets/*": ["./secrets/src/*"],

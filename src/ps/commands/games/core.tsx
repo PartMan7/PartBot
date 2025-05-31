@@ -137,7 +137,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 
 	return {
 		name: gameId,
-		aliases: Game.meta?.aliases,
+		...(Game.meta.aliases ? { aliases: Game.meta?.aliases } : {}),
 		flags: {
 			routePMs: true,
 		},

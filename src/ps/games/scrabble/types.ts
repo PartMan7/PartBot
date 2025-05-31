@@ -35,10 +35,10 @@ export type RenderCtx = {
 	board: Board;
 	header?: string;
 	dimHeader?: boolean;
-	players: Record<string, { score: number; name: string; rack: number; out?: boolean }>;
+	players: Record<string, { score: number; name: string; rack: number; out?: boolean | undefined }>;
 	getPoints: (tile: string) => number;
 	bag: number;
-	rack?: string[];
+	rack: string[] | undefined;
 	isActive: boolean;
 	side: string | null;
 	turn: string;

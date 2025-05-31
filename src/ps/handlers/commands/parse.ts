@@ -38,12 +38,6 @@ export function parse(
 		command: command.slice(),
 		args: [],
 		arg: '',
-		message: undefined,
-		checkPermissions: undefined,
-		run: undefined,
-		unsafeRun: undefined,
-		broadcast: undefined,
-		broadcastHTML: undefined,
 	};
 	const sourceCommand = PSCommands[command.shift()!];
 	let commandObj: PSCommand = sourceCommand;

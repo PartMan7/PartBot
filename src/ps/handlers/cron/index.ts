@@ -1,15 +1,10 @@
 import { CronJob } from 'cron';
 
 import { PSCronJobs } from '@/cache';
+import { register } from '@/ps/handlers/cron/hindi';
 
+import type { TimeZone } from '@/ps/handlers/cron/constants';
 import type { Client } from 'ps-client';
-
-// Timezones
-/** @see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones */
-enum TimeZone {
-	IST = 'Asia/Kolkata',
-	GMT = 'Etc/GMT',
-}
 
 export class PSCronJobManager {
 	readonly #jobs: Record<string, CronJob> = {};
@@ -26,15 +21,7 @@ export class PSCronJobManager {
 
 export function startPSCron(this: Client): PSCronJobManager {
 	const Jobs = new PSCronJobManager();
-
-	Jobs.register('hindi-automodchat-enable', '0 0 * * *', TimeZone.IST, () => {
-		this.rooms.get('hindi')?.send('/automodchat 10, +');
-	});
-	Jobs.register('hindi-automodchat-disable', '0 7 * * *', TimeZone.IST, () => {
-		const room = this.rooms.get('hindi');
-		room?.send('/modchat ac');
-		room?.send('/automodchat off');
-	});
+	register.call(this, Jobs);
 
 	// Kill existing cron jobs
 	PSCronJobs.manager?.kill();
