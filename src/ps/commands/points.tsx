@@ -1,28 +1,29 @@
+import { uploadToPastie } from 'ps-client/tools';
+
 import { PSRoomConfigs } from '@/cache';
 import { type Model as PointsModel, bulkAddPoints, getPoints, getRank, queryPoints, resetPoints } from '@/database/points';
 import { IS_ENABLED } from '@/enabled';
 import { LB_COMMON_STYLES as COMMON_STYLES, LB_STYLES } from '@/ps/other/leaderboardStyles';
 import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
+import { log } from '@/utils/logger';
 import { pluralize } from '@/utils/pluralize';
 
 import type { ToTranslate, TranslatedText } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { PSPointsType, PSRoomConfig } from '@/types/ps';
 import type { CSSProperties, ReactElement } from 'react';
-import { uploadToPastie } from 'ps-client/tools';
-import { log } from '@/utils/logger';
 
 const NUM_PATTERN = /^-?\d+$/;
 
-function getPointsType(input: string, roomPoints: NonNullable<PSRoomConfig['points']>): PSPointsType | null {
+function getPointsType(input: string, roomPoints: NonNullable<PSRoomConfig['points']>): PSPointsType[] | null {
 	const pointsId = toId(input);
-	return (
-		Object.values(roomPoints.types).find(
-			({ id, aliases, singular, plural, symbol }) =>
-				id === pointsId || aliases?.includes(pointsId) || toId(singular) === pointsId || toId(plural) === pointsId || symbol === input
-		) ?? null
+	if (pointsId === 'all') return Object.values(roomPoints.types);
+	const res = Object.values(roomPoints.types).find(
+		({ id, aliases, singular, plural, symbol }) =>
+			id === pointsId || aliases?.includes(pointsId) || toId(singular) === pointsId || toId(plural) === pointsId || symbol === input
 	);
+	return res ? [res] : null;
 }
 
 function Board({
@@ -96,8 +97,8 @@ export const command: PSCommand[] = [
 			const pointsTypeInput = ['add', 'remove'].includes(originalCommand.join('.')) ? args.shift() : roomConfig.points.priority[0];
 			if (!pointsTypeInput) throw new ChatError('Specify a points type!' as ToTranslate);
 
-			const pointsType = getPointsType(pointsTypeInput, roomConfig.points);
-			if (!pointsType) throw new ChatError(`Couldn't find a points type matching ${pointsTypeInput}.` as ToTranslate);
+			const pointsTypes = getPointsType(pointsTypeInput, roomConfig.points);
+			if (!pointsTypes) throw new ChatError(`Couldn't find a points type matching ${pointsTypeInput}.` as ToTranslate);
 
 			const numVals = args.filter(arg => NUM_PATTERN.test(arg));
 			if (numVals.length !== 1) throw new ChatError(`How many points? ${numVals.join('/')}` as ToTranslate);
@@ -110,13 +111,17 @@ export const command: PSCommand[] = [
 			const pointsData = Object.fromEntries(
 				users.map(user => {
 					const id = toId(user);
-					return [id, { id, name: user, points: { [pointsType.id]: pointsAmount } }];
+					return [id, { id, name: user, points: Object.fromEntries(pointsTypes.map(type => [type.id, pointsAmount])) }];
 				})
 			);
 			const res = await bulkAddPoints(pointsData, message.target.id);
 			if (!res) throw new ChatError('Something went wrong...' as ToTranslate);
+			const pluralData = {
+				singular: pointsTypes.map(pointsType => pointsType.singular).join('/'),
+				plural: pointsTypes.map(pointsType => pointsType.plural).join('/'),
+			};
 			broadcast(
-				`Added ${pluralize<TranslatedText>(pointsAmount, pointsType)} to ${res.map(entry => entry.name).list($T)}.` as ToTranslate
+				`Added ${pluralize<TranslatedText>(pointsAmount, pluralData)} to ${res.map(entry => entry.name).list($T)}.` as ToTranslate
 			);
 		},
 	},
@@ -194,8 +199,9 @@ export const command: PSCommand[] = [
 
 			let pointsList = roomPoints.priority;
 			if (NUM_PATTERN.test(arg)) queryData = await queryPoints(room.id, roomPoints.priority, +arg);
+			else if (toId(arg) === 'all') queryData = await queryPoints(room.id, roomPoints.priority, Infinity);
 			else if (arg) {
-				const sortBy = getPointsType(arg, roomPoints)?.id;
+				const sortBy = getPointsType(arg, roomPoints)?.[0].id;
 				if (!sortBy) throw new ChatError($T('INVALID_ARGUMENTS'));
 				pointsList = [sortBy, ...roomPoints.priority.filter(type => type !== sortBy)];
 				queryData = await queryPoints(room.id, pointsList);
@@ -253,9 +259,9 @@ export const command: PSCommand[] = [
 				message.target.send(`/modnote ${backupURL}`);
 			}
 
-			await resetPoints(message.target.id, typeof pointsToReset === 'boolean' ? pointsToReset : pointsToReset.id);
+			await resetPoints(message.target.id, typeof pointsToReset === 'boolean' ? pointsToReset : pointsToReset[0].id);
 			if (pointsToReset === true) return message.reply('Leaderboard has been reset!' as ToTranslate);
-			message.reply(`Reset all users' ${pointsToReset.plural} to 0.` as ToTranslate);
+			message.reply(`Reset all users' ${pointsToReset[0].plural} to 0.` as ToTranslate);
 			run('leaderboard');
 		},
 	},

@@ -61,6 +61,7 @@ export async function bulkAddPoints(
 			const existing = userPoints.find(document => document.userId === id);
 			const document =
 				existing ?? (await model.create({ id: `${roomId}-${id}`, userId: id, name: name ?? id, roomId, points: new Map() }));
+			document.name = name ?? id;
 			Object.entries(points).forEach(([type, count]) => document.points.set(type, (document.points.get(type) ?? 0) + count));
 			return document;
 		})
