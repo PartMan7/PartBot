@@ -15,6 +15,7 @@ declare global {
 		remove(...toRemove: T[]): T[];
 		sample(amount: number, rng?: RNGSource): T[];
 		shuffle(rng?: RNGSource): T[];
+		/** Default order is ascending */
 		sortBy(getSort: ((term: T, thisArray: T[]) => unknown) | null, dir?: 'asc' | 'desc'): T[];
 		space<S = unknown>(spacer: S): (T | S)[];
 		sum(): T;

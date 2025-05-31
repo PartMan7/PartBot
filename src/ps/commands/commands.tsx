@@ -31,14 +31,17 @@ export const command: PSCommand = {
 
 		const otherCommands: PSCommand[] = [];
 
-		const groupedCommands = visibleCommands.reduce<Record<string, PSCommand[]>>((grouped, command) => {
-			if (command.categories.length > 0) {
-				command.categories.forEach(category => (grouped[category] ??= []).push(command));
-			} else {
-				otherCommands.push(command);
-			}
-			return grouped;
-		}, {});
+		const groupedCommands = visibleCommands.reduce<Record<string, PSCommand[]>>(
+			(grouped, command) => {
+				if (command.categories.length > 0) {
+					command.categories.forEach(category => (grouped[category] ??= []).push(command));
+				} else {
+					otherCommands.push(command);
+				}
+				return grouped;
+			},
+			{ utility: [], points: [], game: [], casual: [] }
+		);
 
 		message.author.sendHTML(
 			<div className="infobox">
@@ -48,16 +51,17 @@ export const command: PSCommand = {
 				</p>
 				<hr />
 				{[
-					...Object.entries(groupedCommands)
-						.map(([key, commands]) => [titleCase(key), commands] as [string, PSCommand[]])
-						.sortBy(([key]) => key),
+					...Object.entries(groupedCommands).map(([key, commands]) => [titleCase(key), commands] as [string, PSCommand[]]),
 					['Other', otherCommands] as [string, PSCommand[]],
 				]
 					.filter(([_key, commands]) => commands.length > 0)
 					.map(([key, commands]) => (
 						<details>
 							<summary style={{ marginBottom: 4 }}>{key} Commands</summary>
-							{commands.map(command => <b title={command.help ?? undefined}>{command.name}</b>).space(', ')}
+							{commands
+								.sortBy(command => command.name)
+								.map(command => <b title={command.help ?? undefined}>{command.name}</b>)
+								.space(', ')}
 						</details>
 					))
 					.space(<hr />)}
