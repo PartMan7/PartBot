@@ -57,7 +57,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 						rank,
 						{
 							name: rank,
-							help: `Promotes user(s) to ${rank}`,
+							help: `Promotes user(s) to ${rank}.`,
 							syntax: 'CMD [users...]',
 							perms,
 							children: {
@@ -73,7 +73,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 								},
 								add: {
 									name: 'add',
-									help: `Promotes user(s) to ${rank}`,
+									help: `Promotes user(s) to ${rank}.`,
 									syntax: 'CMD [users...]',
 									async run({ message, arg, checkPermissions, $T }) {
 										const userList = arg.split(',');

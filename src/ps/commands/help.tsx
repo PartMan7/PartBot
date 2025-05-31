@@ -3,7 +3,6 @@ import { LivePS } from '@/sentinel/live';
 import { Perms } from '@/types/perms';
 import { ChatError } from '@/utils/chatError';
 import { Button, Username } from '@/utils/components/ps';
-import { jsxToHTML } from '@/utils/jsxToHTML';
 
 import type { ToTranslate } from '@/i18n/types';
 import type { parse } from '@/ps/handlers/commands/parse';
@@ -109,7 +108,7 @@ function SubCommands({
 	parsed: ReturnType<typeof parse>;
 	checkPermissions: (perms: Perms) => boolean;
 }): ReactElement | null {
-	const { command, context } = parsed;
+	const { command } = parsed;
 	if (!command.children) return null;
 
 	const validChildren = Object.values(command.children)
@@ -123,7 +122,7 @@ function SubCommands({
 			<details>
 				<summary>Subcommands</summary>
 				{validChildren.map(child => (
-					<p>
+					<p style={{ paddingLeft: 12 }}>
 						<b>{child.name}</b>
 						{child.help ? `: ${child.help}` : null}
 						{child.perms ? (
