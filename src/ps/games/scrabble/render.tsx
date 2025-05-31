@@ -1,4 +1,5 @@
 import { Table } from '@/ps/games/render';
+import { WIDE_LETTERS } from '@/ps/games/scrabble/constants';
 import { Button, Form, Username } from '@/utils/components/ps';
 import { type Point, coincident } from '@/utils/grid';
 import { log } from '@/utils/logger';
@@ -8,7 +9,6 @@ import type { Scrabble } from '@/ps/games/scrabble';
 import type { Log } from '@/ps/games/scrabble/logs';
 import type { BoardTile, Bonus, RenderCtx } from '@/ps/games/scrabble/types';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
-import { WIDE_LETTERS } from '@/ps/games/scrabble/constants';
 
 export function renderMove(logEntry: Log, { id, players, $T, renderCtx: { msg } }: Scrabble): [ReactElement, { name: string }] {
 	const Wrapper = ({ children }: { children: ReactNode }): ReactElement => (
