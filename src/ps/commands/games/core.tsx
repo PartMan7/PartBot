@@ -146,7 +146,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 		async run({ run, command }) {
 			return run(`help ${command.join(' ')}`);
 		},
-		category: ['game'],
+		categories: ['game'],
 		children: {
 			create: {
 				name: 'create',

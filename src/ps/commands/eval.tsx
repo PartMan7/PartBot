@@ -9,7 +9,7 @@ export const command: PSCommand = {
 	syntax: 'CMD [code]',
 	perms: 'admin',
 	aliases: ['exec', 'run'],
-	category: ['utility'],
+	categories: ['utility'],
 	async run(context) {
 		const {
 			message,

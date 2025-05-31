@@ -9,7 +9,7 @@ export const command: PSCommand = {
 	help: 'Testing command',
 	syntax: 'CMD USERNAME?',
 	aliases: ['getalts'],
-	category: ['utility'],
+	categories: ['utility'],
 	async run({ message, arg, $T, checkPermissions }) {
 		let lookup = message.author.userid;
 		if (arg) {

@@ -11,6 +11,7 @@ export const command: PSCommand = {
 	name: 'hundos',
 	help: "Shows a Pokémon's hundo-CP at specific levels.",
 	syntax: 'CMD [mon], [levels...?]',
+	categories: ['utility'],
 	aliases: ['hundo'],
 	// TODO: GO-only
 	async run({ arg, broadcast, $T }) {

@@ -7,10 +7,10 @@ import getSecretCommands from '@/secrets/ps';
 import { cachebust } from '@/utils/cachebust';
 import { fsPath } from '@/utils/fsPath';
 
-import type { PSCommand } from '@/types/chat';
+import type { PSCommand, PSCommandChild } from '@/types/chat';
 
 // Generate aliases
-function addAlias(command: PSCommand, stack: string[], aliasAs: readonly string[]) {
+function addAlias(command: PSCommandChild, stack: string[], aliasAs: readonly string[]) {
 	if (command.children)
 		Object.entries(command.children).forEach(([defaultName, subCommand]) => {
 			const names = [defaultName, ...(subCommand.aliases || [])];
@@ -55,7 +55,9 @@ export async function loadCommands(): Promise<void> {
 					Object.entries(command.extendedAliases).forEach(([lookup, aliasedTo]) => {
 						const baseSubcommand = aliasedTo
 							.slice(1)
-							.reduce<PSCommand | undefined>((commandObj, subcommand) => commandObj?.children?.[subcommand], PSCommands[aliasedTo[0]]);
+							.reduce<
+								PSCommandChild | undefined
+							>((commandObj, subcommand) => commandObj?.children?.[subcommand], PSCommands[aliasedTo[0]]);
 						if (!baseSubcommand) throw new Error(`Unable to find command ${lookup} aliased to ${aliasedTo}`);
 						addAlias(baseSubcommand, [lookup], aliasedTo);
 					});

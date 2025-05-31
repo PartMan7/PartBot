@@ -11,6 +11,7 @@ export const command: PSCommand = {
 	name: 'lettersample',
 	help: 'Generates random letters.',
 	syntax: 'CMD [vowels count] x [consonant count]',
+	categories: ['game'],
 	async run({ arg, broadcast, $T }) {
 		const input = arg ? parsePoint(arg) : [5, 5];
 		if (!input) throw new ChatError($T('INVALID_ARGUMENTS'));

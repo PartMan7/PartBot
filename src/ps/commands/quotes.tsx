@@ -203,7 +203,7 @@ export const command: PSCommand = {
 	aliases: ['q', 'quote'],
 	help: 'Quotes module!',
 	syntax: 'CMD',
-	category: ['utility'],
+	categories: ['utility'],
 	extendedAliases: {
 		addquote: ['quotes', 'add'],
 	},

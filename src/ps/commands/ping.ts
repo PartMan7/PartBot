@@ -5,6 +5,7 @@ export const command: PSCommand = {
 	help: "You're asking help on... how to use ping?",
 	syntax: 'CMD',
 	perms: ['room', 'voice'],
+	categories: [],
 	async run({ message, $T }) {
 		return message.reply($T('COMMANDS.PONG'));
 	},

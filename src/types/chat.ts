@@ -88,7 +88,7 @@ export type PSCommand = {
 	/**
 	 * A list of categories that this command falls under.
 	 */
-	category?: PSCommandCategory[];
+	categories: PSCommandCategory[];
 	/**
 	 * Flags to define metadata for the command.
 	 */
@@ -147,13 +147,16 @@ export type PSCommand = {
 	 * Subcommands of the function.
 	 * Values are parsed the same way as the command itself, and may be nested.
 	 */
-	children?: { [key: string]: Omit<PSCommand, 'extendedAliases' | 'static'> };
+	children?: { [key: string]: PSCommandChild };
 	/**
 	 * Function that executes when the command is run.
 	 * @param context Relevant context for the command
 	 */
 	run(context: PSCommandContext): Promise<unknown>;
 };
+
+/** Subcommand */
+export type PSCommandChild = Omit<PSCommand, 'extendedAliases' | 'static' | 'categories'>;
 
 // Will need to update this to work with slash commands
 export type DiscCommand = {

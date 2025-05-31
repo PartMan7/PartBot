@@ -8,6 +8,7 @@ export const command: PSCommand = {
 	help: 'Kills the bot.',
 	syntax: 'CMD',
 	perms: 'admin',
+	categories: ['utility'],
 	async run({ message }) {
 		await Promise.any([message.reply(';-;' as NoTranslate), sleep('2s')]);
 		process.exit();

@@ -2,7 +2,7 @@ import { PSAliases, PSCommands } from '@/cache';
 import { ChatError } from '@/utils/chatError';
 
 import type { TranslationFn } from '@/i18n/types';
-import type { PSCommand, PSCommandContext } from '@/types/chat';
+import type { PSCommand, PSCommandChild, PSCommandContext } from '@/types/chat';
 
 type Cascade = { flags: NonNullable<PSCommand['flags']>; perms: NonNullable<PSCommand['perms']> };
 
@@ -11,7 +11,7 @@ export function parse(
 	spaceCapturedArgs: string[],
 	$T: TranslationFn
 ): {
-	command: PSCommand;
+	command: PSCommandChild;
 	sourceCommand: PSCommand;
 	cascade: Cascade;
 	context: PSCommandContext;
@@ -40,7 +40,7 @@ export function parse(
 		arg: '',
 	};
 	const sourceCommand = PSCommands[command.shift()!];
-	let commandObj: PSCommand = sourceCommand;
+	let commandObj: PSCommandChild = sourceCommand;
 	if (!commandObj) throw new Error($T('INVALID_ALIAS', { aliasFor: context.command![0] }));
 
 	const cascade: Cascade = {
@@ -48,7 +48,7 @@ export function parse(
 		perms: commandObj.perms ?? 'regular',
 	};
 	while (command.length > 0 && commandObj) {
-		const next: PSCommand | undefined = commandObj.children?.[command[0]];
+		const next: PSCommandChild | undefined = commandObj.children?.[command[0]];
 		if (!next) break;
 		if (next.flags) {
 			Object.entries(next.flags).forEach(([flag, value]) => {

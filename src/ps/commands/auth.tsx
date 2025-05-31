@@ -40,7 +40,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 				flags: {
 					roomOnly: true,
 				},
-				category: ['utility'],
+				categories: ['utility'],
 				extendedAliases: {
 					...Object.fromEntries(
 						(Object.entries(ranksMapping) as [PromotableAuthKey, AuthValue][]).flatMap(([rank, { alias: aliases }]) =>
@@ -60,6 +60,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 							help: `Promotes user(s) to ${rank}.`,
 							syntax: 'CMD [users...]',
 							perms,
+							categories: ['utility'],
 							children: {
 								list: {
 									name: 'list',
@@ -113,7 +114,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 				flags: {
 					roomOnly: true,
 				},
-				category: ['utility'],
+				categories: ['utility'],
 				async run({ message, arg, checkPermissions, $T }) {
 					const userList = arg.split(',');
 					const users = userList.map(toId).filter(Boolean);

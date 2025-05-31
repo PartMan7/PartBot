@@ -19,7 +19,7 @@ export const command: PSCommand = {
 	help: 'Creates a game of kunc! Guess the Pokémon by a randomly-generated set.',
 	syntax: 'CMD [time?]',
 	perms: (message, checkPermission) => (message.type === 'chat' ? checkPermission('driver') : true),
-	category: ['game'],
+	categories: ['game'],
 	async run({ message, arg, $T }): Promise<User[] | null> {
 		const id = message.type === 'chat' ? message.target.id : `pm-${message.author.id}`;
 		if (PSKuncInProgress[id]) {

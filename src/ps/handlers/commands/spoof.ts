@@ -41,7 +41,6 @@ export function spoof(argData: string, message: PSMessage, $T: TranslationFn): P
 	});
 }
 
-// TODO
 export const getSpoofMessage = (text: string, room: string, PS: Client, partial?: Partial<PSMessage>): PSMessage => {
 	const time = new Date();
 

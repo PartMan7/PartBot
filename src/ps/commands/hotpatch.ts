@@ -8,7 +8,7 @@ export const command: PSCommand = {
 	help: 'Hotpatches stuff.',
 	syntax: 'CMD [hotpatch type]',
 	perms: 'admin',
-	category: ['utility'],
+	categories: ['utility'],
 	async run({ message, arg }) {
 		const types = arg.split(/\s*,\s*/).map(type => type.toLowerCase().replaceAll(' ', '-'));
 		const result = await Promise.allSettled(

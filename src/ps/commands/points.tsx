@@ -84,7 +84,7 @@ export const command: PSCommand[] = [
 		flags: { roomOnly: true },
 		perms: Symbol.for('points.manage'),
 		aliases: ['addp', 'add', 'removep', 'remove', 'removepoints'],
-		category: ['points'],
+		categories: ['points'],
 		async run(ctx) {
 			const { message, arg, $T, originalCommand, broadcast } = ctx;
 			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
@@ -125,7 +125,7 @@ export const command: PSCommand[] = [
 		help: "Displays a user's current points.",
 		syntax: 'CMD [user?]',
 		aliases: ['points'],
-		category: ['points'],
+		categories: ['points'],
 		async run({ message, $T, args, broadcast }) {
 			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
 			const room = message.parent.getRoom(message.type === 'chat' ? message.target.id : (args.shift() ?? ''));
@@ -151,7 +151,7 @@ export const command: PSCommand[] = [
 		name: 'rank',
 		help: "Displays a user's rank on the leaderboard.",
 		syntax: 'CMD [user?]',
-		category: ['points'],
+		categories: ['points'],
 		async run({ message, $T, args, broadcast }) {
 			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
 			const room = message.parent.getRoom(message.type === 'chat' ? message.target.id : (args.shift() ?? ''));
@@ -179,7 +179,7 @@ export const command: PSCommand[] = [
 		help: 'Shows the leaderboard!',
 		syntax: 'CMD [cap/priority]',
 		aliases: ['lb'],
-		category: ['points'],
+		categories: ['points'],
 		async run({ message, $T, args, broadcastHTML }) {
 			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
 			// TODO: Maybe have some helper function to parse room name if not given
@@ -230,7 +230,7 @@ export const command: PSCommand[] = [
 		perms: ['room', 'owner'],
 		flags: { roomOnly: true },
 		aliases: ['resetlb', 'leaderboardreset', 'lbreset', 'reset'],
-		category: ['points'],
+		categories: ['points'],
 		async run({ message, $T, arg, run }) {
 			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
 			const roomConfig = PSRoomConfigs[message.target.id];

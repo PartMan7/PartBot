@@ -72,6 +72,7 @@ export const command: PSCommand[] = Object.values(filterTypes).map(({ initial, a
 	help: 'Filter matching entries (by RegEx). See https://regexone.com for help.',
 	syntax: 'CMD [pattern]',
 	flags: { pmOnly: true },
+	categories: [],
 	aliases: [...aliases.slice(1), `f${initial}`],
 	async run({ message, $T, arg }) {
 		const basePattern = arg.trim();

@@ -8,6 +8,7 @@ export const command: PSCommand = {
 	name: 'sample',
 	help: 'Generates random numbers.',
 	syntax: 'CMD [max=9] x [count=5]',
+	categories: ['utility'],
 	aliases: ['random'],
 	async run({ arg, broadcast, originalCommand }) {
 		const [max, count] = parsePoint(arg) ?? [9, 5];
