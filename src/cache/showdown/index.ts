@@ -5,8 +5,7 @@ import { fsPath } from '@/utils/fsPath';
 
 import type { ShowdownDataType } from '@/cache/showdown/types';
 
-const RANDOMS_SETS_URL =
-	'https://raw.githubusercontent.com/smogon/pokemon-showdown/refs/heads/master/data/random-battles/gen9/sets.json';
+const RANDOMS_SETS_URL = 'https://play.pokemonshowdown.com/data/sets/gen9.json';
 
 export const ShowdownData: ShowdownDataType = {
 	[ShowdownDataKeys.RandomSetsGen9]: {},

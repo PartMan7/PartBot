@@ -201,7 +201,7 @@ function MultiQuotes({ list, paginate, buffer }: { list: QuoteCollection; pagina
 export const command: PSCommand = {
 	name: 'quotes',
 	aliases: ['q', 'quote'],
-	help: null,
+	help: 'Quotes module!',
 	syntax: 'CMD',
 	category: ['utility'],
 	extendedAliases: {
@@ -269,7 +269,7 @@ export const command: PSCommand = {
 			help:
 				'Adds the given quote. <code>\n</code> works as a newline, and <code>/me</code> syntax can be formatted via ' +
 				'wrapping the username in <code>[]</code> (eg: <code>[14:20:21] • #PartMan hugs Hydro</code> would be formatted ' +
-				'as <code>[14:20:21] • #[PartMan] hugs Hydro</code>) (staff-only)',
+				'as <code>[14:20:21] • #[PartMan] hugs Hydro</code>)',
 			syntax: 'CMD [new quote]',
 			flags: {
 				roomOnly: true,
@@ -292,7 +292,7 @@ export const command: PSCommand = {
 			name: 'preview',
 			aliases: ['p'],
 			perms: 'driver',
-			help: 'Previews the given quote. Syntax is the same as add (staff-only)',
+			help: 'Previews the given quote. Syntax is the same as add.',
 			syntax: 'CMD [new quote]',
 			flags: {
 				roomOnly: true,

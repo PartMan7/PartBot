@@ -6,7 +6,7 @@ import type { PSCommand } from '@/types/chat';
 export const command: PSCommand = {
 	name: 'eval',
 	help: 'Evaluates code',
-	syntax: 'CMD code',
+	syntax: 'CMD [code]',
 	perms: 'admin',
 	aliases: ['exec', 'run'],
 	category: ['utility'],

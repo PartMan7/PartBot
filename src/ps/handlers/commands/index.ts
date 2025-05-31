@@ -107,7 +107,7 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 			return commandHandler(message, { type: 'run', command: `${prefix}${command}`, bypassPerms: true, calledFrom, ctx });
 		};
 
-		return commandObj.run({ ...context, message });
+		return await commandObj.run({ ...context, message });
 	} catch (_err) {
 		const err = _err as Error;
 		message.privateReply(err.message as string);
