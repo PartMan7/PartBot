@@ -9,9 +9,9 @@ export const LanguageMap = {
 	hindi: Hindi,
 };
 
-export function applyVariables(text: string, variables: Record<string, string | number>): TranslatedText {
+export function applyVariables(text: string, variables: Record<string, string | number | undefined>): TranslatedText {
 	return Object.entries(variables).reduce(
-		(acc, [name, value]) => acc.replaceAll(`{{${name}}}`, value.toString()),
+		(acc, [name, value]) => (value ? acc.replaceAll(`{{${name}}}`, value.toString()) : acc),
 		text
 	) as TranslatedText;
 }

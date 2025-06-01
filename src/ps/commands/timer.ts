@@ -63,8 +63,7 @@ export const command: PSCommand = {
 	async run({ message, args, run, $T }) {
 		const id = messageToId(message);
 		if (Timers[id]) return run('timer status');
-		const [timeText, ...commentLines] = args.join(' ').split('//');
-		const comment = commentLines.join('//').trim();
+		const [timeText, comment] = args.join(' ').lazySplit(/\/\/\s*/, 1);
 		const timeToSet = fromHumanTime(timeText);
 		if (!timeToSet) throw new ChatError($T('COMMANDS.TIMER.INVALID_TIME'));
 		if (timeToSet > fromHumanTime('7 days')) throw new ChatError($T('COMMANDS.TIMER.MAX_TIME'));
@@ -72,7 +71,7 @@ export const command: PSCommand = {
 			() => {
 				delete Timers[id];
 				message.reply(
-					$T(comment ? 'COMMANDS.TIMER.TIMER_END' : 'COMMANDS.TIMER.TIMER_END_WITH_COMMENT', { user: message.author.name, comment })
+					$T(comment ? 'COMMANDS.TIMER.TIMER_END_WITH_COMMENT' : 'COMMANDS.TIMER.TIMER_END', { user: message.author.name, comment })
 				);
 			},
 			timeToSet,

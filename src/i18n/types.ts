@@ -31,7 +31,7 @@ export type ToTranslate = TranslatedText;
 
 export type TranslationFn = (
 	lookup: Exclude<keyof TextMap, number | symbol>,
-	variables?: Record<string, string | number>
+	variables?: Record<string, string | number | undefined>
 ) => TranslatedText;
 
 type ReplaceStringWithTranslatedText<TParams extends readonly unknown[]> = {
