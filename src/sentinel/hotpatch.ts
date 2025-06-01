@@ -57,7 +57,7 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 
 			case 'cron':
 			case 'schedule': {
-				await cachebustDir(fsPath('@', 'ps', 'handlers', 'cron'));
+				await cachebustDir(fsPath('ps', 'handlers', 'cron'));
 				const { startPSCron } = await import('@/ps/handlers/cron');
 				startPSCron.call(PS);
 				break;
