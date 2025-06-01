@@ -11,6 +11,9 @@ import { errorLog, log } from '@/utils/logger';
 
 import type { NoTranslate } from '@/i18n/types';
 import type { Sentinel } from '@/sentinel/types';
+import { fetchRoomConfigs } from '@/database/psrooms';
+import { PSRoomConfigs } from '@/cache';
+import { emptyObject } from '@/utils/emptyObject';
 
 export type HotpatchType = 'code' | 'data' | string;
 
@@ -26,6 +29,15 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 			case 'data': {
 				await updatePSData();
 				// TODO: cachebust
+				break;
+			}
+			case 'roomconfigs':
+			case 'room-configs': {
+				const fetched = await fetchRoomConfigs();
+				fetched.forEach(entry => {
+					emptyObject(PSRoomConfigs);
+					PSRoomConfigs[entry.roomId] = entry;
+				});
 				break;
 			}
 			case 'sentinel': {
