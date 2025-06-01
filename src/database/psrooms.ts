@@ -36,11 +36,9 @@ const schema = new mongoose.Schema<PSRoomConfig>({
 				symbol: { type: String, required: true },
 				aliases: [String],
 			},
-			required: true,
 		},
 		priority: {
 			type: [String],
-			required: true,
 		},
 		format: String,
 	},
