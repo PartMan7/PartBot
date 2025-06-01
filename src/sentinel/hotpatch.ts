@@ -2,18 +2,18 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { update as updatePSData } from 'ps-client/tools';
 
+import { PSRoomConfigs } from '@/cache';
+import { fetchRoomConfigs } from '@/database/psrooms';
 import { registers } from '@/sentinel/registers';
 import { cachebust, cachebustDir } from '@/utils/cachebust';
 import { ChatError } from '@/utils/chatError';
 import { $ } from '@/utils/child_process';
+import { emptyObject } from '@/utils/emptyObject';
 import { fsPath } from '@/utils/fsPath';
 import { errorLog, log } from '@/utils/logger';
 
 import type { NoTranslate } from '@/i18n/types';
 import type { Sentinel } from '@/sentinel/types';
-import { fetchRoomConfigs } from '@/database/psrooms';
-import { PSRoomConfigs } from '@/cache';
-import { emptyObject } from '@/utils/emptyObject';
 
 export type HotpatchType = 'code' | 'data' | string;
 

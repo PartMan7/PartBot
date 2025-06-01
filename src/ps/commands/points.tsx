@@ -31,7 +31,7 @@ function Board({
 	data,
 	styles,
 }: {
-	headers: string[];
+	headers: (string | { hover: string; title: string })[];
 	data: (string | number)[][];
 	styles: { header?: CSSProperties; odd?: CSSProperties; even?: CSSProperties };
 }): ReactElement {
@@ -51,7 +51,9 @@ function Board({
 					<thead>
 						<tr>
 							{headers.map(title => (
-								<th style={{ ...COMMON_STYLES.header, ...styles.header }}>{title}</th>
+								<th style={{ ...COMMON_STYLES.header, ...styles.header }} title={typeof title !== 'string' ? title.hover : undefined}>
+									{typeof title !== 'string' ? title.title : title}
+								</th>
 							))}
 						</tr>
 					</thead>
@@ -209,7 +211,14 @@ export const command: PSCommand[] = [
 
 			if (!queryData) throw new Error(`Somehow I didn't manage to get any data! Send help please (${room.id}, ${args})`);
 
-			const headers = ['#', $T('COMMANDS.POINTS.HEADERS.USER'), ...pointsList.map(pointsType => roomPoints.types[pointsType].symbol)];
+			const headers = [
+				'#',
+				$T('COMMANDS.POINTS.HEADERS.USER'),
+				...pointsList.map(pointsType => ({
+					hover: roomPoints.types[pointsType].plural,
+					title: roomPoints.types[pointsType].symbol,
+				})),
+			];
 			const data = queryData.map((user, index, data) => {
 				let rank = index;
 
