@@ -50,6 +50,10 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 				this.hotpatch = (await import('@/sentinel/hotpatch')).hotpatch;
 				break;
 			}
+			case 'secrets': {
+				await cachebustDir(fsPath('secrets'));
+				break;
+			}
 			default:
 				const register = registers.list.find(register => register.label === hotpatchType);
 				if (!register) throw new ChatError(`Hotpatch type ${hotpatchType} not found.` as NoTranslate);
