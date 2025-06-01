@@ -40,7 +40,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				const onlineUser1 = game.room.users.some(user => toId(user) === ctx.user1);
 				const hasUser2 = !!ctx.user2 && game.hasPlayer(ctx.user2);
 				const onlineUser2 = game.room.users.some(user => toId(user) === ctx.user2);
-				return (hasUser1 && onlineUser1 && !hasUser2) || (hasUser2 && onlineUser2 && !hasUser1);
+				return (hasUser1 && onlineUser2 && !hasUser2) || (hasUser2 && onlineUser1 && !hasUser1);
 			}
 			if (ctx.action === 'any') return true;
 			const hasJoined = !!ctx.user && game.hasPlayer(ctx.user);
