@@ -15,7 +15,10 @@ export const command: PSCommand[] = [
 		aliases: ['cw'],
 		categories: ['game'],
 		async run({ broadcast, arg, $T }) {
-			const [word, input = ScrabbleMods.CSW21] = arg.lazySplit(',', 1);
+			const [word, input = ScrabbleMods.CSW21] = arg
+				.toLowerCase()
+				.replace(/[^a-z0-9,]/g, '')
+				.lazySplit(',', 1);
 			const mod = parseMod(input, ScrabbleMods, ScrabbleModData);
 			if (!mod) throw new ChatError($T('GAME.MOD_NOT_FOUND', { mod: input }));
 			const check = checkWord(word, mod);
