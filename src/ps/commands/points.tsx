@@ -121,7 +121,7 @@ export const command: PSCommand[] = [
 				plural: pointsTypes.map(pointsType => pointsType.plural).join('/'),
 			};
 			broadcast(
-				`Added ${pluralize<TranslatedText>(pointsAmount, pluralData)} to ${res.map(entry => entry.name).list($T)}.` as ToTranslate
+				`Added ${pluralize<TranslatedText>(pointsAmount, pluralData)} to ${res.map(entry => entry.name ?? entry.id).list($T)}.` as ToTranslate
 			);
 		},
 	},
