@@ -11,6 +11,7 @@ import { joinHandler, leaveHandler, nickHandler } from '@/ps/handlers/joins';
 import { notifyHandler } from '@/ps/handlers/notifications';
 import { pageHandler } from '@/ps/handlers/page';
 import { rawHandler } from '@/ps/handlers/raw';
+import { tourHandler } from '@/ps/handlers/tours';
 
 /**
  * Exports the 'live' versions of functions from Sentinel.
@@ -41,4 +42,5 @@ export const LivePS = {
 	notifyHandler,
 	pageHandler,
 	rawHandler,
+	tourHandler,
 };
