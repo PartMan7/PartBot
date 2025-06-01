@@ -4,6 +4,7 @@ import { update as updatePSData } from 'ps-client/tools';
 
 import { PSRoomConfigs } from '@/cache';
 import { fetchRoomConfigs } from '@/database/psrooms';
+import PS from '@/ps';
 import { registers } from '@/sentinel/registers';
 import { cachebust, cachebustDir } from '@/utils/cachebust';
 import { ChatError } from '@/utils/chatError';
@@ -26,11 +27,13 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 				$`git pull`;
 				break;
 			}
+
 			case 'data': {
 				await updatePSData();
 				// TODO: cachebust
 				break;
 			}
+
 			case 'roomconfigs':
 			case 'room-configs': {
 				const fetched = await fetchRoomConfigs();
@@ -40,6 +43,7 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 				});
 				break;
 			}
+
 			case 'sentinel': {
 				cachebust('@/sentinel/create');
 				cachebust('@/sentinel/hotpatch');
@@ -50,10 +54,20 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 				this.hotpatch = (await import('@/sentinel/hotpatch')).hotpatch;
 				break;
 			}
+
+			case 'cron':
+			case 'schedule': {
+				await cachebustDir(fsPath('@', 'ps', 'handlers', 'cron'));
+				const { startPSCron } = await import('@/ps/handlers/cron');
+				startPSCron.call(PS);
+				break;
+			}
+
 			case 'secrets': {
 				await cachebustDir(fsPath('secrets'));
 				break;
 			}
+
 			default:
 				const register = registers.list.find(register => register.label === hotpatchType);
 				if (!register) throw new ChatError(`Hotpatch type ${hotpatchType} not found.` as NoTranslate);
