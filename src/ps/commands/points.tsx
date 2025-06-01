@@ -205,7 +205,7 @@ export const command: PSCommand[] = [
 				if (!sortBy) throw new ChatError($T('INVALID_ARGUMENTS'));
 				pointsList = [sortBy, ...roomPoints.priority.filter(type => type !== sortBy)];
 				queryData = await queryPoints(room.id, pointsList);
-			} else queryData = await queryPoints(room.id, roomPoints.priority);
+			} else queryData = await queryPoints(room.id, roomPoints.priority, 10);
 
 			if (!queryData) throw new Error(`Somehow I didn't manage to get any data! Send help please (${room.id}, ${args})`);
 
