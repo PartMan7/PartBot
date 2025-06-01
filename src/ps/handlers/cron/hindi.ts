@@ -1,7 +1,6 @@
 import { pokedex } from 'ps-client/data';
 
 import { PSCommands } from '@/cache';
-import { bulkAddPoints } from '@/database/points';
 import { i18n } from '@/i18n';
 import { TimeZone } from '@/ps/handlers/cron/constants';
 import { sample } from '@/utils/random';
@@ -144,26 +143,24 @@ export function register(this: Client, Jobs: PSCronJobManager): void {
 		await sleep('1 min');
 		room.send('Starting kunc!');
 
+		const gamePoints: Record<string, { user: User; points: number }> = {};
+
 		for (let i = 0; i < rounds; i++) {
 			const winners = (await kuncCommand.run(partialContext as PSCommandContext)) as User[] | null;
 			if (winners) {
-				const pointsData = Object.fromEntries(
-					winners.map(user => [
-						user.id,
-						{
-							name: user.name,
-							id: user.id,
-							points: {
-								points: 1,
-								officialPoints: 1,
-							},
-						},
-					])
-				);
-				bulkAddPoints(pointsData, room.id);
+				winners.forEach(user => {
+					gamePoints[user.id] ??= { user, points: 0 };
+					gamePoints[user.id].points++;
+				});
 			}
 			if (i !== rounds - 1) await sleep('5 sec');
 		}
+
+		const top = Object.values(gamePoints)
+			.sortBy(entry => entry.points, 'desc')
+			.slice(0, 3);
+
+		room.send(`Winners: ${top.map(({ user }) => user.name).list()}`); // TODO add points based on... PL?
 
 		postGGSSEvent();
 	});
