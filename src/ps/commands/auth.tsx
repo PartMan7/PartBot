@@ -99,6 +99,15 @@ export const command: PSCommand[] = IS_ENABLED.DB
 										);
 									},
 								},
+								remove: {
+									name: 'remove',
+									help: '(Use deauth instead)',
+									syntax: 'deauth [users...]',
+									aliases: ['delete', 'yeet', 'demote'],
+									async run({ message }) {
+										message.reply('Hi can you try deauth instead' as ToTranslate);
+									},
+								},
 							},
 							async run({ run, arg }) {
 								return run(`promote ${rank} add ${arg}`);
