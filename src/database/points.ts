@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+import { PSRoomConfigs } from '@/cache';
 import { IS_ENABLED } from '@/enabled';
 import { toId } from '@/tools';
 
@@ -41,8 +42,10 @@ export async function addPoints(user: string, points: Record<string, number>, ro
 	if (!IS_ENABLED.DB) return;
 	const userId = toId(user);
 	const id = `${roomId}-${userId}`;
+	const roomConfig = PSRoomConfigs[roomId].points!;
 	const document = (await model.findOne({ id })) ?? (await model.create({ id, userId, roomId, name: user, points: new Map() }));
 	document.name = user;
+	Object.keys(roomConfig.types).forEach(type => document.points.set(type, document.points.get(type) ?? 0));
 	Object.entries(points).forEach(([type, count]) => document.points.set(type, (document.points.get(type) ?? 0) + count));
 	await document.save();
 	return document.toJSON();
@@ -55,12 +58,14 @@ export async function bulkAddPoints(
 	if (!IS_ENABLED.DB) return;
 	const lookupIds = Object.keys(bulkData).map(userId => `${roomId}-${userId}`);
 	const userPoints = await model.find({ id: { $in: lookupIds } });
+	const roomConfig = PSRoomConfigs[roomId].points!;
 
 	const documentsToSave = await Promise.all(
 		Object.values(bulkData).map(async ({ name, id, points }) => {
 			const existing = userPoints.find(document => document.userId === id);
 			const document =
 				existing ?? (await model.create({ id: `${roomId}-${id}`, userId: id, name: name ?? id, roomId, points: new Map() }));
+			Object.keys(roomConfig.types).forEach(type => document.points.set(type, document.points.get(type) ?? 0));
 			document.name = name ?? id;
 			Object.entries(points).forEach(([type, count]) => document.points.set(type, (document.points.get(type) ?? 0) + count));
 			return document;
@@ -68,7 +73,7 @@ export async function bulkAddPoints(
 	);
 
 	await model.bulkSave(documentsToSave);
-	return userPoints.map(document => document.toJSON());
+	return documentsToSave.map(document => document.toJSON());
 }
 
 export async function getPoints(user: string, roomId: string): Promise<Model | null | undefined> {
