@@ -46,3 +46,9 @@ function sample(input: null | number | [number, number] | Record<string, number>
 }
 
 export { sample };
+
+export function randomString(length = 16, rng?: RNGSource): string {
+	const RNG = useRNG(rng);
+	const validChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('');
+	return Array.from({ length }, () => validChars.random(RNG)).join('');
+}

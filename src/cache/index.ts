@@ -21,6 +21,7 @@ export const PSCronJobs: { manager: PSCronJobManager | null } = { manager: null 
 export const PSNoPrefixHelp: { [key: string]: Date } = {};
 export const PSQuoteRoomPrefs: { [key: string]: { room: string; at: Date } } = {};
 export const PSKuncInProgress: { [key: string]: boolean } = {};
+export const PSPointsNonce: { [key: string]: Record<string, Record<string, number>> | null } = {};
 
 // Games
 export const PSGames: { [key in keyof Games]?: Record<string, CommonGame> } = {};

@@ -1,7 +1,6 @@
-import assert from 'node:assert';
 import { uploadToPastie } from 'ps-client/tools';
 
-import { PSRoomConfigs } from '@/cache';
+import { PSPointsNonce, PSRoomConfigs } from '@/cache';
 import {
 	type BulkPointsDataInput,
 	type Model as PointsModel,
@@ -137,9 +136,9 @@ export const command: PSCommand[] = [
 		},
 	},
 	{
-		name: 'addjson',
+		name: 'addnonce',
 		help: null,
-		syntax: 'CMD [json data]',
+		syntax: 'CMD [nonce]',
 		perms: 'driver',
 		flags: { conceal: true, noDisplay: true, routePMs: true },
 		categories: ['points'],
@@ -149,31 +148,13 @@ export const command: PSCommand[] = [
 			const roomConfig = PSRoomConfigs[message.target.id];
 			if (!roomConfig.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS', { room: message.target.title }));
 
-			let json;
-			try {
-				json = JSON.parse(arg);
-			} catch {
-				throw new ChatError('Invalid JSON.' as ToTranslate);
-			}
-			try {
-				// TODO: Maybe use zod here?
-				assert.equal(typeof json, 'object');
-				assert.equal(Array.isArray(json), false);
-				Object.entries(json).forEach(([user, value]) => {
-					assert.ok(toId(user));
-					assert.equal(typeof value, 'object');
-					assert.equal(Array.isArray(value), false);
-					Object.entries(value!).forEach(([type, amount]) => {
-						assert(roomConfig.points?.types[type]);
-						assert.equal(typeof amount, 'number');
-						assert.equal(Math.round(amount), amount);
-					});
-				});
-			} catch {
-				throw new ChatError($T('INVALID_ARGUMENTS'));
-			}
+			const nonce = arg.trim();
+			if (!nonce) throw new ChatError('Nonce not provided.' as ToTranslate);
+			const data = PSPointsNonce[nonce];
 
-			const data: Record<string, Record<string, number>> = json;
+			if (data === null) throw new ChatError(`Already added points for ${nonce}!` as ToTranslate);
+			if (!data) throw new ChatError(`Invalid nonce ${nonce}.` as ToTranslate);
+
 			const pointsData: BulkPointsDataInput = Object.fromEntries(
 				Object.entries(data).map(([name, points]) => {
 					const id = toId(name);
@@ -181,7 +162,13 @@ export const command: PSCommand[] = [
 				})
 			);
 
-			await bulkAddPoints(pointsData, message.target.id);
+			PSPointsNonce[nonce] = null;
+			try {
+				await bulkAddPoints(pointsData, message.target.id);
+			} catch (err) {
+				PSPointsNonce[nonce] = data;
+				throw err;
+			}
 			broadcast('Added points!' as ToTranslate);
 		},
 	},

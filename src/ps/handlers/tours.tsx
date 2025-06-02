@@ -1,14 +1,15 @@
 import { Temporal } from '@js-temporal/polyfill';
 
-import { PSRoomConfigs } from '@/cache';
+import { PSPointsNonce, PSRoomConfigs } from '@/cache';
 import { prefix } from '@/config/ps';
 import { bulkAddPoints } from '@/database/points';
 import { TimeZone } from '@/ps/handlers/cron/constants';
 import getSecretFunction from '@/secrets/functions';
-import { Button } from '@/utils/components/ps';
+import { Button, Form } from '@/utils/components/ps';
 import { errorLog } from '@/utils/logger';
 
 import type { Client } from 'ps-client';
+import { randomString } from '@/utils/random';
 
 export type BracketNode = {
 	team: string;
@@ -146,9 +147,12 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 						return;
 					}
 
-					const jsonData: Record<string, Record<string, number>> = Object.fromEntries(
+					const nonce = randomString();
+					// TODO: Add mapValues
+					PSPointsNonce[nonce] = Object.fromEntries(
 						Object.entries(pointsToAdd).map(([user, amount]) => [user, { [pointsType.id]: amount }])
 					);
+
 					room.sendHTML(
 						<div className="infobox">
 							<p>
@@ -158,9 +162,9 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 									.join(', ')}
 							</p>
 							<p>
-								<Button name="send" value={`/botmsg ${this.status.username},${prefix}@${roomId} addjson ${JSON.stringify(jsonData)}`}>
-									Add Points!
-								</Button>
+								<Form value={`/botmsg ${this.status.username},${prefix}@${roomId} addnonce ${nonce}`}>
+									<button>Add Points!</button>
+								</Form>
 							</p>
 						</div>
 					);
