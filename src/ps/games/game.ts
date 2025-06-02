@@ -20,7 +20,7 @@ import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
 import type { ReactElement } from 'react';
 
-const backupKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'theme', 'log', 'startedAt', 'createdAt'] as const;
+const backupKeys = ['state', 'started', 'turn', 'turns', 'seed', 'players', 'mod', 'theme', 'log', 'startedAt', 'createdAt'] as const;
 
 /**
  * This is the shared code for all games. To check the game-specific code, refer to the
@@ -64,6 +64,7 @@ export class BaseGame<State extends BaseState> {
 	spectators: string[] = [];
 
 	theme?: string;
+	mod?: string | null;
 
 	// Game-provided methods:
 	render(side: State['turn'] | null): ReactElement;
@@ -130,7 +131,8 @@ export class BaseGame<State extends BaseState> {
 					case 'state':
 					case 'turn':
 					case 'turns':
-					case 'started': {
+					case 'started':
+					case 'mod': {
 						// @ts-expect-error -- key isn't narrowed correctly
 						if (key in parsedBackup) this[key] = parsedBackup[key];
 						break;
