@@ -69,6 +69,13 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 				break;
 			}
 
+			case 'commands': {
+				const commandsRegister = registers.list.find(register => register.label === 'commands')!;
+				await cachebustDir(fsPath('ps', 'commands'));
+				await commandsRegister.reload([]);
+				break;
+			}
+
 			default:
 				const register = registers.list.find(register => register.label === hotpatchType);
 				if (!register) throw new ChatError(`Hotpatch type ${hotpatchType} not found.` as NoTranslate);
