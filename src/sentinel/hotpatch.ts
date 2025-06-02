@@ -37,8 +37,8 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 			case 'roomconfigs':
 			case 'room-configs': {
 				const fetched = await fetchRoomConfigs();
+				emptyObject(PSRoomConfigs);
 				fetched.forEach(entry => {
-					emptyObject(PSRoomConfigs);
 					PSRoomConfigs[entry.roomId] = entry;
 				});
 				break;
