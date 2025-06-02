@@ -103,8 +103,8 @@ export const command: PSCommand[] = [
 			if (!pointsTypes) throw new ChatError(`Couldn't find a points type matching ${pointsTypeInput}.` as ToTranslate);
 
 			const numVals = args.filter(arg => NUM_PATTERN.test(arg));
-			if (numVals.length !== 1) throw new ChatError(`How many points? ${numVals.join('/')}` as ToTranslate);
-			const pointsAmount = (originalCommand.join('.').includes('remove') ? -1 : 1) * parseInt(numVals[0]);
+			if (numVals.length > 1) throw new ChatError(`How many points? ${numVals.join('/')}` as ToTranslate);
+			const pointsAmount = (originalCommand.join('.').includes('remove') ? -1 : 1) * parseInt(numVals[0] ?? '1');
 			if (Math.abs(pointsAmount) > 1e6) throw new ChatError($T('SCREW_YOU'));
 
 			const users = args.filter(arg => !NUM_PATTERN.test(arg));
