@@ -75,7 +75,10 @@ export function renderMenu(room: PSRoomTranslated, meta: Meta, isStaff: boolean)
 }
 
 export function renderBackups(room: PSRoomTranslated, meta: Meta): ReactElement {
-	const stashedGames = gameCache.getByGame(room.roomid, meta.id).filter(game => !PSGames[meta.id]?.[game.id]);
+	const stashedGames = gameCache
+		.getByGame(room.roomid, meta.id)
+		.filter(game => !PSGames[meta.id]?.[game.id])
+		.sortBy(game => game.at, 'desc');
 	return (
 		<>
 			<hr />

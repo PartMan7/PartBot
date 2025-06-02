@@ -7,6 +7,7 @@ import type { GamesList } from '@/ps/games/common';
 export type GameBackup = {
 	room: string;
 	id: string;
+	at: number;
 	game: string;
 	backup: string;
 };
