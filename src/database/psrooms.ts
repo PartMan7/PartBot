@@ -63,7 +63,7 @@ export async function updateAuth(users: string[], authKey: AuthKey, roomId: stri
 	}
 	roomConfig.markModified('auth');
 	await roomConfig.save();
-	PSRoomConfigs[roomId] = roomConfig.toObject();
+	PSRoomConfigs[roomId] = roomConfig.toJSON();
 	return true;
 }
 
@@ -80,7 +80,7 @@ export async function deauth(users: string[], roomId: string): Promise<boolean> 
 	}
 	roomConfig.markModified('auth');
 	await roomConfig.save();
-	PSRoomConfigs[roomId] = roomConfig.toObject();
+	PSRoomConfigs[roomId] = roomConfig.toJSON();
 	return true;
 }
 
