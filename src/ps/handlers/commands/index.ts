@@ -87,12 +87,12 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 			return usePermissions(perm, context.command, message);
 		};
 
-		context.broadcast = function (msg, perm = 'voice') {
+		context.broadcast = function (msg, perm = 'whitelist') {
 			if (usePermissions(perm, null, message)) return message.reply(msg);
 			else return message.privateReply(msg);
 		};
 		context.broadcastHTML = function (html, opts = {}) {
-			const { perm = 'voice' } = opts;
+			const { perm = 'whitelist' } = opts;
 			if (message.type === 'pm') return message.replyHTML(html, opts);
 			if (usePermissions(perm, null, message)) return message.sendHTML(html, opts);
 			else return message.target.privateHTML(message.author, html, opts);
