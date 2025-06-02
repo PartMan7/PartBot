@@ -25,7 +25,7 @@ export function checkHunts(room: string, data: string) {
 	const { type: huntType, maker } = huntStart.groups;
 
 	function post(message: string): void {
-		const sanitized = unescapeHTML(message.replace(/@(?=here|everyone)/, '@\u200b'));
+		const sanitized = unescapeHTML(message.replace(/(?<!^)@(?=here|everyone)/, '@\u200b'));
 		huntChannel!.send(sanitized);
 	}
 
