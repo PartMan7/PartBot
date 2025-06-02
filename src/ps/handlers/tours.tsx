@@ -5,18 +5,29 @@ import { prefix } from '@/config/ps';
 import { bulkAddPoints } from '@/database/points';
 import { TimeZone } from '@/ps/handlers/cron/constants';
 import getSecretFunction from '@/secrets/functions';
-import { Button, Form } from '@/utils/components/ps';
+import { Form } from '@/utils/components/ps';
 import { errorLog } from '@/utils/logger';
+import { randomString } from '@/utils/random';
 
 import type { Client } from 'ps-client';
-import { randomString } from '@/utils/random';
 
 export type BracketNode = {
 	team: string;
-	state: 'inprogress'; // TODO: Add other possible values
-	room: string; // Is this only defined when inprogress?
-	children?: BracketNode[] | null;
-};
+	children?: [BracketNode, BracketNode] | null;
+} & (
+	| {
+			state: 'finished';
+			result: 'win';
+			score: [1, 0] | [0, 1];
+	  }
+	| {
+			state: 'inprogress';
+			room: string;
+	  }
+	| {
+			state: 'available' | 'unavailable' | 'challenging';
+	  }
+);
 
 export type BracketTree = {
 	format: string;
@@ -59,6 +70,7 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 			break;
 		}
 		case 'update': {
+			// TODO: PS no longer sends generator in update events! Might need to store stuff in state
 			if (wallTourFinals) {
 				let json: BracketTree;
 				try {
@@ -156,7 +168,8 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 					room.sendHTML(
 						<div className="infobox">
 							<p>
-								<b>${pointsType.plural}:</b> $
+								<b>{pointsType.plural}</b>
+								{': '}
 								{Object.entries(pointsToAdd)
 									.map(([user, amount]) => `+${amount} ${user}`)
 									.join(', ')}
