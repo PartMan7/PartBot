@@ -38,6 +38,8 @@ const model = mongoose.model<MapModel>('point', schema, 'points', {
 
 const DEFAULT_LB_USERS_CAP = 50;
 
+export type BulkPointsDataInput = Record<string, { name?: string; id: string; points: Record<string, number> }>;
+
 export async function addPoints(user: string, points: Record<string, number>, roomId: string): Promise<Model | undefined> {
 	if (!IS_ENABLED.DB) return;
 	const userId = toId(user);
@@ -51,10 +53,7 @@ export async function addPoints(user: string, points: Record<string, number>, ro
 	return document.toJSON();
 }
 
-export async function bulkAddPoints(
-	bulkData: Record<string, { name?: string; id: string; points: Record<string, number> }>,
-	roomId: string
-): Promise<Model[] | undefined> {
+export async function bulkAddPoints(bulkData: BulkPointsDataInput, roomId: string): Promise<Model[] | undefined> {
 	if (!IS_ENABLED.DB) return;
 	const lookupIds = Object.keys(bulkData).map(userId => `${roomId}-${userId}`);
 	const userPoints = await model.find({ id: { $in: lookupIds } });

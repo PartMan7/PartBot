@@ -6,10 +6,15 @@ export type PSMessage = Message;
 export type AuthKey = Perms & string;
 
 export type PSPointsType = {
+	// Used for referring from anywhere in the code
 	id: string;
+	// Shown when adding/removing exactly one point
 	singular: string;
+	// Shown as the 'human' name for points
 	plural: string;
+	// Used for the abbreviation in the leaderboard table
 	symbol: string;
+	// Only helps when adding points, for end users
 	aliases?: string[];
 };
 

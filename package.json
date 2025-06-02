@@ -22,6 +22,7 @@
 	"author": "PartMan7",
 	"license": "ISC",
 	"dependencies": {
+		"@js-temporal/polyfill": "^0.5.1",
 		"@swc/core": "^1.7.40",
 		"@tailwindcss/cli": "^4.0.8",
 		"chess.js": "^1.2.0",

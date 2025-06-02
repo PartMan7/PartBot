@@ -1,7 +1,16 @@
+import assert from 'node:assert';
 import { uploadToPastie } from 'ps-client/tools';
 
 import { PSRoomConfigs } from '@/cache';
-import { type Model as PointsModel, bulkAddPoints, getPoints, getRank, queryPoints, resetPoints } from '@/database/points';
+import {
+	type BulkPointsDataInput,
+	type Model as PointsModel,
+	bulkAddPoints,
+	getPoints,
+	getRank,
+	queryPoints,
+	resetPoints,
+} from '@/database/points';
 import { IS_ENABLED } from '@/enabled';
 import { LB_COMMON_STYLES as COMMON_STYLES, LB_STYLES } from '@/ps/other/leaderboardStyles';
 import { toId } from '@/tools';
@@ -125,6 +134,55 @@ export const command: PSCommand[] = [
 			broadcast(
 				`Added ${pluralize<TranslatedText>(pointsAmount, pluralData)} to ${res.map(entry => entry.name ?? entry.id).list($T)}.` as ToTranslate
 			);
+		},
+	},
+	{
+		name: 'addjson',
+		help: null,
+		syntax: 'CMD [json data]',
+		perms: 'driver',
+		flags: { conceal: true, noDisplay: true, routePMs: true },
+		categories: ['points'],
+		async run({ message, $T, arg, broadcast }) {
+			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
+
+			const roomConfig = PSRoomConfigs[message.target.id];
+			if (!roomConfig.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS', { room: message.target.title }));
+
+			let json;
+			try {
+				json = JSON.parse(arg);
+			} catch {
+				throw new ChatError('Invalid JSON.' as ToTranslate);
+			}
+			try {
+				// TODO: Maybe use zod here?
+				assert.equal(typeof json, 'object');
+				assert.equal(Array.isArray(json), false);
+				Object.entries(json).forEach(([user, value]) => {
+					assert.ok(toId(user));
+					assert.equal(typeof value, 'object');
+					assert.equal(Array.isArray(value), false);
+					Object.entries(value!).forEach(([type, amount]) => {
+						assert(roomConfig.points?.types[type]);
+						assert.equal(typeof amount, 'number');
+						assert.equal(Math.round(amount), amount);
+					});
+				});
+			} catch {
+				throw new ChatError($T('INVALID_ARGUMENTS'));
+			}
+
+			const data: Record<string, Record<string, number>> = json;
+			const pointsData: BulkPointsDataInput = Object.fromEntries(
+				Object.entries(data).map(([name, points]) => {
+					const id = toId(name);
+					return [id, { id, name, points }];
+				})
+			);
+
+			await bulkAddPoints(pointsData, message.target.id);
+			broadcast('Added points!' as ToTranslate);
 		},
 	},
 	{
