@@ -64,6 +64,7 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 			}
 
 			case 'secrets': {
+				$`cd src/secrets; git pull`;
 				await cachebustDir(fsPath('secrets'));
 				break;
 			}
