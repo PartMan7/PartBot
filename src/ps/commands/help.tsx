@@ -1,5 +1,5 @@
 import { prefix } from '@/config/ps';
-import { LivePS } from '@/sentinel/live';
+import { LivePSStuff } from '@/sentinel/live';
 import { Perms } from '@/types/perms';
 import { ChatError } from '@/utils/chatError';
 import { Button, Username } from '@/utils/components/ps';
@@ -167,7 +167,7 @@ export const command: PSCommand = {
 		// Parse the command to try and find what we need
 		let parsed: ReturnType<typeof parse>;
 		try {
-			parsed = LivePS.commands.parse(args, [], $T);
+			parsed = LivePSStuff.commands.parse(args, [], $T);
 			if (parsed.command.flags?.noDisplay) throw new Error(); // Don't show this here!
 		} catch (e) {
 			throw new ChatError('COULD_NOT_FIND_COMMAND' as ToTranslate); // TODO

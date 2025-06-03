@@ -1,7 +1,7 @@
 import { PSRoomConfigs } from '@/cache';
 import { admins } from '@/config/ps';
 import { KNOWN_RANK_MAPPINGS, RANK_ORDER } from '@/ps/constants';
-import { LivePS } from '@/sentinel/live';
+import { LivePSStuff } from '@/sentinel/live';
 
 import type { Perms } from '@/types/perms';
 import type { AuthKey, PSMessage } from '@/types/ps';
@@ -66,7 +66,7 @@ export function permissions(perm: Perms, command: string[] | null, message: PSMe
 		if (roomConfig?.permissions?.[lookup]) return permissions(roomConfig.permissions[lookup], null, message);
 	}
 	if (typeof perm === 'symbol') {
-		const groupedPerms = LivePS.commands.GROUPED_PERMS;
+		const groupedPerms = LivePSStuff.commands.GROUPED_PERMS;
 		if (perm in groupedPerms) {
 			const symbolName = Symbol.keyFor(perm)!;
 			if (roomConfig?.permissions?.[symbolName]) return permissions(roomConfig.permissions[symbolName], null, message);

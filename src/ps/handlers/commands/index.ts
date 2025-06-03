@@ -1,6 +1,6 @@
 import { prefix } from '@/config/ps';
 import { i18n } from '@/i18n';
-import { LivePS } from '@/sentinel/live';
+import { LivePSStuff } from '@/sentinel/live';
 import { ChatError } from '@/utils/chatError';
 import { log } from '@/utils/logger';
 
@@ -31,7 +31,7 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 
 	if (!messageContent.startsWith(prefix)) return;
 
-	const { parse, permissions, spoof } = LivePS.commands;
+	const { parse, permissions, spoof } = LivePSStuff.commands;
 
 	try {
 		const usePermissions: typeof permissions = (...args) => {

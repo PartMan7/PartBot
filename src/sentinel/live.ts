@@ -26,15 +26,9 @@ import { tourHandler } from '@/ps/handlers/tours';
 export const LiveData = {};
 
 /** @see {@link LiveData} */
-export const LivePS = {
+export const LivePSHandlers = {
 	autoResHandler,
-	commands: {
-		commandHandler,
-		parse,
-		permissions,
-		spoof,
-		GROUPED_PERMS,
-	},
+	commandHandler,
 	interfaceHandler,
 	joinHandler,
 	leaveHandler,
@@ -43,4 +37,15 @@ export const LivePS = {
 	pageHandler,
 	rawHandler,
 	tourHandler,
+};
+export type LivePSHandlers = typeof LivePSHandlers;
+
+/** @see {@link LiveData} */
+export const LivePSStuff = {
+	commands: {
+		parse,
+		permissions,
+		spoof,
+		GROUPED_PERMS,
+	},
 };

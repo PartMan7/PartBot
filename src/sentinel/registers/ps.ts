@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 
 import { Games } from '@/ps/games';
 import { reloadCommands } from '@/ps/loaders/commands';
-import { LivePS } from '@/sentinel/live';
+import { LivePSHandlers, LivePSStuff } from '@/sentinel/live';
 import { cachebust } from '@/utils/cachebust';
 import { fsPath } from '@/utils/fsPath';
 
@@ -17,7 +17,10 @@ const PS_EVENT_HANDLERS = {
 	'raw-handler': { imports: ['rawHandler'], importPath: '@/ps/handlers/raw', fileName: 'raw' },
 	'notify-handler': { imports: ['notifyHandler'], importPath: '@/ps/handlers/notifications', fileName: 'notifications' },
 	'tour-handler': { imports: ['tourHandler'], importPath: '@/ps/handlers/tours', fileName: 'tours' },
-} satisfies Record<string, { imports: (keyof typeof LivePS)[]; importPath: string; fileName: string /* TODO: remove fileName */ }>;
+} satisfies Record<
+	string,
+	{ imports: (keyof typeof LivePSHandlers)[]; importPath: string; fileName: string /* TODO: remove fileName */ }
+>;
 
 export const PS_REGISTERS: Register[] = [
 	{
@@ -66,17 +69,17 @@ export const PS_REGISTERS: Register[] = [
 					const importPath = `@/ps/handlers/commands/${file}`;
 					cachebust(importPath);
 					const hotHandler = await import(importPath);
-					LivePS.commands[file] = hotHandler[file];
+					LivePSStuff.commands[file] = hotHandler[file];
 				})
 			);
 
 			cachebust('@/ps/handlers/commands/customPerms');
 			const { GROUPED_PERMS: newGroupedPerms } = await import('@/ps/handlers/commands/customPerms');
-			LivePS.commands.GROUPED_PERMS = newGroupedPerms;
+			LivePSStuff.commands.GROUPED_PERMS = newGroupedPerms;
 
 			cachebust('@/ps/handlers/commands');
 			const { commandHandler } = await import('@/ps/handlers/commands');
-			LivePS.commands.commandHandler = commandHandler;
+			LivePSHandlers.commandHandler = commandHandler;
 		},
 	},
 
@@ -87,7 +90,7 @@ export const PS_REGISTERS: Register[] = [
 		reload: async () => {
 			cachebust(handlerData.importPath);
 			const hotHandler = await import(handlerData.importPath);
-			handlerData.imports.forEach(namedImport => (LivePS[namedImport] = hotHandler[namedImport]));
+			handlerData.imports.forEach(namedImport => (LivePSHandlers[namedImport] = hotHandler[namedImport]));
 		},
 	})),
 ];
