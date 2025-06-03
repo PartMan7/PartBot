@@ -67,7 +67,7 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 	switch (event) {
 		case 'create': {
 			const [_format, generator, _, name] = data.lazySplit('|', 3);
-			if (IS_ENABLED.DB && roomId === 'petmods') {
+			if (IS_ENABLED.DISCORD && roomId === 'petmods') {
 				getChannel(ANNOUNCEMENTS_CHANNEL)?.send(`${ROLES.PS_TOURS} A ${name} ${generator} tournament has been created in the room!`);
 			}
 			break;
