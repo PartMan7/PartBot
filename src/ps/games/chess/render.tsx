@@ -15,18 +15,19 @@ function getSquare(x: number, y: number, flip: boolean): Square {
 type BoardCell = ReturnType<Chess['board']>[number][number];
 
 const PIECE_IMAGES: Record<string, string> = {
-	wk: 'https://partbot.partman.dev/public/chess/WK.png',
-	wq: 'https://partbot.partman.dev/public/chess/WQ.png',
-	wb: 'https://partbot.partman.dev/public/chess/WB.png',
-	wn: 'https://partbot.partman.dev/public/chess/WN.png',
-	wr: 'https://partbot.partman.dev/public/chess/WR.png',
-	wp: 'https://partbot.partman.dev/public/chess/WP.png',
-	bk: 'https://partbot.partman.dev/public/chess/BK.png',
-	bq: 'https://partbot.partman.dev/public/chess/BQ.png',
-	bb: 'https://partbot.partman.dev/public/chess/BB.png',
-	bn: 'https://partbot.partman.dev/public/chess/BN.png',
-	br: 'https://partbot.partman.dev/public/chess/BR.png',
-	bp: 'https://partbot.partman.dev/public/chess/BP.png',
+	// TODO: Move these all to PartBot!
+	wk: 'https://partprofessor.partman.dev/public/chess/WK.png',
+	wq: 'https://partprofessor.partman.dev/public/chess/WQ.png',
+	wb: 'https://partprofessor.partman.dev/public/chess/WB.png',
+	wn: 'https://partprofessor.partman.dev/public/chess/WN.png',
+	wr: 'https://partprofessor.partman.dev/public/chess/WR.png',
+	wp: 'https://partprofessor.partman.dev/public/chess/WP.png',
+	bk: 'https://partprofessor.partman.dev/public/chess/BK.png',
+	bq: 'https://partprofessor.partman.dev/public/chess/BQ.png',
+	bb: 'https://partprofessor.partman.dev/public/chess/BB.png',
+	bn: 'https://partprofessor.partman.dev/public/chess/BN.png',
+	br: 'https://partprofessor.partman.dev/public/chess/BR.png',
+	bp: 'https://partprofessor.partman.dev/public/chess/BP.png',
 };
 
 function adaptBoard(board: BoardCell[][], flip: boolean): BoardCell[][] {
