@@ -179,7 +179,8 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 									<button>Add Points!</button>
 								</Form>
 							</p>
-						</div>
+						</div>,
+						{ rank: '%' }
 					);
 				}
 			}
