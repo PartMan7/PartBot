@@ -47,11 +47,14 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 			case 'sentinel': {
 				cachebust('@/sentinel/create');
 				cachebust('@/sentinel/hotpatch');
+				cachebust('@/sentinel/process');
 				await cachebustDir(fsPath('sentinel', 'registers'));
 				const newSentinel = await import('@/sentinel/create');
 				this.sentinel.close();
+				this.process.kill();
 				this.sentinel = newSentinel.create(this.emitter);
 				this.hotpatch = (await import('@/sentinel/hotpatch')).hotpatch;
+				this.process = (await import('@/sentinel/process')).processHandler();
 				break;
 			}
 

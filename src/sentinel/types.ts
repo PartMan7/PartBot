@@ -13,7 +13,7 @@ export interface Emitter extends EventEmitter {
 	emit<K extends keyof EmitterEvents>(event: K, ...args: EmitterEvents[K]): boolean;
 	on<K extends keyof EmitterEvents>(event: K, listener: (...args: EmitterEvents[K]) => void): this;
 }
-export type Sentinel = { emitter: Emitter; sentinel: FSWatcher; hotpatch: typeof hotpatch };
+export type Sentinel = { emitter: Emitter; sentinel: FSWatcher; hotpatch: typeof hotpatch; process: { kill: () => void } };
 
 export type Register = { label: string; pattern: RegExp; reload: (filepaths: string[]) => Promise<void> | void; debounce?: number };
 export type Listener = { label: string; pattern: RegExp; reload: (filepaths: string) => Promise<void> | void };
