@@ -66,9 +66,11 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 
 	switch (event) {
 		case 'create': {
-			const [_format, generator, _, name] = data.lazySplit('|', 3);
+			const [_format, _generator, _, name] = data.lazySplit('|', 3);
 			if (IS_ENABLED.DISCORD && roomId === 'petmods') {
-				getChannel(ANNOUNCEMENTS_CHANNEL)?.send(`${ROLES.PS_TOURS} A ${name} ${generator} tournament has been created in the room!`);
+				getChannel(ANNOUNCEMENTS_CHANNEL)?.send(
+					`${ROLES.PS_TOURS} A ${name} tournament has been created in [the room](https://play.pokemonshowdown.com/petmods)!`
+				);
 			}
 			break;
 		}
