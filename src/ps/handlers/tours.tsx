@@ -10,6 +10,9 @@ import { errorLog } from '@/utils/logger';
 import { randomString } from '@/utils/random';
 
 import type { Client } from 'ps-client';
+import { getChannel } from '@/discord/loaders/channels';
+import { ANNOUNCEMENTS_CHANNEL, ROLES } from '@/discord/constants/servers/petmods';
+import { IS_ENABLED } from '@/enabled';
 
 export type BracketNode = {
 	team: string;
@@ -62,6 +65,13 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 	const wallTourFinals = ['hindi', 'capproject'].includes(roomId);
 
 	switch (event) {
+		case 'create': {
+			const [_format, generator, _, name] = data.lazySplit('|', 3);
+			if (IS_ENABLED.DB && roomId === 'petmods') {
+				getChannel(ANNOUNCEMENTS_CHANNEL)?.send(`${ROLES.PS_TOURS} A ${name} ${generator} tournament has been created in the room!`);
+			}
+			break;
+		}
 		case 'battlestart': {
 			if (wishLuck) {
 				const [_p1, _p2, battleRoom] = data.lazySplit('|', 2);
