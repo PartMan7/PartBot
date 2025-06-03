@@ -11,7 +11,7 @@ declare global {
 		count(map: true): Map<T, number>;
 		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X[];
 		list($T?: TranslationFn | string): string;
-		random(rng?: RNGSource): T;
+		random(rng?: RNGSource): T | null;
 		remove(...toRemove: T[]): T[];
 		sample(amount: number, rng?: RNGSource): T[];
 		shuffle(rng?: RNGSource): T[];
@@ -27,7 +27,7 @@ declare global {
 		count(map: true): Map<T, number>;
 		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X[];
 		list($T?: TranslationFn): string;
-		random(rng?: RNGSource): T;
+		random(rng?: RNGSource): T | null;
 		sample(amount: number, rng?: RNGSource): T[];
 		space<S = unknown>(spacer: S): (T | S)[];
 		sum(): T;
@@ -109,8 +109,10 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function <T = unknown>(this: T[], rng?: RNGSource): T {
-			return this[sample(this.length, useRNG(rng))];
+		value: function <T = unknown>(this: T[], rng?: RNGSource): T | null {
+			const lookup = sample(this.length, useRNG(rng));
+			if (lookup >= this.length) return null;
+			return this[lookup];
 		},
 	},
 	remove: {

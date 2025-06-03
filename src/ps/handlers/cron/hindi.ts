@@ -61,7 +61,7 @@ async function Hangman(this: Client) {
 		// TODO: Add a hangman command
 		const randMon = Object.values(pokedex)
 			.filter(mon => mon.num > 0 && !mon.forme)
-			.random();
+			.random()!;
 		room.send(`/hangman create ${randMon.name}, A Pokémon!`);
 
 		gamesDone++;

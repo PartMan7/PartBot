@@ -264,7 +264,7 @@ export class BaseGame<State extends BaseState> {
 			if (availableSlots.length === 0) return { success: false, error: this.$T('GAME.IS_FULL') };
 			let turn = ctx as State['turn'];
 			// `-` is the 'random' side
-			if (turn === '-') turn = availableSlots.random(this.prng);
+			if (turn === '-') turn = availableSlots.random(this.prng)!;
 			else if (!availableSlots.includes(turn))
 				return { success: false, error: this.$T('GAME.INVALID_SIDE', { sides: availableSlots.list(this.$T) }) };
 			newPlayer.turn = turn;

@@ -57,13 +57,22 @@ export async function addQuote(quote: string, room: string, by: string): Promise
 
 export async function getAllQuotes(room: string): Promise<Model[]> {
 	if (!IS_ENABLED.DB) return [];
-	return model.find({ room }).sort({ at: 1 }).lean();
+	return (await model.find({ room }).sort({ at: 1 }).lean()) ?? [];
 }
 
 export async function getQuoteByIndex(index: number, room: string): Promise<Model | null> {
 	if (!IS_ENABLED.DB) return null;
 	const quotes = await getAllQuotes(room);
 	return quotes[index] ?? null;
+}
+
+export async function deleteQuoteByIndex(index: number, room: string): Promise<Model | null> {
+	if (!IS_ENABLED.DB) return null;
+	const allQuotes = await model.find({ room }).sort({ at: 1 });
+	if (index >= allQuotes.length) return null;
+	const toDelete = allQuotes[index];
+	await toDelete.deleteOne();
+	return toDelete.toObject();
 }
 
 export async function searchQuotes(

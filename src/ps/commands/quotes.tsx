@@ -250,7 +250,8 @@ export const command: PSCommand = {
 			syntax: 'CMD',
 			async run({ message, broadcast, broadcastHTML, room: _room, $T }) {
 				const room: string = (_room as string) ?? (await getRoom(message, $T));
-				const [index, randQuote] = Object.entries(await getAllQuotes(room)).random();
+				const quotes = await getAllQuotes(room);
+				const [index, randQuote] = Object.entries(quotes).random() ?? [0, null];
 				if (!randQuote) return broadcast($T('COMMANDS.QUOTES.NO_QUOTES_FOUND'));
 				broadcastHTML(
 					<>

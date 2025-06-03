@@ -33,8 +33,8 @@ export const command: PSCommand = {
 
 		const kuncData = ShowdownData[ShowdownDataKeys.RandomSetsGen9];
 
-		const selectedMon = Object.keys(kuncData).random();
-		const selectedMoves = kuncData[selectedMon].sets.random().movepool.sample(4);
+		const selectedMon = Object.keys(kuncData).random()!;
+		const selectedMoves = kuncData[selectedMon].sets.random()!.movepool.sample(4);
 		const matchingMons = Object.keys(kuncData).filter(m => {
 			const mon = kuncData[m];
 			return mon.sets.some(set => {
