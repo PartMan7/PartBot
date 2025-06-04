@@ -20,6 +20,7 @@ export const command: PSCommand = {
 	syntax: 'CMD [time?]',
 	perms: (message, checkPermission) => (message.type === 'chat' ? checkPermission('driver') : true),
 	categories: ['game'],
+	// TODO: Add end
 	async run({ message, arg, $T }): Promise<User[] | null> {
 		const id = message.type === 'chat' ? message.target.id : `pm-${message.author.id}`;
 		if (PSKuncInProgress[id]) {
