@@ -157,8 +157,7 @@ export const command: PSCommand = {
 							<Button name="send" value={`/msg ${Bot.status.userid},${prefix}commands`}>
 								commands
 							</Button>{' '}
-							you can use? {/* TODO: Move this to PartBot! */}
-							Alternatively, you can take a look at my <a href="https://github.com/PartMan7/PartBot">source code</a>.
+							you can use? Alternatively, you can take a look at my <a href="https://github.com/PartMan7/PartBot">source code</a>.
 						</p>
 					</div>
 				</center>
