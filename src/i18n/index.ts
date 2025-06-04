@@ -9,6 +9,8 @@ export const LanguageMap = {
 	hindi: Hindi,
 };
 
+export type Language = keyof typeof LanguageMap;
+
 export function applyVariables(text: string, variables: Record<string, string | number | undefined>): TranslatedText {
 	return Object.entries(variables).reduce(
 		(acc, [name, value]) => (value ? acc.replaceAll(`{{${name}}}`, value.toString()) : acc),
@@ -16,7 +18,7 @@ export function applyVariables(text: string, variables: Record<string, string | 
 	) as TranslatedText;
 }
 
-export function i18n(language: keyof typeof LanguageMap = 'english'): TranslationFn {
+export function i18n(language: Language = 'english'): TranslationFn {
 	const translations = LanguageMap[language] as TranslationGroup;
 	const fallback = LanguageMap['english'] as TranslationGroup;
 	return (lookup, variables = {}) => {

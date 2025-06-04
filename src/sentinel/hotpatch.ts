@@ -5,7 +5,7 @@ import { update as updatePSData } from 'ps-client/tools';
 import { PSRoomConfigs } from '@/cache';
 import { updateShowdownData } from '@/cache/showdown';
 import { fetchRoomConfigs } from '@/database/psrooms';
-import { LanguageMap } from '@/i18n';
+import { type Language, LanguageMap } from '@/i18n';
 import PS from '@/ps';
 import { registers } from '@/sentinel/registers';
 import { cachebust, cachebustDir } from '@/utils/cachebust';
@@ -39,7 +39,7 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 				await Promise.all(
 					languages.map(async language => {
 						const { default: dict } = await import(fsPath('i18n', 'languages', language));
-						LanguageMap[language as keyof typeof LanguageMap] = dict;
+						LanguageMap[language as Language] = dict;
 					})
 				);
 				break;
