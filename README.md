@@ -11,9 +11,9 @@ This might take a while...
 
 - Cloning and Installing
 - Developing
-- [Planned Features](https://github.com/PartMan7/PartBotter/labels/enhancement)
-- [Known Issues](https://github.com/PartMan7/PartBotter/labels/bug)
-- [Suggestions, Bug Reports, and Feedback](https://github.com/PartMan7/PartBotter/tree/main/docs/SUGGESTIONS.md)
+- [Planned Features](https://github.com/PartMan7/PartBot/labels/enhancement)
+- [Known Issues](https://github.com/PartMan7/PartBot/labels/bug)
+- [Suggestions, Bug Reports, and Feedback](https://github.com/PartMan7/PartBot/tree/main/docs/SUGGESTIONS.md)
 - [Credits](#Credits)
 
 ## Credits

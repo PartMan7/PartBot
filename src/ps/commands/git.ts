@@ -7,6 +7,6 @@ export const command: PSCommand = {
 	syntax: 'CMD',
 	categories: ['utility'],
 	async run({ broadcast }) {
-		broadcast('https://github.com/PartMan7/PartBotter' as NoTranslate);
+		broadcast('https://github.com/PartMan7/PartBot' as NoTranslate);
 	},
 };

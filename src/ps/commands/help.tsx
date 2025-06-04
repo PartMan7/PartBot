@@ -158,7 +158,7 @@ export const command: PSCommand = {
 								commands
 							</Button>{' '}
 							you can use? {/* TODO: Move this to PartBot! */}
-							Alternatively, you can take a look at my <a href="https://github.com/PartMan7/PartBotter">source code</a>.
+							Alternatively, you can take a look at my <a href="https://github.com/PartMan7/PartBot">source code</a>.
 						</p>
 					</div>
 				</center>

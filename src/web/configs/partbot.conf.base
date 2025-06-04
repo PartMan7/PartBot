@@ -1,6 +1,6 @@
 server {
 	listen 80;
-	server_name partbotter.partman.dev;
+	server_name partbot.partman.dev;
 	location / {
 		proxy_pass http://localhost:{{PORT}};
 		proxy_http_version 1.1;

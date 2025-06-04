@@ -6,12 +6,12 @@ server {
 	error_page 404 /not_found.html;
 	charset utf-8;
 
-	location = /partbotter {
+	location = /partbot {
 		try_files /index.html =404;
 	}
 
-	location /partbotter/ {
-		rewrite ^/partbotter/(.*)$ /$1 break;
+	location /partbot/ {
+		rewrite ^/partbot/(.*)$ /$1 break;
 		try_files $uri $uri.html =404;
 	}
 

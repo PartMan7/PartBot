@@ -1,7 +1,7 @@
 # Contributing to PartBot
 
 I welcome all contributors to PartBot! Technical contributors can refer to the documentation below, while non-technical
-contributors are welcome to check out the [Suggestions, Bug Reports, and Feedback](https://github.com/PartMan7/PartBotter/tree/main/docs/SUGGESTIONS.md)
+contributors are welcome to check out the [Suggestions, Bug Reports, and Feedback](https://github.com/PartMan7/PartBot/tree/main/docs/SUGGESTIONS.md)
 docs.
 
 ---
@@ -13,7 +13,7 @@ PartBot requires Node.js v16+ (untested on lower versions) to run, and uses `npm
 To install, clone this repository and install dependencies.
 
 ```bash
-$ git clone https://github.com/PartMan7/PartBotter.git PartBot
+$ git clone https://github.com/PartMan7/PartBot.git PartBot
 $ cd PartBot
 $ npm install
 ```
@@ -44,4 +44,4 @@ automatically run on every pull request.
 
 ---
 
-For details about the structure of PartBot (globals, types, layouts, etc.) please refer to the [structure documentation](https://github.com/PartMan7/PartBotter/tree/main/docs/STRUCTURE.md).
+For details about the structure of PartBot (globals, types, layouts, etc.) please refer to the [structure documentation](https://github.com/PartMan7/PartBot/tree/main/docs/STRUCTURE.md).
