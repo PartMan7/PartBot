@@ -1,5 +1,5 @@
-import English from '@/i18n/english';
-import Hindi from '@/i18n/hindi';
+import English from '@/i18n/languages/english';
+import Hindi from '@/i18n/languages/hindi';
 import { ChatError } from '@/utils/chatError';
 
 import type { TranslatedText, TranslationFn, TranslationGroup } from '@/i18n/types';
