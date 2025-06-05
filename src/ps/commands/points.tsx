@@ -185,7 +185,7 @@ export const command: PSCommand[] = [
 			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS', { room: room.title }));
 			const target = args.join(' ').trim() || message.author.id;
 			const targetPoints = await getPoints(target, room.id);
-			if (!targetPoints) throw new ChatError($T('COMMANDS.POINTS.USER_NO_POINTS'));
+			if (!targetPoints) throw new ChatError($T('COMMANDS.POINTS.USER_NO_POINTS', { user: target }));
 			const roomPoints = roomConfig.points;
 			return broadcast(
 				$T('COMMANDS.POINTS.USER_POINTS', {
@@ -212,7 +212,7 @@ export const command: PSCommand[] = [
 			const roomPoints = roomConfig.points;
 			const target = args.join(' ').trim() || message.author.id;
 			const targetPoints = await getRank(target, room.id, roomPoints.priority);
-			if (!targetPoints) throw new ChatError($T('COMMANDS.POINTS.USER_NO_POINTS'));
+			if (!targetPoints) throw new ChatError($T('COMMANDS.POINTS.USER_NO_POINTS', { user: target }));
 			return broadcast(
 				$T('COMMANDS.POINTS.USER_POINTS_RANKED', {
 					user: targetPoints.name,
