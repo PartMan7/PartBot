@@ -1,11 +1,12 @@
 import { Temporal } from '@js-temporal/polyfill';
 
-import { PSPointsNonce, PSRoomConfigs } from '@/cache';
+import { PSCommands, PSPointsNonce, PSRoomConfigs } from '@/cache';
 import { prefix } from '@/config/ps';
 import { bulkAddPoints } from '@/database/points';
 import { ANNOUNCEMENTS_CHANNEL, ROLES } from '@/discord/constants/servers/petmods';
 import { getChannel } from '@/discord/loaders/channels';
 import { IS_ENABLED } from '@/enabled';
+import { i18n } from '@/i18n';
 import { TimeZone } from '@/ps/handlers/cron/constants';
 import getSecretFunction from '@/secrets/functions';
 import { toId } from '@/tools';
@@ -13,6 +14,9 @@ import { Form } from '@/utils/components/ps';
 import { Logger } from '@/utils/logger';
 import { randomString } from '@/utils/random';
 
+import type { PSCommandContext } from '@/types/chat';
+import type { RecursivePartial } from '@/types/common';
+import type { PSMessage } from '@/types/ps';
 import type { Client } from 'ps-client';
 
 export type BracketNode = {
@@ -131,8 +135,23 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 						])
 					),
 					roomId
-				).then(() => {
-					// TODO: Run leaderboard
+				).then(async res => {
+					if (!res) return;
+					const lbCommand = PSCommands.leaderboard;
+					const partialMessage: RecursivePartial<PSMessage> = {
+						type: 'chat',
+						target: room,
+						parent: this,
+					};
+					const $T = i18n(); // TODO: Use language pref
+					const partialContext: Partial<PSCommandContext> = {
+						args: [],
+						message: partialMessage as PSMessage,
+						broadcastHTML: room.sendHTML.bind(room),
+						$T,
+					};
+
+					lbCommand.run(partialContext as PSCommandContext);
 				});
 			}
 			if (roomId === 'capproject') {
