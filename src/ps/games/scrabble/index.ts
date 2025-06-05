@@ -385,6 +385,7 @@ export class Scrabble extends BaseGame<State> {
 		return null;
 	}
 
+	// TODO: Fix Discord embeds
 	async renderEmbed(): Promise<EmbedBuilder | null> {
 		const winners = this.winCtx && this.winCtx.type === 'win' ? this.winCtx.winnerIds : null;
 		if (!winners) return null;
@@ -457,11 +458,14 @@ export class Scrabble extends BaseGame<State> {
 	}
 
 	parseBonus(bonus: Bonus | null, tile: BoardTile): BonusReducer {
-		return score => {
-			if (!bonus) return score;
-			const modifier = +bonus.charAt(0);
-			const additive = bonus.charAt(1) === 'L';
-			return additive ? score + (modifier - 1) * tile.points : score * modifier;
+		const modifier = +(bonus?.charAt(0) ?? 0);
+		const additive = bonus?.charAt(1) === 'L';
+		return {
+			apply: score => {
+				if (!bonus) return score;
+				return additive ? score + (modifier - 1) * tile.points : score * modifier;
+			},
+			weight: bonus ? (additive ? 1 : 2) : 0,
 		};
 	}
 
@@ -475,7 +479,11 @@ export class Scrabble extends BaseGame<State> {
 		const wordData = words.map<[string, number | null]>(word => {
 			const scoring = this.checkWord(word.word);
 			if (!scoring) return [word.word, null];
-			return [word.word, word.bonuses.reduce((score, bonus) => bonus(score), word.baseScore) * scoring[0] + scoring[1]];
+			return [
+				word.word,
+				word.bonuses.sortBy(bonus => bonus.weight, 'asc').reduce((score, bonus) => bonus.apply(score), word.baseScore) * scoring[0] +
+					scoring[1],
+			];
 		});
 		const invalidWords = wordData.filter(entry => entry[1] === null).map(entry => entry[0]);
 		if (invalidWords.length > 0) {
