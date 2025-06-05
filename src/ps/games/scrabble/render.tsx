@@ -2,7 +2,7 @@ import { Table } from '@/ps/games/render';
 import { WIDE_LETTERS } from '@/ps/games/scrabble/constants';
 import { Button, Form, Username } from '@/utils/components/ps';
 import { type Point, coincident } from '@/utils/grid';
-import { log } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 
 import type { CellRenderer } from '@/ps/games/render';
 import type { Scrabble } from '@/ps/games/scrabble';
@@ -54,7 +54,7 @@ export function renderMove(logEntry: Log, { id, players, $T, renderCtx: { msg } 
 				opts,
 			];
 		default:
-			log('Scrabble had some weird move', logEntry, players);
+			Logger.log('Scrabble had some weird move', logEntry, players);
 			return [
 				<Wrapper>
 					Well <i>something</i> happened, I think! Someone go poke PartMan

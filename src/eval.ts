@@ -9,7 +9,7 @@ import { ansiToHtml } from '@/utils/ansiToHtml';
 import { cachebust as _cachebust } from '@/utils/cachebust';
 import { $ as _$ } from '@/utils/child_process';
 import { fsPath as _fsPath } from '@/utils/fsPath';
-import { log as _log } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 
 import type { PSCommandContext } from '@/types/chat';
 import type { PSMessage } from '@/types/ps';
@@ -20,14 +20,13 @@ const cachebust = _cachebust;
 const fs = _fs;
 const fsSync = _fsSync;
 const fsPath = _fsPath;
-const log = _log;
 const path = _path;
 const Tools = _Tools;
 const $ = _$;
 const Sentinel = _Sentinel;
 
 // Storing in context for eval()
-const _evalContext = [cache, cachebust, fs, fsSync, fsPath, log, path, Tools, $, Sentinel];
+const _evalContext = [cache, cachebust, fs, fsSync, fsPath, path, Tools, $, Sentinel];
 
 export type EvalModes = 'COLOR_OUTPUT' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
 export type EvalOutput = {
@@ -105,8 +104,9 @@ export async function evaluate(
 	try {
 		const res = await (() => {
 			const { message, context } = passedContext;
+			const { log, deepLog, errorLog } = Logger;
 			// Storing in context for eval()
-			const _innerEvalContext = { message, context };
+			const _innerEvalContext = { message, context, log, deepLog, errorLog };
 			return eval(code);
 		})();
 		success = true;

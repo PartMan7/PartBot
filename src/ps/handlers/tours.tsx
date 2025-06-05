@@ -10,7 +10,7 @@ import { TimeZone } from '@/ps/handlers/cron/constants';
 import getSecretFunction from '@/secrets/functions';
 import { toId } from '@/tools';
 import { Form } from '@/utils/components/ps';
-import { errorLog } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 import { randomString } from '@/utils/random';
 
 import type { Client } from 'ps-client';
@@ -89,7 +89,7 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 				try {
 					json = JSON.parse(data);
 				} catch (e) {
-					if (e instanceof Error) errorLog(e);
+					if (e instanceof Error) Logger.errorLog(e);
 					return;
 				}
 				if (json.generator !== 'Single Elimination') return;
@@ -107,7 +107,7 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 			try {
 				json = JSON.parse(data);
 			} catch (e) {
-				if (e instanceof Error) errorLog(e);
+				if (e instanceof Error) Logger.errorLog(e);
 				return;
 			}
 			if (roomId === 'hindi') {
@@ -171,7 +171,7 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 					const pointsType = PSRoomConfigs.capproject?.points?.types.tournight;
 					if (!pointsType) {
 						room.send("Hi for some reason Tour Nights don't exist, someone go poke PartMan");
-						errorLog(new Error(`CAP room points: ${JSON.stringify(PSRoomConfigs.capproject)}`));
+						Logger.errorLog(new Error(`CAP room points: ${JSON.stringify(PSRoomConfigs.capproject)}`));
 						return;
 					}
 

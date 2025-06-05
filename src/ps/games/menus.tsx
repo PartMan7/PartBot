@@ -2,7 +2,7 @@ import { PSGames } from '@/cache';
 import { gameCache } from '@/cache/games';
 import { prefix } from '@/config/ps';
 import { Button, Username } from '@/utils/components/ps';
-import { log } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 
 import type { PSRoomTranslated } from '@/i18n/types';
 import type { Meta, Player } from '@/ps/games/common';
@@ -88,7 +88,7 @@ export function renderBackups(room: PSRoomTranslated, meta: Meta): ReactElement 
 					try {
 						parsed = JSON.parse(game.backup);
 					} catch (e) {
-						log(`Unable to parse ${game.backup} in backups`, e);
+						Logger.log(`Unable to parse ${game.backup} in backups`, e);
 						return <div>Unable to parse backup for {game.id}</div>;
 					}
 					const players = Object.values(parsed.players);

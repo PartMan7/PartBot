@@ -1,5 +1,5 @@
 import { LivePSHandlers } from '@/sentinel/live';
-import { errorLog } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 
 import type { Client } from 'ps-client';
 
@@ -10,7 +10,7 @@ export function registerEvent<Event extends keyof LivePSHandlers>(client: Client
 			// @ts-expect-error -- See above
 			return LivePSHandlers[event].apply(client, args);
 		} catch (err) {
-			if (err instanceof Error) errorLog(err);
+			if (err instanceof Error) Logger.errorLog(err);
 		}
 	};
 }

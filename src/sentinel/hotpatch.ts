@@ -13,7 +13,7 @@ import { ChatError } from '@/utils/chatError';
 import { $ } from '@/utils/child_process';
 import { emptyObject } from '@/utils/emptyObject';
 import { fsPath } from '@/utils/fsPath';
-import { errorLog, log } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 
 import type { NoTranslate } from '@/i18n/types';
 import type { Sentinel } from '@/sentinel/types';
@@ -27,6 +27,30 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 		switch (hotpatchType) {
 			case 'code': {
 				$`git pull`;
+				break;
+			}
+
+			case 'sentinel': {
+				cachebust('@/sentinel/create');
+				cachebust('@/sentinel/hotpatch');
+				cachebust('@/sentinel/process');
+				await cachebustDir(fsPath('sentinel', 'registers'));
+				const newSentinel = await import('@/sentinel/create');
+				this.sentinel.close();
+				this.process.kill();
+				this.sentinel = newSentinel.create(this.emitter);
+				this.hotpatch = (await import('@/sentinel/hotpatch')).hotpatch;
+				this.process = (await import('@/sentinel/process')).processHandler();
+				break;
+			}
+
+			case 'logger': {
+				const { closeStreams } = await import('@/utils/logger');
+				closeStreams();
+				cachebust('@/utils/logger');
+
+				const { Logger: NewLogger } = await import('@/utils/logger');
+				Object.assign(Logger, NewLogger);
 				break;
 			}
 
@@ -66,20 +90,6 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 				break;
 			}
 
-			case 'sentinel': {
-				cachebust('@/sentinel/create');
-				cachebust('@/sentinel/hotpatch');
-				cachebust('@/sentinel/process');
-				await cachebustDir(fsPath('sentinel', 'registers'));
-				const newSentinel = await import('@/sentinel/create');
-				this.sentinel.close();
-				this.process.kill();
-				this.sentinel = newSentinel.create(this.emitter);
-				this.hotpatch = (await import('@/sentinel/hotpatch')).hotpatch;
-				this.process = (await import('@/sentinel/process')).processHandler();
-				break;
-			}
-
 			case 'cron':
 			case 'schedule': {
 				await cachebustDir(fsPath('ps', 'handlers', 'cron'));
@@ -109,11 +119,11 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 					.map(entry => path.join(entry.parentPath, entry.name));
 				await register.reload(allFiles.filter(file => register.pattern.test(file)));
 		}
-		log(`${hotpatchType} was hotpatched ${typeof by === 'symbol' ? `(${Symbol.keyFor(by) ?? '-'})` : `by ${by}`}`);
+		Logger.log(`${hotpatchType} was hotpatched ${typeof by === 'symbol' ? `(${Symbol.keyFor(by) ?? '-'})` : `by ${by}`}`);
 	} catch (error) {
 		if (error instanceof Error) {
-			log('Failed to hotpatch', hotpatchType, by, error.message);
-			errorLog(error);
+			Logger.log('Failed to hotpatch', hotpatchType, by, error.message);
+			Logger.errorLog(error);
 		}
 		throw error;
 	}

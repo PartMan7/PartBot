@@ -3,7 +3,7 @@ import { prefix } from '@/config/ps';
 import { LanguageMap, i18n } from '@/i18n';
 import { LivePSStuff } from '@/sentinel/live';
 import { ChatError } from '@/utils/chatError';
-import { log } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 
 import type { PSCommandContext } from '@/types/chat';
 import type { PSMessage } from '@/types/ps';
@@ -114,11 +114,14 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 		};
 
 		return await commandObj.run({ ...context, message });
-	} catch (_err) {
-		const err = _err as Error;
-		message.privateReply(err.message as string);
-
-		if (err.name !== 'ChatError') log(err);
+	} catch (err) {
+		if (err instanceof Error) {
+			message.privateReply(err.message as string);
+			if (err.name !== 'ChatError') Logger.errorLog(err);
+		} else {
+			Logger.log('A command threw a non-error value.', err);
+			Logger.errorLog(new Error('A command threw a non-error value.'));
+		}
 		return null;
 	}
 }

@@ -8,7 +8,7 @@ import { IS_ENABLED } from '@/enabled';
 import { renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { toHumanTime, toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
-import { log } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 import { pick } from '@/utils/pick';
 import { sample, useRNG } from '@/utils/random';
 import { Timer } from '@/utils/timer';
@@ -171,7 +171,7 @@ export class BaseGame<State extends BaseState> {
 		const timerLength = this.timerLength;
 		const player = this.parent.getUser(this.players[turn].id);
 		if (!player) {
-			log('Unable to find player for ', { turn, game: this });
+			Logger.log('Unable to find player for ', { turn, game: this });
 			return;
 		}
 		this.timer = new Timer(
@@ -465,7 +465,7 @@ export class BaseGame<State extends BaseState> {
 					if (replay) this.room.send(replay as NoTranslate);
 				})
 				.catch(err => {
-					log(err);
+					Logger.log(err);
 					this.room.send(this.$T('GAME.UPLOAD_FAILED', { id: this.id }));
 				});
 		}

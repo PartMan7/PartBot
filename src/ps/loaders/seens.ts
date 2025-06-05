@@ -1,6 +1,6 @@
 import { PSSeenCache } from '@/cache';
 import { fetchAllSeens } from '@/database/seens';
-import { log } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 
 export async function loadSeens(): Promise<void> {
 	const fetched = await fetchAllSeens();
@@ -8,5 +8,5 @@ export async function loadSeens(): Promise<void> {
 		const { id, name, at, seenIn } = entry;
 		PSSeenCache[id] = { id, name, at, seenIn };
 	});
-	log('Loaded seens!');
+	Logger.log('Loaded seens!');
 }

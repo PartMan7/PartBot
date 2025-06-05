@@ -1,10 +1,10 @@
 import mongoose, { type Mongoose } from 'mongoose';
 
 import { IS_ENABLED } from '@/enabled';
-import { log } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 
 const connection: Promise<Mongoose> | null = IS_ENABLED.DB ? mongoose.connect(process.env.DB_MONGO_URL!) : null;
-if (connection) connection.then(() => log('Connected to database!'));
-else log('Skipping database...');
+if (connection) connection.then(() => Logger.log('Connected to database!'));
+else Logger.log('Skipping database...');
 
 export default connection;

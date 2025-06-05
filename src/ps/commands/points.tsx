@@ -14,7 +14,7 @@ import { IS_ENABLED } from '@/enabled';
 import { LB_COMMON_STYLES as COMMON_STYLES, LB_STYLES } from '@/ps/other/leaderboardStyles';
 import { toId } from '@/tools';
 import { ChatError } from '@/utils/chatError';
-import { log } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 import { pluralize } from '@/utils/pluralize';
 
 import type { ToTranslate, TranslatedText } from '@/i18n/types';
@@ -308,7 +308,7 @@ export const command: PSCommand[] = [
 			const currentData = await queryPoints(message.target.id, roomPoints.priority, Infinity);
 			if (currentData?.length) {
 				const backupURL = await uploadToPastie(JSON.stringify(currentData, null, 2));
-				log(`Backup for ${message.target.id}, reset ${pointsToReset} by ${message.author.id}: ${backupURL}`);
+				Logger.log(`Backup for ${message.target.id}, reset ${pointsToReset} by ${message.author.id}: ${backupURL}`);
 				message.target.send(`/modnote ${backupURL}`);
 			}
 

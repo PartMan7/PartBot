@@ -2,7 +2,7 @@ import { DiscCommands } from '@/cache';
 import { admins } from '@/config/discord';
 import { i18n } from '@/i18n';
 import { ChatError } from '@/utils/chatError';
-import { log } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 
 import type { Interaction } from 'discord.js';
 
@@ -29,7 +29,7 @@ export default async function messageHandler(interaction: Interaction): Promise<
 	} catch (err) {
 		if (err instanceof Error) {
 			interaction.reply({ content: err.message, ephemeral: true });
-			if (err.name !== 'ChatError') log(err);
+			if (err.name !== 'ChatError') Logger.log(err);
 		}
 	}
 }

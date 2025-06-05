@@ -9,6 +9,7 @@ declare global {
 		access<V = ArrayAtom<T>>(pos: number[]): V;
 		count(): Record<T & (string | number), number>;
 		count(map: true): Map<T, number>;
+		group(size: number): T[][];
 		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X[];
 		list($T?: TranslationFn | string): string;
 		random(rng?: RNGSource): T | null;
@@ -26,6 +27,7 @@ declare global {
 		count(): Record<T & (string | number), number>;
 		count(map: true): Map<T, number>;
 		filterMap<X>(cb: (element: T, index: number, thisArray: T[]) => X | undefined): X[];
+		group(size: number): T[][];
 		list($T?: TranslationFn): string;
 		random(rng?: RNGSource): T | null;
 		sample(amount: number, rng?: RNGSource): T[];
@@ -89,6 +91,24 @@ Object.defineProperties(Array.prototype, {
 				results.push(result);
 			}
 			return results;
+		},
+	},
+	group: {
+		enumerable: false,
+		writable: false,
+		configurable: false,
+		value: function <T>(this: T[], size: number, evenly = false): T[][] {
+			if (this.length <= size) return [this];
+			if (!evenly) {
+				const ret: T[][] = [];
+				const length = Math.ceil(this.length / size);
+				for (let i = 0; i < length; i++) {
+					ret.push(this.slice(i * size, i * size + size));
+				}
+				return ret;
+			}
+			// TODO
+			return [];
 		},
 	},
 	list: {

@@ -6,10 +6,10 @@ import { registerEvent } from '@/ps/handlers';
 import { startPSCron } from '@/ps/handlers/cron';
 import { transformHTML } from '@/ps/handlers/html';
 import loadPS from '@/ps/loaders';
-import { log } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 
 const PS = new Client({ username, password, rooms, transformHTML });
-PS.on('login', () => log(`Connected to PS! [${username}]`));
+PS.on('login', () => Logger.log(`Connected to PS! [${username}]`));
 
 if (IS_ENABLED.PS) loadPS().then(() => PS.connect());
 

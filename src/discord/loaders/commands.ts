@@ -6,7 +6,7 @@ import { resetCache } from '@/cache/reset';
 import { clientId, token } from '@/config/discord';
 import { cachebust } from '@/utils/cachebust';
 import { fsPath } from '@/utils/fsPath';
-import { log } from '@/utils/logger';
+import { Logger } from '@/utils/logger';
 
 import type { DiscCommand } from '@/types/chat';
 
@@ -24,13 +24,13 @@ async function registerCommands() {
 		},
 		{}
 	);
-	log('Registering Discord commands');
+	Logger.log('Registering Discord commands');
 	await Promise.all([
 		restClient.put(Routes.applicationCommands(clientId), { body: globalBody }),
 		...Object.entries(guildSpecificBody).map(([guildId, commands]) =>
 			restClient
 				.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
-				.catch(() => log(`Unable to register commands for guild #${guildId}`))
+				.catch(() => Logger.log(`Unable to register commands for guild #${guildId}`))
 		),
 	]);
 }
