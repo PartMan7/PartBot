@@ -37,7 +37,7 @@ This might take a while...
 
 3. **Setup environment variables**
 
-   Create a `.env` file at the root with your configuration (see `.env.example` if available).
+   Create a `.env` file at the root with your configuration `.env.example`.
 
 4. **Start the bot**
    ```bash
