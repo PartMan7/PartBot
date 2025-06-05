@@ -120,7 +120,7 @@ const translations: AvailableTranslations = {
 			ROOM_NO_POINTS: '{{room}} mein points enabled nahi hain.',
 			USER_NO_POINTS: '[[]]{{user}} ke paas is room mein koi points nahi hain.',
 			USER_POINTS: '[[]]{{user}} ke paas {{roomName}} mein {{pointsList}} hain.',
-			USER_POINTS_RANKED: '[[]]{{user}} {{roomName}} mein {{pointsList}} ke saath #{{rank}} par ranked hai.',
+			USER_POINTS_RANKED: '[[]]{{user}} {{roomName}} mein {{pointsList}} ke saath #{{rank}} par hai.',
 			HEADERS: {
 				USER: 'User',
 			},

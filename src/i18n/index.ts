@@ -13,7 +13,7 @@ export type Language = keyof typeof LanguageMap;
 
 export function applyVariables(text: string, variables: Record<string, string | number | undefined>): TranslatedText {
 	return Object.entries(variables).reduce(
-		(acc, [name, value]) => (typeof value === 'string' ? acc.replaceAll(`{{${name}}}`, value.toString()) : acc),
+		(acc, [name, value]) => (typeof value !== 'undefined' ? acc.replaceAll(`{{${name}}}`, value.toString()) : acc),
 		text
 	) as TranslatedText;
 }
