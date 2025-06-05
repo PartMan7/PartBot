@@ -20,12 +20,12 @@ export const command: PSCommand = {
 	syntax: 'CMD [time?]',
 	perms: (message, checkPermission) => (message.type === 'chat' ? checkPermission('driver') : true),
 	categories: ['game'],
+	// TODO: Add end
 	async run({ message, arg, $T }): Promise<User[] | null> {
 		const id = message.type === 'chat' ? message.target.id : `pm-${message.author.id}`;
 		if (PSKuncInProgress[id]) {
 			throw new ChatError(`Kunc in progress! Finish it first or end with \`\`${prefix}kunc end\`\`` as ToTranslate);
 		}
-		PSKuncInProgress[id] = true;
 		const time = arg.trim() ? fromHumanTime(arg) : fromHumanTime('30 sec');
 		if (!time || time < fromHumanTime('5 sec') || time > fromHumanTime('1 min')) {
 			throw new ChatError('Set a reasonable time please (5s - 1min)' as ToTranslate);
@@ -45,6 +45,7 @@ export const command: PSCommand = {
 		const matchingNamesLower = matchingNames.map(name => name.toLowerCase().replace(/[ -]/g, ''));
 
 		message.reply(`**Kunc: ${selectedMoves.join(', ')}**` as NoTranslate);
+		PSKuncInProgress[id] = true;
 
 		const solved: User[] = [];
 

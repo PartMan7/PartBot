@@ -1,3 +1,4 @@
+import type { Language } from '@/i18n';
 import type { Perms } from '@/types/perms';
 import type { Message } from 'ps-client';
 
@@ -34,6 +35,7 @@ export type PSRoomConfig = {
 	permissions?: {
 		[key: string]: Perms;
 	} | null;
+	language?: Language;
 	points?: {
 		types: Record<string, PSPointsType>;
 		priority: string[];

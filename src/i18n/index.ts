@@ -1,5 +1,5 @@
-import English from '@/i18n/english';
-import Hindi from '@/i18n/hindi';
+import English from '@/i18n/languages/english';
+import Hindi from '@/i18n/languages/hindi';
 import { ChatError } from '@/utils/chatError';
 
 import type { TranslatedText, TranslationFn, TranslationGroup } from '@/i18n/types';
@@ -9,14 +9,16 @@ export const LanguageMap = {
 	hindi: Hindi,
 };
 
+export type Language = keyof typeof LanguageMap;
+
 export function applyVariables(text: string, variables: Record<string, string | number | undefined>): TranslatedText {
 	return Object.entries(variables).reduce(
-		(acc, [name, value]) => (value ? acc.replaceAll(`{{${name}}}`, value.toString()) : acc),
+		(acc, [name, value]) => (typeof value === 'string' ? acc.replaceAll(`{{${name}}}`, value.toString()) : acc),
 		text
 	) as TranslatedText;
 }
 
-export function i18n(language: keyof typeof LanguageMap = 'english'): TranslationFn {
+export function i18n(language: Language = 'english'): TranslationFn {
 	const translations = LanguageMap[language] as TranslationGroup;
 	const fallback = LanguageMap['english'] as TranslationGroup;
 	return (lookup, variables = {}) => {

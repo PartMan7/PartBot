@@ -1,4 +1,4 @@
-import type refText from '@/i18n/english';
+import type refText from '@/i18n/languages/english';
 import type { Message, Room } from 'ps-client';
 
 export type Translations = typeof refText;

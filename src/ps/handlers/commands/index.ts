@@ -1,5 +1,6 @@
+import { PSRoomConfigs } from '@/cache';
 import { prefix } from '@/config/ps';
-import { i18n } from '@/i18n';
+import { LanguageMap, i18n } from '@/i18n';
 import { LivePSStuff } from '@/sentinel/live';
 import { ChatError } from '@/utils/chatError';
 import { log } from '@/utils/logger';
@@ -42,7 +43,12 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 		};
 
 		const argData = messageContent.substring(prefix.length);
-		const $T = i18n(); // TODO: Allow overriding translations
+		let language = message.type === 'chat' ? PSRoomConfigs[message.target.id]?.language : undefined;
+		if (language && !LanguageMap[language]) {
+			language = undefined;
+			message.privateReply(`Could not find translations for ${language}.`);
+		}
+		const $T = i18n(language); // TODO: Allow overriding translations
 		// Check if this is a spoof message. If so, spoof and pass to the room.
 		// Will only trigger commands with `flags.routePMs` enabled.
 		if (!indirect && argData.startsWith('@')) {

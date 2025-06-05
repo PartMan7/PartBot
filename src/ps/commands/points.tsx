@@ -126,13 +126,12 @@ export const command: PSCommand[] = [
 			);
 			const res = await bulkAddPoints(pointsData, message.target.id);
 			if (!res) throw new ChatError('Something went wrong...' as ToTranslate);
+
 			const pluralData = {
 				singular: pointsTypes.map(pointsType => pointsType.singular).join('/'),
 				plural: pointsTypes.map(pointsType => pointsType.plural).join('/'),
 			};
-			broadcast(
-				`Added ${pluralize<TranslatedText>(pointsAmount, pluralData)} to ${res.map(entry => entry.name ?? entry.id).list($T)}.` as ToTranslate
-			);
+			broadcast(`Added ${pluralize<TranslatedText>(pointsAmount, pluralData)} to ${users.list($T)}.` as ToTranslate);
 		},
 	},
 	{

@@ -8,6 +8,7 @@ import { getChannel } from '@/discord/loaders/channels';
 import { IS_ENABLED } from '@/enabled';
 import { TimeZone } from '@/ps/handlers/cron/constants';
 import getSecretFunction from '@/secrets/functions';
+import { toId } from '@/tools';
 import { Form } from '@/utils/components/ps';
 import { errorLog } from '@/utils/logger';
 import { randomString } from '@/utils/random';
@@ -124,7 +125,10 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 				if (!pointsType) throw new Error(`AAAAAA someone ping PartMan for ${roomId}`);
 				bulkAddPoints(
 					Object.fromEntries(
-						Object.entries(pointsToAdd).map(([user, points]) => [user, { id: user, points: { [pointsType]: points } }])
+						Object.entries(pointsToAdd).map(([user, points]) => [
+							user,
+							{ id: toId(user), name: user, points: { [pointsType]: points } },
+						])
 					),
 					roomId
 				).then(() => {

@@ -8,7 +8,7 @@ export type BoardTile = {
 };
 
 export type Bonus = '3W' | '2W' | '3L' | '2L' | '2*';
-export type BonusReducer = (score: number) => number;
+export type BonusReducer = { apply: (score: number) => number; weight: number };
 
 export type BaseBoard = (Bonus | null)[][];
 export type Board = (null | BoardTile)[][];

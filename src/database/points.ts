@@ -32,7 +32,7 @@ const schema = new mongoose.Schema<MapModel>({
 	},
 });
 
-const model = mongoose.model<MapModel>('point', schema, 'points', {
+export const model = mongoose.model<MapModel>('point', schema, 'points', {
 	overwriteModels: true,
 });
 
@@ -53,26 +53,31 @@ export async function addPoints(user: string, points: Record<string, number>, ro
 	return document.toJSON();
 }
 
-export async function bulkAddPoints(bulkData: BulkPointsDataInput, roomId: string): Promise<Model[] | undefined> {
+export async function bulkAddPoints(bulkData: BulkPointsDataInput, roomId: string): Promise<boolean | undefined> {
 	if (!IS_ENABLED.DB) return;
-	const lookupIds = Object.keys(bulkData).map(userId => `${roomId}-${userId}`);
-	const userPoints = await model.find({ id: { $in: lookupIds } });
 	const roomConfig = PSRoomConfigs[roomId].points!;
 
-	const documentsToSave = await Promise.all(
-		Object.values(bulkData).map(async ({ name, id, points }) => {
-			const existing = userPoints.find(document => document.userId === id);
-			const document =
-				existing ?? (await model.create({ id: `${roomId}-${id}`, userId: id, name: name ?? id, roomId, points: new Map() }));
-			Object.keys(roomConfig.types).forEach(type => document.points.set(type, document.points.get(type) ?? 0));
-			document.name = name ?? id;
-			Object.entries(points).forEach(([type, count]) => document.points.set(type, (document.points.get(type) ?? 0) + count));
-			return document;
-		})
-	);
+	const bulkQueries = Object.values(bulkData).map(({ id, name, points }) => ({
+		updateOne: {
+			filter: { id: `${roomId}-${id}` },
+			update: {
+				$setOnInsert: {
+					id: `${roomId}-${id}`,
+					roomId,
+					userId: id,
+					...Object.fromEntries(
+						roomConfig.priority.filter(type => typeof points[type] !== 'number').map(type => [`points.${type}`, 0])
+					),
+				},
+				$inc: Object.fromEntries(Object.entries(points).map(([type, amount]) => [`points.${type}`, amount])),
+				$set: { name: name ?? id },
+			},
+			upsert: true,
+		},
+	}));
 
-	await model.bulkSave(documentsToSave);
-	return documentsToSave.map(document => document.toJSON());
+	const res = await model.bulkWrite(bulkQueries);
+	return res.isOk();
 }
 
 export async function getPoints(user: string, roomId: string): Promise<Model | null | undefined> {

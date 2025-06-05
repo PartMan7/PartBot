@@ -25,6 +25,7 @@ const schema = new mongoose.Schema<PSRoomConfig>({
 	private: Boolean,
 	ignore: Boolean,
 	permissions: Object,
+	language: String,
 
 	points: {
 		types: {
