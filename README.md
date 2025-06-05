@@ -11,9 +11,6 @@ This might take a while...
 ## Features
 
 - Modular and extensible TypeScript codebase
-- Discord integration via `discord.js`
-- Web interface with React and TailwindCSS
-- MongoDB support via `mongoose`
 - Real-time file watching and reloads
 - Rich set of utilities for tournaments, games (e.g., Chess), and more
 
