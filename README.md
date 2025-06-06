@@ -37,7 +37,7 @@ This might take a while...
 
 3. **Setup environment variables**
 
-   Modify the `.env` file (which is automatically copied from `.env.template`.
+   Modify the `.env` file (which is automatically copied from `.env.example`).
 
 4. **Start the bot**
    ```bash
