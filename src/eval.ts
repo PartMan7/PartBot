@@ -25,8 +25,11 @@ const Tools = _Tools;
 const $ = _$;
 const Sentinel = _Sentinel;
 
+// Allow storing eval results
+const E: Record<string, unknown> = {};
+
 // Storing in context for eval()
-const _evalContext = [cache, cachebust, fs, fsSync, fsPath, path, Tools, $, Sentinel];
+const _evalContext = [cache, cachebust, fs, fsSync, fsPath, path, Tools, $, Sentinel, E];
 
 export type EvalModes = 'COLOR_OUTPUT' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
 export type EvalOutput = {
