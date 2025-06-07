@@ -2,7 +2,7 @@
 
 import type { AvailableTranslations } from '@/i18n/types';
 
-const translations: AvailableTranslations = {
+export default {
 	GRAMMAR: {
 		AND: 'aur',
 		OR: 'ya',
@@ -142,6 +142,4 @@ const translations: AvailableTranslations = {
 			TIMER_SET: 'Aapka timer ab se {{timeLeft}} ke liye set kiya gaya hai.',
 		},
 	},
-};
-
-export default translations;
+} satisfies AvailableTranslations;
