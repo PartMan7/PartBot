@@ -1,5 +1,6 @@
 import English from '@/i18n/languages/english';
 import Hindi from '@/i18n/languages/hindi';
+import Portuguese from '@/i18n/languages/portuguese';
 import { ChatError } from '@/utils/chatError';
 
 import type { TranslatedText, TranslationFn, TranslationGroup } from '@/i18n/types';
@@ -7,6 +8,7 @@ import type { TranslatedText, TranslationFn, TranslationGroup } from '@/i18n/typ
 export const LanguageMap = {
 	english: English,
 	hindi: Hindi,
+	portuguese: Portuguese,
 };
 
 export type Language = keyof typeof LanguageMap;
