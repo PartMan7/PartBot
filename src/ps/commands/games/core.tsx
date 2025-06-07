@@ -162,6 +162,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 					}
 					const id = Game.meta.players === 'single' ? `#${Game.meta.abbr}-${message.author.id}` : generateId();
 					if (PSGames[gameId]?.[id]) throw new ChatError($T('GAME.ALREADY_STARTED'));
+					if (message.type === 'pm') throw new ChatError("Can't create a game in DMs!" as ToTranslate);
 					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T, args, by: message.author });
 					if (game.meta.players === 'many') {
 						message.reply(
