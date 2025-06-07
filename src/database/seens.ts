@@ -36,10 +36,9 @@ const schema = new mongoose.Schema<Model>({
 
 const model = mongoose.model<Model>('seen', schema, 'seens', { overwriteModels: true });
 
-// TODO: Debounce calls to this
-export function seeUser(user: string, rooms: string[] = []): Promise<Model> {
+export function seeUser(user: string, rooms: string[] = [], at = new Date()): Promise<Model> {
 	const userId = toId(user);
-	return model.findOneAndUpdate({ id: userId }, { id: userId, name: user, seenIn: rooms }, { upsert: true, new: true });
+	return model.findOneAndUpdate({ id: userId }, { id: userId, name: user, seenIn: rooms, at }, { upsert: true, new: true });
 }
 
 export function lastSeen(user: string): Promise<Model | null> {
