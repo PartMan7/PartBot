@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import { PSRoomConfigs } from '@/cache';
 import { IS_ENABLED } from '@/enabled';
 import { toId } from '@/tools';
-import { deepClone } from '@/utils/deepClone';
 import { Logger } from '@/utils/logger';
 
 import type { AuthKey, PSRoomConfig } from '@/types/ps';
@@ -95,7 +94,7 @@ export async function getRoomConfig(roomId: string): Promise<PSRoomConfig | null
 export async function updateConfig(roomId: string, updateCallback: (config: PSRoomConfig) => void): Promise<PSRoomConfig | null> {
 	if (!IS_ENABLED.DB) return null;
 	const entry = (await model.findOne({ roomId })) ?? (await model.create({ roomId }));
-	const before = deepClone(entry.toJSON());
+	const before = entry.toJSON();
 	updateCallback(entry);
 	await entry.save();
 	const lean = entry.toJSON();
