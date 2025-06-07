@@ -155,6 +155,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				syntax: 'CMD [mods?]',
 				perms: Game.meta.players === 'single' ? 'regular' : Symbol.for('games.create'),
 				async run({ message, args, $T }) {
+					if (message.type === 'pm') throw new ChatError("Can't create a game in DMs!" as ToTranslate);
 					if (Game.meta.players === 'single') {
 						if (Object.values(PSGames[gameId] ?? {}).find(game => message.author.id in game.players)) {
 							throw new ChatError($T('GAME.ALREADY_JOINED'));
@@ -162,7 +163,6 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 					}
 					const id = Game.meta.players === 'single' ? `#${Game.meta.abbr}-${message.author.id}` : generateId();
 					if (PSGames[gameId]?.[id]) throw new ChatError($T('GAME.ALREADY_STARTED'));
-					if (message.type === 'pm') throw new ChatError("Can't create a game in DMs!" as ToTranslate);
 					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T, args, by: message.author });
 					if (game.meta.players === 'many') {
 						message.reply(
