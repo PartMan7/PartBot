@@ -90,6 +90,16 @@ export async function getRoomConfig(roomId: string): Promise<PSRoomConfig | null
 	return model.findOne({ roomId }).lean();
 }
 
+export async function updateConfig(roomId: string, updateCallback: (config: PSRoomConfig) => void): Promise<PSRoomConfig | null> {
+	if (!IS_ENABLED.DB) return null;
+	const entry = (await model.findOne({ roomId })) ?? (await model.create({ roomId }));
+	updateCallback(entry);
+	await entry.save();
+	const lean = entry.toJSON();
+	PSRoomConfigs[roomId] = lean;
+	return lean;
+}
+
 export async function fetchRoomConfigs(): Promise<PSRoomConfig[]> {
 	if (!IS_ENABLED.DB) return [];
 	return model.find({}).lean();
