@@ -2,7 +2,7 @@ import { Temporal } from '@js-temporal/polyfill';
 
 import { PSCommands, PSPointsNonce, PSRoomConfigs } from '@/cache';
 import { prefix } from '@/config/ps';
-import { bulkAddPoints } from '@/database/points';
+import { type BulkPointsDataInput, bulkAddPoints } from '@/database/points';
 import { ANNOUNCEMENTS_CHANNEL, ROLES } from '@/discord/constants/servers/petmods';
 import { getChannel } from '@/discord/loaders/channels';
 import { IS_ENABLED } from '@/enabled';
@@ -10,8 +10,10 @@ import { i18n } from '@/i18n';
 import { TimeZone } from '@/ps/handlers/cron/constants';
 import getSecretFunction from '@/secrets/functions';
 import { toId } from '@/tools';
+import { Username } from '@/utils/components';
 import { Form } from '@/utils/components/ps';
 import { Logger } from '@/utils/logger';
+import { pluralize } from '@/utils/pluralize';
 import { randomString } from '@/utils/random';
 
 import type { PSCommandContext } from '@/types/chat';
@@ -58,6 +60,16 @@ function inRange(time: Temporal.PlainTime, range: [Temporal.PlainTime, Temporal.
 		return Temporal.PlainTime.compare(time, range[0]) === -1 && Temporal.PlainTime.compare(time, range[1]) === 1;
 	}
 }
+
+function labelPoints(data: Record<string, number>, pointsType: string): Record<string, Record<string, number>> {
+	// TODO: Add mapValues
+	return Object.fromEntries(Object.entries(data).map(([user, amount]) => [user, { [pointsType]: amount }]));
+}
+
+function toBulkData(data: Record<string, Record<string, number>>): BulkPointsDataInput {
+	return Object.fromEntries(Object.entries(data).map(([user, points]) => [user, { id: toId(user), name: user, points }]));
+}
+
 export function tourHandler(this: Client, roomId: string, line: string, isIntro?: boolean): void {
 	if (isIntro) return;
 
@@ -114,109 +126,151 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 				if (e instanceof Error) Logger.errorLog(e);
 				return;
 			}
-			if (roomId === 'hindi') {
-				if (/casual|ignore|no ?points/i.test(json.format || '')) return;
-				// The actual algorithm is secret
-				// Nice try, though
-				const scoringAlgo = getSecretFunction<(tourBracket: string) => Record<string, number> | null>(
-					'hindiTourPointsAlgo',
-					() => null
-				);
-				const pointsToAdd = scoringAlgo(data);
-				if (!pointsToAdd) return;
 
-				const pointsType = PSRoomConfigs[roomId]?.points?.priority[0];
-				if (!pointsType) throw new Error(`AAAAAA someone ping PartMan for ${roomId}`);
-				bulkAddPoints(
-					Object.fromEntries(
-						Object.entries(pointsToAdd).map(([user, points]) => [
-							user,
-							{ id: toId(user), name: user, points: { [pointsType]: points } },
-						])
-					),
-					roomId
-				).then(async res => {
-					if (!res) return;
-					const lbCommand = PSCommands.leaderboard;
-					const partialMessage: RecursivePartial<PSMessage> = {
-						type: 'chat',
-						target: room,
-						parent: this,
-					};
-					const $T = i18n(); // TODO: Use language pref
-					const partialContext: Partial<PSCommandContext> = {
-						args: [],
-						message: partialMessage as PSMessage,
-						broadcastHTML: room.sendHTML.bind(room),
-						$T,
-					};
+			const showLeaderboard = () => {
+				const lbCommand = PSCommands.leaderboard;
+				const partialMessage: RecursivePartial<PSMessage> = {
+					type: 'chat',
+					target: room,
+					parent: this,
+				};
+				const $T = i18n(); // TODO: Use language pref
+				const partialContext: Partial<PSCommandContext> = {
+					args: [],
+					message: partialMessage as PSMessage,
+					broadcastHTML: room.sendHTML.bind(room),
+					$T,
+				};
+				lbCommand.run(partialContext as PSCommandContext);
+			};
 
-					lbCommand.run(partialContext as PSCommandContext);
+			/** [#1, #2, #3 and #4] */
+			const getTopFour = (): string[] => {
+				const winners: string[] = [];
+				const root = json.bracketData.rootNode;
+
+				// add first place
+				winners.push(root.team);
+				// add second place
+				root.children?.forEach(child => {
+					if (child.team !== winners[0]) winners.push(child.team);
 				});
-			}
-			if (roomId === 'capproject') {
-				const currentTime = Temporal.Now.instant().toZonedDateTimeISO(TimeZone.AST).toPlainTime();
+				// add runners-up
+				root.children?.forEach(child => {
+					if (Array.isArray(child.children))
+						child.children.forEach(kid => {
+							if (!winners.includes(kid.team)) winners.push(kid.team);
+						});
+				});
 
-				if (
-					inRange(currentTime, [new Temporal.PlainTime(11), new Temporal.PlainTime(13)]) ||
-					inRange(currentTime, [new Temporal.PlainTime(23), new Temporal.PlainTime(1)])
-				) {
-					if (json.generator !== 'Single Elimination') return;
+				return winners;
+			};
 
-					const root = json.bracketData.rootNode;
-					const winners: string[] = [];
-					const pointsToAdd: Record<string, number> = {};
+			switch (roomId) {
+				case 'hindi': {
+					if (/casual|ignore|no ?points/i.test(json.format || '')) return;
+					// The actual algorithm is secret
+					// Nice try, though
+					const scoringAlgo = getSecretFunction<(tourBracket: string) => Record<string, number> | null>(
+						'hindiTourPointsAlgo',
+						() => null
+					);
+					const pointsToAdd = scoringAlgo(data);
+					if (!pointsToAdd) return;
 
-					// add first place
-					winners.push(root.team);
-					// add second place
-					root.children?.forEach(child => {
-						if (child.team !== winners[0]) winners.push(child.team);
+					const pointsType = PSRoomConfigs[roomId]?.points?.priority[0];
+					if (!pointsType) throw new Error(`AAAAAA someone ping PartMan for ${roomId}`);
+					bulkAddPoints(toBulkData(labelPoints(pointsToAdd, pointsType)), roomId).then(res => {
+						if (res) showLeaderboard();
 					});
-					// add runners-up
-					root.children?.forEach(child => {
-						if (Array.isArray(child.children))
-							child.children.forEach(kid => {
-								if (!winners.includes(kid.team)) winners.push(kid.team);
-							});
-					});
+					break;
+				}
 
-					[3, 2, 1, 1].forEach((amt, index) => {
-						if (winners[index]) {
-							pointsToAdd[winners[index]] = amt;
+				case 'capproject': {
+					const currentTime = Temporal.Now.instant().toZonedDateTimeISO(TimeZone.AST).toPlainTime();
+
+					if (
+						inRange(currentTime, [new Temporal.PlainTime(11), new Temporal.PlainTime(13)]) ||
+						inRange(currentTime, [new Temporal.PlainTime(23), new Temporal.PlainTime(1)])
+					) {
+						if (json.generator !== 'Single Elimination') return;
+
+						const winners = getTopFour();
+						const pointsToAdd: Record<string, number> = {};
+
+						[3, 2, 1, 1].forEach((amt, index) => {
+							if (winners[index]) {
+								pointsToAdd[winners[index]] = amt;
+							}
+						});
+
+						const pointsType = PSRoomConfigs[roomId]?.points?.types.tournight;
+						if (!pointsType) {
+							room.send("Hi for some reason Tour Nights don't exist, someone go poke PartMan");
+							Logger.errorLog(new Error(`CAP room points: ${JSON.stringify(PSRoomConfigs[roomId])}`));
+							return;
 						}
-					});
 
-					const pointsType = PSRoomConfigs.capproject?.points?.types.tournight;
-					if (!pointsType) {
-						room.send("Hi for some reason Tour Nights don't exist, someone go poke PartMan");
-						Logger.errorLog(new Error(`CAP room points: ${JSON.stringify(PSRoomConfigs.capproject)}`));
+						const nonce = randomString();
+						PSPointsNonce[nonce] = labelPoints(pointsToAdd, pointsType.id);
+
+						room.sendHTML(
+							<div className="infobox">
+								<p>
+									<b>{pointsType.plural}</b>
+									{': '}
+									{Object.entries(pointsToAdd)
+										.map(([user, amount]) => `+${amount} ${user}`)
+										.join(', ')}
+								</p>
+								<p>
+									<Form value={`/botmsg ${this.status.username},${prefix}@${roomId} addnonce ${nonce}`}>
+										<button>Add Points!</button>
+									</Form>
+								</p>
+							</div>,
+							{ rank: '%' }
+						);
+					}
+					break;
+				}
+
+				case 'petmods': {
+					const winners = getTopFour();
+					if (winners.length < 4) {
+						room.sendHTML(<div className="infobox">Not adding points for this (only {winners.length} players).</div>, { rank: '%' });
 						return;
 					}
 
-					const nonce = randomString();
-					// TODO: Add mapValues
-					PSPointsNonce[nonce] = Object.fromEntries(
-						Object.entries(pointsToAdd).map(([user, amount]) => [user, { [pointsType.id]: amount }])
-					);
+					const roomConfig = PSRoomConfigs[roomId]?.points;
+					const pointsType = roomConfig?.types[roomConfig?.priority[0]];
+					if (!pointsType) {
+						room.send("Hi for some reason points aren't configured properly, someone go poke PartMan");
+						Logger.errorLog(new Error(`Pet Mods room points: ${JSON.stringify(PSRoomConfigs[roomId])}`));
+						return;
+					}
 
-					room.sendHTML(
-						<div className="infobox">
-							<p>
-								<b>{pointsType.plural}</b>
-								{': '}
-								{Object.entries(pointsToAdd)
-									.map(([user, amount]) => `+${amount} ${user}`)
-									.join(', ')}
-							</p>
-							<p>
-								<Form value={`/botmsg ${this.status.username},${prefix}@${roomId} addnonce ${nonce}`}>
-									<button>Add Points!</button>
-								</Form>
-							</p>
-						</div>,
-						{ rank: '%' }
-					);
+					const pointsToAdd: Record<string, number> = {};
+					[4, 2, 1, 1].forEach((amount, index) => (pointsToAdd[winners[index]] = amount));
+
+					bulkAddPoints(toBulkData(labelPoints(pointsToAdd, pointsType.id)), roomId).then(res => {
+						if (!res) return;
+						room.sendHTML(
+							<div className="infobox">
+								Added points:{' '}
+								{Object.entries(pointsToAdd).map(([user, amount]) => (
+									<>
+										<Username name={user} />: {pluralize(amount, pointsType)}
+									</>
+								))}
+							</div>,
+							{
+								rank: '%',
+							}
+						);
+						showLeaderboard();
+					});
+					break;
 				}
 			}
 		}
