@@ -16,8 +16,8 @@ export const meta: Meta = {
 	},
 
 	autostart: true,
-	pokeTimer: fromHumanTime('30 sec'),
-	timer: fromHumanTime('1 min'),
+	pokeTimer: fromHumanTime('3 min'),
+	timer: fromHumanTime('5 min'),
 
 	themes: CHESS_THEMES,
 	defaultTheme,
