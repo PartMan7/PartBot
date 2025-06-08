@@ -15,6 +15,7 @@ export const command: PSCommand[] = [
 		name: 'dt',
 		help: 'Shows the data for a Pokémon.',
 		syntax: 'CMD [mon/move]',
+		flags: { allowPMs: true },
 		categories: ['utility'],
 		// TODO: Keep this GO-only
 		async run({ broadcastHTML, arg, $T }) {

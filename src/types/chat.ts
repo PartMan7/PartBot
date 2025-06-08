@@ -93,13 +93,13 @@ export type PSCommand = {
 	 * Flags to define metadata for the command.
 	 */
 	flags?: {
-		// If enabled, hides the command from command lists
+		// If enabled, hides the command from command lists.
 		noDisplay?: boolean | undefined;
-		// If enabled, replaces 'access denied' errors with 'command not found'
+		// If enabled, replaces 'access denied' errors with 'command not found'.
 		conceal?: boolean | undefined;
-		// Ensures a command can only be run from a room
-		roomOnly?: boolean | undefined;
-		// Ensures a command can only be run from a PM
+		// Allows commands to be run from PMs.
+		allowPMs?: boolean | undefined;
+		// Ensures a command can only be run from a PM. Implicitly enables allowPMs.
 		pmOnly?: boolean | undefined;
 		// Allows 'rerouted' PMs (eg: ,@boardgames othello join). Disabled by default.
 		routePMs?: boolean | undefined;
@@ -112,7 +112,7 @@ export type PSCommand = {
 	/**
 	 * Command syntax.
 	 * Disable explicitly by passing null.
-	 * For syntax formatting, see
+	 * Start with a CMD
 	 */
 	syntax: string | null;
 	/**

@@ -46,6 +46,7 @@ export const command: PSCommand = {
 	name: 'namecolour',
 	help: "Displays a user's namecolour!",
 	syntax: 'CMD [user?]',
+	flags: { allowPMs: true },
 	aliases: ['namecolor'],
 	categories: ['utility'],
 	async run({ message, arg, broadcastHTML }) {

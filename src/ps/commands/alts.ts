@@ -8,6 +8,7 @@ export const command: PSCommand = {
 	name: 'alts',
 	help: "Lists a user's alts. Requires trusted perms to view beyond your own.",
 	syntax: 'CMD [user?]',
+	flags: { allowPMs: true },
 	aliases: ['getalts'],
 	categories: ['utility'],
 	async run({ message, arg, $T, checkPermissions }) {

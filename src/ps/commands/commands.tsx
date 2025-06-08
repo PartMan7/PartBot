@@ -1,9 +1,9 @@
 import { PSCommands } from '@/cache';
+import { prefix } from '@/config/ps';
 import { permissions } from '@/ps/handlers/commands/permissions';
 import { getSpoofMessage } from '@/ps/handlers/commands/spoof';
 
 import type { PSCommand } from '@/types/chat';
-import { prefix } from '@/config/ps';
 
 function titleCase(input: string): string {
 	return input.charAt(0).toUpperCase() + input.slice(1);
@@ -13,6 +13,7 @@ export const command: PSCommand = {
 	name: 'commands',
 	help: 'Displays a list of commands that can be used by the user.',
 	syntax: 'CMD [room?]',
+	flags: { allowPMs: true },
 	categories: ['utility'],
 	async run({ message, arg }) {
 		const targetRoom = arg ? message.parent.getRoom(arg) : message.type === 'chat' ? message.target : null;

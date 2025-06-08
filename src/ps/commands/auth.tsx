@@ -37,9 +37,6 @@ export const command: PSCommand[] = IS_ENABLED.DB
 				name: 'promote',
 				help: 'Promotes a user.',
 				syntax: 'CMD [rank], [users...]',
-				flags: {
-					roomOnly: true,
-				},
 				categories: ['utility'],
 				extendedAliases: {
 					...Object.fromEntries(
@@ -120,9 +117,6 @@ export const command: PSCommand[] = IS_ENABLED.DB
 				name: 'deauth',
 				help: 'Demotes a user.',
 				syntax: 'CMD [users...]',
-				flags: {
-					roomOnly: true,
-				},
 				categories: ['utility'],
 				async run({ message, arg, checkPermissions, $T }) {
 					const userList = arg.split(',');

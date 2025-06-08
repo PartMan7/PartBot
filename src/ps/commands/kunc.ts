@@ -18,6 +18,7 @@ export const command: PSCommand = {
 	name: 'kunc',
 	help: 'Creates a game of kunc! Guess the Pokémon by a randomly-generated set.',
 	syntax: 'CMD [time?]',
+	flags: { allowPMs: true },
 	perms: (message, checkPermission) => (message.type === 'chat' ? checkPermission('driver') : true),
 	categories: ['game'],
 	// TODO: Add end

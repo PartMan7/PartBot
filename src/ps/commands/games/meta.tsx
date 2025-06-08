@@ -1,10 +1,10 @@
+import { PSGames } from '@/cache';
 import { Games } from '@/ps/games';
 import { renderMenu } from '@/ps/games/menus';
 
 import type { PSCommand } from '@/types/chat';
 import type { HTMLopts } from 'ps-client/classes/common';
 import type { ReactElement } from 'react';
-import { PSGames } from '@/cache';
 
 export const command: PSCommand = {
 	name: 'games',

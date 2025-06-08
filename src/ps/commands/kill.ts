@@ -7,6 +7,7 @@ export const command: PSCommand = {
 	name: 'kill',
 	help: 'Kills the bot.',
 	syntax: 'CMD',
+	flags: { allowPMs: true },
 	perms: 'admin',
 	categories: ['utility'],
 	async run({ message }) {

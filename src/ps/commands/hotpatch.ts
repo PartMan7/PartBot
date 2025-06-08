@@ -7,6 +7,7 @@ export const command: PSCommand = {
 	name: 'hotpatch',
 	help: 'Hotpatches stuff.',
 	syntax: 'CMD [hotpatch type]',
+	flags: { allowPMs: true },
 	perms: 'admin',
 	categories: ['utility'],
 	async run({ message, arg }) {

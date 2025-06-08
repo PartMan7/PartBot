@@ -84,10 +84,18 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 		};
 
 		const conceal = sourceCommand.flags?.conceal ? $T('CMD_NOT_FOUND') : null;
-		if (!usePermissions(cascade.perms, context.command, message)) throw new ChatError(conceal ?? $T('ACCESS_DENIED'));
-		if (!cascade.flags.routePMs && indirect?.type === 'spoof') throw new ChatError(conceal ?? $T('NO_DMS_COMMAND'));
-		if (cascade.flags.roomOnly && message.type !== 'chat') throw new ChatError(conceal ?? $T('ROOM_ONLY_COMMAND'));
-		if (cascade.flags.pmOnly && message.type !== 'pm') throw new ChatError(conceal ?? $T('PM_ONLY_COMMAND'));
+		if (!usePermissions(cascade.perms, context.command, message)) {
+			throw new ChatError(conceal ?? $T('ACCESS_DENIED'));
+		}
+		if (!cascade.flags.routePMs && indirect?.type === 'spoof') {
+			throw new ChatError(conceal ?? $T('NO_DMS_COMMAND'));
+		}
+		if (!cascade.flags.allowPMs && !cascade.flags.pmOnly && message.type !== 'chat') {
+			throw new ChatError(conceal ?? $T('ROOM_ONLY_COMMAND'));
+		}
+		if (cascade.flags.pmOnly && message.type !== 'pm') {
+			throw new ChatError(conceal ?? $T('PM_ONLY_COMMAND'));
+		}
 
 		context.checkPermissions = function (perm) {
 			return usePermissions(perm, context.command, message);

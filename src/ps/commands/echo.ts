@@ -7,6 +7,7 @@ export const command: PSCommand = {
 	name: 'echo',
 	help: 'Echoes the given text',
 	syntax: 'CMD (text)',
+	flags: { allowPMs: true },
 	aliases: ['do'],
 	perms: 'voice',
 	categories: ['casual'],

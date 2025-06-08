@@ -92,7 +92,6 @@ export const command: PSCommand[] = [
 		name: 'addpoints',
 		help: 'Adds points to a user!',
 		syntax: 'CMD [points], [...users]',
-		flags: { roomOnly: true },
 		perms: Symbol.for('points.manage'),
 		aliases: ['addp', 'add', 'removep', 'remove', 'removepoints'],
 		categories: ['points'],
@@ -175,6 +174,7 @@ export const command: PSCommand[] = [
 		name: 'atm',
 		help: "Displays a user's current points.",
 		syntax: 'CMD [user?]',
+		flags: { allowPMs: true },
 		aliases: ['points'],
 		categories: ['points'],
 		async run({ message, $T, args, broadcast }) {
@@ -202,6 +202,7 @@ export const command: PSCommand[] = [
 		name: 'rank',
 		help: "Displays a user's rank on the leaderboard.",
 		syntax: 'CMD [user?]',
+		flags: { allowPMs: true },
 		categories: ['points'],
 		async run({ message, $T, args, broadcast }) {
 			if (!IS_ENABLED.DB) throw new ChatError($T('DISABLED.DB'));
@@ -229,6 +230,7 @@ export const command: PSCommand[] = [
 		name: 'leaderboard',
 		help: 'Shows the leaderboard!',
 		syntax: 'CMD [cap/priority]',
+		flags: { allowPMs: true },
 		aliases: ['lb'],
 		categories: ['points'],
 		async run({ message, $T, args, broadcastHTML }) {
@@ -287,7 +289,6 @@ export const command: PSCommand[] = [
 		help: 'Resets the leaderboard (either of a specific type, or all)',
 		syntax: 'CMD [pointsType?]',
 		perms: ['room', 'owner'],
-		flags: { roomOnly: true },
 		aliases: ['resetlb', 'leaderboardreset', 'lbreset', 'reset'],
 		categories: ['points'],
 		async run({ message, $T, arg, run }) {

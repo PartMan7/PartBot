@@ -272,9 +272,7 @@ export const command: PSCommand = {
 				'wrapping the username in <code>[]</code> (eg: <code>[14:20:21] • #PartMan hugs Hydro</code> would be formatted ' +
 				'as <code>[14:20:21] • #[PartMan] hugs Hydro</code>)',
 			syntax: 'CMD [new quote]',
-			flags: {
-				roomOnly: true,
-			},
+			// TODO: Support DMs
 			async run({ message, arg, broadcastHTML }) {
 				const parsedQuote = parseQuote(arg);
 				await addQuote(parsedQuote, message.target.id, message.author.name);
@@ -295,9 +293,6 @@ export const command: PSCommand = {
 			perms: 'driver',
 			help: 'Previews the given quote. Syntax is the same as add.',
 			syntax: 'CMD [new quote]',
-			flags: {
-				roomOnly: true,
-			},
 			async run({ message, arg, broadcastHTML }) {
 				const parsedQuote = parseQuote(arg);
 				const { length } = await getAllQuotes(message.target.id);

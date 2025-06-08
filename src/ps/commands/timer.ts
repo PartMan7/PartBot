@@ -14,6 +14,7 @@ export const command: PSCommand = {
 	name: 'timer',
 	help: 'Sets a timer for the given interval (in human units!)',
 	syntax: 'CMD (time, written out) (// reason)?',
+	flags: { allowPMs: true },
 	categories: ['utility'],
 	children: {
 		status: {

@@ -11,6 +11,7 @@ export const command: PSCommand = {
 	name: 'lettersample',
 	help: 'Generates random letters.',
 	syntax: 'CMD [vowels count] x [consonant count]',
+	flags: { allowPMs: true },
 	categories: ['game'],
 	async run({ arg, broadcast, $T }) {
 		const input = arg ? parsePoint(arg) : [5, 5];

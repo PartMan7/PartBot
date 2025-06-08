@@ -7,6 +7,7 @@ export const command: PSCommand = {
 	name: 'eval',
 	help: 'Evaluates code',
 	syntax: 'CMD [code]',
+	flags: { allowPMs: true },
 	perms: 'admin',
 	aliases: ['exec', 'run'],
 	categories: ['utility'],

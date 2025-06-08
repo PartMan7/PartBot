@@ -142,6 +142,7 @@ export const command: PSCommand = {
 	name: 'help',
 	help: 'Shows the help for a command.',
 	syntax: 'CMD [command]',
+	flags: { allowPMs: true },
 	categories: ['utility'],
 	async run({ message, broadcastHTML, args, checkPermissions, $T }) {
 		const Bot = message.parent;
@@ -192,7 +193,7 @@ export const command: PSCommand = {
 							{Object.entries(command.flags).map(([flag, value]) => {
 								if (!value) return null;
 								if (flag === 'pmOnly') return 'Can only be used in PMs.';
-								if (flag === 'roomOnly') return 'Can only be used in a chatroom.';
+								if (flag === 'allowPMs') return 'Can be used in PMs.';
 							})}
 						</p>
 					) : null}

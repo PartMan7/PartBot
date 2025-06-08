@@ -6,6 +6,7 @@ export const command: PSCommand = {
 	name: 'myperms',
 	help: 'Displays your highest permissions',
 	syntax: 'CMD',
+	flags: { allowPMs: true },
 	aliases: ['me'],
 	categories: ['utility'],
 	async run({ message, broadcast, checkPermissions, $T }) {
