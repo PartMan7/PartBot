@@ -29,8 +29,6 @@ export function nickHandler(this: Client, room: string, newName: string, oldName
 		to = toId(newName),
 		id = `${from}-${to}`;
 	if (from === to) return;
-	// Throttling cache updates at once per 5s per rename (A-B)
-	// TODO: Use debounce
 	DebounceAltCache[id] ??= {
 		at: new Date(),
 		call: debounce(() => rename(oldName, newName), fromHumanTime('5 seconds')),
@@ -44,11 +42,10 @@ const DebounceSeenCache: Record<string, { name: string; at: Date; call: (rooms: 
 export function leaveHandler(this: Client, room: string, name: string, isIntro: boolean): void {
 	if (isIntro) return;
 	const userId = toId(name);
-	// Throttling cache updates at once per 5s per leave
 	DebounceSeenCache[userId] ??= {
 		name,
 		at: new Date(),
-		call: debounce(rooms => seeUser(name, rooms, DebounceSeenCache[userId].at), fromHumanTime('5 seconds')),
+		call: debounce((rooms: string[]) => seeUser(name, rooms.unique(), DebounceSeenCache[userId].at), fromHumanTime('5 seconds')),
 	};
 	DebounceSeenCache[userId].at = new Date();
 	const userObj = this.getUser(name);

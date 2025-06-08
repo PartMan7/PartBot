@@ -116,6 +116,7 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 		return await commandObj.run({ ...context, message });
 	} catch (err) {
 		if (err instanceof Error) {
+			// TODO: Ping the user in case they're in another room! (Eg: for spoof messages)
 			message.privateReply(err.message as string);
 			if (err.name !== 'ChatError') Logger.errorLog(err);
 		} else {

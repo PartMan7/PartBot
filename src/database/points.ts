@@ -32,9 +32,7 @@ const schema = new mongoose.Schema<MapModel>({
 	},
 });
 
-export const model = mongoose.model<MapModel>('point', schema, 'points', {
-	overwriteModels: true,
-});
+export const model = mongoose.model<MapModel>('point', schema, 'points', { overwriteModels: true });
 
 const DEFAULT_LB_USERS_CAP = 50;
 
