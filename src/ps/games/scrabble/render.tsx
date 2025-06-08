@@ -1,8 +1,9 @@
 import { Table } from '@/ps/games/render';
-import { WIDE_LETTERS } from '@/ps/games/scrabble/constants';
+import { RACK_SIZE, WIDE_LETTERS } from '@/ps/games/scrabble/constants';
 import { Button, Form, Username } from '@/utils/components/ps';
 import { type Point, coincident } from '@/utils/grid';
 import { Logger } from '@/utils/logger';
+import { pluralize } from '@/utils/pluralize';
 
 import type { CellRenderer } from '@/ps/games/render';
 import type { Scrabble } from '@/ps/games/scrabble';
@@ -185,53 +186,19 @@ function Scores({ players }: { players: RenderCtx['players'] }): ReactElement[] 
 		const username = <Username name={player.name} />;
 		return (
 			<div>
-				{player.out ? <s>{username}</s> : username}: {player.score} ({player.rack} tile(s) in rack)
+				{player.out ? <s>{username}</s> : username}: {player.score}
+				{player.rack !== RACK_SIZE ? <> ({player.rack} tile(s) in rack)</> : null}
 			</div>
 		);
 	});
 }
 
-function renderInput(this: This, ctx: RenderCtx): ReactElement | null {
-	// ctx.selected is only passed for the active player
-	if (!ctx.isActive) return null;
+function UserPanel({ children }: { children: ReactNode }): ReactElement {
 	return (
-		<>
-			{ctx.selected ? (
-				<Form value={`${this.msg} ! p${encodePos(ctx.selected)}{dir} {word}`} style={{ display: 'inline-block', margin: '0 8px' }}>
-					<center style={{ display: 'inline-block' }}>
-						<input name="word" type="text" width="200" placeholder="Your word here" />
-						<br />
-						<div style={{ textAlign: 'left', margin: '4px 0' }}>
-							<select name="dir">
-								<option value="r">Right</option>
-								<option value="d">Down</option>
-							</select>
-							<button style={{ float: 'right' }}>Go!</button>
-						</div>
-					</center>
-				</Form>
-			) : (
-				<h3>Select a tile to play from!</h3>
-			)}
-			{
-				<div style={{ display: 'inline-block' }}>
-					<div style={{ textAlign: 'right' }}>
-						<Button name="send" value={`${this.msg} ! -`}>
-							Pass
-						</Button>
-					</div>
-					<Form value={`${this.msg} ! x {tiles}`} style={{ margin: '4px 0' }}>
-						<input name="tiles" placeholder="Exchange tiles" width="100" style={{ marginRight: 4 }} />
-						<button>Exchange</button>
-					</Form>
-				</div>
-			}
-		</>
+		<div style={{ width: 320, backgroundColor: '#5552', border: '1px solid', borderRadius: 4, padding: '12px 16px', margin: 8 }}>
+			{children}
+		</div>
 	);
-}
-
-function InfoPanel({ bag }: { bag: number }): string {
-	return bag ? `${bag} tile(s) left in bag.` : 'Empty bag.';
 }
 
 export function render(this: This, ctx: RenderCtx): ReactElement {
@@ -240,15 +207,59 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
 			{renderBoard.bind(this)(ctx)}
 			{ctx.side ? (
-				<center style={{ margin: BASE_MARGIN, padding: BASE_PADDING, border: '1px solid' }}>
-					<div style={{ color: '#000' }}>{ctx.rack?.map(letter => <Letter letter={letter} points={ctx.getPoints(letter)} />)}</div>
-					{renderInput.bind(this)(ctx)}
-				</center>
+				<>
+					<UserPanel>
+						<div style={{ color: '#000', display: 'inline-block' }}>
+							{ctx.rack?.map(letter => <Letter letter={letter} points={ctx.getPoints(letter)} />)}
+						</div>
+						{ctx.isActive ? (
+							<Button value={`${this.msg} ! -`} style={{ border: '2px solid darkred', borderRadius: 4, marginLeft: 24 }}>
+								Pass
+							</Button>
+						) : null}
+					</UserPanel>
+					{ctx.isActive ? (
+						<>
+							<UserPanel>
+								{ctx.selected ? (
+									<Form
+										value={`${this.msg} ! p${encodePos(ctx.selected)}{dir} {word}`}
+										style={{ display: 'inline-block', margin: '0 8px' }}
+									>
+										<center style={{ display: 'inline-block' }}>
+											<input name="word" type="text" placeholder="Your word here" style={{ width: 300 }} />
+											<br />
+											<div style={{ textAlign: 'left', margin: '4px 0' }}>
+												<label style={{ fontSize: '0.8em' }}>
+													<input type="radio" name="dir" value="r" checked />
+													<span style={{ position: 'relative', top: -2 }}>Right</span>
+												</label>
+												<label style={{ fontSize: '0.8em' }}>
+													<input type="radio" name="dir" value="d" />
+													<span style={{ position: 'relative', top: -2 }}>Down</span>
+												</label>
+												<button style={{ float: 'right', fontWeight: 'bold', border: '2px solid green', borderRadius: 4 }}>Go!</button>
+											</div>
+										</center>
+									</Form>
+								) : (
+									<h3>Select a tile to play from!</h3>
+								)}
+								<hr />
+								<Form value={`${this.msg} ! x {tiles}`} style={{ margin: '4px 0' }}>
+									<input name="tiles" placeholder="Exchange tiles" width="100" style={{ marginRight: 4 }} />
+									<button>Exchange</button>
+								</Form>
+							</UserPanel>
+						</>
+					) : null}
+				</>
 			) : null}
-			<div style={{ margin: BASE_MARGIN, padding: BASE_PADDING, border: '1px solid' }}>
-				<InfoPanel bag={ctx.bag} />
+			<UserPanel>
 				<Scores players={ctx.players} />
-			</div>
+				<hr />
+				Bag: {pluralize(ctx.bag, 'tile', 'tiles')}
+			</UserPanel>
 		</center>
 	);
 }
