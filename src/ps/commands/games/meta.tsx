@@ -26,7 +26,7 @@ export const command: PSCommand = {
 					<>
 						<hr />
 						{Object.values(Games)
-							.filter(Game => Object.keys(PSGames[Game.meta.id] ?? {}).length > 0)
+							.filter(Game => Object.values(PSGames[Game.meta.id] ?? {}).filter(game => game.room.id === message.target.id).length > 0)
 							.map(Game => (
 								<>
 									<h3>{Game.meta.name}</h3>
