@@ -4,6 +4,7 @@ import { renderMenu } from '@/ps/games/menus';
 import type { PSCommand } from '@/types/chat';
 import type { HTMLopts } from 'ps-client/classes/common';
 import type { ReactElement } from 'react';
+import { PSGames } from '@/cache';
 
 export const command: PSCommand = {
 	name: 'games',
@@ -25,6 +26,7 @@ export const command: PSCommand = {
 					<>
 						<hr />
 						{Object.values(Games)
+							.filter(Game => Object.keys(PSGames[Game.meta.id] ?? {}).length > 0)
 							.map(Game => (
 								<>
 									<h3>{Game.meta.name}</h3>
