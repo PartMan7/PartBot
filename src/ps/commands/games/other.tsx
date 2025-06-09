@@ -12,6 +12,7 @@ export const command: PSCommand[] = [
 		name: 'checkword',
 		help: 'Checks the legality of a word according to the Scrabble dictionary.',
 		syntax: 'CMD word[, mod]',
+		flags: { allowPMs: true },
 		aliases: ['cw'],
 		categories: ['game'],
 		async run({ broadcast, arg, $T }) {
