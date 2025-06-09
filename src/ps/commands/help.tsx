@@ -151,7 +151,7 @@ export const command: PSCommand = {
 				<center className="infobox">
 					<div style={{ maxWidth: 400 }}>
 						<p>
-							Hi! I'm <Username name={Bot.status.username ?? 'PartBot'} />, and I'll try to help you as best as I can.
+							Hi! I'm <Username name={Bot.status.username ?? 'PartBot'} clickable />, and I'll try to help you as best as I can.
 						</p>
 						<p>
 							To start off, would you like to take a look at some{' '}

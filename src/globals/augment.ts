@@ -12,6 +12,7 @@ declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace -- Used to augment IntrinsicElements
 	namespace JSX {
 		export interface IntrinsicElements {
+			username: HTMLProps<HTMLElement>;
 			psicon: _PSIconProps;
 			font: HTMLProps<HTMLSpanElement>;
 		}
