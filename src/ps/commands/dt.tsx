@@ -90,7 +90,7 @@ export const command: PSCommand[] = [
 						</font>
 						<br />
 						<hr />
-						<details style={{ marginBottom: -10 }}>
+						<details>
 							<summary title={mon.unreleased ? 'Moves are for an unreleased Pokémon and may not be accurate' : undefined}>
 								Moves{mon.unreleased ? '*' : ''}
 							</summary>
