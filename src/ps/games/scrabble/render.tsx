@@ -11,6 +11,9 @@ import type { Log } from '@/ps/games/scrabble/logs';
 import type { BoardTile, Bonus, RenderCtx } from '@/ps/games/scrabble/types';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
+// Do NOT use \u2605 for cross-browser reasons
+const STAR = '⭑';
+
 export function renderMove(logEntry: Log, { id, players, $T, renderCtx: { msg } }: Scrabble): [ReactElement, { name: string }] {
 	const Wrapper = ({ children }: { children: ReactNode }): ReactElement => (
 		<>
@@ -104,6 +107,7 @@ function renderBoard(this: This, ctx: RenderCtx) {
 			background: 'none',
 			height: 20,
 			width: 20,
+			padding: 0,
 		};
 		const ButtonIfNeeded = clickable ? Button : 'div';
 		return (
@@ -111,6 +115,7 @@ function renderBoard(this: This, ctx: RenderCtx) {
 				style={{
 					height: 20,
 					width: 20,
+					lineHeight: 0,
 					background: cell ? LETTER_HEX : getBackgroundHex(baseCell),
 					textAlign: cell ? 'center' : undefined,
 				}}
@@ -121,7 +126,6 @@ function renderBoard(this: This, ctx: RenderCtx) {
 						style={{
 							...buttonStyles,
 							color: cell.blank ? '#333' : '#000',
-							padding: 0,
 							fontSize: 16,
 							overflow: WIDE_LETTERS.includes(cell.letter) && cell.points ? 'hidden' : undefined,
 						}}
@@ -140,19 +144,20 @@ function renderBoard(this: This, ctx: RenderCtx) {
 							...(baseCell === '2*'
 								? {
 										color: '#000',
-										padding: 0,
-										fontSize: 16,
+										fontSize: 18,
 										textAlign: 'center',
 										lineHeight: '18px',
 									}
 								: {}),
 						}}
 					>
-						{baseCell === '2*' ? '★' : ' '}
+						{baseCell === '2*' ? STAR : ' '}
 					</Button>
 				) : null}
 				{!cell && !clickable && baseCell === '2*' ? (
-					<div style={{ color: '#000', height: 20, width: 20, padding: 0, lineHeight: '15px' }}>★</div>
+					<div style={{ color: '#000', height: 20, width: 20, lineHeight: '20px', textAlign: 'center', fontSize: 18, marginTop: -2 }}>
+						{STAR}
+					</div>
 				) : null}
 			</td>
 		);
@@ -165,19 +170,24 @@ function renderBoard(this: This, ctx: RenderCtx) {
 
 function Letter({ letter, points }: { letter: string; points: number }): ReactElement {
 	return (
-		<b
+		<div
 			style={{
-				display: 'inline-block',
 				background: LETTER_HEX,
-				height: 22,
-				width: 20,
-				lineHeight: '20px',
+				color: 'black',
+				textAlign: 'center',
+				padding: 0,
+				display: 'inline-block',
 				margin: 4,
+				height: 20,
+				minWidth: 20,
+				maxWidth: 20,
 			}}
 		>
-			{letter}
-			{points ? <sub style={{ fontSize: '0.6em' }}>{points}</sub> : null}
-		</b>
+			<b style={{ fontSize: 16 }}>
+				{letter === '_' ? '&nbsp;&nbsp;' : letter}
+				<sub style={{ fontSize: '0.4em' }}>{points ?? 0}</sub>
+			</b>
+		</div>
 	);
 }
 
