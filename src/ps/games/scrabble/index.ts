@@ -491,7 +491,11 @@ export class Scrabble extends BaseGame<State> {
 				wordList: invalidWords.list(this.$T),
 			});
 		}
-		const wordsPoints = Object.fromEntries(wordData as [string, number][]);
+		const wordsPoints = Object.fromEntries(
+            (wordData as [string, number][]).map(
+            	([word, points], index) => [word + '\u200b'.repeat(index), points]
+            )
+        );
 		return { total: Object.values(wordsPoints).sum() + bingoPoints, bingo, words: wordsPoints };
 	}
 }
