@@ -17,10 +17,7 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 				{cell ? (
 					<span style={{ ...roundStyles, background: cell === 'W' ? 'white' : 'black' }} />
 				) : action ? (
-					<Button
-						value={`${this.msg} play ${i}-${j}`}
-						style={{ ...roundStyles, border: '1px dashed black', background: '#6666' }}
-					>
+					<Button value={`${this.msg} play ${i}-${j}`} style={{ ...roundStyles, border: '1px dashed black', background: '#6666' }}>
 						{' '}
 					</Button>
 				) : null}

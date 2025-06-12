@@ -25,12 +25,14 @@ This might take a while...
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/PartMan7/PartBot.git
    cd PartBot
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
