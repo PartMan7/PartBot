@@ -71,8 +71,6 @@ export function renderMove(logEntry: Log, { id, players, $T, renderCtx: { msg } 
 type This = { msg: string };
 
 const LETTER_HEX = '#da5';
-const BASE_MARGIN = 12;
-const BASE_PADDING = 8;
 
 function encodePos([x, y]: Point): string {
 	return [x, y]
@@ -115,7 +113,7 @@ function renderBoard(this: This, ctx: RenderCtx) {
 				style={{
 					height: 20,
 					width: 20,
-					lineHeight: 0,
+					lineHeight: !cell ? 0 : undefined,
 					background: cell ? LETTER_HEX : getBackgroundHex(baseCell),
 					textAlign: cell ? 'center' : undefined,
 				}}
@@ -125,14 +123,15 @@ function renderBoard(this: This, ctx: RenderCtx) {
 						value={`${this.msg} ! s${encodePos([i, j])}`}
 						style={{
 							...buttonStyles,
+							fontFamily: clickable ? 'inherit' : undefined,
 							color: cell.blank ? '#333' : '#000',
 							fontSize: 16,
 							overflow: WIDE_LETTERS.includes(cell.letter) && cell.points ? 'hidden' : undefined,
 						}}
 					>
-						<b>
+						<b style={{ whiteSpace: 'nowrap' }}>
 							{cell.letter}
-							{cell.points ? <sub style={{ fontSize: '0.6em' }}>{cell.points}</sub> : null}
+							{cell.points ? <sub style={{ fontSize: '0.4em' }}>{cell.points}</sub> : null}
 						</b>
 					</ButtonIfNeeded>
 				) : null}
@@ -181,11 +180,12 @@ function Letter({ letter, points }: { letter: string; points: number }): ReactEl
 				height: 20,
 				minWidth: 20,
 				maxWidth: 20,
+				overflow: 'hidden',
 			}}
 		>
-			<b style={{ fontSize: 16 }}>
+			<b style={{ fontSize: 14, whiteSpace: 'nowrap' }}>
 				{letter === '_' ? '&nbsp;&nbsp;' : letter}
-				<sub style={{ fontSize: '0.4em' }}>{points ?? 0}</sub>
+				<sub style={{ fontSize: '0.5em' }}>{points ?? 0}</sub>
 			</b>
 		</div>
 	);

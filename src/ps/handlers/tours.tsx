@@ -28,7 +28,7 @@ export type BracketNode = {
 	| {
 			state: 'finished';
 			result: 'win';
-			score: [1, 0] | [0, 1];
+			score: [number, number];
 	  }
 	| {
 			state: 'inprogress';
