@@ -337,6 +337,7 @@ export class BaseGame<State extends BaseState> {
 		const newTurn = this.meta.turns ? turn : withPlayer.id;
 		this.players[newTurn] = { ...oldPlayer, ...assign, turn: newTurn };
 		if (!this.meta.turns) this.turns.splice(this.turns.indexOf(turn), 1, newTurn);
+		if (this.turn === turn) this.turn = newTurn;
 		this.spectators.remove(oldPlayer.id);
 		this.backup();
 		return { success: true, data: this.$T('GAME.SUB', { in: withPlayer.name, out: oldPlayer.name }) };
