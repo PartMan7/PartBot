@@ -124,14 +124,14 @@ function renderBoard(this: This, ctx: RenderCtx) {
 						style={{
 							...buttonStyles,
 							fontFamily: clickable ? 'inherit' : undefined,
-							color: cell.blank ? '#333' : '#000',
+							color: cell.blank ? '#444' : '#000',
 							fontSize: 16,
 							overflow: WIDE_LETTERS.includes(cell.letter) && cell.points ? 'hidden' : undefined,
 						}}
 					>
 						<b style={{ whiteSpace: 'nowrap' }}>
 							{cell.letter}
-							{cell.points ? <sub style={{ fontSize: '0.4em' }}>{cell.points}</sub> : null}
+							{<sub style={{ fontSize: '0.4em' }}>{cell.points}</sub>}
 						</b>
 					</ButtonIfNeeded>
 				) : null}
@@ -184,7 +184,7 @@ function Letter({ letter, points }: { letter: string; points: number }): ReactEl
 			}}
 		>
 			<b style={{ fontSize: 14, whiteSpace: 'nowrap' }}>
-				{letter === '_' ? '&nbsp;&nbsp;' : letter}
+				{letter === '_' ? '\u00A0\u00A0' : letter}
 				<sub style={{ fontSize: '0.5em' }}>{points ?? 0}</sub>
 			</b>
 		</div>
