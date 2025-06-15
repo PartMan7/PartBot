@@ -453,6 +453,7 @@ export class BaseGame<State extends BaseState> {
 			const model: GameModel = {
 				id: this.id,
 				game: this.meta.id,
+				mod: this.mod,
 				room: this.roomid,
 				players: new Map(Object.entries(this.players)),
 				log: this.log.map(entry => JSON.stringify(entry)),

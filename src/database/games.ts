@@ -14,6 +14,7 @@ const schema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	mod: String,
 	room: {
 		type: String,
 		required: true,
@@ -56,6 +57,7 @@ const schema = new mongoose.Schema({
 export interface GameModel {
 	id: string;
 	game: string;
+	mod?: string | null | undefined;
 	room: string;
 	players: Map<string, Player>;
 	created: Date;
