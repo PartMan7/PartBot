@@ -12,7 +12,7 @@ export function renderCloseSignups(this: Mastermind): ReactElement {
 		<>
 			<hr />
 			{player} is playing a round of {this.meta.name}!
-			<Button value={`${this.renderCtx.simpleMsg} watch`} style={{ marginLeft: 16 }}>
+			<Button value={`${this.renderCtx.simpleMsg} watch ${this.id}`} style={{ marginLeft: 16 }}>
 				Watch
 			</Button>
 			{this.setBy || !hasGuessed ? (
