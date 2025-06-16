@@ -40,8 +40,6 @@ export class Scrabble extends BaseGame<State> {
 	constructor(ctx: BaseContext) {
 		super(ctx);
 		super.persist(ctx);
-
-		if (ctx.backup) return;
 	}
 
 	moddable() {
