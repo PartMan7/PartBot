@@ -24,7 +24,7 @@ const dispatchLog = debounce((_logs: string[]): void => {
 		logGroup.group(10).forEach(set => embed.addFields({ name: '\u200b', value: set.join('\n') }));
 		return embed;
 	});
-	LogClient.send({ embeds });
+	LogClient.send({ embeds }).catch();
 }, 5_000);
 
 const dispatchError = debounce((_errors: Error[]): void => {
@@ -32,10 +32,10 @@ const dispatchError = debounce((_errors: Error[]): void => {
 	const errors = _errors.length > 20 ? [..._errors.slice(0, 10), ..._errors.slice(-10)] : _errors;
 	const embeds = errors.group(10).map(errorGroup => {
 		const embed = new EmbedBuilder().setColor('Red');
-		errorGroup.forEach(err => embed.addFields({ name: err.toString(), value: err.stack ?? '[no stack]' }));
+		errorGroup.forEach(err => embed.addFields({ name: err.toString() ?? '[no error message]', value: err.stack ?? '[no stack]' }));
 		return embed;
 	});
-	ErrorLogClient.send({ embeds });
+	ErrorLogClient.send({ embeds }).catch();
 }, 1_000);
 
 function log(...args: unknown[]): void {
