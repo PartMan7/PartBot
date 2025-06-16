@@ -16,9 +16,9 @@ export function autoResHandler(message: PSMessage) {
 		return message.reply(`${helpMessage}\nAlso, ${message.author.name} needs a shower.`);
 	}
 
-	/* Standard bot reply */
+	// Standard bot reply
 	// Only reply if the message didn't start from the prefix...
-	if (!message.content.startsWith(prefix)) {
+	if (message.type === 'pm' && !message.content.startsWith(prefix)) {
 		const { userid } = message.author;
 		// Don't send the help message if sent in the last 5 minutes
 		if (Date.now() - (PSNoPrefixHelp[userid]?.getTime() ?? 0) < fromHumanTime('5 minutes')) return;
