@@ -1,6 +1,6 @@
-import { PSGames, PSNoPrefixHelp } from '@/cache';
-import { owner, prefix, username } from '@/config/ps';
-import { fromHumanTime, toId } from '@/tools';
+import { PSGames } from '@/cache';
+import { prefix } from '@/config/ps';
+import { toId } from '@/tools';
 
 import type { PSMessage } from '@/types/ps';
 
@@ -48,15 +48,5 @@ export function interfaceHandler(message: PSMessage) {
 		/* Challenges and battle-related handlers */
 
 		/* Invites and related handlers */
-
-		/* Standard bot reply */
-		// Only reply if the message didn't start from the prefix...
-		if (message.content.startsWith(prefix)) return;
-		const { userid } = message.author;
-		// Don't send the help message if sent in the last 5 minutes
-		if (Date.now() - (PSNoPrefixHelp[userid]?.getTime() ?? 0) < fromHumanTime('5 minutes')) return;
-		PSNoPrefixHelp[userid] = new Date();
-		const helpMessage = `Hi, I'm ${username}, a chatbot by ${owner}! My prefix is \`\`${prefix}\`\` - try \`\`${prefix}help\`\` or \`\`${prefix}commands!\`\``;
-		message.reply(helpMessage);
 	}
 }
