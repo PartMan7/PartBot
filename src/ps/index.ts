@@ -16,7 +16,6 @@ if (IS_ENABLED.PS) loadPS().then(() => PS.connect());
 PS.on('message', registerEvent(PS, 'commandHandler'));
 PS.on('message', registerEvent(PS, 'interfaceHandler'));
 PS.on('message', registerEvent(PS, 'autoResHandler'));
-PS.on('message', registerEvent(PS, 'pageHandler'));
 
 PS.on('join', registerEvent(PS, 'joinHandler'));
 PS.on('name', registerEvent(PS, 'nickHandler'));

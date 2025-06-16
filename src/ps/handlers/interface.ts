@@ -12,17 +12,17 @@ export function interfaceHandler(message: PSMessage) {
 		// Handle page requests
 		if (message.content.startsWith('|requestpage|')) return; // currently nothing; might do stuff with this later
 		if (message.content.startsWith('|closepage|')) {
-			// |closepage|TheJ3estPenguin|test
 			const match = message.content.match(/^\|closepage\|(?<user>.*?)\|(?<pageId>\w+)$/);
 			if (!match) return message.reply('...hmm hmm hmmmmmmmm very sus');
 			if (toId(match.groups!.user) !== message.author.id) return message.reply('Wow I see how it is');
 			const pageId = match.groups!.pageId;
 			const gameId = `#${pageId.toUpperCase()}`;
+			const singlePlayerGameId = `#${pageId.slice(0, 2)}-${pageId.slice(2)}`;
 
 			// Check if there's any relevant games
 			const game = Object.values(PSGames)
 				.flatMap(gamesList => Object.values(gamesList))
-				.find(checkGame => checkGame.id === gameId);
+				.find(checkGame => checkGame.id === gameId || checkGame.id === singlePlayerGameId);
 			if (!game) return; // Don't put any errors here! People should be able to close games that don't exist, like ones that ended
 
 			const user = message.author.id;

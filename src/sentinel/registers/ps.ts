@@ -13,7 +13,6 @@ const PS_EVENT_HANDLERS = {
 	'autores-handler': { imports: ['autoResHandler'], importPath: '@/ps/handlers/autores', fileName: 'autores' },
 	'interface-handler': { imports: ['interfaceHandler'], importPath: '@/ps/handlers/interface', fileName: 'interface' },
 	'joins-handler': { imports: ['joinHandler', 'leaveHandler', 'nickHandler'], importPath: '@/ps/handlers/joins', fileName: 'joins' },
-	'page-handler': { imports: ['pageHandler'], importPath: '@/ps/handlers/page', fileName: 'page' },
 	'raw-handler': { imports: ['rawHandler'], importPath: '@/ps/handlers/raw', fileName: 'raw' },
 	'notify-handler': { imports: ['notifyHandler'], importPath: '@/ps/handlers/notifications', fileName: 'notifications' },
 	'tour-handler': { imports: ['tourHandler'], importPath: '@/ps/handlers/tours', fileName: 'tours' },

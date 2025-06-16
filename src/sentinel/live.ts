@@ -9,7 +9,6 @@ import { spoof } from '@/ps/handlers/commands/spoof';
 import { interfaceHandler } from '@/ps/handlers/interface';
 import { joinHandler, leaveHandler, nickHandler } from '@/ps/handlers/joins';
 import { notifyHandler } from '@/ps/handlers/notifications';
-import { pageHandler } from '@/ps/handlers/page';
 import { rawHandler } from '@/ps/handlers/raw';
 import { tourHandler } from '@/ps/handlers/tours';
 
@@ -34,7 +33,6 @@ export const LivePSHandlers = {
 	leaveHandler,
 	nickHandler,
 	notifyHandler,
-	pageHandler,
 	rawHandler,
 	tourHandler,
 };
