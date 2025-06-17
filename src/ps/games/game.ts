@@ -15,7 +15,7 @@ import { Timer } from '@/utils/timer';
 
 import type { GameModel } from '@/database/games';
 import type { NoTranslate, PSRoomTranslated, ToTranslate, TranslatedText, TranslationFn } from '@/i18n/types';
-import type { ActionResponse, BaseLog, BaseState, EndType, Meta, Player } from '@/ps/games/common';
+import type { ActionResponse, BaseLog, BaseState, EndType, Meta, Player } from '@/ps/games/types';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
 import type { ReactElement } from 'react';

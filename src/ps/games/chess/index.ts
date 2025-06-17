@@ -8,8 +8,8 @@ import { pick } from '@/utils/pick';
 import type { TranslatedText } from '@/i18n/types';
 import type { Log } from '@/ps/games/chess/logs';
 import type { RenderCtx, State, ThemeColours, Turn, WinCtx } from '@/ps/games/chess/types';
-import type { ActionResponse, EndType, Meta, Theme } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
+import type { ActionResponse, EndType, Meta, Theme } from '@/ps/games/types';
 import type { Move, Square } from 'chess.js';
 import type { User } from 'ps-client';
 

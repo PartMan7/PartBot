@@ -6,9 +6,9 @@ import { deepClone } from '@/utils/deepClone';
 import { type Point, parsePoint, stepPoint } from '@/utils/grid';
 
 import type { ToTranslate, TranslatedText } from '@/i18n/types';
-import type { EndType } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
 import type { State } from '@/ps/games/lightsout/types';
+import type { EndType } from '@/ps/games/types';
 import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/lightsout/meta';

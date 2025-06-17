@@ -2,7 +2,7 @@ import mongoose, { type HydratedDocument } from 'mongoose';
 
 import { IS_ENABLED } from '@/enabled';
 
-import type { Player } from '@/ps/games/common';
+import type { Player } from '@/ps/games/types';
 
 const schema = new mongoose.Schema({
 	id: {

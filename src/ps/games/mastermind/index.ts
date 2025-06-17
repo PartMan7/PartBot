@@ -5,9 +5,9 @@ import { render, renderCloseSignups } from '@/ps/games/mastermind/render';
 import { sample } from '@/utils/random';
 
 import type { ToTranslate, TranslatedText } from '@/i18n/types';
-import type { EndType } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
 import type { Guess, GuessResult, State } from '@/ps/games/mastermind/types';
+import type { EndType } from '@/ps/games/types';
 import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/mastermind/meta';

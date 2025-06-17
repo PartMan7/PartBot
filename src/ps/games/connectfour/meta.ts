@@ -1,7 +1,7 @@
-import { GamesList } from '@/ps/games/common';
+import { GamesList } from '@/ps/games/types';
 import { fromHumanTime } from '@/tools';
 
-import type { Meta } from '@/ps/games/common';
+import type { Meta } from '@/ps/games/types';
 
 export const meta: Meta = {
 	name: 'Connect Four',

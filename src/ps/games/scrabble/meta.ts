@@ -1,9 +1,9 @@
-import { GamesList } from '@/ps/games/common';
 import { ScrabbleMods } from '@/ps/games/scrabble/constants';
 import { ScrabbleModData } from '@/ps/games/scrabble/mods';
+import { GamesList } from '@/ps/games/types';
 import { fromHumanTime } from '@/tools';
 
-import type { Meta } from '@/ps/games/common';
+import type { Meta } from '@/ps/games/types';
 
 export const meta: Meta = {
 	name: 'Scrabble',

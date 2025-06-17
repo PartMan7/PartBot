@@ -16,11 +16,11 @@ import { render, renderMove } from '@/ps/games/scrabble/render';
 import { type Point, coincident, flipPoint, multiStepPoint, rangePoints, stepPoint } from '@/utils/grid';
 
 import type { TranslatedText } from '@/i18n/types';
-import type { ActionResponse, EndType } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
 import type { ScrabbleMods } from '@/ps/games/scrabble/constants';
 import type { Log } from '@/ps/games/scrabble/logs';
 import type { BoardTile, Bonus, BonusReducer, Points, RenderCtx, State, WinCtx, Word, WordScore } from '@/ps/games/scrabble/types';
+import type { ActionResponse, EndType } from '@/ps/games/types';
 import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/scrabble/meta';

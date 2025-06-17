@@ -6,7 +6,7 @@ import { LivePSHandlers, LivePSStuff } from '@/sentinel/live';
 import { cachebust } from '@/utils/cachebust';
 import { fsPath } from '@/utils/fsPath';
 
-import type { GamesList, Meta } from '@/ps/games/common';
+import type { GamesList, Meta } from '@/ps/games/types';
 import type { Register } from '@/sentinel/types';
 
 const PS_EVENT_HANDLERS = {
@@ -35,7 +35,7 @@ export const PS_REGISTERS: Register[] = [
 		label: 'games',
 		pattern: /\/ps\/games\//,
 		reload: async () => {
-			['common', 'game', 'index', 'render'].forEach(file => cachebust(`@/ps/games/${file}`));
+			['types', 'game', 'index', 'render'].forEach(file => cachebust(`@/ps/games/${file}`));
 			const games = await fs.readdir(fsPath('ps', 'games'), { withFileTypes: true });
 			await Promise.all(
 				games

@@ -6,10 +6,10 @@ import { BaseGame, createGrid } from '@/ps/games/game';
 import { repeat } from '@/utils/repeat';
 
 import type { TranslatedText } from '@/i18n/types';
-import type { EndType } from '@/ps/games/common';
 import type { Log } from '@/ps/games/connectfour/logs';
 import type { Board, RenderCtx, State, Turn, WinCtx } from '@/ps/games/connectfour/types';
 import type { BaseContext } from '@/ps/games/game';
+import type { EndType } from '@/ps/games/types';
 import type { User } from 'ps-client';
 import type { ReactElement } from 'react';
 

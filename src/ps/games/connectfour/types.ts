@@ -1,4 +1,4 @@
-import type { Player } from '@/ps/games/common';
+import type { Player } from '@/ps/games/types';
 
 export type Turn = 'Y' | 'R';
 

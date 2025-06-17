@@ -1,6 +1,6 @@
-import type { BaseLog } from '@/ps/games/common';
 import type { DIRECTION } from '@/ps/games/scrabble/constants';
 import type { BoardTile, Points } from '@/ps/games/scrabble/types';
+import type { BaseLog } from '@/ps/games/types';
 import type { Satisfies, SerializedInstance } from '@/types/common';
 import type { Point } from '@/utils/grid';
 

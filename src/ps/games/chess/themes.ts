@@ -1,5 +1,5 @@
 import type { ThemeColours } from '@/ps/games/chess/types';
-import type { Theme } from '@/ps/games/common';
+import type { Theme } from '@/ps/games/types';
 
 export const defaultTheme = 'default';
 

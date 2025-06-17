@@ -1,6 +1,6 @@
-import { GamesList } from '@/ps/games/common';
+import { GamesList } from '@/ps/games/types';
 
-import type { Meta } from '@/ps/games/common';
+import type { Meta } from '@/ps/games/types';
 
 export const meta: Meta = {
 	name: 'Lights Out',

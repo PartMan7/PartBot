@@ -1,7 +1,7 @@
 import { Button } from '@/utils/components/ps';
 
-import type { BaseState } from '@/ps/games/common';
 import type { BaseGame } from '@/ps/games/game';
+import type { BaseState } from '@/ps/games/types';
 import type { CSSProperties, HTMLProps, ReactElement, ReactNode } from 'react';
 
 export function renderSignups<State extends BaseState>(this: BaseGame<State>, staff: boolean): ReactElement | null {

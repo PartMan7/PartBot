@@ -1,5 +1,5 @@
-import type { BaseLog, CommonLog } from '@/ps/games/common';
 import type { Turn } from '@/ps/games/connectfour/types';
+import type { BaseLog, CommonLog } from '@/ps/games/types';
 import type { Satisfies, SerializedInstance } from '@/types/common';
 
 export type Log = Satisfies<

@@ -5,7 +5,7 @@ import { Button, Username } from '@/utils/components/ps';
 import { Logger } from '@/utils/logger';
 
 import type { PSRoomTranslated } from '@/i18n/types';
-import type { Meta, Player } from '@/ps/games/common';
+import type { Meta, Player } from '@/ps/games/types';
 import type { ReactElement } from 'react';
 
 export function renderMenu(room: PSRoomTranslated, meta: Meta, isStaff: boolean): ReactElement {

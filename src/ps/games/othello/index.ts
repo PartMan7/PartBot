@@ -6,10 +6,10 @@ import { render } from '@/ps/games/othello/render';
 import { deepClone } from '@/utils/deepClone';
 
 import type { TranslatedText } from '@/i18n/types';
-import type { EndType } from '@/ps/games/common';
 import type { BaseContext } from '@/ps/games/game';
 import type { Log } from '@/ps/games/othello/logs';
 import type { Board, RenderCtx, State, Turn, WinCtx } from '@/ps/games/othello/types';
+import type { EndType } from '@/ps/games/types';
 import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/othello/meta';

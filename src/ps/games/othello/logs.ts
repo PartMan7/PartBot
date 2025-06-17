@@ -1,5 +1,5 @@
-import type { BaseLog } from '@/ps/games/common';
 import type { Turn } from '@/ps/games/othello/types';
+import type { BaseLog } from '@/ps/games/types';
 import type { Satisfies, SerializedInstance } from '@/types/common';
 
 export type Log = Satisfies<
