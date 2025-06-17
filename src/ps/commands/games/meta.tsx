@@ -31,7 +31,7 @@ export const command: PSCommand = {
 								Game.meta.players === 'single' ? (
 									<details key={Game.meta.id}>
 									  	<summary>
-										  <h3 style={{ display: 'inline-block', verticalAlign: 'middle' }}>{Game.meta.name}</h3>
+											<h3 style={{ display: 'inline-block', verticalAlign: 'middle' }}>{Game.meta.name}</h3>
 										</summary>
 									  	{renderMenu(message.target, Game.meta, !!staff)}
 									</details>
