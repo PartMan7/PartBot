@@ -7,6 +7,7 @@ import type { PSMessage } from '@/types/ps';
 export function autoResHandler(message: PSMessage) {
 	if (message.isIntro) return;
 	if (!message.author.userid || !message.target || message.author.id === message.parent.status.userid) return;
+	if (message.content.startsWith('|')) return; // Exclude PS stuff like `|closepage|` and `|requestpage|`
 
 	const helpMessage = `Hi, I'm ${username}, a chatbot by ${owner}! My prefix is \`\`${prefix}\`\` - try \`\`${prefix}help\`\` or \`\`${prefix}commands!\`\``;
 	if (toId(message.content) === message.parent.status.userid && message.content.endsWith('?')) {
