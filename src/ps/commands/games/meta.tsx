@@ -28,10 +28,13 @@ export const command: PSCommand = {
 						{Object.values(Games)
 							.filter(Game => Object.values(PSGames[Game.meta.id] ?? {}).filter(game => game.room.id === message.target.id).length > 0)
 							.map(Game => (
-								<>
-									<h3>{Game.meta.name}</h3>
+								<details key={Game.meta.id} open={Game.meta.players === 'many'}>
+									<summary>
+										<h3 style={{ margin: 4, display: 'inline-block', verticalAlign: 'middle' }}>{Game.meta.name}</h3>
+									</summary>
+									<br />
 									{renderMenu(message.target, Game.meta, !!staff)}
-								</>
+								</details>
 							))
 							.space(<hr />)}
 						<br />
