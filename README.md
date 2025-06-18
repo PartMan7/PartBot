@@ -1,6 +1,6 @@
 # PartBot
 
-_A morden rewrite of PartBot for Pokemon Showdown_
+_A modern rewrite of PartBot for Pokémon Showdown._
 
 ---
 
