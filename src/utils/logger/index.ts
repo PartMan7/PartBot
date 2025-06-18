@@ -29,13 +29,20 @@ const dispatchLog = debounce((_logs: string[]): void => {
 
 const dispatchError = debounce((_errors: Error[]): void => {
 	if (!ErrorLogClient) return;
-	const errors = _errors.length > 20 ? [..._errors.slice(0, 10), ..._errors.slice(-10)] : _errors;
-	const embeds = errors.group(10).map(errorGroup => {
-		const embed = new EmbedBuilder().setColor('Red');
-		errorGroup.forEach(err => embed.addFields({ name: err.toString() ?? '[no error message]', value: err.stack ?? '[no stack]' }));
-		return embed;
-	});
-	ErrorLogClient.send({ embeds }).catch();
+	try {
+		const errors = _errors.length > 20 ? [..._errors.slice(0, 10), ..._errors.slice(-10)] : _errors;
+		const embeds = errors.group(10).map(errorGroup => {
+			const embed = new EmbedBuilder().setColor('Red');
+			errorGroup.forEach(err => embed.addFields({ name: err.toString() ?? '[no error message]', value: err.stack ?? '[no stack]' }));
+			return embed;
+		});
+		ErrorLogClient.send({ embeds }).catch();
+	} catch (err) {
+		if (err instanceof Error) {
+			const timestamp = `[${new Date().toISOString()}]`;
+			errLogStream.write(`${timestamp} ${err.toString()}\n${err.stack || '[no stack]'}\n`);
+		}
+	}
 }, 1_000);
 
 function log(...args: unknown[]): void {
