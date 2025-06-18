@@ -27,21 +27,15 @@ export const command: PSCommand = {
 						<hr />
 						{Object.values(Games)
 							.filter(Game => Object.values(PSGames[Game.meta.id] ?? {}).filter(game => game.room.id === message.target.id).length > 0)
-							.map(Game =>
-								Game.meta.players === 'single' ? (
-									<details key={Game.meta.id}>
-										<summary>
-											<h3 style={{ display: 'inline-block', verticalAlign: 'middle' }}>{Game.meta.name}</h3>
-										</summary>
-										{renderMenu(message.target, Game.meta, !!staff)}
-									</details>
-								) : (
-									<div key={Game.meta.id}>
-										<h3>{Game.meta.name}</h3>
-										{renderMenu(message.target, Game.meta, !!staff)}
-									</div>
-								)
-							)
+							.map(Game => (
+								<details key={Game.meta.id} open={Game.meta.players === 'many'}>
+									<summary>
+										<h3 style={{ margin: 4, display: 'inline-block', verticalAlign: 'middle' }}>{Game.meta.name}</h3>
+									</summary>
+									<br />
+									{renderMenu(message.target, Game.meta, !!staff)}
+								</details>
+							))
 							.space(<hr />)}
 						<br />
 						<hr />
