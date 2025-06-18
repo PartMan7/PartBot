@@ -52,5 +52,6 @@ See [Suggestions & Feedback](https://github.com/PartMan7/PartBot/tree/main/docs/
 
 ## Credits
 
-- [PartMan](https://github.com/PartMan7) (Parth Mane) - Lead Developer, Maintainer
-- [zxchan](https://github.com/singiamtel) - putting up with dumb questions
+- [@PartMan7](https://github.com/PartMan7) (Parth Mane) - Lead Developer, Maintainer
+- [@Audiino](https://github.com/Audiino) - Maintainer, Victim of being asked to do stuff
+- [@zxchan](https://github.com/singiamtel) - putting up with dumb questions
