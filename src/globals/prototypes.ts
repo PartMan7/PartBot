@@ -54,7 +54,11 @@ Object.defineProperties(Array.prototype, {
 		configurable: false,
 		value: function <T, V = ArrayAtom<T>>(this: T[], point: number[]): V {
 			// eslint-disable-next-line -- Consumer-side responsibility for type safety
-			return point.reduce<any>((arr, index) => arr[index], this);
+			return point.reduce<any>((arr, index) => {
+				if (!Array.isArray(arr)) throw new Error(`Attempting to index ${index} of ${point} on ${arr}`);
+				if (index >= arr.length || index < 0) throw new RangeError(`Accessing ${index} on array of length ${arr.length}`);
+				return arr[index];
+			}, this);
 		},
 	},
 	count: {
