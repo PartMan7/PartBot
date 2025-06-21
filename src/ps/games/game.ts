@@ -245,6 +245,11 @@ export class BaseGame<State extends BaseState> {
 		if (closeSignupsHTML) this.room.sendHTML(closeSignupsHTML, { name: this.id, change });
 	}
 
+	getPlayer(user: User | string): Player | null {
+		const userId = typeof user === 'string' ? toId(user) : user.id;
+		return Object.values(this.players).find(player => player.id === userId) ?? null;
+	}
+
 	addPlayer(user: User, ctx: string | null): ActionResponse<{ started: boolean; as: BaseState['turn'] }> {
 		if (this.started) return { success: false, error: this.$T('GAME.ALREADY_STARTED') };
 		if (this.meta.players === 'single' && Object.keys(this.players).length >= 1) this.throw('GAME.IS_FULL');
@@ -369,7 +374,7 @@ export class BaseGame<State extends BaseState> {
 		const tryStart = this.onStart?.();
 		if (tryStart?.success === false) return tryStart;
 		this.started = true;
-		if (!this.turns.length) this.turns = Object.keys(this.players).shuffle();
+		if (!this.turns.length) this.turns = Object.keys(this.players).shuffle(this.prng);
 		this.nextPlayer();
 		this.startedAt = new Date();
 		this.setTimer('Game started');
@@ -409,7 +414,7 @@ export class BaseGame<State extends BaseState> {
 		user.pageHTML(html, { name: this.id, room: this.room });
 	}
 
-	update(user?: string) {
+	update(user?: string): void {
 		if (!this.started) return;
 		if (user) {
 			const asPlayer = Object.values(this.players).find(player => player.id === user);
