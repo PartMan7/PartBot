@@ -34,6 +34,7 @@ export type Meta = Readonly<
 
 // Note: The values here MUST match the folder name!
 export enum GamesList {
+	Battleship = 'battleship',
 	Chess = 'chess',
 	ConnectFour = 'connectfour',
 	LightsOut = 'lightsout',
