@@ -4,6 +4,11 @@ import { ChatError } from '@/utils/chatError';
 
 import type { PSCommand } from '@/types/chat';
 
+function isPublicStaff([room, { isPrivate }]: [string, { isPrivate?: boolean }]): boolean {
+	if (isPrivate) return false;
+	return /^[%@*#]/.test(room);
+}
+
 export const command: PSCommand = {
 	name: 'alts',
 	help: "Lists a user's alts. Requires trusted perms to view beyond your own.",
@@ -14,8 +19,10 @@ export const command: PSCommand = {
 	async run({ message, arg, $T, checkPermissions }) {
 		let lookup = message.author.userid;
 		if (arg) {
-			// TODO: Change this to use _any_ room
-			if (!checkPermissions(['room', 'driver']) && !checkPermissions(['global', 'voice'])) throw new ChatError($T('ACCESS_DENIED'));
+			if (!checkPermissions(['room', 'driver']) && !checkPermissions(['global', 'voice'])) {
+				const isPublicRoomStaff = message.author.rooms && Object.entries(message.author.rooms).some(isPublicStaff);
+				if (!isPublicRoomStaff) throw new ChatError($T('ACCESS_DENIED'));
+			}
 			lookup = toId(arg);
 		}
 		const altsList = await getAlts(lookup);
