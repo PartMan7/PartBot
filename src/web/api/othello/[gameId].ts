@@ -1,5 +1,6 @@
 import { getGameById } from '@/database/games';
 import { IS_ENABLED } from '@/enabled';
+import { WebError } from '@/utils/webError';
 
 import type { RequestHandler } from 'express';
 
@@ -10,6 +11,6 @@ export const handler: RequestHandler = async (req, res) => {
 		const game = await getGameById('othello', gameId);
 		res.json(game!.toJSON());
 	} catch (err: unknown) {
-		res.status(404).send((err as Error).message);
+		if (err instanceof Error) throw new WebError(err.message, 404);
 	}
 };
