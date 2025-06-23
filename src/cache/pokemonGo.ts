@@ -1,5 +1,4 @@
 import { FlatCache } from 'flat-cache';
-// @ts-expect-error -- TODO: Add native types for sheets-parser
 import SheetsParser from 'sheets-parser';
 
 import { IS_ENABLED } from '@/enabled';
@@ -85,11 +84,11 @@ if (cachedChargedMoves) GOData.chargedMoves = cachedChargedMoves;
 
 export async function updatePokemonGOCache(): Promise<void> {
 	if (!client) throw new Error('Reading data from Google Sheets is disabled.');
-	const data: {
+	const data = await client.getDataFromSheet<{
 		pokedex: Record<string, PokemonGO.Pokemon>;
 		fast_moves: Record<string, PokemonGO.FastMove>;
 		charged_moves: Record<string, PokemonGO.ChargedMove>;
-	} = await client.getDataFromSheet(POKEMON_GO_SOURCE_SHEET_ID, ['#pokedex', '#fast_moves', '#charged_moves']);
+	}>(POKEMON_GO_SOURCE_SHEET_ID, ['#pokedex', '#fast_moves', '#charged_moves']);
 
 	flatCache.set('pokedex', data.pokedex);
 	flatCache.set('fastMoves', data.fast_moves);
