@@ -62,6 +62,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 								list: {
 									name: 'list',
 									help: 'Lists the current users at the given rank.',
+									perms: 'regular',
 									syntax: 'CMD',
 									async run({ message, broadcastHTML }) {
 										const roomConfig = PSRoomConfigs[message.target.id];
