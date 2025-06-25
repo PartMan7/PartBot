@@ -127,7 +127,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 
 	function getGame(feed: string, searchCtx: SearchContext, roomCtx: RoomContext): { game: CommonGame; ctx: string } {
 		const { $T } = roomCtx;
-		const [fullSpec, fullCtx] = feed.lazySplit(/\s*,\s*/, 1);
+		const [fullSpec, fullCtx = ''] = feed.lazySplit(/\s*,\s*/, 1);
 		const fullGame = gameFromContext(fullSpec, searchCtx, roomCtx, fullCtx);
 		if (fullGame) return { game: fullGame, ctx: fullCtx };
 		const inferredGame = gameFromContext(null, searchCtx, roomCtx, feed);
