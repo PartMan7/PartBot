@@ -7,6 +7,7 @@ import { ANNOUNCEMENTS_CHANNEL, ROLES } from '@/discord/constants/servers/petmod
 import { getChannel } from '@/discord/loaders/channels';
 import { IS_ENABLED } from '@/enabled';
 import { i18n } from '@/i18n';
+import { getLanguage } from '@/i18n/language';
 import { TimeZone } from '@/ps/handlers/cron/constants';
 import getSecretFunction from '@/secrets/functions';
 import { toId } from '@/tools';
@@ -134,7 +135,7 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 					target: room,
 					parent: this,
 				};
-				const $T = i18n(); // TODO: Use language pref
+				const $T = i18n(getLanguage(room));
 				const partialContext: Partial<PSCommandContext> = {
 					args: [],
 					message: partialMessage as PSMessage,

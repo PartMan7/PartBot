@@ -1,6 +1,6 @@
-import { PSRoomConfigs } from '@/cache';
 import { prefix } from '@/config/ps';
 import { LanguageMap, i18n } from '@/i18n';
+import { getLanguage } from '@/i18n/language';
 import { LivePSStuff } from '@/sentinel/live';
 import { ChatError } from '@/utils/chatError';
 import { Logger } from '@/utils/logger';
@@ -43,7 +43,7 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 		};
 
 		const argData = messageContent.substring(prefix.length);
-		let language = message.type === 'chat' ? PSRoomConfigs[message.target.id]?.language : undefined;
+		let language = getLanguage(message.target);
 		if (language && !LanguageMap[language]) {
 			language = undefined;
 			message.privateReply(`Could not find translations for ${language}.`);
