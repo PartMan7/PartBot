@@ -157,7 +157,7 @@ export function fromHumanTime(srcText: string): number {
 			length: MIN_LENGTH,
 		},
 		hrs: {
-			regex: /\d+(?:\.\d+)?:h(?:(?:ou)?r)?s?/,
+			regex: /\d+(?:\.\d+)?h(?:(?:ou)?r)?s?/,
 			length: HOUR_LENGTH,
 		},
 		day: {
