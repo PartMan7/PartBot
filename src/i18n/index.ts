@@ -1,4 +1,5 @@
 import English from '@/i18n/languages/english';
+import French from '@/i18n/languages/french';
 import Hindi from '@/i18n/languages/hindi';
 import Portuguese from '@/i18n/languages/portuguese';
 import { ChatError } from '@/utils/chatError';
@@ -9,6 +10,7 @@ export const LanguageMap = {
 	english: English,
 	hindi: Hindi,
 	portuguese: Portuguese,
+	french: French,
 };
 
 export type Language = keyof typeof LanguageMap;
