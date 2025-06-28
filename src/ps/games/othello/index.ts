@@ -170,15 +170,15 @@ export class Othello extends BaseGame<State> {
 			id: this.id,
 		};
 		if (this.winCtx) {
-			ctx.header = 'Game ended.';
+			ctx.header = this.$T('GAME.GAME_ENDED');
 		} else if (side === this.turn) {
-			ctx.header = 'Your turn!';
+			ctx.header = this.$T('GAME.YOUR_TURN');
 		} else if (side) {
-			ctx.header = 'Waiting for opponent...';
+			ctx.header = this.$T('GAME.WAITING_FOR_OPPONENT');
 			ctx.dimHeader = true;
 		} else if (this.turn) {
 			const current = this.players[this.turn];
-			ctx.header = `Waiting for ${current.name}${this.sides ? ` (${this.turn})` : ''}...`;
+			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` });
 		}
 		return render.bind(this.renderCtx)(ctx);
 	}

@@ -366,15 +366,15 @@ export class Scrabble extends BaseGame<State> {
 			selected: side && side === this.turn ? this.selected : null,
 		};
 		if (this.winCtx) {
-			ctx.header = 'Game ended.';
+			ctx.header = this.$T('GAME.GAME_ENDED');
 		} else if (isActive) {
-			ctx.header = 'Your turn!';
+			ctx.header = this.$T('GAME.YOUR_TURN');
 		} else if (side) {
-			ctx.header = `Waiting for ${this.players[this.turn!]?.name}...`;
+			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: this.players[this.turn!]?.name });
 			ctx.dimHeader = true;
 		} else if (this.turn) {
 			const current = this.players[this.turn];
-			ctx.header = `Waiting for ${current.name}${this.sides ? ` (${this.turn})` : ''}...`;
+			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` });
 		}
 		return render.bind(this.renderCtx)(ctx);
 	}

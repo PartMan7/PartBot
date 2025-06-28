@@ -12,7 +12,7 @@ export function renderCloseSignups(this: LightsOut): ReactElement {
 			<hr />
 			{player} is playing a round of {this.meta.name}!
 			<Button value={`${this.renderCtx.simpleMsg} watch`} style={{ marginLeft: 16 }}>
-				Watch
+				{this.$T('GAME.LABELS.WATCH')}
 			</Button>
 			<hr />
 		</>

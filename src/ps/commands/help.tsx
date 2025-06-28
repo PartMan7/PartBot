@@ -3,8 +3,8 @@ import { LivePSStuff } from '@/sentinel/live';
 import { Perms } from '@/types/perms';
 import { ChatError } from '@/utils/chatError';
 import { Button, Username } from '@/utils/components/ps';
+import { groupSub } from '@/utils/groupSub';
 
-import type { ToTranslate } from '@/i18n/types';
 import type { parse } from '@/ps/handlers/commands/parse';
 import type { PSCommand, PSCommandChild } from '@/types/chat';
 import type { ReactElement } from 'react';
@@ -151,14 +151,19 @@ export const command: PSCommand = {
 				<center className="infobox">
 					<div style={{ maxWidth: 400 }}>
 						<p>
-							Hi! I'm <Username name={Bot.status.username ?? 'PartBot'} clickable />, and I'll try to help you as best as I can.
+							{groupSub($T('COMMANDS.HELP.MESSAGE_1'), {
+								'<USERNAME />': <Username name={Bot.status.username ?? 'PartBot'} clickable />,
+							})}
 						</p>
 						<p>
-							To start off, would you like to take a look at some{' '}
-							<Button name="send" value={`/msg ${Bot.status.userid},${prefix}commands`}>
-								commands
-							</Button>{' '}
-							you can use? Alternatively, you can take a look at my <a href="https://github.com/PartMan7/PartBot">source code</a>.
+							{groupSub($T('COMMANDS.HELP.MESSAGE_2'), {
+								'<COMMANDS />': (
+									<Button name="send" value={`/msg ${Bot.status.userid},${prefix}commands`}>
+										{$T('COMMANDS.HELP.COMMANDS')}
+									</Button>
+								),
+								'<SOURCE_CODE />': <a href="https://github.com/PartMan7/PartBot">{$T('COMMANDS.HELP.SOURCE_CODE')}</a>,
+							})}
 						</p>
 					</div>
 				</center>
@@ -170,12 +175,12 @@ export const command: PSCommand = {
 			parsed = LivePSStuff.commands.parse(args, [], $T);
 			if (parsed.command.flags?.noDisplay) throw new Error(); // Don't show this here!
 		} catch (e) {
-			throw new ChatError('COULD_NOT_FIND_COMMAND' as ToTranslate); // TODO
+			throw new ChatError($T('COMMANDS.HELP.COULD_NOT_FIND_COMMAND'));
 		}
 		const { command, context } = parsed;
 		const closeEnough = context.args.length > 0 ? context.args.join('>') : null;
 		if (command.perms && !checkPermissions(command.perms))
-			throw new ChatError((command.flags?.conceal ? 'COULD_NOT_FIND_COMMAND' : 'ACCESS_DENIED') as ToTranslate);
+			throw new ChatError($T(command.flags?.conceal ? 'COMMANDS.HELP.COULD_NOT_FIND_COMMAND' : 'ACCESS_DENIED'));
 		if (command.help) {
 			broadcastHTML(
 				<div className="infobox" style={{ padding: 8 }}>
@@ -192,8 +197,8 @@ export const command: PSCommand = {
 						<p>
 							{Object.entries(command.flags).map(([flag, value]) => {
 								if (!value) return null;
-								if (flag === 'pmOnly') return 'Can only be used in PMs.';
-								if (flag === 'allowPMs') return 'Can be used in PMs.';
+								if (flag === 'pmOnly') return $T('COMMANDS.HELP.PM_ONLY');
+								if (flag === 'allowPMs') return $T('COMMANDS.HELP.ALLOW_PMS');
 							})}
 						</p>
 					) : null}

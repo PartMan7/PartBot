@@ -14,7 +14,7 @@ import { sample, useRNG } from '@/utils/random';
 import { Timer } from '@/utils/timer';
 
 import type { GameModel } from '@/database/games';
-import type { NoTranslate, PSRoomTranslated, ToTranslate, TranslatedText, TranslationFn } from '@/i18n/types';
+import type { NoTranslate, PSRoomTranslated, TranslatedText, TranslationFn } from '@/i18n/types';
 import type { ActionResponse, BaseLog, BaseState, EndType, Meta, Player } from '@/ps/games/types';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
@@ -85,7 +85,7 @@ export class BaseGame<State extends BaseState> {
 	onStart?(): ActionResponse;
 	onEnd(type?: EndType): TranslatedText;
 	onEnd() {
-		return 'Game ended';
+		return this.$T('GAME.GAME_ENDED');
 	}
 	trySkipPlayer?(turn: BaseState['turn']): boolean;
 	moddable?(): boolean;
@@ -298,9 +298,7 @@ export class BaseGame<State extends BaseState> {
 			return {
 				success: true,
 				data: {
-					message: (staffAction
-						? `${player.name} has been disqualified from the game.`
-						: 'You have forfeited the game.') as ToTranslate,
+					message: this.$T(staffAction ? 'GAME.DQ' : 'GAME.FORFEIT', { player: player.name }),
 					cb: () => {
 						const playersLeft = Object.values(this.players).filter((player: Player) => !player.out);
 						if (playersLeft.length <= 1) this.end('dq');
@@ -315,9 +313,7 @@ export class BaseGame<State extends BaseState> {
 		delete this.players[player.turn];
 		return {
 			success: true,
-			data: {
-				message: (staffAction ? `${player.name} has been removed from the game.` : 'You have left the game.') as ToTranslate,
-			},
+			data: { message: this.$T(staffAction ? 'GAME.REMOVED' : 'GAME.LEFT', { player: player.name }) },
 		};
 	}
 
