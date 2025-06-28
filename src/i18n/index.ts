@@ -3,7 +3,7 @@ import Hindi from '@/i18n/languages/hindi';
 import Portuguese from '@/i18n/languages/portuguese';
 import { ChatError } from '@/utils/chatError';
 
-import type { TranslatedText, TranslationFn, TranslationGroup } from '@/i18n/types';
+import type { NoTranslate, TranslatedText, TranslationFn, TranslationGroup } from '@/i18n/types';
 
 export const LanguageMap = {
 	english: English,
@@ -21,7 +21,7 @@ export function applyVariables(text: string, variables: Record<string, string | 
 }
 
 export function i18n(language: Language = 'english'): TranslationFn {
-	const translations = LanguageMap[language] as TranslationGroup;
+	const translations = LanguageMap[language] as TranslationGroup | undefined;
 	const fallback = LanguageMap['english'] as TranslationGroup;
 	return (lookup, variables = {}) => {
 		const lookupPath = lookup.split('.');
@@ -30,8 +30,7 @@ export function i18n(language: Language = 'english'): TranslationFn {
 			lookupPath.reduce((group, label) => group?.[label], translations) ??
 			// @ts-expect-error -- Not bothering to type this whole thing
 			lookupPath.reduce((group, label) => group?.[label], fallback);
-		// @ts-expect-error -- Cannot translate the message for when translations are not found
-		if (!base) throw new ChatError('Translations not found!');
+		if (!base) throw new ChatError('Translations not found!' as NoTranslate);
 		if (Array.isArray(base)) return applyVariables(base.random(), variables);
 		return applyVariables(base, variables);
 	};
