@@ -1,8 +1,9 @@
 import { EmbedBuilder } from 'discord.js';
 
 import { WINNER_ICON } from '@/discord/constants/emotes';
-import { BaseGame, createGrid } from '@/ps/games/game';
+import { BaseGame } from '@/ps/games/game';
 import { render } from '@/ps/games/othello/render';
+import { createGrid } from '@/ps/games/utils';
 import { deepClone } from '@/utils/deepClone';
 
 import type { TranslatedText } from '@/i18n/types';

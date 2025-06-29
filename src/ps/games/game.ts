@@ -484,9 +484,5 @@ export type BaseContext = {
 	args: string[];
 };
 
-export function createGrid<T>(x: number, y: number, fill: (x: number, y: number) => T) {
-	return Array.from({ length: x }).map((_, i) => Array.from({ length: y }).map((_, j) => fill(i, j)));
-}
-
 /** Non-generic type representing only the things all games have in common */
 export type CommonGame = BaseGame<BaseState>;

@@ -1,6 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 
-import { BaseGame, createGrid } from '@/ps/games/game';
+import { BaseGame } from '@/ps/games/game';
 import { checkWord } from '@/ps/games/scrabble/checker';
 import {
 	BaseBoard,
@@ -13,6 +13,7 @@ import {
 } from '@/ps/games/scrabble/constants';
 import { ScrabbleModData } from '@/ps/games/scrabble/mods';
 import { render, renderMove } from '@/ps/games/scrabble/render';
+import { createGrid } from '@/ps/games/utils';
 import { type Point, coincident, flipPoint, multiStepPoint, rangePoints, stepPoint } from '@/utils/grid';
 
 import type { TranslatedText } from '@/i18n/types';

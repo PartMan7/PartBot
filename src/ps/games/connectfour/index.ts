@@ -2,7 +2,8 @@ import { EmbedBuilder } from 'discord.js';
 
 import { WINNER_ICON } from '@/discord/constants/emotes';
 import { render } from '@/ps/games/connectfour/render';
-import { BaseGame, createGrid } from '@/ps/games/game';
+import { BaseGame } from '@/ps/games/game';
+import { createGrid } from '@/ps/games/utils';
 import { repeat } from '@/utils/repeat';
 
 import type { TranslatedText } from '@/i18n/types';

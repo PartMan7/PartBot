@@ -12,3 +12,7 @@ export function generateId(): string {
 	const idNum = (newId * 999979) % 36 ** 4;
 	return `#${idNum.toString(36).padStart(4, '0').toUpperCase()}`;
 }
+
+export function createGrid<T>(x: number, y: number, fill: (x: number, y: number) => T) {
+	return Array.from({ length: x }).map((_, i) => Array.from({ length: y }).map((_, j) => fill(i, j)));
+}

@@ -1,7 +1,8 @@
 import { type ReactElement } from 'react';
 
-import { BaseGame, createGrid } from '@/ps/games/game';
+import { BaseGame } from '@/ps/games/game';
 import { render, renderCloseSignups } from '@/ps/games/lightsout/render';
+import { createGrid } from '@/ps/games/utils';
 import { deepClone } from '@/utils/deepClone';
 import { type Point, parsePoint, stepPoint } from '@/utils/grid';
 
