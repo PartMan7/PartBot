@@ -5,13 +5,11 @@ export type Translations = typeof refText;
 
 // Like RecursivePartial, but loosens 'string' to string
 type RecursiveLoosePartial<T> = {
-	[P in keyof T]?: T[P] extends (infer U)[]
-		? RecursiveLoosePartial<U>[]
-		: T[P] extends object | undefined
+	[P in keyof T]?: T[P] extends string | readonly string[]
+		? string | readonly string[]
+		: T[P] extends object
 			? RecursiveLoosePartial<T[P]>
-			: T[P] extends string
-				? string
-				: T[P];
+			: T[P];
 };
 export type AvailableTranslations = RecursiveLoosePartial<Translations>;
 
