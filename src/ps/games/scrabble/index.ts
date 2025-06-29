@@ -67,6 +67,7 @@ export class Scrabble extends BaseGame<State> {
 		Object.keys(this.players).forEach(player => {
 			this.state.score[player] = 0;
 			this.state.racks[player] = this.state.bag.splice(0, RACK_SIZE);
+			if (this.state.racks[player].includes('_')) this.room.privateSend(player, this.$T('GAME.SCRABBLE.HOW_TO_BLANK'));
 		});
 		return { success: true, data: null };
 	}
