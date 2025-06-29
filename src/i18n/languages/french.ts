@@ -150,7 +150,7 @@ export default {
 		UPTIME: 'Le Bot fonctionne depuis {{time}}.',
 		RANK: 'Votre classement est {{rank}}.',
 		PONG: 'Pong !',
-		ROOM_NOT_GIVEN: 'Aucun salon reçu dans la minute',
+		ROOM_NOT_GIVEN: 'Aucun salon reçu dans la minute.xw',
 
 		EVAL: {
 			SUCCESS: 'Commande exécutée avec succès.',
