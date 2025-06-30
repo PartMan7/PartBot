@@ -419,7 +419,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				name: 'menu',
 				aliases: ['m', 'list'],
 				help: 'Displays active games.',
-				perms: Symbol.for('games.manage'),
+				perms: Symbol.for('games.create'),
 				syntax: 'CMD',
 				async run({ message, broadcastHTML }) {
 					const regHTML = renderMenu(message.target, Game.meta, false);
@@ -433,7 +433,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				name: 'stash',
 				aliases: ['yeet'],
 				help: 'Stashes a game to store it for later.',
-				perms: Symbol.for('games.manage'),
+				perms: Symbol.for('games.create'),
 				syntax: 'CMD [game ref]',
 				async run({ message, arg, $T }) {
 					const { game } = getGame(arg, { action: 'any' }, { room: message.target, $T });
@@ -449,7 +449,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 							name: 'backups',
 							aliases: ['bu', 'b'],
 							help: 'Shows a list of currently available backups.',
-							perms: Symbol.for('games.manage'),
+							perms: Symbol.for('games.create'),
 							syntax: 'CMD',
 							async run({ message }) {
 								const HTML = renderBackups(message.target, Game.meta);
@@ -460,7 +460,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 							name: 'restore',
 							aliases: ['r', 'unstash', 'unyeet'],
 							help: 'Restores a game from stash/backups.',
-							perms: Symbol.for('games.manage'),
+							perms: Symbol.for('games.create'),
 							syntax: 'CMD [id]',
 							async run({ message, arg, $T }) {
 								const id = arg.trim().toUpperCase();
