@@ -10,7 +10,7 @@ export const command: PSCommand = {
 	name: 'games',
 	help: 'Metacommands for games.',
 	syntax: 'CMD [menu]',
-	perms: Symbol.for('games.manage'),
+	perms: Symbol.for('games.create'),
 	categories: ['game'],
 	async run({ run }) {
 		return run('games menu');
