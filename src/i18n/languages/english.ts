@@ -33,6 +33,18 @@ export default {
 	},
 
 	GAME: {
+		LABELS: {
+			END: 'End',
+			JOIN: 'Join',
+			JOIN_SIDE: 'Join ({{side}})',
+			RANDOM: 'Random',
+			START: 'Start',
+			STASH: 'Stash',
+			UNSTASH: 'Unstash',
+			WATCH: 'Watch',
+		},
+		SIGNUPS_OPEN: '{{game}} signups are open!',
+		SIGNUPS_CLOSED: '{{game}} signups closed.',
 		ALREADY_JOINED: 'You have already joined this game.',
 		ALREADY_STARTED: 'The game has already started!',
 		ALREADY_WATCHING: 'You are already watching this game!',
@@ -66,12 +78,19 @@ export default {
 		RESTORING_WRONG_TYPE: 'You seem to be restoring the wrong type of game...',
 		STASHED: 'Successfully stashed game {{id}}.',
 		SUB: '{{out}} has been subbed with {{in}}!',
+		DQ: '{{player}} has been disqualified from the game.',
+		FORFEIT: 'You have forfeited the game.',
+		REMOVED: '{{player}} has been removed from the game.',
+		LEFT: 'You have left the game.',
 		WATCHING_NOTHING: "You don't seem to need to rejoin anything...",
 		WON: '{{winner}} won!',
 		WON_AGAINST: '{{winner}} won the game of {{game}} against {{loser}}{{ctx}}!',
 		WAITING: 'Waiting for you to play...',
 		NON_PLAYER_OR_SPEC: 'User not in players/spectators',
 		YOUR_TURN: 'Your turn!',
+		WAITING_FOR_OPPONENT: 'Waiting for opponent...',
+		WAITING_FOR_PLAYER: 'Waiting for {{player}}...',
+		GAME_ENDED: 'Game ended.',
 		UPLOAD_FAILED: 'Failed to upload game {{id}}.',
 		MOD_NOT_FOUND: "Could not find a mod called '{{mod}}'.",
 		CANNOT_MOD: 'Mods cannot be applied to this game now.',
@@ -80,6 +99,8 @@ export default {
 		INVALID_THEME: 'Invalid theme. Valid themes are: {{themes}}.',
 		SET_THEME: 'The theme has been set to {{theme}}.',
 		CANNOT_LEAVE: "You can't forfeit a game by closing it! Try ``{{prefix}}{{game}} forfeit`` instead.",
+		NO_GAMES_FOUND: 'No games found.',
+		NO_BACKUPS_FOUND: 'No game backups found.',
 		TIMER: {
 			PRIVATE: "Psst it's your turn to play in {{game}} [{{id}}]",
 			PUBLIC: "{{user}} hasn't played in {{game}} [{{id}}] for {{time}}...",
@@ -112,12 +133,22 @@ export default {
 	},
 
 	COMMANDS: {
+		HELP: {
+			MESSAGE_1: "Hi! I'm <USERNAME />, and I'll try to help you as best as I can.",
+			MESSAGE_2:
+				'To start off, would you like to take a look at some <COMMANDS /> you can use? Alternatively, you can take a look at my <SOURCE_CODE />.',
+			COMMANDS: 'commands',
+			SOURCE_CODE: 'source code',
+			COULD_NOT_FIND_COMMAND: 'Could not find command.',
+			PM_ONLY: 'Can only be used in PMs.',
+			ALLOW_PMS: 'Can be used in PMs.',
+		},
 		ALTS: 'Alts: {{alts}}',
 		BOOP: 'BOOP',
 		UPTIME: 'The Bot has been running for {{time}}.',
 		RANK: 'Your rank is {{rank}}.',
 		PONG: 'Pong!',
-		ROOM_NOT_GIVEN: 'Did not receive a room within a minute',
+		ROOM_NOT_GIVEN: 'Did not receive a room within a minute.',
 
 		EVAL: {
 			SUCCESS: 'Command executed successfully.',
@@ -148,6 +179,47 @@ export default {
 			TIMER_END: '{{user}}, your timer is up!',
 			TIMER_END_WITH_COMMENT: '{{user}}, your timer is up! Reason: {{comment}}',
 			TIMER_SET: 'Your timer has been set for {{timeLeft}} from now.',
+
+			MS: {
+				ABBR: 'ms',
+				NAME: 'millisecond',
+				PLUR: 'milliseconds',
+			},
+			SEC: {
+				ABBR: 'sec',
+				NAME: 'second',
+				PLUR: 'seconds',
+			},
+			MIN: {
+				ABBR: 'min',
+				NAME: 'minute',
+				PLUR: 'minutes',
+			},
+			HR: {
+				ABBR: 'hr',
+				NAME: 'hour',
+				PLUR: 'hours',
+			},
+			DAY: {
+				ABBR: 'day',
+				NAME: 'day',
+				PLUR: 'days',
+			},
+			WK: {
+				ABBR: 'wk',
+				NAME: 'week',
+				PLUR: 'weeks',
+			},
+			YR: {
+				ABBR: 'yr',
+				NAME: 'year',
+				PLUR: 'years',
+			},
+			DEC: {
+				ABBR: 'dec',
+				NAME: 'decade',
+				PLUR: 'decades',
+			},
 		},
 	},
 } as const;

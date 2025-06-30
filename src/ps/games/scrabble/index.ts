@@ -1,6 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 
-import { BaseGame, createGrid } from '@/ps/games/game';
+import { BaseGame } from '@/ps/games/game';
 import { checkWord } from '@/ps/games/scrabble/checker';
 import {
 	BaseBoard,
@@ -13,6 +13,7 @@ import {
 } from '@/ps/games/scrabble/constants';
 import { ScrabbleModData } from '@/ps/games/scrabble/mods';
 import { render, renderMove } from '@/ps/games/scrabble/render';
+import { createGrid } from '@/ps/games/utils';
 import { type Point, coincident, flipPoint, multiStepPoint, rangePoints, stepPoint } from '@/utils/grid';
 
 import type { TranslatedText } from '@/i18n/types';
@@ -66,6 +67,7 @@ export class Scrabble extends BaseGame<State> {
 		Object.keys(this.players).forEach(player => {
 			this.state.score[player] = 0;
 			this.state.racks[player] = this.state.bag.splice(0, RACK_SIZE);
+			if (this.state.racks[player].includes('_')) this.room.privateSend(player, this.$T('GAME.SCRABBLE.HOW_TO_BLANK'));
 		});
 		return { success: true, data: null };
 	}
@@ -366,15 +368,15 @@ export class Scrabble extends BaseGame<State> {
 			selected: side && side === this.turn ? this.selected : null,
 		};
 		if (this.winCtx) {
-			ctx.header = 'Game ended.';
+			ctx.header = this.$T('GAME.GAME_ENDED');
 		} else if (isActive) {
-			ctx.header = 'Your turn!';
+			ctx.header = this.$T('GAME.YOUR_TURN');
 		} else if (side) {
-			ctx.header = `Waiting for ${this.players[this.turn!]?.name}...`;
+			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: this.players[this.turn!]?.name });
 			ctx.dimHeader = true;
 		} else if (this.turn) {
 			const current = this.players[this.turn];
-			ctx.header = `Waiting for ${current.name}${this.sides ? ` (${this.turn})` : ''}...`;
+			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` });
 		}
 		return render.bind(this.renderCtx)(ctx);
 	}

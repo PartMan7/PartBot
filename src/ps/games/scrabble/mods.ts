@@ -11,6 +11,11 @@ export const ScrabbleModData: Record<ScrabbleMods, { name: string; dict: DICTION
 		name: 'CSW21',
 		dict: DICTIONARY.CSW21,
 	},
+	[ScrabbleMods.ODS8]: {
+		name: 'ODS8',
+		dict: DICTIONARY.ODS8,
+		aliases: ['ods', 'french', 'francais', 'franais'],
+	},
 	[ScrabbleMods.CLABBERS]: {
 		name: 'Clabbers',
 		dict: DICTIONARY.CLABBERS,

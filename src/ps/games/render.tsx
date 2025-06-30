@@ -10,7 +10,7 @@ export function renderSignups<State extends BaseState>(this: BaseGame<State>, st
 	return (
 		<>
 			<hr />
-			<h1>{this.meta.name} Signups have begun!</h1>
+			<h1>{this.$T('GAME.SIGNUPS_OPEN', { game: this.meta.name })}</h1>
 			{this.sides
 				? Object.entries(this.meta.turns!)
 						.filter(([turn]) => !this.players[turn])
@@ -22,13 +22,13 @@ export function renderSignups<State extends BaseState>(this: BaseGame<State>, st
 				: null}
 			{this.sides && this.turns.length - Object.keys(this.players).length > 1 ? (
 				<Button value={`${this.renderCtx.msg} join -`} style={{ margin: 5 }}>
-					Random
+					{this.$T('GAME.LABELS.RANDOM')}
 				</Button>
 			) : null}
 			{!this.sides ? <Button value={`${this.renderCtx.msg} join`}>Join</Button> : null}
 			{staff && startable ? (
 				<Button value={`${this.renderCtx.msg} start`} style={{ marginLeft: 8 }}>
-					Start
+					{this.$T('GAME.LABELS.START')}
 				</Button>
 			) : null}
 			<hr />
@@ -40,8 +40,8 @@ export function renderCloseSignups<State extends BaseState>(this: BaseGame<State
 	return (
 		<>
 			<hr />
-			<h1>{this.meta.name} Signups have closed.</h1>
-			<Button value={`${this.renderCtx.msg} watch`}>Watch</Button>
+			<h1>{this.$T('GAME.SIGNUPS_CLOSED', { game: this.meta.name })}</h1>
+			<Button value={`${this.renderCtx.msg} watch`}>{this.$T('GAME.LABELS.WATCH')}</Button>
 			<hr />
 		</>
 	);

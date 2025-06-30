@@ -43,7 +43,7 @@ export class Chess extends BaseGame<State> {
 		}
 
 		this.lib.setHeader('Event', `Room Match ${this.id}`);
-		this.lib.setHeader('Site', 'https://play.pokemonshowdown.com/boardgames');
+		this.lib.setHeader('Site', `https://play.pokemonshowdown.com/${this.roomid}`);
 	}
 
 	onStart(): ActionResponse {
@@ -186,21 +186,21 @@ export class Chess extends BaseGame<State> {
 			small: false,
 		};
 		if (this.winCtx) {
-			ctx.header = 'Game ended.';
+			ctx.header = this.$T('GAME.GAME_ENDED');
 			if (side === null) ctx.small = true; // chatroom
 		} else if (side === this.turn) {
-			ctx.header = 'Your turn!';
+			ctx.header = this.$T('GAME.YOUR_TURN');
 			if (this.selected) {
 				const selectedPiece = this.lib.get(this.selected);
 				const seventhRanks = { w: 7, b: 2 };
 				if (selectedPiece?.type === 'p' && seventhRanks[selectedPiece.color] === +this.selected.charAt(1)) ctx.promotion = true;
 			}
 		} else if (side) {
-			ctx.header = 'Waiting for opponent...';
+			ctx.header = this.$T('GAME.WAITING_FOR_OPPONENT');
 			ctx.dimHeader = true;
 		} else if (this.turn) {
 			const current = this.players[this.turn];
-			ctx.header = `Waiting for ${current.name}${this.sides ? ` (${this.turn})` : ''}...`;
+			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` });
 		}
 		return render.bind(this.renderCtx)(ctx);
 	}
