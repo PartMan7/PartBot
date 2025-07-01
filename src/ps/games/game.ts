@@ -294,6 +294,7 @@ export class BaseGame<State extends BaseState> {
 			const forfeitPlayer = this.onForfeitPlayer?.(player, ctx);
 			if (forfeitPlayer?.success === false) return forfeitPlayer;
 			player.out = true;
+			this.spectators.push(player.id);
 			this.log.push({ action: staffAction ? 'dq' : 'forfeit', turn: player.turn, time: new Date(), ctx: null });
 			return {
 				success: true,
