@@ -31,7 +31,7 @@ export function interfaceHandler(message: PSMessage) {
 				message.reply(game.$T('GAME.CANNOT_LEAVE', { prefix, game: game.meta.id }));
 				return game.update(user);
 			}
-			if (game.spectators.includes(user) || (player && player.out)) {
+			if (game.spectators.includes(user)) {
 				game.spectators.remove(user);
 				message.reply(
 					game.$T('GAME.NO_LONGER_WATCHING', {
