@@ -8,7 +8,7 @@ export default {
 		OR: 'ya',
 	},
 
-	ACCESS_DENIED: 'Pahunch mana hai.',
+	ACCESS_DENIED: 'Anumati nahin hai.',
 	SCREW_YOU: 'Bhaad mein jao.',
 	CANCELLED: 'Yeh command radd kar di gayi thi.',
 	CMD_NOT_FOUND: 'Command nahi mili.',
