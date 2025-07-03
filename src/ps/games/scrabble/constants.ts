@@ -3,7 +3,7 @@ import CSW19 from '@/static/words/csw19.json';
 import CSW21 from '@/static/words/csw21.json';
 import ODS8 from '@/static/words/ods8.json';
 
-import type { BaseBoard as BaseBoardType } from '@/ps/games/scrabble/types';
+import type { BaseBoard as BaseBoardType, LetterMetadata } from '@/ps/games/scrabble/types';
 
 export const BaseBoard: BaseBoardType = [
 	['3W', null, null, '2L', null, null, null, '3W', null, null, null, '2L', null, null, '3W'],
@@ -26,7 +26,7 @@ export const BaseBoard: BaseBoardType = [
 export const RACK_SIZE = 7;
 export const WIDE_LETTERS = ['Q', 'W', 'Z'];
 
-export const LETTER_COUNTS = {
+export const LETTER_COUNTS: LetterMetadata = {
 	A: 9,
 	B: 2,
 	C: 2,
@@ -56,7 +56,7 @@ export const LETTER_COUNTS = {
 	_: 2,
 };
 
-export const LETTER_POINTS = {
+export const LETTER_POINTS: LetterMetadata = {
 	A: 1,
 	B: 3,
 	C: 3,

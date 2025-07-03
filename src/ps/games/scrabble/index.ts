@@ -44,21 +44,19 @@ export class Scrabble extends BaseGame<State> {
 	}
 
 	moddable() {
-		if (!this.started) return true;
-		const isEmptyBoard = !this.state.board.some(row => row.some(Boolean));
-		if (isEmptyBoard) return true;
-		return false;
+		return !this.started;
 	}
 
 	applyMod(mod: ScrabbleMods): ActionResponse<TranslatedText> {
 		this.mod = mod;
+		this.points = ScrabbleModData[mod].points ?? LETTER_POINTS;
 		return { success: true, data: this.$T('GAME.APPLIED_MOD', { mod: ScrabbleModData[mod].name, id: this.id }) };
 	}
 
 	onStart(): ActionResponse {
 		this.state.baseBoard = BaseBoard;
 		this.state.board = createGrid<BoardTile | null>(BaseBoard.length, BaseBoard[0].length, () => null);
-		this.state.bag = Object.entries(LETTER_COUNTS)
+		this.state.bag = Object.entries((this.mod ? ScrabbleModData[this.mod].counts : null) ?? LETTER_COUNTS)
 			.flatMap(([letter, count]) => letter.repeat(count).split(''))
 			.shuffle(this.prng);
 		this.state.score = {};
