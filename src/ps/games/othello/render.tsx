@@ -9,7 +9,7 @@ const roundStyles = { height: 24, width: 24, display: 'inline-block', borderRadi
 
 type This = { msg: string };
 
-export function renderBoard(this: This, ctx: RenderCtx) {
+function renderBoard(this: This, ctx: RenderCtx) {
 	const Cell: CellRenderer<Turn | null> = ({ cell, i, j }) => {
 		const action = ctx.validMoves.some(([x, y]) => x === i && y === j);
 		return (

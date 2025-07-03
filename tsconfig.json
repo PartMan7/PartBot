@@ -1,12 +1,12 @@
 {
 	"compilerOptions": {
 		"baseUrl": "src",
-		"lib": ["esnext"],
-		"target": "esnext",
+		"lib": ["ESNext"],
+		"target": "ESNext",
 		"noEmit": true,
 		"jsx": "react-jsx",
 		"skipLibCheck": true,
-		"module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
+		"module": "Preserve",
 		"esModuleInterop": true, // Allow default-importing stuff like path
 		"resolveJsonModule": true, // Allow importing JSON files
 		"exactOptionalPropertyTypes": true, // Stricter checks!
@@ -17,8 +17,5 @@
 		}
 	},
 	"include": ["src/**/*"],
-	"exclude": ["src/web/react/**/*"],
-	"ts-node": {
-		"require": ["tsconfig-paths/register"] // For path aliases
-	}
+	"exclude": ["src/web/react/**/*"]
 }

@@ -6,11 +6,14 @@ import loadDiscord from '@/discord/loaders';
 import { IS_ENABLED } from '@/enabled';
 import { Logger } from '@/utils/logger';
 
-const Discord = new Client({ intents: GatewayIntentBits.Guilds });
-Discord.once(Events.ClientReady, readyClient => Logger.log(`Connected to Discord! [${readyClient.user.tag}]`));
+function getDiscord(): Client {
+	const Discord = new Client({ intents: GatewayIntentBits.Guilds });
+	Discord.once(Events.ClientReady, readyClient => Logger.log(`Connected to Discord! [${readyClient.user.tag}]`));
 
-if (IS_ENABLED.DISCORD) loadDiscord().then(() => Discord.login(token));
+	if (IS_ENABLED.DISCORD) loadDiscord().then(() => Discord.login(token));
+	Discord.on(Events.InteractionCreate, chatHandler);
 
-Discord.on(Events.InteractionCreate, chatHandler);
+	return Discord;
+}
 
-export default Discord;
+export default globalThis.Discord ??= getDiscord();
