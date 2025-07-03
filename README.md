@@ -46,6 +46,19 @@ This might take a while...
    npm start
    ```
 
+## Translations
+
+If you're interested in helping out with translations (either to correct existing translations or to add new ones), contributions are happily welcomed!
+
+Currently, PartBot supports the following languages on Showdown:
+
+- English
+- Hindi (PoC [@P9](https://github.com/ISenseAura))
+- Portuguese (PoC [@Seyhura](https://github.com/Seyhura))
+- French (PoC [@Distrib](https://github.com/Distrib-ps))
+
+Feel free to refer to the [source code](https://github.com/PartMan7/PartBot/tree/main/src/i18n/languages) for the actual translations.
+
 ## Suggestions, Bug Reports, and Feedback
 
 See [Suggestions & Feedback](https://github.com/PartMan7/PartBot/tree/main/docs/SUGGESTIONS.md) for ideas, bugs, and requests.
