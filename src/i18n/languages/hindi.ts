@@ -23,7 +23,7 @@ export default {
 	TOO_LATE: 'Bahut der ho gayi!',
 	USER_NOT_FOUND: 'User nahi mila!',
 	WRONG_ROOM: 'Galat room.',
-	INVALID_ARGUMENTS: 'Amaanya tark',
+	INVALID_ARGUMENTS: 'Amaanya tark.',
 	ENTRY_NOT_FOUND: 'Iss naam ka kuch nahi mila.',
 
 	DISABLED: {
