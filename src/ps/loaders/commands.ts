@@ -9,6 +9,35 @@ import { fsPath } from '@/utils/fsPath';
 
 import type { PSCommand, PSCommandChild } from '@/types/chat';
 
+import '@/ps/commands/alts';
+import '@/ps/commands/auth';
+import '@/ps/commands/boop';
+import '@/ps/commands/commands';
+import '@/ps/commands/dt';
+import '@/ps/commands/echo';
+import '@/ps/commands/eval';
+import '@/ps/commands/filter';
+import '@/ps/commands/games/core';
+import '@/ps/commands/games/meta';
+import '@/ps/commands/games/other';
+import '@/ps/commands/git';
+import '@/ps/commands/help';
+import '@/ps/commands/hotpatch';
+import '@/ps/commands/hundos';
+import '@/ps/commands/kill';
+import '@/ps/commands/kunc';
+import '@/ps/commands/lettersample';
+import '@/ps/commands/myperms';
+import '@/ps/commands/namecolour';
+import '@/ps/commands/pat';
+import '@/ps/commands/ping';
+import '@/ps/commands/points';
+import '@/ps/commands/quotes';
+import '@/ps/commands/randpoke';
+import '@/ps/commands/sample';
+import '@/ps/commands/timer';
+import '@/ps/commands/uptime';
+
 // Generate aliases
 function addAlias(command: PSCommandChild, stack: string[], aliasAs: readonly string[]) {
 	if (command.children)

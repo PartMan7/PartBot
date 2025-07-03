@@ -1,6 +1,10 @@
 import '@/globals';
 
-Logger.log('PartBot is starting up...');
+const firstRun = '__FIRST_RUN__';
+if (globalThis[firstRun]) {
+	Logger.log('PartBot is starting up...');
+	globalThis[firstRun] = true;
+}
 
 import '@/discord';
 import '@/ps';

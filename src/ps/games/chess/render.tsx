@@ -35,7 +35,7 @@ function adaptBoard(board: BoardCell[][], flip: boolean): BoardCell[][] {
 	return board.map(row => row.toReversed()).reverse();
 }
 
-export function renderBoard(this: This, ctx: RenderCtx) {
+function renderBoard(this: This, ctx: RenderCtx) {
 	const size = ctx.small ? 30 : 45;
 	const flip = ctx.side === 'B';
 

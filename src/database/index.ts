@@ -5,6 +5,5 @@ import { Logger } from '@/utils/logger';
 
 const connection: Promise<Mongoose> | null = IS_ENABLED.DB ? mongoose.connect(process.env.DB_MONGO_URL!) : null;
 if (connection) connection.then(() => Logger.log('Connected to database!'));
-else Logger.log('Skipping database...');
 
 export default connection;
