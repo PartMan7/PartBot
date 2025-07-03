@@ -14,8 +14,8 @@ export default {
 	CMD_NOT_FOUND: 'Command nahi mili.',
 	CONFIRM: "Kya aap nishchit hain? Pushti ke liye 'confirm' likhein.",
 	NOT_CONFIRMED: 'Samay par confirmation nahi mili.',
-	INVALID_ALIAS: '{{aliasFor}} ke liye avaidh upnaam tha.',
-	INVALID_ROOM_ID: 'Avaid room ID.',
+	INVALID_ALIAS: '{{aliasFor}} ke liye amaanya upnaam tha.',
+	INVALID_ROOM_ID: 'Amaanya room ID.',
 	NO_DMS_COMMAND: 'Yeh command PMs se nahi chalai ja sakti.',
 	NOT_IN_ROOM: 'Aap us room mein nahi hain.',
 	PM_ONLY_COMMAND: 'Yeh command sirf PMs mein istemal ki ja sakti hai.',
@@ -23,7 +23,7 @@ export default {
 	TOO_LATE: 'Bahut der ho gayi!',
 	USER_NOT_FOUND: 'User nahi mila!',
 	WRONG_ROOM: 'Galat room.',
-	INVALID_ARGUMENTS: 'Avaid tarkik sankhya.',
+	INVALID_ARGUMENTS: 'Amaanya tark',
 	ENTRY_NOT_FOUND: 'Iss naam ka kuch nahi mila.',
 
 	DISABLED: {
