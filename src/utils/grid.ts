@@ -13,12 +13,31 @@ export function parsePoint(input: string): Point | null {
 	return [+matched[1], +matched[2]];
 }
 
+/**
+ * Assumes grid follows top-down A-Z, left-right 1-9
+ * @param input
+ * @example parsePointA1('B5'); // [1, 4]
+ */
+export function parsePointA1(input: string): Point | null {
+	const matched = input.match(/^([a-z])(\d+)$/i);
+	if (!matched) return null;
+	return [matched[1].toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0), +matched[2] - 1];
+}
+
+export function pointToA1(input: Point): string {
+	return `${(input[0] + 1).toLetter()}${input[1] + 1}`;
+}
+
 export function coincident(point1: Point, point2: Point): boolean {
 	return point1[0] === point2[0] && point1[1] === point2[1];
 }
 
 export function taxicab(from: Point, to: Point): number {
 	return Math.abs(to[0] - from[0]) + Math.abs(to[1] - from[1]);
+}
+
+export function sameRowOrCol(point: Point, ref: Point): boolean {
+	return point[0] === ref[0] || point[1] === ref[1];
 }
 
 export function rangePoints(from: Point, to: Point, length?: number): Point[] {

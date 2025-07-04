@@ -201,6 +201,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				async run({ message, arg, $T }) {
 					const { game, ctx } = getGame(arg, { action: 'play', user: message.author.id }, { room: message.target, $T });
 					try {
+						if (!game.getPlayer(message.author)) throw new ChatError($T('GAME.IMPOSTOR_ALERT'));
 						game.action(message.author, ctx, false);
 					} catch (err) {
 						// Regenerate the HTML if given an invalid input
@@ -235,6 +236,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				syntax: 'CMD [id], [move]',
 				async run({ message, arg, $T }): Promise<void> {
 					const { game, ctx } = getGame(arg, { action: 'reaction', user: message.author.id }, { room: message.target, $T });
+					if (!game.getPlayer(message.author)) throw new ChatError($T('GAME.IMPOSTOR_ALERT'));
 					game.action(message.author, ctx, true);
 				},
 			},
