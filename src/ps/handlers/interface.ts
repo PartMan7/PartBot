@@ -26,7 +26,8 @@ export function interfaceHandler(message: PSMessage) {
 			if (!game) return; // Don't put any errors here! People should be able to close games that don't exist, like ones that ended
 
 			const user = message.author.id;
-			if (game.hasPlayer(user)) {
+			const player = Object.values(game.players).find(player => player.id === user);
+			if (game.hasPlayer(user) && player && !player.out) {
 				message.reply(game.$T('GAME.CANNOT_LEAVE', { prefix, game: game.meta.id }));
 				return game.update(user);
 			}

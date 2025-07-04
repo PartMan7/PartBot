@@ -294,6 +294,7 @@ export class BaseGame<State extends BaseState> {
 			const forfeitPlayer = this.onForfeitPlayer?.(player, ctx);
 			if (forfeitPlayer?.success === false) return forfeitPlayer;
 			player.out = true;
+			this.spectators.push(player.id);
 			this.log.push({ action: staffAction ? 'dq' : 'forfeit', turn: player.turn, time: new Date(), ctx: null });
 			return {
 				success: true,
@@ -409,7 +410,7 @@ export class BaseGame<State extends BaseState> {
 		if (!this.started) return;
 		if (user) {
 			const asPlayer = Object.values(this.players).find(player => player.id === user);
-			if (asPlayer) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
+			if (asPlayer && !asPlayer.out) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
 			if (this.spectators.includes(user)) return this.sendHTML(user, this.render(null));
 			this.throw('GAME.NON_PLAYER_OR_SPEC');
 		}
