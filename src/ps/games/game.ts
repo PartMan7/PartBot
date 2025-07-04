@@ -410,7 +410,7 @@ export class BaseGame<State extends BaseState> {
 		if (!this.started) return;
 		if (user) {
 			const asPlayer = Object.values(this.players).find(player => player.id === user);
-			if (asPlayer) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
+			if (asPlayer && !asPlayer.out) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
 			if (this.spectators.includes(user)) return this.sendHTML(user, this.render(null));
 			this.throw('GAME.NON_PLAYER_OR_SPEC');
 		}
