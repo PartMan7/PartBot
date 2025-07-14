@@ -1,5 +1,3 @@
-import { Temporal } from '@js-temporal/polyfill';
-
 import { PSCommands, PSPointsNonce, PSRoomConfigs } from '@/cache';
 import { prefix } from '@/config/ps';
 import { type BulkPointsDataInput, bulkAddPoints } from '@/database/points';

@@ -6,7 +6,6 @@ import { PSRoomConfigs } from '@/cache';
 import { updateShowdownData } from '@/cache/showdown';
 import { fetchRoomConfigs } from '@/database/psrooms';
 import { type Language, LanguageMap } from '@/i18n';
-import PS from '@/ps';
 import { registers } from '@/sentinel/registers';
 import { cachebust, cachebustDir } from '@/utils/cachebust';
 import { ChatError } from '@/utils/chatError';

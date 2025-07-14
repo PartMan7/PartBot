@@ -8,22 +8,27 @@ import { transformHTML } from '@/ps/handlers/html';
 import loadPS from '@/ps/loaders';
 import { Logger } from '@/utils/logger';
 
-const PS = new Client({ username, password, rooms, transformHTML });
-PS.on('login', () => Logger.log(`Connected to PS! [${username}]`));
+function getPS(): Client {
+	const PS = new Client({ username, password, rooms, transformHTML });
 
-if (IS_ENABLED.PS) loadPS().then(() => PS.connect());
+	PS.on('login', () => Logger.log(`Connected to PS! [${username}]`));
 
-PS.on('message', registerEvent(PS, 'commandHandler'));
-PS.on('message', registerEvent(PS, 'interfaceHandler'));
-PS.on('message', registerEvent(PS, 'autoResHandler'));
+	if (IS_ENABLED.PS) loadPS().then(() => PS.connect());
 
-PS.on('join', registerEvent(PS, 'joinHandler'));
-PS.on('name', registerEvent(PS, 'nickHandler'));
-PS.on('leave', registerEvent(PS, 'leaveHandler'));
-PS.on('notify', registerEvent(PS, 'notifyHandler'));
-PS.on('raw', registerEvent(PS, 'rawHandler'));
-PS.on('tournament', registerEvent(PS, 'tourHandler'));
+	PS.on('message', registerEvent(PS, 'commandHandler'));
+	PS.on('message', registerEvent(PS, 'interfaceHandler'));
+	PS.on('message', registerEvent(PS, 'autoResHandler'));
 
-if (IS_ENABLED.PS) startPSCron.bind(PS)();
+	PS.on('join', registerEvent(PS, 'joinHandler'));
+	PS.on('name', registerEvent(PS, 'nickHandler'));
+	PS.on('leave', registerEvent(PS, 'leaveHandler'));
+	PS.on('notify', registerEvent(PS, 'notifyHandler'));
+	PS.on('raw', registerEvent(PS, 'rawHandler'));
+	PS.on('tournament', registerEvent(PS, 'tourHandler'));
 
-export default PS;
+	if (IS_ENABLED.PS) startPSCron.bind(PS)();
+
+	return PS;
+}
+
+export default globalThis.PS ??= getPS();
