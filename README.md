@@ -10,7 +10,7 @@ PartBot does a lot of stuff across a wide variety of platforms, with a heavy foc
 
 ## Suggestions, Bug Reports, and Feedback
 
-See [Suggestions & Feedback](https://github.com/PartMan7/PartBot/tree/main/docs/SUGGESTIONS.md) for ideas, bugs, and requests. Contributions are always welcome!
+See [Suggestions & Feedback](docs/SUGGESTIONS.md) for ideas, bugs, and requests. Contributions are always welcome!
 
 ## Getting Started
 
@@ -20,7 +20,7 @@ See [Suggestions & Feedback](https://github.com/PartMan7/PartBot/tree/main/docs/
 
 ### Installation & Setup
 
-See the [setup docs](/SETUP.md) for the setup process.
+See the [setup docs](SETUP.md) for the setup process.
 
 ## Translations
 
@@ -33,7 +33,7 @@ Currently, PartBot supports the following languages on Showdown:
 - Portuguese (PoC [@Seyhura](https://github.com/Seyhura))
 - French (PoC [@Distrib](https://github.com/Distrib-ps))
 
-Feel free to refer to the [source code](https://github.com/PartMan7/PartBot/tree/main/src/i18n/languages) for the actual translations.
+Feel free to refer to the [source code](src/i18n/languages) for the actual translations.
 
 ## Credits
 
