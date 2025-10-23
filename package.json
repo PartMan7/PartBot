@@ -20,7 +20,7 @@
 	},
 	"keywords": [],
 	"author": "PartMan7",
-	"license": "ISC",
+	"license": "MIT",
 	"dependencies": {
 		"@js-temporal/polyfill": "^0.5.1",
 		"@swc/core": "^1.7.40",
