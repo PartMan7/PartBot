@@ -188,7 +188,7 @@ Object.defineProperties(Array.prototype, {
 		enumerable: false,
 		writable: false,
 		configurable: false,
-		value: function T<T>(this: T[], amount: number, rng?: RNGSource): T[] {
+		value: function <T>(this: T[], amount: number, rng?: RNGSource): T[] {
 			const RNG = useRNG(rng);
 			const sample = Array.from(this),
 				out: T[] = [];
