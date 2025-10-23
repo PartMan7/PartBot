@@ -8,7 +8,7 @@ docs.
 
 ## System Requirements and Setup
 
-PartBot requires Node.js v16+ (untested on lower versions) to run, and uses `npm` as the package manager.
+PartBot requires Node.js v18+ (v16+ may work but v18+ is recommended) to run, and uses `npm` as the package manager.
 
 To install, clone this repository and install dependencies.
 
@@ -22,8 +22,8 @@ This will also run the `prepare` script, which installs Husky hooks and patches 
 
 ## Configuration
 
-Once with setup, please copy the `.env.example` file to `.env` and change the values accordingly. This file populates
-the environment variable. The full list of supported env variables is below:
+Once setup is complete, please copy the `.env.example` file to `.env` and change the values accordingly. This file populates
+the environment variables. The full list of supported env variables is below:
 
 - `PREFIX`: The prefix to use for commands on PS.
 - `PS_USERNAME`: The username for the chatbot on PS.
