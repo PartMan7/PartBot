@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import '@/globals';
+import { Logger } from '@/utils/logger';
 
 Logger.log('PartBot is starting up...');
 
@@ -8,4 +9,3 @@ import '@/ps';
 import '@/web';
 
 import '@/sentinel';
-import { Logger } from '@/utils/logger';
