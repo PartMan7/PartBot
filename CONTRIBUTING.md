@@ -44,4 +44,4 @@ automatically run on every pull request.
 
 ---
 
-For details about the structure of PartBot (globals, types, layouts, etc.) please refer to the [structure documentation](https://github.com/PartMan7/PartBot/tree/main/docs/STRUCTURE.md).
+For details about the structure of PartBot (globals, types, layouts, etc.) please refer to the [structure documentation](docs/STRUCTURE.md).
