@@ -104,9 +104,9 @@ export function normalizeHue(hue: number): number {
 // region Conversion Methods
 
 export function StringToHex(hex: string): Hex | null {
-	const hexVal = hex.replace(/^#/, '');
-	if (![3, 4, 6, 8].includes(hexVal.length)) return null;
-	if (/^[0-9a-f]+$/i.test(hexVal)) return hex as Hex;
+	hex = hex.replace(/^#/, '');
+	if (![3, 4, 6, 8].includes(hex.length)) return null;
+	if (/^[0-9a-f]+$/i.test(hex)) return hex as Hex;
 	return null;
 }
 
@@ -125,7 +125,7 @@ export function HexToRgb(hex: Hex): Rgb {
 }
 
 export function RgbToHex({ R, G, B, a }: Rgb): Hex {
-	return `#${[R, G, B, ...(a! < 1 ? [Math.round(a! * 255)] : [])]
+	return `${[R, G, B, ...(a! < 1 ? [Math.round(a! * 255)] : [])]
 		.map(n => (Number.isNaN(n) ? 10 : Math.round(Math.min(Math.max(n, 0), 255))).toString(16).padStart(2, '0'))
 		.join('')}` as Hex;
 }
