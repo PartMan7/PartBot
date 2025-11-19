@@ -104,9 +104,9 @@ export function normalizeHue(hue: number): number {
 // region Conversion Methods
 
 export function StringToHex(hex: string): Hex | null {
-	hex = hex.replace(/^#/, '');
-	if (![3, 4, 6, 8].includes(hex.length)) return null;
-	if (/^[0-9a-f]+$/i.test(hex)) return hex as Hex;
+	const hexVal = hex.replace(/^#/, '');
+	if (![3, 4, 6, 8].includes(hexVal.length)) return null;
+	if (/^[0-9a-f]+$/i.test(hexVal)) return hexVal as Hex;
 	return null;
 }
 
