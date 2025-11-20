@@ -20,7 +20,6 @@ import type { PSMessage } from '@/types/ps';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
 type IndexedQuoteModel = [index: number, quote: QuoteModel];
-type QuoteCollection = {index: number, quote: string, addedBy?: string, dateAdded?: string}[];
 
 const PAGE_SIZE = 50;
 const MAX_QUOTE_LENGTH = (MAX_CHAT_HTML_LENGTH / PAGE_SIZE) * 2; // Leniency margin of 2x
@@ -157,8 +156,8 @@ function FormatQuote({
 	quote,
 	psUsernameTag = true,
 	header,
-	addedBy = 'Unknown User',
-	dateAdded = 'Unknown Date',
+	addedBy,
+	dateAdded,
 }: {
 	quote: string;
 	psUsernameTag?: boolean;
@@ -192,9 +191,11 @@ function FormatQuote({
 					quoteLines.map(line => <FormatQuoteLine line={line} psUsernameTag={psUsernameTag} />)
 				)}
 			</div>
-			<div style={{ fontSize: 10, opacity: 0.6, marginTop: 6 }}>
-				Added by {addedBy} on {dateAdded}
-			</div>
+			{addedBy && dateAdded && (
+				<div style={{ fontSize: 10, opacity: 0.6, marginTop: 6 }}>
+					Added by {addedBy} on {dateAdded}
+				</div>
+			)}
 		</>
 	);
 }
@@ -220,7 +221,7 @@ function MultiQuotes({
 	title: baseTitle,
 	showAll = false,
 }: {
-	list: QuoteCollection;
+	list: IndexedQuoteModel[];
 	pageNum: number | null;
 	total: number;
 	command: string | null;
@@ -235,8 +236,8 @@ function MultiQuotes({
 	})}${total > list.length ? ` of ${total} total` : ''})`;
 	const title = baseTitle ? `${baseTitle} ${suffix}` : pageNum ? `Page ${pageNum} of ${pageCount} ${suffix}` : `All Quotes`;
 	const quotes = list
-		.map( quote => (
-			<FormatQuote quote={quote.quote} header={`#${quote.index}`} addedBy={quote.addedBy ?? ''} dateAdded={quote.dateAdded ?? ''} />
+		.map(([index, quote]) => (
+			<FormatQuote quote={quote.quote} header={`#${index}`} addedBy={quote.addedBy} dateAdded={quote.at.toDateString()} />
 		))
 		.space(<hr />, !useDropdown);
 
@@ -374,12 +375,7 @@ export const command: PSCommand = {
 				broadcastHTML(
 					<>
 						<hr />
-						<FormatQuote
-							quote={parsedQuote}
-							header={`#${length} [preview]`}
-							addedBy={message.author.name}
-							dateAdded={new Date(message.time).toDateString()}
-						/>
+						<FormatQuote quote={parsedQuote} header={`#${length} [preview]`} />
 						<hr />
 					</>,
 					{ name: `previewquote-${message.parent.status.userid}` }
@@ -396,15 +392,10 @@ export const command: PSCommand = {
 				const room: string = await getRoom(givenRoom, message, $T);
 				const quotes = await getAllQuotes(room);
 
-				const foundQuotes: QuoteCollection = searchQuotes(
+				const foundQuotes: IndexedQuoteModel[] = searchQuotes(
 					quotes.map<IndexedQuoteModel>((quote, index) => [index + 1, quote]),
 					arg
-				).map(([index, quote]) => ({
-					index,
-					quote: quote.quote,
-					addedBy: quote.addedBy,
-					dateAdded: new Date(quote.at).toDateString(),
-				}));
+				);
 
 				if (!foundQuotes.length) return broadcast($T('COMMANDS.QUOTES.NO_QUOTES_FOUND'));
 
@@ -460,14 +451,9 @@ export const command: PSCommand = {
 				const pageNum = arg ? parseInt(arg) || 1 : 1;
 				const startIndex = (pageNum - 1) * PAGE_SIZE;
 				const endIndex = startIndex + PAGE_SIZE;
-				const pagedQuotes: QuoteCollection = quotes
+				const pagedQuotes: IndexedQuoteModel[] = quotes
 					.slice(startIndex, endIndex)
-					.map((quote, index) => ({
-						index: startIndex + index + 1, 
-						quote: quote.quote, 
-						addedBy: quote.addedBy, 
-						dateAdded: new Date(quote.at).toDateString()
-					}));
+					.map((quote, index) => [startIndex + index + 1, quote]);
 
 				if (!pagedQuotes.length) throw new ChatError('Invalid page number.' as ToTranslate);
 
@@ -496,14 +482,9 @@ export const command: PSCommand = {
 				const pageNum = arg ? parseInt(arg) || 1 : 1;
 				const startIndex = (pageNum - 1) * PAGE_SIZE;
 				const endIndex = startIndex + PAGE_SIZE;
-				const pageQuotes: QuoteCollection = quotes
+				const pageQuotes: IndexedQuoteModel[] = quotes
 					.slice(startIndex, endIndex)
-					.map((quote, index) => ({
-						index: startIndex + index + 1, 
-						quote: quote.quote, 
-						addedBy: quote.addedBy, 
-						dateAdded: new Date(quote.at).toDateString()
-					}));
+					.map((quote, index) => [startIndex + index + 1, quote]);
 
 				if (!pageQuotes.length) throw new ChatError('Invalid page number.' as ToTranslate);
 
