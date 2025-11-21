@@ -109,7 +109,7 @@ export default {
 		},
 
 		LIGHTS_OUT: {
-			INVALID_SIZE: 'Lights Out doit être entre 3x5 et 9x10.',
+			INVALID_SIZE: 'Lights Out doit être entre 2x2 et 15x15.',
 		},
 		MASTERMIND: {
 			ENDED: 'La partie de Mastermind a été arrêtée pour {{player}}.',

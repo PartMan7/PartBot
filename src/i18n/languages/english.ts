@@ -111,7 +111,7 @@ export default {
 		},
 
 		LIGHTS_OUT: {
-			INVALID_SIZE: 'Lights Out may only be from 3x5 to 9x10.',
+			INVALID_SIZE: 'Lights Out may only be from 2x2 to 15x15.',
 		},
 		MASTERMIND: {
 			ENDED: 'The game of Mastermind was ended for {{player}}.',

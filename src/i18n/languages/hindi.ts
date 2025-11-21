@@ -92,7 +92,7 @@ export default {
 			PUBLIC: '{{user}} ne {{game}} [{{id}}] mein {{time}} se move nahi kiya...',
 		},
 		LIGHTS_OUT: {
-			INVALID_SIZE: 'Lights Out ka size sirf 3x5 se 9x10 ke beech ho sakta hai.',
+			INVALID_SIZE: 'Lights Out ka size sirf 2x2 se 15x15 ke beech ho sakta hai.',
 		},
 		MASTERMIND: {
 			ENDED: '{{player}} ke liye Mastermind ka game khatam kiya gaya.',
