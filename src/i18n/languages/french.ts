@@ -25,6 +25,8 @@ export default {
 	WRONG_ROOM: 'Mauvais salon.',
 	INVALID_ARGUMENTS: "Nombre d'arguments invalide.",
 	ENTRY_NOT_FOUND: 'Entrée introuvable.',
+	BLACKLISTED_COMMAND: '{{room}} a désactivé cette commande.', // '{{room}} has disabled this command.'
+	BLACKLISTED_CATEGORIES: '{{room}} a désactivé les commandes {{categories}}.', // '{{room}} has disabled {{categories}} commands.'
 
 	DISABLED: {
 		DB: 'La base de données est actuellement désactivée.',
@@ -73,6 +75,7 @@ export default {
 		],
 		NOT_STARTED: "La partie n'a pas encore commencé.",
 		CANNOT_START: 'Impossible de démarrer la partie ! Vérifiez les joueurs.',
+		AUTOSTART_QUEUED: 'La partie a été mise en file d\'attente pour démarrer dans {{time}}.', // 'The game has been queued to start in {{time}}.'
 		NOT_WATCHING: 'Mais vous ne regardez pas cette partie...',
 		NOW_WATCHING: 'Vous regardez maintenant la partie de {{game}} entre {{players}}.',
 		NO_LONGER_WATCHING: 'Vous ne regardez plus la partie de {{game}} entre {{players}}.',
@@ -81,6 +84,7 @@ export default {
 		STASHED: 'Partie {{id}} mise de côté avec succès.',
 		SUB: '{{out}} a été remplacé par {{in}} !',
 		DQ: '{{player}} a été disqualifié de la partie.',
+		FORCE_WIN: '{{player}} a reçu la victoire pour la partie {{id}} !', // '{{player}} was given the win for game {{id}}!'
 		FORFEIT: 'Vous avez abandonné la partie.',
 		REMOVED: '{{player}} a été retiré de la partie.',
 		LEFT: 'Vous avez quitté la partie.',
@@ -158,10 +162,11 @@ export default {
 		},
 
 		POINTS: {
-			ROOM_NO_POINTS: '{{room}} n’a pas les points activés.',
-			USER_NO_POINTS: '[[]]{{user}} n’a aucun point dans ce salon.',
+			ROOM_NO_POINTS: '{{room}} n\'a pas les points activés.',
+			USER_NO_POINTS: '[[]]{{user}} n\'a aucun point dans ce salon.',
 			USER_POINTS: '[[]]{{user}} a {{pointsList}} dans {{roomName}}.',
 			USER_POINTS_RANKED: '[[]]{{user}} est classé #{{rank}} avec {{pointsList}} dans {{roomName}}.',
+			ADDED_POINTS_TO_USERS: 'Ajouté {{pointsText}} à {{users}}.', // 'Added {{pointsText}} to {{users}}.'
 			HEADERS: {
 				USER: 'Utilisateur',
 			},
@@ -169,6 +174,7 @@ export default {
 
 		QUOTES: {
 			NO_QUOTES_FOUND: 'Aucune citation trouvée.',
+			NO_QUOTES_FOUND_MATCHING: 'Aucune citation trouvée correspondant à "{{search}}".', // 'No quotes found matching "{{search}}".'
 		},
 
 		TIMER: {
@@ -181,6 +187,7 @@ export default {
 			TIMER_END: '{{user}}, votre minuteur est terminé !',
 			TIMER_END_WITH_COMMENT: '{{user}}, votre minuteur est terminé ! Raison : {{comment}}',
 			TIMER_SET: 'Votre minuteur a été défini pour {{timeLeft}} à partir de maintenant.',
+			TIME_AGO: 'Il y a {{timeAgo}}', // '{{timeAgo}} ago'
 
 			MS: { ABBR: 'ms', NAME: 'milliseconde', PLUR: 'millisecondes' },
 			SEC: { ABBR: 'sec', NAME: 'seconde', PLUR: 'secondes' },
