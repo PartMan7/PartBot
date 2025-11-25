@@ -25,6 +25,8 @@ export default {
 	WRONG_ROOM: 'Galat room.',
 	INVALID_ARGUMENTS: 'Amaanya tark.',
 	ENTRY_NOT_FOUND: 'Iss naam ka kuch nahi mila.',
+	BLACKLISTED_COMMAND: '{{room}} ne is command ko disabled kar diya hai.', // '{{room}} has disabled this command.'
+	BLACKLISTED_CATEGORIES: '{{room}} ne {{categories}} commands ko disabled kar diya hai.', // '{{room}} has disabled {{categories}} commands.'
 
 	DISABLED: {
 		DB: 'Database abhi disabled hai.',
@@ -63,6 +65,7 @@ export default {
 		NOT_PLAYING: 'Aap nahi khel rahe ho, weeb.',
 		NOT_STARTED: 'Game abhi tak shuru nahi hua hai.',
 		CANNOT_START: 'Game shuru nahi kiya ja sakta! Kripya khiladiyon ko dekhein.',
+		AUTOSTART_QUEUED: 'Game ko {{time}} mein shuru karne ke liye queue mein daal diya gaya hai.', // 'The game has been queued to start in {{time}}.'
 		NOT_WATCHING: 'Aap is game ko nahi dekh rahe ho...',
 		NOW_WATCHING: 'Aap ab {{game}} game ko dekh rahe hain, jo {{players}} ke beech ho raha hai.',
 		NO_LONGER_WATCHING: 'Aap ab {{game}} game ko nahi dekh rahe hain, jo {{players}} ke beech ho raha tha.',
@@ -70,6 +73,11 @@ export default {
 		RESTORING_WRONG_TYPE: 'Aap galat prakar ka khel chalu karne ki koshish kar rahe hain...',
 		STASHED: 'Safaltapoorvak khel {{id}} ko stash kiya gaya.',
 		SUB: '{{out}} ko {{in}} se replace kar diya gaya!',
+		DQ: '{{player}} ko game se disqualify kar diya gaya hai.', // '{{player}} has been disqualified from the game.'
+		FORCE_WIN: '{{player}} ko {{id}} game ki jeet di gayi!', // '{{player}} was given the win for game {{id}}!'
+		FORFEIT: 'Aapne game forfeit kar diya hai.', // 'You have forfeited the game.'
+		REMOVED: '{{player}} ko game se hata diya gaya hai.', // '{{player}} has been removed from the game.'
+		LEFT: 'Aapne game chhod diya hai.', // 'You have left the game.'
 		WATCHING_NOTHING: 'Aapko kuchh dobara join karne ki avashyakta nahi lagti...',
 		WON: '{{winner}} jeet gaya!',
 		WON_AGAINST: '{{winner}} ne {{game}} khel mein {{loser}} ko {{ctx}} ke saath hara diya!',
@@ -87,6 +95,8 @@ export default {
 		INVALID_THEME: 'Avaid theme. Sahi themes hain: {{themes}}.',
 		SET_THEME: 'Theme ko {{theme}} par set kiya gaya.',
 		CANNOT_LEAVE: 'Aap khel ko band karke chhodega nahi kar sakte! Kripya ``{{prefix}}{{game}} forfeit`` ka istemal karein.',
+		NO_GAMES_FOUND: 'Koi games nahi mile.', // 'No games found.'
+		NO_BACKUPS_FOUND: 'Koi game backups nahi mile.', // 'No game backups found.'
 		TIMER: {
 			PRIVATE: 'Psst {{game}} [{{id}}] mein aapki baari hai!',
 			PUBLIC: '{{user}} ne {{game}} [{{id}}] mein {{time}} se move nahi kiya...',
@@ -141,12 +151,14 @@ export default {
 			USER_NO_POINTS: '[[]]{{user}} ke paas is room mein koi points nahi hain.',
 			USER_POINTS: '[[]]{{user}} ke paas {{roomName}} mein {{pointsList}} hain.',
 			USER_POINTS_RANKED: '[[]]{{user}} ka rank #{{rank}} hai, jinke paas {{roomName}} mein {{pointsList}} hain.',
+			ADDED_POINTS_TO_USERS: '{{users}} ko {{pointsText}} add kiye gaye.', // 'Added {{pointsText}} to {{users}}.'
 			HEADERS: {
 				USER: 'User',
 			},
 		},
 		QUOTES: {
 			NO_QUOTES_FOUND: 'Koi quotes nahi mile.',
+			NO_QUOTES_FOUND_MATCHING: '"{{search}}" se match karne wale koi quotes nahi mile.', // 'No quotes found matching "{{search}}".'
 		},
 		TIMER: {
 			NONE_RUNNING: 'Aapka koi timer nahi chal raha!',
@@ -158,6 +170,7 @@ export default {
 			TIMER_END: '{{user}}, aapka timer khatam ho gaya hai!',
 			TIMER_END_WITH_COMMENT: '{{user}}, aapka timer khatam ho gaya hai! Karan: {{comment}}',
 			TIMER_SET: 'Aapka timer abhi se {{timeLeft}} ke liye set ho gaya hai.',
+			TIME_AGO: '{{timeAgo}} pehle', // '{{timeAgo}} ago'
 			MS: {
 				ABBR: 'ms',
 				NAME: 'millisecond',
