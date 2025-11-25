@@ -25,6 +25,8 @@ export default {
 	WRONG_ROOM: 'Sala errada.',
 	INVALID_ARGUMENTS: 'Número de argumentos inválido.',
 	ENTRY_NOT_FOUND: 'Entrada não encontrada.',
+	BLACKLISTED_COMMAND: '{{room}} desativou este comando.',
+	BLACKLISTED_CATEGORIES: '{{room}} desativou os comandos do(a) {{categories}}.',
 
 	DISABLED: {
 		DB: 'O banco de dados está atualmente desativado.',
@@ -73,6 +75,7 @@ export default {
 		],
 		NOT_STARTED: 'O jogo ainda não começou.',
 		CANNOT_START: 'Não é possível iniciar o jogo! Verifique os jogadores.',
+		AUTOSTART_QUEUED: 'O jogo foi colocado na fila para começar em {{time}}.',
 		NOT_WATCHING: 'Você não está assistindo este jogo...',
 		NOW_WATCHING: 'Você agora está assistindo o jogo de {{game}} entre {{players}}.',
 		NO_LONGER_WATCHING: 'Você não está mais assistindo o jogo de {{game}} entre {{players}}.',
@@ -81,6 +84,7 @@ export default {
 		STASHED: 'Jogo {{id}} armazenado com sucesso.',
 		SUB: '{{out}} foi substituído por {{in}}!',
 		DQ: '{{player}} foi desclassificado do jogo.',
+		FORCE_WIN: '{{player}} recebeu a vitória pelo jogo {{id}}!',
 		FORFEIT: 'Você desistiu do jogo.',
 		REMOVED: '{{player}} foi removido do jogo.',
 		LEFT: 'Você saiu do jogo.',
@@ -170,6 +174,7 @@ export default {
 
 		QUOTES: {
 			NO_QUOTES_FOUND: 'Nenhuma citação encontrada.',
+			NO_QUOTES_FOUND_MATCHING: 'Nenhuma citação encontrada correspondendo a "{{search}}".',
 		},
 
 		TIMER: {
@@ -182,6 +187,7 @@ export default {
 			TIMER_END: '{{user}}, seu timer acabou!',
 			TIMER_END_WITH_COMMENT: '{{user}}, seu timer acabou! Motivo: {{comment}}',
 			TIMER_SET: 'Seu timer foi definido para {{timeLeft}} a partir de agora.',
+			TIME_AGO: '{{timeAgo}} atrás',
 
 			MS: {
 				ABBR: 'ms',
