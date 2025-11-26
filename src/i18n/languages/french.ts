@@ -75,7 +75,7 @@ export default {
 		],
 		NOT_STARTED: "La partie n'a pas encore commencé.",
 		CANNOT_START: 'Impossible de démarrer la partie ! Vérifiez les joueurs.',
-		AUTOSTART_QUEUED: 'La partie a été mise en file d\'attente pour démarrer dans {{time}}.', // 'The game has been queued to start in {{time}}.'
+		AUTOSTART_QUEUED: "La partie a été mise en file d'attente pour démarrer dans {{time}}.", // 'The game has been queued to start in {{time}}.'
 		NOT_WATCHING: 'Mais vous ne regardez pas cette partie...',
 		NOW_WATCHING: 'Vous regardez maintenant la partie de {{game}} entre {{players}}.',
 		NO_LONGER_WATCHING: 'Vous ne regardez plus la partie de {{game}} entre {{players}}.',
@@ -162,8 +162,8 @@ export default {
 		},
 
 		POINTS: {
-			ROOM_NO_POINTS: '{{room}} n\'a pas les points activés.',
-			USER_NO_POINTS: '[[]]{{user}} n\'a aucun point dans ce salon.',
+			ROOM_NO_POINTS: "{{room}} n'a pas les points activés.",
+			USER_NO_POINTS: "[[]]{{user}} n'a aucun point dans ce salon.",
 			USER_POINTS: '[[]]{{user}} a {{pointsList}} dans {{roomName}}.',
 			USER_POINTS_RANKED: '[[]]{{user}} est classé #{{rank}} avec {{pointsList}} dans {{roomName}}.',
 			ADDED_POINTS_TO_USERS: 'Ajouté {{pointsText}} à {{users}}.', // 'Added {{pointsText}} to {{users}}.'
