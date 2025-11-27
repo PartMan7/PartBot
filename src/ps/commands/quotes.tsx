@@ -195,7 +195,7 @@ function FormatQuote({
 			{addedBy && dateAdded && (
 				<>
 					<span style={{ fontSize: 10, opacity: 0.6, marginTop: 6 }}>Added by&nbsp;</span>
-					<UsernamePS name={addedBy} style={{ fontSize: 10 }} clickable />
+					<UsernamePS name={addedBy} style={{ fontSize: 10, color: '#666' }} clickable />
 					<span style={{ fontSize: 10, opacity: 0.6, marginTop: 6 }}>&nbsp;on {dateAdded}</span>
 				</>
 			)}
