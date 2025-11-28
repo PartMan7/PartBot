@@ -334,7 +334,7 @@ export const command: PSCommand = {
 				broadcastHTML(
 					<>
 						<hr />
-						<FormatQuote quote={randQuote.quote} header={`#${+index + 1}`} addedBy={randQuote.addedBy} dateAdded={dateAdded} />
+						<FormatQuote quote={randQuote.quote} header={`#${index}`} addedBy={randQuote.addedBy} dateAdded={dateAdded} />
 						<hr />
 					</>,
 					{ name: `viewquote-${message.parent.status.userid}` }
