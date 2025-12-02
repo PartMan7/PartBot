@@ -21,6 +21,7 @@ export const PSCommands: { [key: string]: PSCommand & { path: string } } = {};
  */
 export const PSAliases: { [key: string]: string } = {};
 export const PSAltCache: Partial<{ [key: string]: { from: string; to: string; at: Date } }> = {};
+export const PSJoinphraseCache: Partial<{ [key: string]: { id: string; phrase: string } }> = {};
 export const PSSeenCache: Partial<{ [key: string]: { id: string; name: string; at: Date; seenIn: string[] } }> = {};
 export const PSCronJobs: { manager: PSCronJobManager | null } = { manager: null };
 

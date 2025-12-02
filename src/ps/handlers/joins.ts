@@ -1,4 +1,4 @@
-import { PSAltCache, PSGames, PSSeenCache } from '@/cache';
+import { PSAltCache, PSGames, PSJoinphraseCache, PSSeenCache } from '@/cache';
 import { rename } from '@/database/alts';
 import { seeUser } from '@/database/seens';
 import { ChatError } from '@/utils/chatError';
@@ -13,6 +13,11 @@ export function joinHandler(this: Client, room: string, user: string, isIntro: b
 	// Joinphrases
 	// 'Stalking'
 	// (Kinda creepy name for the feature, but it CAN be used in creepy ways so make sure it's regulated!)
+	// TODO Add minimum-messages-sent and minimum-time-since-last-occurence conditions
+	const userId = toId(user),
+		roomId = toId(room);
+	const phrase = PSJoinphraseCache[`${userId}-${roomId}`]?.phrase;
+	this.getRoom(room).send(phrase ?? '');
 
 	// Check if there's any relevant games
 	const roomGames = Object.values(PSGames)
@@ -22,7 +27,7 @@ export function joinHandler(this: Client, room: string, user: string, isIntro: b
 	roomGames.forEach(game => {
 		if (game.hasPlayerOrSpectator(user))
 			try {
-				game.update(toId(user));
+				game.update(userId);
 			} catch (err) {
 				if (!(err instanceof ChatError)) throw err;
 			}
