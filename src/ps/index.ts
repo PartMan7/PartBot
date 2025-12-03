@@ -16,6 +16,7 @@ if (IS_ENABLED.PS) loadPS().then(() => PS.connect());
 PS.on('message', msg => registerEvent(PS, 'commandHandler')(msg));
 PS.on('message', msg => registerEvent(PS, 'interfaceHandler')(msg));
 PS.on('message', msg => registerEvent(PS, 'autoResHandler')(msg));
+PS.on('message', msg => registerEvent(PS, 'otherHandler')(msg));
 
 PS.on('join', registerEvent(PS, 'joinHandler'));
 PS.on('joinRoom', registerEvent(PS, 'joinRoomHandler'));

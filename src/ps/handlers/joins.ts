@@ -6,18 +6,57 @@ import { debounce } from '@/utils/debounce';
 import { fromHumanTime } from '@/utils/humanTime';
 import { toId } from '@/utils/toId';
 
+import type { PSMessage } from '@/types/ps';
 import type { Client } from 'ps-client';
+
+const minimumMessages: number = 5,
+	minimumTime: number = 30; // seconds
+
+interface jpState {
+	messageCount: number; // messages since last jp
+	lastTime: number; // timestamp of last jp
+}
+const jpStateMap: Partial<Record<string, jpState>> = {};
+
+export function otherHandler(message: PSMessage) {
+	if (message.isIntro) return;
+	if (!message.author || !message.author.userid || !message.target || message.author.id === message.parent.status.userid) return;
+	if (message.content.startsWith('|')) return;
+	const roomId = message.target.id;
+
+	for (const key in jpStateMap) {
+		if (!jpStateMap[key]) continue;
+
+		const rId = key.split('-')[1];
+		if (rId !== roomId) continue;
+
+		jpStateMap[key]!.messageCount++;
+	} // increment message count for each joinphrase in the room
+}
 
 export function joinHandler(this: Client, room: string, user: string, isIntro: boolean): void {
 	if (isIntro) return;
-	// Joinphrases
-	// 'Stalking'
-	// (Kinda creepy name for the feature, but it CAN be used in creepy ways so make sure it's regulated!)
-	// TODO Add minimum-messages-sent and minimum-time-since-last-occurence conditions
+
 	const userId = toId(user),
 		roomId = toId(room);
-	const phrase = PSJoinphraseCache[`${userId}-${roomId}`]?.phrase;
-	this.getRoom(room).send(phrase ?? '');
+	const key = `${userId}-${roomId}`;
+	const phrase = PSJoinphraseCache[key]?.phrase;
+	if (!phrase) return;
+
+	let state = jpStateMap[key];
+	if (!state) {
+		state = { messageCount: minimumMessages, lastTime: 0 };
+		jpStateMap[key] = state;
+	}
+	const now = Date.now() / 1000;
+	const minimumMessagesReached: boolean = state.messageCount >= minimumMessages;
+	const minimumTimeReached: boolean = now - state.lastTime >= minimumTime;
+	if (!minimumTimeReached || !minimumMessagesReached) {
+		return;
+	}
+	this.getRoom(room).send(phrase);
+	state.messageCount = 0;
+	state.lastTime = now;
 
 	// Check if there's any relevant games
 	const roomGames = Object.values(PSGames)
