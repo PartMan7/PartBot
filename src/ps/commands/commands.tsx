@@ -44,7 +44,7 @@ export const command: PSCommand = {
 			{ utility: [], points: [], game: [], casual: [] }
 		);
 
-		message.author.sendHTML(
+		message.replyHTML(
 			<div className="infobox">
 				<h2>Commands</h2>
 				<p>
