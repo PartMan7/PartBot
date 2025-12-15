@@ -6,57 +6,24 @@ import { debounce } from '@/utils/debounce';
 import { fromHumanTime } from '@/utils/humanTime';
 import { toId } from '@/utils/toId';
 
-import type { PSMessage } from '@/types/ps';
 import type { Client } from 'ps-client';
 
-const minimumMessages: number = 5,
-	minimumTime: number = 30; // seconds
-
-interface jpState {
-	messageCount: number; // messages since last jp
-	lastTime: number; // timestamp of last jp
-}
-const jpStateMap: Partial<Record<string, jpState>> = {};
-
-export function otherHandler(message: PSMessage) {
-	if (message.isIntro) return;
-	if (!message.author || !message.author.userid || !message.target || message.author.id === message.parent.status.userid) return;
-	if (message.content.startsWith('|')) return;
-	const roomId = message.target.id;
-
-	for (const key in jpStateMap) {
-		if (!jpStateMap[key]) continue;
-
-		const rId = key.split('-')[1];
-		if (rId !== roomId) continue;
-
-		jpStateMap[key]!.messageCount++;
-	} // increment message count for each joinphrase in the room
-}
+const MIN_JP_MESSAGES = 20; // Number of messages required as a minimum gap
+const MIN_JP_DELAY = fromHumanTime('30 seconds');
 
 export function joinHandler(this: Client, room: string, user: string, isIntro: boolean): void {
 	if (isIntro) return;
 
-	const userId = toId(user),
-		roomId = toId(room);
-	const key = `${userId}-${roomId}`;
-	const phrase = PSJoinphraseCache[key]?.phrase;
-	if (!phrase) return;
-
-	let state = jpStateMap[key];
-	if (!state) {
-		state = { messageCount: minimumMessages, lastTime: 0 };
-		jpStateMap[key] = state;
+	const userId = toId(user);
+	const joinphraseData = PSJoinphraseCache[room]?.[userId];
+	if (joinphraseData) {
+		const now = Date.now();
+		if (now - joinphraseData.lastTime >= MIN_JP_DELAY && joinphraseData.messageCount >= MIN_JP_MESSAGES) {
+			this.getRoom(room).send(joinphraseData.phrase);
+			joinphraseData.messageCount = 0;
+			joinphraseData.lastTime = now;
+		}
 	}
-	const now = Date.now() / 1000;
-	const minimumMessagesReached: boolean = state.messageCount >= minimumMessages;
-	const minimumTimeReached: boolean = now - state.lastTime >= minimumTime;
-	if (!minimumTimeReached || !minimumMessagesReached) {
-		return;
-	}
-	this.getRoom(room).send(phrase);
-	state.messageCount = 0;
-	state.lastTime = now;
 
 	// Check if there's any relevant games
 	const roomGames = Object.values(PSGames)
