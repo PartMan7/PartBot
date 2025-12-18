@@ -39,4 +39,5 @@ Feel free to refer to the [source code](src/i18n/languages) for the actual trans
 
 - [@PartMan7](https://github.com/PartMan7) (Parth Mane) - Lead Developer, Maintainer
 - [@Audiino](https://github.com/Audiino) - Lead Artist, Maintainer, Victim of being asked to do stuff
+- GrassyStorm - Artist
 - [@zxchan](https://github.com/singiamtel) - putting up with dumb questions
