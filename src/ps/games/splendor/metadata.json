@@ -549,7 +549,8 @@
 				"dark": 2,
 				"grass": 1
 			},
-			"art": "larvesta.png"
+			"art": "larvesta.png",
+			"attr": "grassystorm"
 		},
 		"leafeon": {
 			"id": "leafeon",
