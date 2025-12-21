@@ -6,7 +6,7 @@ export const command: PSCommand = {
 	help: 'Starts a randpoke param search.',
 	syntax: 'CMD',
 	rooms: ['scavengers'],
-	perms: ['room', 'voice'],
+	perms: 'voice',
 	categories: ['casual'],
 	async run({ message }) {
 		message.reply('!randpoke 2, FE, NatDex' as NoTranslate);
