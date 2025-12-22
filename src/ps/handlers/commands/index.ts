@@ -115,6 +115,12 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 			throw new ChatError(conceal ?? $T('PM_ONLY_COMMAND'));
 		}
 
+		context.hasFeature = function (feature, room) {
+			if (message.type === 'pm') return null;
+			const roomConfig = PSRoomConfigs[room ?? message.target.id];
+			return roomConfig?.features?.includes(feature) ?? false;
+		};
+
 		context.checkPermissions = function (perm) {
 			return usePermissions(perm, context.command, message);
 		};

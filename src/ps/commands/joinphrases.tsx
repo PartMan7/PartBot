@@ -32,7 +32,7 @@ async function getRoom(message: PSMessageTranslated, arg: string): Promise<strin
 
 export const command: PSCommand = {
 	name: 'joinphrase',
-	help: 'Joinphrases module! Joinphrases are messages that are sent when a user joins a room.',
+	help: 'Joinphrases module! Joinphrases are messages that are sent when a user joins a room. The room must enable joinphrases to use these.',
 	perms: ['room', 'driver'],
 	syntax: 'CMD',
 	aliases: ['jp', 'joinphrases'],
@@ -57,7 +57,7 @@ export const command: PSCommand = {
 	children: {
 		help: {
 			name: 'help',
-			help: 'Shows the help for the joinphrases command',
+			help: 'Shows the help for the joinphrases command.',
 			aliases: ['h'],
 			syntax: 'CMD',
 			async run({ run }) {
@@ -66,11 +66,12 @@ export const command: PSCommand = {
 		},
 		add: {
 			name: 'add',
-			help: 'Adds a new  joinphrase for a given user',
+			help: 'Adds a new joinphrase for a given user.',
 			flags: { allowPMs: false },
 			syntax: 'CMD [user], [joinphrase]',
 			aliases: ['new', 'a', 'n'],
-			async run({ message, arg, $T }) {
+			async run({ message, arg, $T, hasFeature }) {
+				if (!hasFeature('joinphrases')) throw new ChatError('Joinphrases are not enabled for this room.' as ToTranslate);
 				if (!arg) throw new ChatError($T('INVALID_ARGUMENTS'));
 				const [username, phrase] = arg.lazySplit(/\s*,\s*/, 1).map(s => s.trim());
 				if (!phrase) throw new ChatError($T('INVALID_ARGUMENTS'));
@@ -85,11 +86,12 @@ export const command: PSCommand = {
 		},
 		view: {
 			name: 'view',
-			help: 'Displays a given joinphrase',
+			help: 'Displays a given joinphrase.',
 			syntax: 'CMD [user]',
 			flags: { allowPMs: false },
 			aliases: ['show', 'display', 'get'],
-			async run({ message, arg, $T }) {
+			async run({ message, arg, $T, hasFeature }) {
+				if (!hasFeature('joinphrases')) throw new ChatError('Joinphrases are not enabled for this room.' as ToTranslate);
 				if (!arg) throw new ChatError($T('INVALID_ARGUMENTS'));
 				const targetUser = arg.trim();
 
@@ -101,11 +103,12 @@ export const command: PSCommand = {
 		},
 		delete: {
 			name: 'delete',
-			help: "Deletes a user's joinphrase",
+			help: "Deletes a user's joinphrase.",
 			syntax: 'CMD [user]',
 			flags: { allowPMs: false },
 			aliases: ['del', 'remove', 'rem', 'd', 'r'],
-			async run({ message, arg, $T }) {
+			async run({ message, arg, $T, hasFeature }) {
+				if (!hasFeature('joinphrases')) throw new ChatError('Joinphrases are not enabled for this room.' as ToTranslate);
 				if (!arg) throw new ChatError($T('INVALID_ARGUMENTS'));
 				const targetUser = arg.trim();
 
@@ -115,10 +118,11 @@ export const command: PSCommand = {
 		},
 		list: {
 			name: 'list',
-			help: 'Lists all joinphrases for a given user',
+			help: 'Lists all joinphrases for a given room.',
 			syntax: 'CMD [user]',
 			aliases: ['ls', 'l'],
-			async run({ message, arg }) {
+			async run({ message, arg, hasFeature }) {
+				if (!hasFeature('joinphrases')) throw new ChatError('Joinphrases are not enabled for this room.' as ToTranslate);
 				const targetRoom = await getRoom(message, arg);
 				const joinphrases = await fetchAllJoinphrases(targetRoom);
 
@@ -144,7 +148,8 @@ export const command: PSCommand = {
 			syntax: 'CMD [user], [joinphrase]',
 			flags: { allowPMs: false },
 			aliases: ['e', 'update'],
-			async run({ message, arg, $T }) {
+			async run({ message, arg, $T, hasFeature }) {
+				if (!hasFeature('joinphrases')) throw new ChatError('Joinphrases are not enabled for this room.' as ToTranslate);
 				if (!arg) throw new ChatError($T('INVALID_ARGUMENTS'));
 				const [username, phrase] = arg.lazySplit(/\s*,\s*/, 1).map(s => s.trim());
 				if (!phrase) throw new ChatError($T('INVALID_ARGUMENTS'));
