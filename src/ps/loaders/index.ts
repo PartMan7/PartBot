@@ -13,8 +13,8 @@ export default async function init() {
 		if (process.env.NODE_ENV !== 'development') {
 			await loadAlts();
 			await loadSeens();
-			await loadJoinphrases();
 		}
+		await loadJoinphrases();
 		await loadRoomConfigs();
 	}
 }

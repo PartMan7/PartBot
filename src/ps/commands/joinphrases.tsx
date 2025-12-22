@@ -2,6 +2,7 @@ import { toRoomID } from 'ps-client/tools';
 
 import { deleteJoinphrase, fetchAllJoinphrases, getJoinphrase, setJoinphrase } from '@/database/joinphrases';
 import { MAX_MESSAGE_LENGTH } from '@/ps/constants';
+import { loadJoinphrases } from '@/ps/loaders/joinphrases';
 import { ChatError } from '@/utils/chatError';
 import { Username } from '@/utils/components';
 
@@ -81,7 +82,8 @@ export const command: PSCommand = {
 				}
 				validateJoinphrase(phrase);
 				await setJoinphrase(targetUser, message.target.id, phrase, message.author.name);
-				message.reply('Joinphrase Added!' as ToTranslate);
+				message.reply('Joinphrase added!' as ToTranslate);
+				loadJoinphrases();
 			},
 		},
 		view: {
@@ -114,6 +116,7 @@ export const command: PSCommand = {
 
 				await deleteJoinphrase(targetUser, message.target.id);
 				message.reply('Joinphrase deleted.' as ToTranslate);
+				loadJoinphrases();
 			},
 		},
 		list: {
@@ -144,7 +147,7 @@ export const command: PSCommand = {
 		},
 		edit: {
 			name: 'edit',
-			help: "Edits a user's joinphrase",
+			help: "Edits a user's joinphrase.",
 			syntax: 'CMD [user], [joinphrase]',
 			flags: { allowPMs: false },
 			aliases: ['e', 'update'],
@@ -160,6 +163,7 @@ export const command: PSCommand = {
 				validateJoinphrase(phrase);
 				await setJoinphrase(targetUser, message.target.id, phrase, message.author.name);
 				message.reply('Joinphrase edited.' as ToTranslate);
+				loadJoinphrases();
 			},
 		},
 	},

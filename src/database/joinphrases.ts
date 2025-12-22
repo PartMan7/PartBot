@@ -4,7 +4,8 @@ import { IS_ENABLED } from '@/enabled';
 import { toId } from '@/utils/toId';
 
 interface Model {
-	id: string; // * Unique field of form "userId-roomId"
+	/** userId-roomId */
+	id: string;
 	username: string;
 	userId: string;
 	roomId: string;
@@ -25,7 +26,6 @@ const schema = new mongoose.Schema<Model>({
 	},
 	userId: {
 		type: String,
-		default: ({ username }: Model) => toId(username),
 	},
 	roomId: {
 		type: String,
@@ -53,11 +53,17 @@ export async function setJoinphrase(username: string, roomId: string, phrase: st
 	return model.findOneAndUpdate(
 		{
 			id: `${userId}-${roomId}`,
-			username,
-			userId,
-			roomId,
-			phrase,
-			addedBy: by,
+		},
+		{
+			$set: {
+				phrase,
+				addedBy: by,
+			},
+			$setOnInsert: {
+				username,
+				userId,
+				roomId,
+			},
 		},
 		{ upsert: true, new: true }
 	);
