@@ -3,6 +3,7 @@
 import type { PSMessageTranslated, TranslatedText, TranslationFn } from '@/i18n/types';
 import type { DiscInteraction } from '@/types/discord';
 import type { Perms } from '@/types/perms';
+import type { Feature } from '@/types/ps';
 import type { SlashCommandBuilder } from 'discord.js';
 import type { HTMLopts } from 'ps-client/classes/common';
 import type { ReactElement } from 'react';
@@ -77,6 +78,12 @@ export type PSCommandContext = {
 	 * @param opts.perm The required permission to broadcast instead of privateReply. Defaults to 'voice'
 	 */
 	broadcastHTML(html: string | ReactElement, opts?: HTMLopts & { perm?: Perms }): void;
+	/**
+	 * Checks whether the room has a given feature enabled.
+	 * @param feature The feature to check for
+	 * @returns true if the feature is enabled, false if it is not, or null for PMs.
+	 */
+	hasFeature(feature: Feature, room?: string): boolean | null;
 	[key: string]: unknown;
 };
 

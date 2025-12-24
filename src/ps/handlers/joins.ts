@@ -1,4 +1,4 @@
-import { PSAltCache, PSGames, PSSeenCache } from '@/cache';
+import { PSAltCache, PSGames, PSJoinphraseCache, PSSeenCache } from '@/cache';
 import { rename } from '@/database/alts';
 import { seeUser } from '@/database/seens';
 import { ChatError } from '@/utils/chatError';
@@ -8,11 +8,22 @@ import { toId } from '@/utils/toId';
 
 import type { Client } from 'ps-client';
 
+const MIN_JP_MESSAGES = 20; // Number of messages required as a minimum gap
+const MIN_JP_DELAY = fromHumanTime('30 seconds');
+
 export function joinHandler(this: Client, room: string, user: string, isIntro: boolean): void {
 	if (isIntro) return;
-	// Joinphrases
-	// 'Stalking'
-	// (Kinda creepy name for the feature, but it CAN be used in creepy ways so make sure it's regulated!)
+
+	const userId = toId(user);
+	const joinphraseData = PSJoinphraseCache[room]?.[userId];
+	if (joinphraseData) {
+		const now = Date.now();
+		if (now - joinphraseData.lastTime >= MIN_JP_DELAY && joinphraseData.messageCount >= MIN_JP_MESSAGES) {
+			this.getRoom(room).send(joinphraseData.phrase);
+			joinphraseData.messageCount = 0;
+			joinphraseData.lastTime = now;
+		}
+	}
 
 	// Check if there's any relevant games
 	const roomGames = Object.values(PSGames)
@@ -22,7 +33,7 @@ export function joinHandler(this: Client, room: string, user: string, isIntro: b
 	roomGames.forEach(game => {
 		if (game.hasPlayerOrSpectator(user))
 			try {
-				game.update(toId(user));
+				game.update(userId);
 			} catch (err) {
 				if (!(err instanceof ChatError)) throw err;
 			}
