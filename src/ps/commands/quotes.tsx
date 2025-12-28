@@ -614,8 +614,8 @@ export const command: PSCommand = {
 		const room: string = await getRoom(givenRoom, message, $T);
 
 		// Check if it's a number (index lookup)
-		const index = parseInt(arg);
-		if (!isNaN(index)) {
+		if (/^\d+$/.test(arg.trim())) {
+			const index = parseInt(arg);
 			const quotes = await getAllQuotes(room);
 			if (index < 1 || index > quotes.length) {
 				throw new ChatError($T('COMMANDS.QUOTES.INVALID_INDEX'));
