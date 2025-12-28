@@ -5,7 +5,7 @@ import { Username } from '@/utils/components';
 import { Button, Form } from '@/utils/components/ps';
 import { Logger } from '@/utils/logger';
 
-import type { ToTranslate, TranslatedText } from '@/i18n/types';
+import type { TranslatedText, TranslationFn } from '@/i18n/types';
 import type { Splendor } from '@/ps/games/splendor/index';
 import type { Log } from '@/ps/games/splendor/logs';
 import type { Board, Card, PlayerData, RenderCtx, TokenCount, Trainer, ViewType } from '@/ps/games/splendor/types';
@@ -398,7 +398,7 @@ function TokenInput({
 	types?: TOKEN_TYPE[];
 	allowDragon?: boolean;
 	preset: TokenCount | null;
-	label: TranslatedText;
+	label: TranslatedText | string;
 	onClick: string;
 }): ReactElement {
 	const types = _types ?? (allowDragon ? AllTokenTypes : TokenTypes);
@@ -423,7 +423,7 @@ function TokenInput({
 	);
 }
 
-function WildCardInput({ action, onClick }: { action: ViewType; onClick: string }): ReactElement {
+function WildCardInput({ action, onClick, $T }: { action: ViewType; onClick: string; $T: TranslationFn }): ReactElement {
 	if (!action.active || action.action !== VIEW_ACTION_TYPE.CLICK_WILD) return <></>;
 	const card = metadata.pokemon[action.id];
 	const typesToInclude = (Object.keys(card.cost) as TOKEN_TYPE[]).concat([TOKEN_TYPE.DRAGON]);
@@ -435,7 +435,7 @@ function WildCardInput({ action, onClick }: { action: ViewType; onClick: string 
 				<TokenInput
 					types={typesToShow}
 					preset={action.preset}
-					label={'Buy!' as ToTranslate}
+					label={$T('GAME.SPLENDOR.LABELS.BUY')}
 					onClick={`${onClick} ! ${ACTIONS.BUY} ${card.id}`}
 				/>
 			) : null}
@@ -456,7 +456,7 @@ function WildCardInput({ action, onClick }: { action: ViewType; onClick: string 
 							zoom: '240%',
 						}}
 					>
-						{'Reserve!' as ToTranslate}
+						{$T('GAME.SPLENDOR.LABELS.RESERVE')}
 					</Button>
 				</div>
 			) : null}
@@ -464,7 +464,7 @@ function WildCardInput({ action, onClick }: { action: ViewType; onClick: string 
 	);
 }
 
-function DeckReserveInput({ action, onClick }: { action: ViewType; onClick: string }): ReactElement {
+function DeckReserveInput({ action, onClick, $T }: { action: ViewType; onClick: string; $T: TranslationFn }): ReactElement {
 	if (!action.active || action.action !== VIEW_ACTION_TYPE.CLICK_DECK) return <></>;
 	return (
 		<div style={{ borderRadius: 12, padding: 12, background: '#1119' }}>
@@ -485,22 +485,47 @@ function DeckReserveInput({ action, onClick }: { action: ViewType; onClick: stri
 						zoom: '240%',
 					}}
 				>
-					{'Reserve!' as ToTranslate}
+					{$T('GAME.SPLENDOR.LABELS.RESERVE')}
 				</Button>
 			</div>
 		</div>
 	);
 }
 
-function ReservedCardInput({ card, preset, onClick }: { preset: TokenCount; card: Card; onClick: string }): ReactElement {
+function ReservedCardInput({
+	card,
+	preset,
+	onClick,
+	$T,
+}: {
+	preset: TokenCount;
+	card: Card;
+	onClick: string;
+	$T: TranslationFn;
+}): ReactElement {
 	const typesToInclude = (Object.keys(card.cost) as TOKEN_TYPE[]).concat([TOKEN_TYPE.DRAGON]);
 	const typesToShow = AllTokenTypes.filter(type => typesToInclude.includes(type));
 	return (
-		<TokenInput types={typesToShow} preset={preset} label={`Buy ${card.name}!` as ToTranslate} onClick={`${onClick} ${card.id}`} />
+		<TokenInput
+			types={typesToShow}
+			preset={preset}
+			label={$T('GAME.SPLENDOR.LABELS.BUY_CARD', { card: card.name })}
+			onClick={`${onClick} ${card.id}`}
+		/>
 	);
 }
 
-export function BaseBoard({ board, view, onClick }: { board: Board; view: ViewType; onClick?: string | undefined }): ReactElement {
+export function BaseBoard({
+	board,
+	view,
+	onClick,
+	$T,
+}: {
+	board: Board;
+	view: ViewType;
+	onClick?: string | undefined;
+	$T: TranslationFn;
+}): ReactElement {
 	return (
 		<>
 			<div>
@@ -543,8 +568,8 @@ export function BaseBoard({ board, view, onClick }: { board: Board; view: ViewTy
 					</>
 				)}
 			</div>
-			{view.active && view.action === VIEW_ACTION_TYPE.CLICK_WILD ? <WildCardInput action={view} onClick={onClick!} /> : null}
-			{view.active && view.action === VIEW_ACTION_TYPE.CLICK_DECK ? <DeckReserveInput action={view} onClick={onClick!} /> : null}
+			{view.active && view.action === VIEW_ACTION_TYPE.CLICK_WILD ? <WildCardInput action={view} onClick={onClick!} $T={$T} /> : null}
+			{view.active && view.action === VIEW_ACTION_TYPE.CLICK_DECK ? <DeckReserveInput action={view} onClick={onClick!} $T={$T} /> : null}
 			<div style={{ height: 48 }} />
 			{([3, 2, 1] as const).map(tier => {
 				const { wild, deck } = board.cards[tier];
@@ -591,10 +616,12 @@ export function ActivePlayer({
 	data,
 	action,
 	onClick,
+	$T,
 }: {
 	data: PlayerData;
 	action: ViewType & { type: 'player' };
 	onClick: string;
+	$T: TranslationFn;
 }): ReactElement {
 	const cardsGroup = data.cards.groupBy(card => card.type);
 	const cards = AllTokenTypes.filterMap<[TOKEN_TYPE, Card[]]>(type => {
@@ -662,6 +689,7 @@ export function ActivePlayer({
 						card={metadata.pokemon[action.id]}
 						preset={action.preset}
 						onClick={`${onClick} ! ${ACTIONS.BUY_RESERVE}`}
+						$T={$T}
 					/>
 				) : (
 					<div>{`You can't afford ${metadata.pokemon[action.id].name}...`}</div>
@@ -670,15 +698,12 @@ export function ActivePlayer({
 			{action.active && action.action === VIEW_ACTION_TYPE.TOO_MANY_TOKENS ? (
 				<div style={{ color: 'white' }}>
 					<p>
-						{
-							// eslint-disable-next-line max-len -- TODO $T
-							`You have too many tokens! The maximum you can have at a time is ${MAX_TOKEN_COUNT}; please discard at least ${action.discard}.` as ToTranslate
-						}
+						{$T('GAME.SPLENDOR.TOO_MANY_TOKENS_MESSAGE', { max: MAX_TOKEN_COUNT, discard: action.discard })}
 					</p>
 					<TokenInput
 						allowDragon
 						preset={null}
-						label={'Discard' as ToTranslate}
+						label={$T('GAME.LABELS.DISCARD')}
 						onClick={`${onClick} ! ${VIEW_ACTION_TYPE.TOO_MANY_TOKENS}`}
 					/>
 				</div>
@@ -746,11 +771,11 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 		<center>
 			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
 			<div style={{ zoom: '50%' }}>
-				<BaseBoard board={ctx.board} onClick={ctx.view.active ? this.msg : undefined} view={ctx.view} />
+				<BaseBoard board={ctx.board} onClick={ctx.view.active ? this.msg : undefined} view={ctx.view} $T={ctx.$T} />
 				<div style={{ height: 48 }} />
 				{ctx.view.type === 'player' ? (
 					<>
-						<ActivePlayer data={ctx.players[ctx.view.self]} action={ctx.view} onClick={this.msg} />
+						<ActivePlayer data={ctx.players[ctx.view.self]} action={ctx.view} onClick={this.msg} $T={ctx.$T} />
 						<hr />
 					</>
 				) : null}

@@ -5,7 +5,7 @@ import { createGrid } from '@/ps/games/utils';
 import { ChatError } from '@/utils/chatError';
 import { type Point, parsePointA1, pointToA1, rangePoints, sameRowOrCol, taxicab } from '@/utils/grid';
 
-import type { ToTranslate, TranslatedText } from '@/i18n/types';
+import type { TranslatedText } from '@/i18n/types';
 import type { ShipType } from '@/ps/games/battleship/constants';
 import type { Log } from '@/ps/games/battleship/logs';
 import type { RenderCtx, SelectionInProgressState, ShipBoard, State, Turn, WinCtx } from '@/ps/games/battleship/types';
@@ -53,14 +53,14 @@ export class Battleship extends BaseGame<State> {
 		const player = this.getPlayer(user)! as Player & { turn: Turn };
 		switch (action) {
 			case 'set': {
-				if (this.state.ready[player.turn] === true) throw new ChatError("Hi you've already set your ships!" as ToTranslate);
+				if (this.state.ready[player.turn] === true) throw new ChatError(this.$T('GAME.BATTLESHIP.ALREADY_SET'));
 				const set = ctx.split('|').map(coords => coords.split('-').map(parsePointA1));
 				const input = set.flatMap(row => row.map(point => (point ? pointToA1(point) : '')));
 				try {
 					this.state.ready[player.turn] = { ...this.validateShipPositions(set), input };
 				} catch (err) {
 					if (err instanceof ChatError) {
-						this.state.ready[player.turn] = { type: 'invalid', input, message: err.message };
+						this.state.ready[player.turn] = { type: 'invalid', input, message: err.message, $T: this.$T };
 						this.update(player.id);
 					} else throw err;
 				}
@@ -70,8 +70,10 @@ export class Battleship extends BaseGame<State> {
 			}
 			case 'confirm-set': {
 				const currentSet = this.state.ready[player.turn];
-				if (currentSet === true) throw new ChatError("Hi you've already set your ships!" as ToTranslate);
-				if (!currentSet || currentSet?.type === 'invalid') throw new ChatError('Set your ships first -_-' as ToTranslate);
+				if (currentSet === true) throw new ChatError(this.$T('GAME.BATTLESHIP.ALREADY_SET'));
+				if (!currentSet || currentSet.type === 'not-set' || currentSet.type === 'invalid') {
+					throw new ChatError(this.$T('GAME.BATTLESHIP.SET_FIRST'));
+				}
 				this.state.board.ships[player.turn] = currentSet.board;
 				this.state.ready[player.turn] = true;
 				const logEntry: Log = { action: 'set', ctx: currentSet.input, time: new Date(), turn: player.turn };
@@ -97,7 +99,7 @@ export class Battleship extends BaseGame<State> {
 				try {
 					hit = this.state.board.ships[opponent].access([x, y]) ?? false;
 				} catch {
-					throw new ChatError('Invalid range given.' as ToTranslate);
+					throw new ChatError(this.$T('GAME.BATTLESHIP.INVALID_RANGE'));
 				}
 				this.state.board.attacks[player.turn][x][y] = hit;
 
@@ -150,10 +152,13 @@ export class Battleship extends BaseGame<State> {
 	render(side: Turn | null): ReactElement {
 		if (side) {
 			const readyState = this.state.ready[side];
-			if (readyState === false) return renderSelection.bind(this.renderCtx)();
+			if (readyState === false) return renderSelection.bind(this.renderCtx)({ type: 'not-set', $T: this.$T });
 			if (readyState && typeof readyState !== 'boolean') return renderSelection.bind(this.renderCtx)(readyState);
 			if (!this.state.allReady)
-				return renderSelection.bind(this.renderCtx)({ type: 'valid', board: this.state.board.ships[side], input: [] }, true);
+				return renderSelection.bind(this.renderCtx)(
+					{ type: 'valid', board: this.state.board.ships[side], input: [], $T: this.$T },
+					true
+				);
 		}
 
 		let ctx: RenderCtx;
@@ -220,19 +225,17 @@ export class Battleship extends BaseGame<State> {
 
 		positions.forEach(({ ship, from, to }) => {
 			if (!sameRowOrCol(from, to)) {
-				throw new ChatError(
-					`Cannot place ${ship.name} between given points ${pointToA1(from)} and ${pointToA1(to)} (not in line)` as ToTranslate
-				);
+				throw new ChatError(this.$T('GAME.BATTLESHIP.NOT_IN_LINE', { ship: ship.name, from: pointToA1(from), to: pointToA1(to) }));
 			}
 			const givenSize = taxicab(from, to) + 1;
 			if (givenSize !== ship.size)
-				throw new ChatError(`${ship.name} has size ${ship.size} but you put it in ${givenSize} cells!` as ToTranslate);
+				throw new ChatError(this.$T('GAME.BATTLESHIP.WRONG_SIZE', { ship: ship.name, size: ship.size, given: givenSize }));
 			if ([from, to].some(([x, y]) => x < 0 || x >= 10 || y < 0 || y >= 10))
-				throw new ChatError(`Points given for ${ship.name} out of range!` as ToTranslate);
+				throw new ChatError(this.$T('GAME.BATTLESHIP.OUT_OF_RANGE', { ship: ship.name }));
 			rangePoints(from, to).forEach(pointInRange => {
 				const point = pointToA1(pointInRange);
 				if (occupied[point]) {
-					throw new ChatError(`${point} would be occupied by both ${ship.name} and ${occupied[point]}` as ToTranslate);
+					throw new ChatError(this.$T('GAME.BATTLESHIP.OVERLAP', { point, ship1: ship.name, ship2: occupied[point] }));
 				} else {
 					occupied[point] = ship.name;
 					shipBoard[pointInRange[0]][pointInRange[1]] = ship.id;
@@ -241,6 +244,6 @@ export class Battleship extends BaseGame<State> {
 		});
 
 		// Ship positions should be valid now
-		return { type: 'valid', board: shipBoard };
+		return { type: 'valid', board: shipBoard, $T: this.$T };
 	}
 }

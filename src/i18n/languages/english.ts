@@ -44,6 +44,7 @@ export default {
 			STASH: 'Stash',
 			UNSTASH: 'Unstash',
 			WATCH: 'Watch',
+			DISCARD: 'Discard',
 		},
 		SIGNUPS_OPEN: '{{game}} signups are open!',
 		SIGNUPS_CLOSED: '{{game}} signups closed.',
@@ -109,13 +110,38 @@ export default {
 			PRIVATE: "Psst it's your turn to play in {{game}} [{{id}}]",
 			PUBLIC: "{{user}} hasn't played in {{game}} [{{id}}] for {{time}}...",
 		},
+		NO_DMS: "Can't create a game in DMs!",
+		NOTIFY_CREATED: '/notifyrank all, {{game}}, A game of {{game}} has been created!,{{id}}signup',
+		PLAYER_JOINED: '{{player}} joined the game of {{game}}{{turn}}{{random}}! [{{id}}]',
+		FORCEWIN_SPECIFY_ID: 'You must specify the game ID for forcewin!',
+		SCRABBLEDEX_NO_ENTRIES: 'No entries yet!',
+		UGO_NOT_ACTIVE: "UGO isn't active!",
 
+		BATTLESHIP: {
+			ALREADY_SET: "You've already set your ships!",
+			SET_FIRST: 'Set your ships first!',
+			INVALID_RANGE: 'Invalid range given.',
+			NOT_IN_LINE: 'Cannot place {{ship}} between given points {{from}} and {{to}} (not in line)',
+			WRONG_SIZE: '{{ship}} has size {{size}} but you put it in {{given}} cells!',
+			OUT_OF_RANGE: 'Points given for {{ship}} out of range!',
+			OVERLAP: '{{point}} would be occupied by both {{ship1}} and {{ship2}}',
+			WAITING_FOR_OPPONENT: 'Waiting for opponent to set their ships...',
+			SET_YOUR_SHIPS: 'Set your ships!',
+		},
 		LIGHTS_OUT: {
 			INVALID_SIZE: 'Lights Out may only be from 2x2 to 15x15.',
+			SOLVE_MESSAGE: '{{player}} solved this board in {{clicks}} moves! (My solution was {{genClicks}} moves)',
 		},
 		MASTERMIND: {
 			ENDED: 'The game of Mastermind was ended for {{player}}.',
 			FAILED: '{{player}} was unable to guess {{solution}} in {{cap}} guesses.',
+			WIN_MESSAGE: '{{player}} guessed {{solution}} in {{turns}} turn!',
+			WIN_MESSAGE_PLURAL: '{{player}} guessed {{solution}} in {{turns}} turns!',
+		},
+		SNAKESLADDERS: {
+			PLAYER_NOT_FOUND: 'Could not find old player.',
+			ROLL_TOO_HIGH: 'You rolled a {{dice}}, but needed a {{needed}} or lower...',
+			ROLL_TOO_HIGH_EXACT: 'You rolled a {{dice}}, but needed exactly a {{needed}}...',
 		},
 		SCRABBLE: {
 			NO_SELECTED: 'You must select a cell to play from first. Please use the buttons!',
@@ -133,6 +159,48 @@ export default {
 			VALID_WORD: '{{word}} is a valid word in {{mod}}.',
 			HOW_TO_BLANK:
 				"Hi, you've drawn a blank tile! A blank tile can be used as any letter, but the tile awards 0 points. You can type `BL[A]NK` (for example) to use the blank as an A. Other syntaxes supported are `BL(A)NK`, or adding an apostrophe after the blanked letter (eg: `BLA'NK`).",
+			UGO_MODS_ONLY: 'The only mods allowed during UGO are Pokémon and Crazymons!',
+			AUTO_MOD_APPLIED: 'Game {{id}} had {{mod}} applied automatically!',
+		},
+		SPLENDOR: {
+			LABELS: {
+				BUY: 'Buy!',
+				RESERVE: 'Reserve!',
+				BUY_CARD: 'Buy {{card}}!',
+			},
+			INVALID_CARD: '{{card}} is not a valid card.',
+			CARD_NOT_ACCESSIBLE: 'Cannot access {{card}} for the desired action.',
+			DISCARD_TOKENS_REQUIRED: 'You need to discard tokens!',
+			CARD_NOT_AVAILABLE_RESERVE: '{{card}} is not available to reserve.',
+			CARD_NOT_AVAILABLE_BUY: '{{card}} is not available to buy.',
+			CANNOT_BUY_OR_RESERVE: 'You can neither buy nor reserve {{card}}.',
+			WHICH_TIER: 'Which tier did you click on?',
+			DECK_EMPTY: 'The deck for tier {{tier}} cards is empty!',
+			RESERVE_LIMIT: 'You cannot reserve more than 3 cards at a time.',
+			NO_DISCARD_NEEDED: "You don't need to discard any tokens yet.",
+			DISCARD_MORE: "You must discard at least {{required}} tokens! {{discarding}} isn't enough.",
+			CANNOT_DISCARD: "Unfortunately it doesn't look like you have those to discard.",
+			INSUFFICIENT_TOKENS: 'The given tokens are insufficient to purchase {{card}}!',
+			OVERPAYING: "You're overpaying!",
+			CANNOT_RESERVE:
+				'You cannot reserve a card. You may only reserve a card if a Dragon token is available AND you have less than three cards currently reserved.',
+			NO_DRAGON_RECEIVED: 'You reserved a card, but there were no Dragon tokens left to receive.',
+			NOT_RESERVED: 'You have not reserved {{card}}!',
+			UNRECOGNIZED_ACTION: 'Unrecognized action {{action}} ({{context}})',
+			INVALID_COUNT: '{{value}} is not a valid count.',
+			UNRECOGNIZED_TYPE: '{{type}} is not a recognized type.',
+			DRAGON_NOT_ALLOWED: "Dragon isn't allowed as a valid token here.",
+			DRAGON_ONLY_BY_RESERVE: 'You may only obtain Dragon tokens by reserving cards!',
+			TOO_MANY_TOKENS_TAKEN: 'Tried to take more tokens than available!{{info}}',
+			TOO_MANY_TOKENS: "You can't take that many tokens!",
+			TAKE_AT_LEAST_TWO: 'You must take at least 2 tokens!',
+			TAKE_THREE_TYPES: 'You should probably be taking one token of three different types...',
+			TAKE_RULES: 'You can only take 2 from 1 type, or 1 each from 3 types!',
+			TAKE_EXACTLY_TWO: 'When taking from one stack you can only take exactly 2.',
+			STACK_TOO_SMALL: 'You can only take 2 tokens if the stack has 4 or more. {{name}} only had {{available}}.',
+			ONE_EACH_TYPE: 'You can only take 1 token from each of the 3 types!{{info}}',
+			TOO_MANY_TOKENS_MESSAGE:
+				'You have too many tokens! The maximum you can have at a time is {{max}}; please discard at least {{discard}}.',
 		},
 	},
 
@@ -168,11 +236,81 @@ export default {
 			HEADERS: {
 				USER: 'User',
 			},
+			SPECIFY_TYPE: 'Specify a points type!',
+			TYPE_NOT_FOUND: "Couldn't find a points type matching {{type}}.",
+			HOW_MANY: 'How many points? {{values}}',
+			SOMETHING_WRONG: 'Something went wrong...',
+			NONCE_NOT_PROVIDED: 'Nonce not provided.',
+			NONCE_ALREADY_USED: 'Already added points for {{nonce}}!',
+			NONCE_INVALID: 'Invalid nonce {{nonce}}.',
+			ADDED: 'Added points!',
+			LB_RESET: 'Leaderboard has been reset!',
+			TYPE_RESET: "Reset all users' {{type}} to 0.",
+		},
+
+		JOINPHRASES: {
+			EMPTY: 'A joinphrase cannot be empty!',
+			TOO_LONG: 'A joinphrase cannot be longer than {{max}} characters!',
+			NO_COMMANDS: 'A joinphrase cannot start with a command!',
+			NO_ROOM: 'No room provided!',
+			NOT_ENABLED: 'Joinphrases are not enabled for this room.',
+			ALREADY_EXISTS: '{{user}} already has a joinphrase in {{room}}...',
+			ADDED: 'Joinphrase added!',
+			NOT_FOUND: '{{user}} does not have a joinphrase in {{room}}...',
+			DELETED: 'Joinphrase deleted.',
+			EDITED: 'Joinphrase edited.',
 		},
 
 		QUOTES: {
+			TOO_LONG: 'Quote is too long.',
+			PROVIDE_SEARCH: 'Please provide a search term.',
+			INVALID_PAGE: 'Invalid page number.',
+			COUNT_SINGULAR: 'There is {{count}} quote in this room.',
+			COUNT_PLURAL: 'There are {{count}} quotes in this room.',
+			PROVIDE_INDEX_OR_TERM: 'Please provide an index or search term.',
+			INVALID_INDEX: 'Invalid quote index.',
+			NO_MATCH: 'No quote found matching that term.',
+			MULTIPLE_MATCHES: 'Multiple quotes found matching that term.',
+			DELETED: 'Quote deleted.',
+			PROVIDE_ROOM_COMMAND: 'Please provide a room and command.',
+			ROOM_PREF_SET: 'Quote room preference set to {{room}}.',
+			SPECIFY_ROOM_COMMAND: 'Please specify a room and a command.',
 			NO_QUOTES_FOUND: 'No quotes found.',
 			NO_QUOTES_FOUND_MATCHING: 'No quotes found matching "{{search}}".',
+		},
+
+		MODNOTE: {
+			NO_COMMON_ROOMS: "We don't have any common rooms where you're staff...",
+		},
+
+		FILTER: {
+			INVALID_REGEX: 'Invalid regular expression. Try https://regex101.com for help.',
+		},
+
+		KUNC: {
+			IN_PROGRESS: 'Kunc in progress! Finish it first or end with ``{{prefix}}kunc end``',
+			INVALID_TIME: 'Set a reasonable time please (5s - 1min)',
+			CORRECT_GUESSERS: '{{guessers}} guessed correctly! Solution: {{solution}}.',
+			NO_GUESSERS: 'No one guessed {{solution}} in time...',
+		},
+
+		AUTH: {
+			WHO_TO_PROMOTE: 'Who do you want to promote?',
+			CANNOT_CHANGE_RANK: 'Cannot change rank for {{users}}.',
+			USE_DEAUTH: 'Please try using deauth instead.',
+			WHO_TO_DEMOTE: 'Who do you want to demote?',
+			CANNOT_DEMOTE: 'Cannot demote {{users}}.',
+		},
+
+		NONCE: {
+			UNAVAILABLE: 'This command is unavailable (you were possibly sniped!)',
+			DONE: 'Done!',
+		},
+
+		HUNDOS: {
+			CP_INFO: '{{name}} can have a CP of {{baseCP}}{{extraCP}}, and {{shinyStatus}} be shiny.',
+			CAN: 'can',
+			CANNOT: 'cannot',
 		},
 
 		TIMER: {

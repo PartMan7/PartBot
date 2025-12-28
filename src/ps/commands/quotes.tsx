@@ -15,7 +15,7 @@ import { pluralize } from '@/utils/pluralize';
 import { escapeRegEx } from '@/utils/regexEscape';
 import { toId } from '@/utils/toId';
 
-import type { ToTranslate, TranslationFn } from '@/i18n/types';
+import type { TranslationFn } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { PSMessage } from '@/types/ps';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
@@ -351,14 +351,14 @@ export const command: PSCommand = {
 				'wrapping the username in ``[]`` (eg: ``[14:20:21] • #PartMan hugs Hydro`` would be formatted ' +
 				'as ``[14:20:21] • #[PartMan] hugs Hydro``).',
 			syntax: 'CMD [new quote]',
-			async run({ message, arg, broadcastHTML }) {
+			async run({ message, arg, broadcastHTML, $T }) {
 				const parsedQuote = parseQuote(arg);
 				const addedBy = message.author.name;
 				const at = Temporal.Now.plainDateISO('UTC').toLocaleString('en-GB');
 
 				const rendered = jsxToHTML(<FormatQuote quote={parsedQuote} addedBy={addedBy} dateAdded={at} />);
 
-				if (rendered.length > MAX_QUOTE_LENGTH) throw new ChatError('Quote is too long.' as ToTranslate);
+				if (rendered.length > MAX_QUOTE_LENGTH) throw new ChatError($T('COMMANDS.QUOTES.TOO_LONG'));
 				await addQuote(parsedQuote, message.target.id, addedBy);
 				const { length } = await getAllQuotes(message.target.id);
 				broadcastHTML(
@@ -396,7 +396,7 @@ export const command: PSCommand = {
 			help: 'Displays all quotes with the specified search term.',
 			syntax: 'CMD [search term]',
 			async run({ message, arg, broadcast, broadcastHTML, room: givenRoom, $T }) {
-				if (!arg) throw new ChatError('Please provide a search term.' as ToTranslate);
+				if (!arg) throw new ChatError($T('COMMANDS.QUOTES.PROVIDE_SEARCH'));
 				const room: string = await getRoom(givenRoom, message, $T);
 				const quotes = await getAllQuotes(room);
 
@@ -463,7 +463,7 @@ export const command: PSCommand = {
 					.slice(startIndex, endIndex)
 					.map((quote, index) => [startIndex + index + 1, quote]);
 
-				if (!pagedQuotes.length) throw new ChatError('Invalid page number.' as ToTranslate);
+				if (!pagedQuotes.length) throw new ChatError($T('COMMANDS.QUOTES.INVALID_PAGE'));
 
 				broadcastHTML(
 					MultiQuotes({
@@ -494,7 +494,7 @@ export const command: PSCommand = {
 					.slice(startIndex, endIndex)
 					.map((quote, index) => [startIndex + index + 1, quote]);
 
-				if (!pageQuotes.length) throw new ChatError('Invalid page number.' as ToTranslate);
+				if (!pageQuotes.length) throw new ChatError($T('COMMANDS.QUOTES.INVALID_PAGE'));
 
 				message.author.pageHTML(
 					MultiQuotes({
@@ -517,10 +517,9 @@ export const command: PSCommand = {
 				const room: string = await getRoom(givenRoom, message, $T);
 				const quotes = await getAllQuotes(room);
 				message.reply(
-					`There ${quotes.length === 1 ? 'is' : 'are'} ${pluralize(quotes.length, {
-						singular: 'quote',
-						plural: 'quotes',
-					})} in this room.` as ToTranslate
+					$T(quotes.length === 1 ? 'COMMANDS.QUOTES.COUNT_SINGULAR' : 'COMMANDS.QUOTES.COUNT_PLURAL', {
+						count: quotes.length,
+					})
 				);
 			},
 		},
@@ -532,7 +531,7 @@ export const command: PSCommand = {
 			help: 'Deletes the given quote. Accepts either an index or a lookup term (``z`` deletes the last).',
 			syntax: 'CMD [index/term]',
 			async run({ message, arg, broadcast, broadcastHTML, $T }) {
-				if (!arg) throw new ChatError('Please provide an index or search term.' as ToTranslate);
+				if (!arg) throw new ChatError($T('COMMANDS.QUOTES.PROVIDE_INDEX_OR_TERM'));
 				const room = message.target.id;
 				const quotes = await getAllQuotes(room);
 				if (!quotes.length) return broadcast($T('COMMANDS.QUOTES.NO_QUOTES_FOUND'));
@@ -546,7 +545,7 @@ export const command: PSCommand = {
 				} else if (!isNaN(parseInt(arg))) {
 					indexToDelete = parseInt(arg) - 1;
 					if (indexToDelete < 0 || indexToDelete >= quotes.length) {
-						throw new ChatError('Invalid quote index.' as ToTranslate);
+						throw new ChatError($T('COMMANDS.QUOTES.INVALID_INDEX'));
 					}
 					toDelete = quotes[indexToDelete];
 				} else {
@@ -555,8 +554,8 @@ export const command: PSCommand = {
 						quotes.map<IndexedQuoteModel>((quote, index) => [index + 1, quote]),
 						arg
 					).map(([, quote]) => quote);
-					if (matching.length === 0) throw new ChatError('No quote found matching that term.' as ToTranslate);
-					if (matching.length > 1) throw new ChatError('Multiple quotes found matching that term.' as ToTranslate);
+					if (matching.length === 0) throw new ChatError($T('COMMANDS.QUOTES.NO_MATCH'));
+					if (matching.length > 1) throw new ChatError($T('COMMANDS.QUOTES.MULTIPLE_MATCHES'));
 					toDelete = matching[0];
 					indexToDelete = quotes.indexOf(toDelete);
 				}
@@ -586,7 +585,7 @@ export const command: PSCommand = {
 
 				Logger.deepLog(toDelete, `deleted by ${message.author.name} in ${message.target.title}`);
 				await deleteQuoteByIndex(indexToDelete, toDelete, room);
-				message.reply('Quote deleted.' as ToTranslate);
+				message.reply($T('COMMANDS.QUOTES.DELETED'));
 			},
 		},
 		room: {
@@ -594,15 +593,15 @@ export const command: PSCommand = {
 			aliases: ['m'],
 			help: "Runs the command in the context of the given room. Can set the user's PM quote room preference if no subcommand is given.",
 			syntax: 'CMD [room] | [subcommand]',
-			async run({ message, arg, run }) {
-				if (!arg) throw new ChatError('Please provide a room and command.' as ToTranslate);
+			async run({ message, arg, run, $T }) {
+				if (!arg) throw new ChatError($T('COMMANDS.QUOTES.PROVIDE_ROOM_COMMAND'));
 				const parts = arg.split('|');
 				if (message.type === 'pm' && parts.length === 1) {
 					PSQuoteRoomPrefs[message.author.userid] = { room: toRoomID(arg), at: new Date() };
-					return message.reply(`Quote room preference set to ${arg}.` as ToTranslate);
+					return message.reply($T('COMMANDS.QUOTES.ROOM_PREF_SET', { room: arg }));
 				}
 				const [targetRoom, subcommand] = parts;
-				if (parts.length !== 2 || !toId(subcommand)) throw new ChatError('Please specify a room and a command.' as ToTranslate);
+				if (parts.length !== 2 || !toId(subcommand)) throw new ChatError($T('COMMANDS.QUOTES.SPECIFY_ROOM_COMMAND'));
 				const roomId = toRoomID(targetRoom);
 
 				return run(`quote ${subcommand}`, { room: roomId });
@@ -619,7 +618,7 @@ export const command: PSCommand = {
 		if (!isNaN(index)) {
 			const quotes = await getAllQuotes(room);
 			if (index < 1 || index > quotes.length) {
-				throw new ChatError('Invalid quote index.' as ToTranslate);
+				throw new ChatError($T('COMMANDS.QUOTES.INVALID_INDEX'));
 			}
 			const quote = quotes[index - 1];
 			const dateAdded = Temporal.Instant.fromEpochMilliseconds(quote.at.getTime())

@@ -46,6 +46,7 @@ export default {
 			STASH: 'Guardar',
 			UNSTASH: 'Restaurar',
 			WATCH: 'Assistir',
+			DISCARD: 'Descartar',
 		},
 		SIGNUPS_OPEN: 'As inscrições para {{game}} estão abertas!',
 		SIGNUPS_CLOSED: 'Inscrições para {{game}} encerradas.',
@@ -114,10 +115,29 @@ export default {
 
 		LIGHTS_OUT: {
 			INVALID_SIZE: 'Lights Out só pode ser de 2x2 a 15x15.',
+			SOLVE_MESSAGE: '{{player}} resolveu este tabuleiro em {{clicks}} movimentos! (Minha solução era {{genClicks}} movimentos)',
 		},
 		MASTERMIND: {
 			ENDED: 'O jogo de Mastermind foi encerrado para {{player}}.',
 			FAILED: '{{player}} não conseguiu adivinhar {{solution}} em {{cap}} tentativas.',
+			WIN_MESSAGE: '{{player}} adivinhou {{solution}} em {{turns}} turno!',
+			WIN_MESSAGE_PLURAL: '{{player}} adivinhou {{solution}} em {{turns}} turnos!',
+		},
+		SNAKESLADDERS: {
+			PLAYER_NOT_FOUND: 'Não foi possível encontrar o jogador antigo',
+			ROLL_TOO_HIGH: 'Você rolou {{dice}}, mas precisava de {{needed}} ou menos...',
+			ROLL_TOO_HIGH_EXACT: 'Você rolou {{dice}}, mas precisava exatamente de {{needed}}...',
+		},
+		BATTLESHIP: {
+			ALREADY_SET: 'Você já posicionou seus navios!',
+			SET_FIRST: 'Posicione seus navios primeiro!',
+			INVALID_RANGE: 'Alcance inválido.',
+			NOT_IN_LINE: 'Não é possível colocar {{ship}} entre {{from}} e {{to}} (não está alinhado)',
+			WRONG_SIZE: '{{ship}} tem tamanho {{size}} mas você usou {{given}} células!',
+			OUT_OF_RANGE: 'Os pontos fornecidos para {{ship}} estão fora do alcance!',
+			OVERLAP: '{{point}} seria ocupado por {{ship1}} e {{ship2}}',
+			WAITING_FOR_OPPONENT: 'Esperando o oponente posicionar seus navios...',
+			SET_YOUR_SHIPS: 'Posicione seus navios!',
 		},
 		SCRABBLE: {
 			NO_SELECTED: 'Você deve primeiro selecionar uma célula para jogar. Use os botões!',
@@ -135,7 +155,55 @@ export default {
 			VALID_WORD: '{{word}} é uma palavra válida em {{mod}}.',
 			HOW_TO_BLANK:
 				"Oi, você pegou uma peça em branco! Uma peça em branco pode representar qualquer letra, mas não dá pontos. Você pode digitar `BL[A]NK` (por exemplo) para usá-la como A. Outras sintaxes suportadas são `BL(A)NK` ou adicionar um apóstrofo após a letra (ex: `BLA'NK`).",
+			UGO_MODS_ONLY: 'Os únicos mods permitidos durante o UGO são Pokémon e Crazymons!',
+			AUTO_MOD_APPLIED: 'O jogo {{id}} teve {{mod}} aplicado automaticamente!',
 		},
+		SPLENDOR: {
+			LABELS: {
+				BUY: 'Comprar!',
+				RESERVE: 'Reservar!',
+				BUY_CARD: 'Comprar {{card}}!',
+			},
+			INVALID_CARD: '{{card}} não é uma carta válida.',
+			CARD_NOT_ACCESSIBLE: 'Não é possível acessar {{card}} para a ação desejada.',
+			DISCARD_TOKENS_REQUIRED: 'Você precisa descartar fichas!',
+			CARD_NOT_AVAILABLE_RESERVE: '{{card}} não está disponível para reservar.',
+			CARD_NOT_AVAILABLE_BUY: '{{card}} não está disponível para comprar.',
+			CANNOT_BUY_OR_RESERVE: 'Você não pode comprar nem reservar {{card}}.',
+			WHICH_TIER: 'Em qual nível você clicou?',
+			DECK_EMPTY: 'O baralho de cartas de nível {{tier}} está vazio!',
+			RESERVE_LIMIT: 'Você não pode reservar mais de 3 cartas por vez.',
+			NO_DISCARD_NEEDED: 'Você não precisa descartar nenhuma ficha ainda.',
+			DISCARD_MORE: 'Você deve descartar pelo menos {{required}} fichas! {{discarding}} não é suficiente.',
+			CANNOT_DISCARD: 'Infelizmente, parece que você não tem essas para descartar.',
+			INSUFFICIENT_TOKENS: 'As fichas fornecidas são insuficientes para comprar {{card}}!',
+			OVERPAYING: 'Você está pagando demais!',
+			CANNOT_RESERVE:
+				'Você não pode reservar uma carta. Você só pode reservar uma carta se uma ficha de Dragão estiver disponível E você tiver menos de três cartas reservadas.',
+			NO_DRAGON_RECEIVED: 'Você reservou uma carta, mas não havia fichas de Dragão sobrando para receber.',
+			NOT_RESERVED: 'Você não reservou {{card}}!',
+			UNRECOGNIZED_ACTION: 'Ação não reconhecida {{action}} ({{context}})',
+			INVALID_COUNT: '{{value}} não é uma contagem válida.',
+			UNRECOGNIZED_TYPE: '{{type}} não é um tipo reconhecido.',
+			DRAGON_NOT_ALLOWED: 'Dragão não é permitido como ficha válida aqui.',
+			DRAGON_ONLY_BY_RESERVE: 'Você só pode obter fichas de Dragão reservando cartas!',
+			TOO_MANY_TOKENS_TAKEN: 'Tentou pegar mais fichas do que disponível!{{info}}',
+			TOO_MANY_TOKENS: 'Você não pode pegar tantas fichas!',
+			TAKE_AT_LEAST_TWO: 'Você deve pegar pelo menos 2 fichas!',
+			TAKE_THREE_TYPES: 'Você provavelmente deveria pegar uma ficha de três tipos diferentes...',
+			TAKE_RULES: 'Você só pode pegar 2 de 1 tipo ou 1 de cada de 3 tipos!',
+			TAKE_EXACTLY_TWO: 'Ao pegar de uma pilha, você só pode pegar exatamente 2.',
+			STACK_TOO_SMALL: 'Você só pode pegar 2 fichas se a pilha tiver 4 ou mais. {{name}} tinha apenas {{available}}.',
+			ONE_EACH_TYPE: 'Você só pode pegar 1 ficha de cada um dos 3 tipos!{{info}}',
+			TOO_MANY_TOKENS_MESSAGE:
+				'Você tem fichas demais! O máximo que você pode ter é {{max}}; por favor, descarte pelo menos {{discard}}.',
+		},
+		NO_DMS: 'Não é possível criar um jogo em mensagens privadas!',
+		NOTIFY_CREATED: '/notifyrank all, {{game}}, Um jogo de {{game}} foi criado!,{{id}}signup',
+		PLAYER_JOINED: '{{player}} entrou no jogo de {{game}}{{turn}}{{random}}! [{{id}}]',
+		FORCEWIN_SPECIFY_ID: 'Você deve especificar o ID do jogo para forcewin!',
+		SCRABBLEDEX_NO_ENTRIES: 'Nenhuma entrada ainda!',
+		UGO_NOT_ACTIVE: 'UGO não está ativo!',
 	},
 
 	COMMANDS: {
@@ -170,11 +238,81 @@ export default {
 			HEADERS: {
 				USER: 'Usuário',
 			},
+			SPECIFY_TYPE: 'Especifique um tipo de pontos!',
+			TYPE_NOT_FOUND: 'Não foi possível encontrar um tipo de pontos correspondente a {{type}}.',
+			HOW_MANY: 'Quantos pontos? {{values}}',
+			SOMETHING_WRONG: 'Algo deu errado...',
+			NONCE_NOT_PROVIDED: 'Nonce não fornecido.',
+			NONCE_ALREADY_USED: 'Já foram adicionados pontos para {{nonce}}!',
+			NONCE_INVALID: 'Nonce inválido {{nonce}}.',
+			ADDED: 'Pontos adicionados!',
+			LB_RESET: 'O ranking foi reiniciado!',
+			TYPE_RESET: 'Todos os {{type}} dos usuários foram zerados.',
+		},
+
+		JOINPHRASES: {
+			EMPTY: 'Uma frase de entrada não pode estar vazia!',
+			TOO_LONG: 'Uma frase de entrada não pode ter mais de {{max}} caracteres!',
+			NO_COMMANDS: 'Uma frase de entrada não pode começar com um comando!',
+			NO_ROOM: 'Nenhuma sala fornecida!',
+			NOT_ENABLED: 'As frases de entrada não estão habilitadas para esta sala.',
+			ALREADY_EXISTS: '{{user}} já tem uma frase de entrada em {{room}}...',
+			ADDED: 'Frase de entrada adicionada!',
+			NOT_FOUND: '{{user}} não tem uma frase de entrada em {{room}}...',
+			DELETED: 'Frase de entrada excluída.',
+			EDITED: 'Frase de entrada editada.',
 		},
 
 		QUOTES: {
+			TOO_LONG: 'A citação é muito longa.',
+			PROVIDE_SEARCH: 'Por favor, forneça um termo de busca.',
+			INVALID_PAGE: 'Número de página inválido.',
+			COUNT_SINGULAR: 'Há {{count}} citação nesta sala.',
+			COUNT_PLURAL: 'Há {{count}} citações nesta sala.',
+			PROVIDE_INDEX_OR_TERM: 'Por favor, forneça um índice ou termo de busca.',
+			INVALID_INDEX: 'Índice de citação inválido.',
+			NO_MATCH: 'Nenhuma citação encontrada correspondendo a esse termo.',
+			MULTIPLE_MATCHES: 'Várias citações encontradas correspondendo a esse termo.',
+			DELETED: 'Citação excluída.',
+			PROVIDE_ROOM_COMMAND: 'Por favor, forneça uma sala e um comando.',
+			ROOM_PREF_SET: 'Preferência de sala de citação definida para {{room}}.',
+			SPECIFY_ROOM_COMMAND: 'Por favor, especifique uma sala e um comando.',
 			NO_QUOTES_FOUND: 'Nenhuma citação encontrada.',
 			NO_QUOTES_FOUND_MATCHING: 'Nenhuma citação encontrada correspondendo a "{{search}}".',
+		},
+
+		MODNOTE: {
+			NO_COMMON_ROOMS: 'Não temos nenhuma sala em comum onde você é staff...',
+		},
+
+		FILTER: {
+			INVALID_REGEX: 'Expressão regular inválida. Tente https://regex101.com para ajuda.',
+		},
+
+		KUNC: {
+			IN_PROGRESS: 'Kunc em andamento! Termine primeiro ou encerre com ``{{prefix}}kunc end``',
+			INVALID_TIME: 'Defina um tempo razoável por favor (5s - 1min)',
+			CORRECT_GUESSERS: '{{guessers}} acertaram! Solução: {{solution}}.',
+			NO_GUESSERS: 'Ninguém adivinhou {{solution}} a tempo...',
+		},
+
+		AUTH: {
+			WHO_TO_PROMOTE: 'Quem você quer promover?',
+			CANNOT_CHANGE_RANK: 'Não é possível alterar o rank de {{users}}.',
+			USE_DEAUTH: 'Por favor, tente usar deauth.',
+			WHO_TO_DEMOTE: 'Quem você quer rebaixar?',
+			CANNOT_DEMOTE: 'Não é possível rebaixar {{users}}.',
+		},
+
+		NONCE: {
+			UNAVAILABLE: 'Este comando está indisponível (você pode ter sido interceptado!)',
+			DONE: 'Feito!',
+		},
+
+		HUNDOS: {
+			CP_INFO: '{{name}} pode ter PC de {{baseCP}}{{extraCP}}, e {{shinyStatus}} ser shiny.',
+			CAN: 'pode',
+			CANNOT: 'não pode',
 		},
 
 		TIMER: {

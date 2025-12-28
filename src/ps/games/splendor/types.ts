@@ -1,3 +1,4 @@
+import type { TranslationFn } from '@/i18n/types';
 import type { TOKEN_TYPE, VIEW_ACTION_TYPE } from '@/ps/games/splendor/constants';
 
 export type Turn = string;
@@ -95,6 +96,7 @@ export type RenderCtx = {
 	view: ViewType;
 	turns: string[];
 	players: Record<string, PlayerData>;
+	$T: TranslationFn;
 };
 
 export type WinCtx = { type: 'win'; winner: { name: string; id: string; points: number } } | { type: 'draw' };

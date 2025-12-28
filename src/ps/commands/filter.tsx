@@ -3,7 +3,6 @@ import { abilities, items, moves, pokedex } from 'ps-client/data';
 import { ChatError } from '@/utils/chatError';
 import { toId } from '@/utils/toId';
 
-import type { ToTranslate } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { ReactElement } from 'react';
 
@@ -81,7 +80,7 @@ export const command: PSCommand[] = Object.values(filterTypes).map(({ initial, a
 		try {
 			pattern = new RegExp(basePattern, 'i');
 		} catch {
-			throw new ChatError('Invalid regular expression. Try https://regex101.com for help.' as ToTranslate);
+			throw new ChatError($T('COMMANDS.FILTER.INVALID_REGEX'));
 		}
 
 		const matchedEntries = entries

@@ -46,6 +46,7 @@ export default {
 			STASH: 'Chhupao',
 			UNSTASH: 'Waapas lao',
 			WATCH: 'Dekho',
+			DISCARD: 'Hatao',
 		},
 		SIGNUPS_OPEN: '{{game}} ke signups ab khule hain!',
 		SIGNUPS_CLOSED: '{{game}} ke signups band ho gaye.',
@@ -103,10 +104,29 @@ export default {
 		},
 		LIGHTS_OUT: {
 			INVALID_SIZE: 'Lights Out ka size sirf 2x2 se 15x15 ke beech ho sakta hai.',
+			SOLVE_MESSAGE: '{{player}} ne is board ko {{clicks}} moves mein solve kiya! (Mera solution tha {{genClicks}} moves)',
 		},
 		MASTERMIND: {
 			ENDED: '{{player}} ke liye Mastermind ka game khatam kiya gaya.',
 			FAILED: '{{player}} {{cap}} tries mein {{solution}} guess nahi kar paya.',
+			WIN_MESSAGE: '{{player}} ne {{turns}} turn mein {{solution}} guess kar liya!',
+			WIN_MESSAGE_PLURAL: '{{player}} ne {{turns}} turns mein {{solution}} guess kar liya!',
+		},
+		SNAKESLADDERS: {
+			PLAYER_NOT_FOUND: 'Purana player nahi mila',
+			ROLL_TOO_HIGH: 'Aapne {{dice}} roll kiya, lekin {{needed}} ya kam chahiye tha...',
+			ROLL_TOO_HIGH_EXACT: 'Aapne {{dice}} roll kiya, lekin exactly {{needed}} chahiye tha...',
+		},
+		BATTLESHIP: {
+			ALREADY_SET: 'Aapne apne ships pehle hi set kar diye hain!',
+			SET_FIRST: 'Pehle apne ships set karein!',
+			INVALID_RANGE: 'Galat range di gayi.',
+			NOT_IN_LINE: '{{ship}} ko {{from}} aur {{to}} ke beech nahi rakh sakte (line mein nahi)',
+			WRONG_SIZE: '{{ship}} ka size {{size}} hai lekin aapne {{given}} cells mein rakha!',
+			OUT_OF_RANGE: '{{ship}} ke liye diye gaye points range ke bahar hain!',
+			OVERLAP: '{{point}} par {{ship1}} aur {{ship2}} dono aa jayenge',
+			WAITING_FOR_OPPONENT: 'Opponent ka intezaar ho raha hai ships set karne ke liye...',
+			SET_YOUR_SHIPS: 'Apne ships set karein!',
 		},
 		SCRABBLE: {
 			NO_SELECTED: 'Pehle ek cell chuniye! Buttons ka use karein.',
@@ -124,8 +144,57 @@ export default {
 			VALID_WORD: '{{word}} {{mod}} mein ek valid shabd hai.',
 			HOW_TO_BLANK:
 				"Namaste, aapko ek blank tile mila hai! Blank tile kisi bhi akshar ke roop mein use ho sakta hai, lekin points nahi milte. Aap `BL[A]NK`, `BL(A)NK`, ya `BLA'NK` likhkar blank specify kar sakte hain.",
+			UGO_MODS_ONLY: 'UGO ke dauran sirf Pokémon aur Crazymons mods allowed hain!',
+			AUTO_MOD_APPLIED: 'Game {{id}} mein {{mod}} automatically lagu ho gaya!',
 		},
+		SPLENDOR: {
+			LABELS: {
+				BUY: 'Kharido!',
+				RESERVE: 'Reserve karo!',
+				BUY_CARD: '{{card}} kharido!',
+			},
+			INVALID_CARD: '{{card}} ek valid card nahi hai.',
+			CARD_NOT_ACCESSIBLE: '{{card}} is action ke liye accessible nahi hai.',
+			DISCARD_TOKENS_REQUIRED: 'Aapko tokens discard karne honge!',
+			CARD_NOT_AVAILABLE_RESERVE: '{{card}} reserve ke liye available nahi hai.',
+			CARD_NOT_AVAILABLE_BUY: '{{card}} kharidne ke liye available nahi hai.',
+			CANNOT_BUY_OR_RESERVE: 'Aap {{card}} na kharid sakte hain na reserve kar sakte hain.',
+			WHICH_TIER: 'Aapne konse tier par click kiya?',
+			DECK_EMPTY: 'Tier {{tier}} cards ka deck khaali hai!',
+			RESERVE_LIMIT: 'Aap ek samay mein 3 se zyada cards reserve nahi kar sakte.',
+			NO_DISCARD_NEEDED: 'Aapko abhi koi tokens discard karne ki zaroorat nahi hai.',
+			DISCARD_MORE: 'Aapko kam se kam {{required}} tokens discard karne honge! {{discarding}} kaafi nahi hai.',
+			CANNOT_DISCARD: 'Maaf kijiye, lagta hai aapke paas wo discard karne ke liye nahi hain.',
+			INSUFFICIENT_TOKENS: '{{card}} kharidne ke liye diye gaye tokens kaafi nahi hain!',
+			OVERPAYING: 'Aap zyada de rahe hain!',
+			CANNOT_RESERVE:
+				'Aap card reserve nahi kar sakte. Aap tabhi reserve kar sakte hain jab Dragon token available ho AUR aapke paas 3 se kam cards reserved hon.',
+			NO_DRAGON_RECEIVED: 'Aapne card reserve kiya, lekin koi Dragon token nahi bacha tha.',
+			NOT_RESERVED: 'Aapne {{card}} reserve nahi kiya hai!',
+			UNRECOGNIZED_ACTION: 'Pehchaan mein nahi aaya action {{action}} ({{context}})',
+			INVALID_COUNT: '{{value}} ek valid count nahi hai.',
+			UNRECOGNIZED_TYPE: '{{type}} ek pehchane gaye type nahi hai.',
+			DRAGON_NOT_ALLOWED: 'Dragon yahan valid token nahi hai.',
+			DRAGON_ONLY_BY_RESERVE: 'Dragon tokens sirf cards reserve karke mil sakte hain!',
+			TOO_MANY_TOKENS_TAKEN: 'Available se zyada tokens lene ki koshish ki gayi!{{info}}',
+			TOO_MANY_TOKENS: 'Aap itne tokens nahi le sakte!',
+			TAKE_AT_LEAST_TWO: 'Aapko kam se kam 2 tokens lene honge!',
+			TAKE_THREE_TYPES: 'Shayad aapko teen alag types se ek-ek token lena chahiye...',
+			TAKE_RULES: 'Aap sirf ek type se 2 ya teen types se ek-ek le sakte hain!',
+			TAKE_EXACTLY_TWO: 'Ek stack se lete waqt aap sirf 2 hi le sakte hain.',
+			STACK_TOO_SMALL: 'Aap 2 tokens tabhi le sakte hain jab stack mein 4 ya zyada hon. {{name}} mein sirf {{available}} the.',
+			ONE_EACH_TYPE: 'Aap teen types mein se har ek se sirf 1 token le sakte hain!{{info}}',
+			TOO_MANY_TOKENS_MESSAGE:
+				'Aapke paas bahut zyada tokens hain! Maximum {{max}} ho sakte hain; kam se kam {{discard}} discard karein.',
+		},
+		NO_DMS: 'DMs mein game nahi bana sakte!',
+		NOTIFY_CREATED: '/notifyrank all, {{game}}, {{game}} ka ek game ban gaya hai!,{{id}}signup',
+		PLAYER_JOINED: '{{player}} {{game}} ke game mein shaamil ho gaye{{turn}}{{random}}! [{{id}}]',
+		FORCEWIN_SPECIFY_ID: 'Forcewin ke liye game ID specify karna zaruri hai!',
+		SCRABBLEDEX_NO_ENTRIES: 'Abhi tak koi entries nahi hain!',
+		UGO_NOT_ACTIVE: 'UGO active nahi hai!',
 	},
+
 	COMMANDS: {
 		HELP: {
 			MESSAGE_1: 'Namaste! Main <USERNAME /> hoon, aur main aapki madad karne ki puri koshish karoonga.',
@@ -146,20 +215,93 @@ export default {
 			SUCCESS: 'Command safalta se chal gaya.',
 			ERROR: 'Command chalane mein error: {{error}}',
 		},
+
 		POINTS: {
 			ROOM_NO_POINTS: '{{room}} mein points enabled nahi hain.',
 			USER_NO_POINTS: '[[]]{{user}} ke paas is room mein koi points nahi hain.',
 			USER_POINTS: '[[]]{{user}} ke paas {{roomName}} mein {{pointsList}} hain.',
 			USER_POINTS_RANKED: '[[]]{{user}} ka rank #{{rank}} hai, jinke paas {{roomName}} mein {{pointsList}} hain.',
-			ADDED_POINTS_TO_USERS: '{{users}} ko {{pointsText}} add kiye gaye.', // 'Added {{pointsText}} to {{users}}.'
+			ADDED_POINTS_TO_USERS: '{{users}} ko {{pointsText}} add kiye gaye.',
 			HEADERS: {
 				USER: 'User',
 			},
+			SPECIFY_TYPE: 'Points type specify karein!',
+			TYPE_NOT_FOUND: '{{type}} se match karne wala points type nahi mila.',
+			HOW_MANY: 'Kitne points? {{values}}',
+			SOMETHING_WRONG: 'Kuch galat ho gaya...',
+			NONCE_NOT_PROVIDED: 'Nonce nahi diya gaya.',
+			NONCE_ALREADY_USED: '{{nonce}} ke liye pehle hi points add ho chuke hain!',
+			NONCE_INVALID: 'Galat nonce {{nonce}}.',
+			ADDED: 'Points add ho gaye!',
+			LB_RESET: 'Leaderboard reset ho gaya!',
+			TYPE_RESET: 'Sabhi users ke {{type}} 0 kar diye gaye.',
 		},
+
+		JOINPHRASES: {
+			EMPTY: 'Joinphrase khaali nahi ho sakta!',
+			TOO_LONG: 'Joinphrase {{max}} characters se lamba nahi ho sakta!',
+			NO_COMMANDS: 'Joinphrase command se shuru nahi ho sakta!',
+			NO_ROOM: 'Room nahi diya gaya!',
+			NOT_ENABLED: 'Is room mein joinphrases enabled nahi hain.',
+			ALREADY_EXISTS: '{{user}} ka {{room}} mein pehle se joinphrase hai...',
+			ADDED: 'Joinphrase add ho gaya!',
+			NOT_FOUND: '{{user}} ka {{room}} mein koi joinphrase nahi hai...',
+			DELETED: 'Joinphrase delete ho gaya.',
+			EDITED: 'Joinphrase edit ho gaya.',
+		},
+
 		QUOTES: {
+			TOO_LONG: 'Quote bahut lamba hai.',
+			PROVIDE_SEARCH: 'Search term dijiye.',
+			INVALID_PAGE: 'Galat page number.',
+			COUNT_SINGULAR: 'Is room mein {{count}} quote hai.',
+			COUNT_PLURAL: 'Is room mein {{count}} quotes hain.',
+			PROVIDE_INDEX_OR_TERM: 'Index ya search term dijiye.',
+			INVALID_INDEX: 'Galat quote index.',
+			NO_MATCH: 'Is term se koi quote nahi mila.',
+			MULTIPLE_MATCHES: 'Is term se kai quotes mile.',
+			DELETED: 'Quote delete ho gaya.',
+			PROVIDE_ROOM_COMMAND: 'Room aur command dijiye.',
+			ROOM_PREF_SET: 'Quote room preference {{room}} par set ho gayi.',
+			SPECIFY_ROOM_COMMAND: 'Room aur command specify karein.',
 			NO_QUOTES_FOUND: 'Koi quotes nahi mile.',
-			NO_QUOTES_FOUND_MATCHING: '"{{search}}" se match karne wale koi quotes nahi mile.', // 'No quotes found matching "{{search}}".'
+			NO_QUOTES_FOUND_MATCHING: '"{{search}}" se match karne wale koi quotes nahi mile.',
 		},
+
+		MODNOTE: {
+			NO_COMMON_ROOMS: 'Humare paas koi common rooms nahi hain jahan aap staff hain...',
+		},
+
+		FILTER: {
+			INVALID_REGEX: 'Galat regular expression. Madad ke liye https://regex101.com dekhein.',
+		},
+
+		KUNC: {
+			IN_PROGRESS: 'Kunc chal raha hai! Pehle khatam karein ya ``{{prefix}}kunc end`` se band karein',
+			INVALID_TIME: 'Sahi time set karein (5s - 1min)',
+			CORRECT_GUESSERS: '{{guessers}} ne sahi guess kiya! Solution: {{solution}}.',
+			NO_GUESSERS: 'Kisi ne {{solution}} time par nahi guess kiya...',
+		},
+
+		AUTH: {
+			WHO_TO_PROMOTE: 'Kisko promote karna hai?',
+			CANNOT_CHANGE_RANK: '{{users}} ka rank nahi badal sakte.',
+			USE_DEAUTH: 'Kripya deauth use karein.',
+			WHO_TO_DEMOTE: 'Kisko demote karna hai?',
+			CANNOT_DEMOTE: '{{users}} ko demote nahi kar sakte.',
+		},
+
+		NONCE: {
+			UNAVAILABLE: 'Yeh command available nahi hai (shayad kisi ne pehle le li!)',
+			DONE: 'Ho gaya!',
+		},
+
+		HUNDOS: {
+			CP_INFO: '{{name}} ka CP {{baseCP}}{{extraCP}} ho sakta hai, aur {{shinyStatus}} shiny ho sakta hai.',
+			CAN: 'yeh',
+			CANNOT: 'yeh nahi',
+		},
+
 		TIMER: {
 			NONE_RUNNING: 'Aapka koi timer nahi chal raha!',
 			ENDS_IN: 'Aapka timer {{timeLeft}}{{comment}} mein khatam hoga.',

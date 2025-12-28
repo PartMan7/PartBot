@@ -5,7 +5,6 @@ import { ChatError } from '@/utils/chatError';
 import { Username } from '@/utils/components';
 import { toId } from '@/utils/toId';
 
-import type { ToTranslate } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { Perms } from '@/types/perms';
 
@@ -77,7 +76,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 									async run({ message, arg, checkPermissions, $T }) {
 										const userList = arg.split(',');
 										const users = userList.map(toId).filter(Boolean);
-										if (!users.length) throw new ChatError('Who do you want to promote?' as ToTranslate);
+										if (!users.length) throw new ChatError($T('COMMANDS.AUTH.WHO_TO_PROMOTE'));
 										const roomConfig = PSRoomConfigs[message.target.id];
 										if (roomConfig?.auth) {
 											const authKeys = Object.keys(ranksMapping) as PromotableAuthKey[];
@@ -86,7 +85,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 												return isAlready && !checkPermissions(ranksMapping[isAlready]?.perms ?? 'admin');
 											});
 											if (cannotChangeRank.length > 0) {
-												throw new ChatError(`Cannot change rank for ${cannotChangeRank.list($T)}.` as ToTranslate);
+												throw new ChatError($T('COMMANDS.AUTH.CANNOT_CHANGE_RANK', { users: cannotChangeRank.list($T) }));
 											}
 										}
 										await updateAuth(users, rank, message.target.id);
@@ -102,8 +101,8 @@ export const command: PSCommand[] = IS_ENABLED.DB
 									help: '(Use deauth instead)',
 									syntax: 'deauth [users...]',
 									aliases: ['delete', 'yeet', 'demote'],
-									async run({ message }) {
-										message.reply('Hi can you try deauth instead' as ToTranslate);
+									async run({ message, $T }) {
+										message.reply($T('COMMANDS.AUTH.USE_DEAUTH'));
 									},
 								},
 							},
@@ -122,7 +121,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 				async run({ message, arg, checkPermissions, $T }) {
 					const userList = arg.split(',');
 					const users = userList.map(toId).filter(Boolean);
-					if (!users.length) throw new ChatError('Who do you want to promote?' as ToTranslate);
+					if (!users.length) throw new ChatError($T('COMMANDS.AUTH.WHO_TO_DEMOTE'));
 					const roomConfig = PSRoomConfigs[message.target.id];
 					if (roomConfig?.auth) {
 						const authKeys = Object.keys(ranksMapping) as PromotableAuthKey[];
@@ -131,7 +130,7 @@ export const command: PSCommand[] = IS_ENABLED.DB
 							return isAlready && !checkPermissions(ranksMapping[isAlready]?.perms ?? 'admin');
 						});
 						if (cannotChangeRank.length > 0) {
-							throw new ChatError(`Cannot demote ${cannotChangeRank.list($T)}.` as ToTranslate);
+							throw new ChatError($T('COMMANDS.AUTH.CANNOT_DEMOTE', { users: cannotChangeRank.list($T) }));
 						}
 					}
 

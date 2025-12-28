@@ -6,28 +6,28 @@ import { loadJoinphrases } from '@/ps/loaders/joinphrases';
 import { ChatError } from '@/utils/chatError';
 import { Username } from '@/utils/components';
 
-import type { NoTranslate, PSMessageTranslated, ToTranslate } from '@/i18n/types';
+import type { NoTranslate, PSMessageTranslated, TranslationFn } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 
-function validateJoinphrase(phrase: string): void {
-	if (!phrase) throw new ChatError('A joinphrase cannot be empty!' as ToTranslate);
+function validateJoinphrase(phrase: string, $T: TranslationFn): void {
+	if (!phrase) throw new ChatError($T('COMMANDS.JOINPHRASES.EMPTY'));
 	if (phrase.length > MAX_MESSAGE_LENGTH)
-		throw new ChatError(`A joinphrase cannot be longer than ${MAX_MESSAGE_LENGTH} characters!` as ToTranslate);
+		throw new ChatError($T('COMMANDS.JOINPHRASES.TOO_LONG', { max: MAX_MESSAGE_LENGTH }));
 
 	// Security checks
 	if (phrase.startsWith('!') || phrase.startsWith('/')) {
 		const VALID_COMMANDS = ['!dt', '/me'];
 		if (!VALID_COMMANDS.some(cmd => phrase.startsWith(cmd + ' '))) {
-			throw new ChatError('A joinphrase cannot start with a command!' as ToTranslate);
+			throw new ChatError($T('COMMANDS.JOINPHRASES.NO_COMMANDS'));
 		}
 	}
 }
 
-async function getRoom(message: PSMessageTranslated, arg: string): Promise<string> {
+async function getRoom(message: PSMessageTranslated, arg: string, $T: TranslationFn): Promise<string> {
 	if (message.type === 'chat') return message.target.roomid;
 	if (arg) return toRoomID(arg);
 	const reply = await message.target.waitFor(msg => msg.content.length > 0 && !!msg.parent.getRoom(toRoomID(msg.content)));
-	if (!reply) throw new ChatError('No room provided!' as ToTranslate);
+	if (!reply) throw new ChatError($T('COMMANDS.JOINPHRASES.NO_ROOM'));
 	return toRoomID(reply.content);
 }
 
@@ -72,17 +72,17 @@ export const command: PSCommand = {
 			syntax: 'CMD [user], [joinphrase]',
 			aliases: ['new', 'a', 'n'],
 			async run({ message, arg, $T, hasFeature }) {
-				if (!hasFeature('joinphrases')) throw new ChatError('Joinphrases are not enabled for this room.' as ToTranslate);
+				if (!hasFeature('joinphrases')) throw new ChatError($T('COMMANDS.JOINPHRASES.NOT_ENABLED'));
 				if (!arg) throw new ChatError($T('INVALID_ARGUMENTS'));
 				const [username, phrase] = arg.lazySplit(/\s*,\s*/, 1).map(s => s.trim());
 				if (!phrase) throw new ChatError($T('INVALID_ARGUMENTS'));
 				const targetUser = username.trim();
 				if (await getJoinphrase(targetUser, message.target.id)) {
-					throw new ChatError(`${targetUser} already has a joinphrase in ${message.target.title}...` as ToTranslate);
+					throw new ChatError($T('COMMANDS.JOINPHRASES.ALREADY_EXISTS', { user: targetUser, room: message.target.title }));
 				}
-				validateJoinphrase(phrase);
+				validateJoinphrase(phrase, $T);
 				await setJoinphrase(targetUser, message.target.id, phrase, message.author.name);
-				message.reply('Joinphrase added!' as ToTranslate);
+				message.reply($T('COMMANDS.JOINPHRASES.ADDED'));
 				loadJoinphrases();
 			},
 		},
@@ -93,12 +93,12 @@ export const command: PSCommand = {
 			flags: { allowPMs: false },
 			aliases: ['show', 'display', 'get'],
 			async run({ message, arg, $T, hasFeature }) {
-				if (!hasFeature('joinphrases')) throw new ChatError('Joinphrases are not enabled for this room.' as ToTranslate);
+				if (!hasFeature('joinphrases')) throw new ChatError($T('COMMANDS.JOINPHRASES.NOT_ENABLED'));
 				if (!arg) throw new ChatError($T('INVALID_ARGUMENTS'));
 				const targetUser = arg.trim();
 
 				const { phrase } = (await getJoinphrase(targetUser, message.target.id)) ?? {};
-				if (!phrase) throw new ChatError(`${targetUser} does not have a joinphrase in ${message.target.title}...` as ToTranslate);
+				if (!phrase) throw new ChatError($T('COMMANDS.JOINPHRASES.NOT_FOUND', { user: targetUser, room: message.target.title }));
 
 				message.privateReply(`${phrase}` as NoTranslate);
 			},
@@ -110,12 +110,12 @@ export const command: PSCommand = {
 			flags: { allowPMs: false },
 			aliases: ['del', 'remove', 'rem', 'd', 'r'],
 			async run({ message, arg, $T, hasFeature }) {
-				if (!hasFeature('joinphrases')) throw new ChatError('Joinphrases are not enabled for this room.' as ToTranslate);
+				if (!hasFeature('joinphrases')) throw new ChatError($T('COMMANDS.JOINPHRASES.NOT_ENABLED'));
 				if (!arg) throw new ChatError($T('INVALID_ARGUMENTS'));
 				const targetUser = arg.trim();
 
 				await deleteJoinphrase(targetUser, message.target.id);
-				message.reply('Joinphrase deleted.' as ToTranslate);
+				message.reply($T('COMMANDS.JOINPHRASES.DELETED'));
 				loadJoinphrases();
 			},
 		},
@@ -124,9 +124,9 @@ export const command: PSCommand = {
 			help: 'Lists all joinphrases for a given room.',
 			syntax: 'CMD [user]',
 			aliases: ['ls', 'l'],
-			async run({ message, arg, hasFeature }) {
-				if (!hasFeature('joinphrases')) throw new ChatError('Joinphrases are not enabled for this room.' as ToTranslate);
-				const targetRoom = await getRoom(message, arg);
+			async run({ message, arg, $T, hasFeature }) {
+				if (!hasFeature('joinphrases')) throw new ChatError($T('COMMANDS.JOINPHRASES.NOT_ENABLED'));
+				const targetRoom = await getRoom(message, arg, $T);
 				const joinphrases = await fetchAllJoinphrases(targetRoom);
 
 				message.replyHTML(
@@ -152,17 +152,17 @@ export const command: PSCommand = {
 			flags: { allowPMs: false },
 			aliases: ['e', 'update'],
 			async run({ message, arg, $T, hasFeature }) {
-				if (!hasFeature('joinphrases')) throw new ChatError('Joinphrases are not enabled for this room.' as ToTranslate);
+				if (!hasFeature('joinphrases')) throw new ChatError($T('COMMANDS.JOINPHRASES.NOT_ENABLED'));
 				if (!arg) throw new ChatError($T('INVALID_ARGUMENTS'));
 				const [username, phrase] = arg.lazySplit(/\s*,\s*/, 1).map(s => s.trim());
 				if (!phrase) throw new ChatError($T('INVALID_ARGUMENTS'));
 				const targetUser = username.trim();
 				if (!(await getJoinphrase(targetUser, message.target.id))) {
-					throw new ChatError(`${targetUser} does not have a joinphrase in ${message.target.title}...` as ToTranslate);
+					throw new ChatError($T('COMMANDS.JOINPHRASES.NOT_FOUND', { user: targetUser, room: message.target.title }));
 				}
-				validateJoinphrase(phrase);
+				validateJoinphrase(phrase, $T);
 				await setJoinphrase(targetUser, message.target.id, phrase, message.author.name);
-				message.reply('Joinphrase edited.' as ToTranslate);
+				message.reply($T('COMMANDS.JOINPHRASES.EDITED'));
 				loadJoinphrases();
 			},
 		},

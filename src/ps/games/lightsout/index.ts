@@ -7,7 +7,7 @@ import { isUGOActive } from '@/ps/ugo';
 import { deepClone } from '@/utils/deepClone';
 import { type Point, parsePoint, stepPoint } from '@/utils/grid';
 
-import type { ToTranslate, TranslatedText } from '@/i18n/types';
+import type { TranslatedText } from '@/i18n/types';
 import type { BaseContext } from '@/ps/games/game';
 import type { State } from '@/ps/games/lightsout/types';
 import type { EndType } from '@/ps/games/types';
@@ -94,7 +94,7 @@ export class LightsOut extends BaseGame<State> {
 		this.ended = true;
 		const player = Object.values(this.players)[0].name;
 		if (type === 'dq' || type === 'force') return this.$T('GAME.ENDED', { game: this.meta.name, id: player });
-		return `${player} solved this board in ${this.state.clicks} moves! (My solution was ${this.state.genClicks} moves)` as ToTranslate;
+		return this.$T('GAME.LIGHTS_OUT.SOLVE_MESSAGE', { player, clicks: this.state.clicks, genClicks: this.state.genClicks });
 	}
 
 	render(asPlayer: string | null): ReactElement {

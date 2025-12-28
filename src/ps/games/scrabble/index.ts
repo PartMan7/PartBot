@@ -18,7 +18,7 @@ import { checkUGO, createGrid } from '@/ps/games/utils';
 import { ChatError } from '@/utils/chatError';
 import { type Point, coincident, flipPoint, multiStepPoint, rangePoints, stepPoint } from '@/utils/grid';
 
-import type { ToTranslate, TranslatedText } from '@/i18n/types';
+import type { TranslatedText } from '@/i18n/types';
 import type { BaseContext } from '@/ps/games/game';
 import type { Log } from '@/ps/games/scrabble/logs';
 import type { BoardTile, Bonus, BonusReducer, Points, RenderCtx, State, WinCtx, Word, WordScore } from '@/ps/games/scrabble/types';
@@ -56,7 +56,7 @@ export class Scrabble extends BaseGame<State> {
 	applyMod(mod: ScrabbleMods): ActionResponse<TranslatedText> {
 		// UGO-CODE
 		if (checkUGO(this) && ![ScrabbleMods.POKEMON, ScrabbleMods.CRAZYMONS].includes(mod))
-			return { success: false, error: 'The only mods allowed during UGO are Pokémon and Crazymons!' as ToTranslate };
+			return { success: false, error: this.$T('GAME.SCRABBLE.UGO_MODS_ONLY') };
 		this.mod = mod;
 		this.points = ScrabbleModData[mod].points ?? LETTER_POINTS;
 		return { success: true, data: this.$T('GAME.APPLIED_MOD', { mod: ScrabbleModData[mod].name, id: this.id }) };
@@ -68,7 +68,7 @@ export class Scrabble extends BaseGame<State> {
 			const defaultMod = ScrabbleMods.POKEMON;
 			const applyMons = this.applyMod(defaultMod);
 			if (!applyMons.success) throw new Error(applyMons.error);
-			this.room.send(`Game ${this.id} had ${ScrabbleModData[defaultMod].name} applied automatically!` as ToTranslate);
+			this.room.send(this.$T('GAME.SCRABBLE.AUTO_MOD_APPLIED', { id: this.id, mod: ScrabbleModData[defaultMod].name }));
 		}
 		this.state.baseBoard = BaseBoard;
 		this.state.board = createGrid<BoardTile | null>(BaseBoard.length, BaseBoard[0].length, () => null);

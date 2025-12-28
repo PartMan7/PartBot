@@ -4,7 +4,6 @@ import { getCP } from '@/utils/pokemonGo';
 import { queryMon } from '@/utils/queryMon';
 
 import type { PokemonGO } from '@/cache/pokemonGo';
-import type { ToTranslate } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 
 export const command: PSCommand = {
@@ -37,7 +36,12 @@ export const command: PSCommand = {
 			? ` (${getCP(mon.baseStats, levels[1], ivRange[0])}-${getCP(mon.baseStats, levels[1], ivRange[1])} at Lv${levels[1]})`
 			: null;
 		broadcast(
-			`${mon.name} can have a CP of ${baseLevelCP}${extraLevelCP ?? ''}, and ${mon.shiny ? 'can' : 'cannot'} be shiny.` as ToTranslate
+			$T('COMMANDS.HUNDOS.CP_INFO', {
+				name: mon.name,
+				baseCP: baseLevelCP,
+				extraCP: extraLevelCP ?? '',
+				shinyStatus: $T(mon.shiny ? 'COMMANDS.HUNDOS.CAN' : 'COMMANDS.HUNDOS.CANNOT'),
+			})
 		);
 	},
 };

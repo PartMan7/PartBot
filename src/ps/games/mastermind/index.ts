@@ -4,7 +4,7 @@ import { BaseGame } from '@/ps/games/game';
 import { render, renderCloseSignups } from '@/ps/games/mastermind/render';
 import { sample } from '@/utils/random';
 
-import type { ToTranslate, TranslatedText } from '@/i18n/types';
+import type { TranslatedText } from '@/i18n/types';
 import type { BaseContext } from '@/ps/games/game';
 import type { Guess, GuessResult, State } from '@/ps/games/mastermind/types';
 import type { EndType } from '@/ps/games/types';
@@ -92,7 +92,11 @@ export class Mastermind extends BaseGame<State> {
 		if (type === 'loss')
 			return this.$T('GAME.MASTERMIND.FAILED', { player, solution: this.state.solution.join(''), cap: this.state.cap });
 		const guesses = this.state.board.length;
-		return `${player} guessed ${this.state.solution.join('')} in ${guesses} turn${guesses === 1 ? '' : 's'}!` as ToTranslate;
+		return this.$T(guesses === 1 ? 'GAME.MASTERMIND.WIN_MESSAGE' : 'GAME.MASTERMIND.WIN_MESSAGE_PLURAL', {
+			player,
+			solution: this.state.solution.join(''),
+			turns: guesses,
+		});
 	}
 
 	render(asPlayer: string | null): ReactElement {

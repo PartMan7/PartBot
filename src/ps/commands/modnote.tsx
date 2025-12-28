@@ -5,7 +5,6 @@ import { ChatError } from '@/utils/chatError';
 import { Button, Form } from '@/utils/components/ps';
 import { toId } from '@/utils/toId';
 
-import type { ToTranslate } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 
 function isStaff(userString: string): boolean {
@@ -89,12 +88,12 @@ export const command: PSCommand = {
 			},
 		},
 	},
-	async run({ arg, message, run }) {
+	async run({ arg, message, run, $T }) {
 		if (!arg) {
 			const rooms = [
 				...message.parent.rooms.values().filter(room => room.users.find(user => toId(user) === message.author.id && isStaff(user))),
 			];
-			if (!rooms.length) throw new ChatError("We don't have any common rooms where you're staff..." as ToTranslate);
+			if (!rooms.length) throw new ChatError($T('COMMANDS.MODNOTE.NO_COMMON_ROOMS'));
 			if (rooms.length === 1) return run(`modnote open ${rooms[0].id}`);
 
 			message.author.sendHTML(

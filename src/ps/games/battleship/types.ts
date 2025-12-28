@@ -1,3 +1,4 @@
+import type { TranslationFn } from '@/i18n/types';
 import type { ShipType } from '@/ps/games/battleship/constants';
 import type { Player } from '@/ps/games/types';
 
@@ -7,13 +8,14 @@ export type ShipBoard = (ShipType | null)[][];
 export type AttackBoard = (ShipType | false | null)[][];
 export type Boards = { ships: Record<Turn, ShipBoard>; attacks: Record<Turn, AttackBoard> };
 
-export type SelectionInProgressState = { type: 'valid'; board: ShipBoard; input: string[] };
-export type SelectionErrorState = { type: 'invalid'; input: string[]; message: string };
+export type SelectionInProgressState = { type: 'valid'; board: ShipBoard; input: string[]; $T: TranslationFn };
+export type SelectionErrorState = { type: 'invalid'; input: string[]; message: string; $T: TranslationFn };
+export type NotSetSelectionState = { type: 'not-set'; $T: TranslationFn };
 
 export type State = {
 	turn: Turn;
 	// object only when previewing ships but not ready yet
-	ready: Record<Turn, boolean | SelectionInProgressState | SelectionErrorState>;
+	ready: Record<Turn, boolean | SelectionInProgressState | SelectionErrorState | NotSetSelectionState>;
 	allReady?: boolean;
 	board: Boards;
 };

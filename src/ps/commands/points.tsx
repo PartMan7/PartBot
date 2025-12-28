@@ -19,7 +19,7 @@ import { Logger } from '@/utils/logger';
 import { pluralize } from '@/utils/pluralize';
 import { toId } from '@/utils/toId';
 
-import type { ToTranslate, TranslatedText } from '@/i18n/types';
+import type { TranslatedText } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { PSPointsType, PSRoomConfig } from '@/types/ps';
 import type { CSSProperties, ReactElement } from 'react';
@@ -110,13 +110,13 @@ export const command: PSCommand[] = [
 			const args = arg.split(',').map(term => term.trim());
 			// If command is not explicitly 'add' or 'remove', use the first declared points type
 			const pointsTypeInput = ['add', 'remove'].includes(originalCommand.join('.')) ? args.shift() : roomConfig.points.priority[0];
-			if (!pointsTypeInput) throw new ChatError('Specify a points type!' as ToTranslate);
+			if (!pointsTypeInput) throw new ChatError($T('COMMANDS.POINTS.SPECIFY_TYPE'));
 
 			const pointsTypes = getPointsType(pointsTypeInput, roomConfig.points);
-			if (!pointsTypes) throw new ChatError(`Couldn't find a points type matching ${pointsTypeInput}.` as ToTranslate);
+			if (!pointsTypes) throw new ChatError($T('COMMANDS.POINTS.TYPE_NOT_FOUND', { type: pointsTypeInput }));
 
 			const numVals = args.filter(arg => NUM_PATTERN.test(arg));
-			if (numVals.length > 1) throw new ChatError(`How many points? ${numVals.join('/')}` as ToTranslate);
+			if (numVals.length > 1) throw new ChatError($T('COMMANDS.POINTS.HOW_MANY', { values: numVals.join('/') }));
 			const pointsAmount = (originalCommand.join('.').includes('remove') ? -1 : 1) * parseInt(numVals[0] ?? '1');
 			if (Math.abs(pointsAmount) > 1e6) throw new ChatError($T('SCREW_YOU'));
 
@@ -130,7 +130,7 @@ export const command: PSCommand[] = [
 				})
 			);
 			const res = await bulkAddPoints(pointsData, message.target.id);
-			if (!res) throw new ChatError('Something went wrong...' as ToTranslate);
+			if (!res) throw new ChatError($T('COMMANDS.POINTS.SOMETHING_WRONG'));
 
 			const pluralData = {
 				singular: pointsTypes.map(pointsType => pointsType.singular).join('/'),
@@ -159,11 +159,11 @@ export const command: PSCommand[] = [
 			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS', { room: message.target.title }));
 
 			const nonce = arg.trim();
-			if (!nonce) throw new ChatError('Nonce not provided.' as ToTranslate);
+			if (!nonce) throw new ChatError($T('COMMANDS.POINTS.NONCE_NOT_PROVIDED'));
 			const data = PSPointsNonce[nonce];
 
-			if (data === null) throw new ChatError(`Already added points for ${nonce}!` as ToTranslate);
-			if (!data) throw new ChatError(`Invalid nonce ${nonce}.` as ToTranslate);
+			if (data === null) throw new ChatError($T('COMMANDS.POINTS.NONCE_ALREADY_USED', { nonce }));
+			if (!data) throw new ChatError($T('COMMANDS.POINTS.NONCE_INVALID', { nonce }));
 
 			const pointsData: BulkPointsDataInput = Object.fromEntries(
 				Object.entries(data).map(([name, points]) => {
@@ -179,7 +179,7 @@ export const command: PSCommand[] = [
 				PSPointsNonce[nonce] = data;
 				throw err;
 			}
-			broadcast('Added points!' as ToTranslate);
+			broadcast($T('COMMANDS.POINTS.ADDED'));
 		},
 	},
 	{
@@ -316,7 +316,7 @@ export const command: PSCommand[] = [
 			if (!roomConfig?.points) throw new ChatError($T('COMMANDS.POINTS.ROOM_NO_POINTS', { room: message.target.title }));
 			const roomPoints = roomConfig.points;
 			const pointsToReset = !arg || toId(arg) === 'all' ? true : getPointsType(arg, roomPoints);
-			if (!pointsToReset) throw new ChatError(`Couldn't find a points type matching ${arg}.` as ToTranslate);
+			if (!pointsToReset) throw new ChatError($T('COMMANDS.POINTS.TYPE_NOT_FOUND', { type: arg }));
 
 			message.privateReply($T('CONFIRM'));
 			await message.target
@@ -333,8 +333,8 @@ export const command: PSCommand[] = [
 			}
 
 			await resetPoints(message.target.id, typeof pointsToReset === 'boolean' ? pointsToReset : pointsToReset[0].id);
-			if (pointsToReset === true) return message.reply('Leaderboard has been reset!' as ToTranslate);
-			message.reply(`Reset all users' ${pointsToReset[0].plural} to 0.` as ToTranslate);
+			if (pointsToReset === true) return message.reply($T('COMMANDS.POINTS.LB_RESET'));
+			message.reply($T('COMMANDS.POINTS.TYPE_RESET', { type: pointsToReset[0].plural }));
 			run('leaderboard');
 		},
 	},

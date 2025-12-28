@@ -6,12 +6,12 @@ import { Button, Form } from '@/utils/components/ps';
 import { pointToA1 } from '@/utils/grid';
 import { Logger } from '@/utils/logger';
 
-import type { ToTranslate } from '@/i18n/types';
 import type { ShipType } from '@/ps/games/battleship/constants';
 import type { Battleship } from '@/ps/games/battleship/index';
 import type { Log } from '@/ps/games/battleship/logs';
 import type {
 	AttackBoard,
+	NotSetSelectionState,
 	RenderCtx,
 	SelectionErrorState,
 	SelectionInProgressState,
@@ -153,17 +153,18 @@ function ShipInput({ msg, filled }: { msg: string; filled?: string[] | null }): 
 
 export function renderSelection(
 	this: { msg: string },
-	ctx?: SelectionInProgressState | SelectionErrorState | null,
+	ctx: SelectionInProgressState | SelectionErrorState | NotSetSelectionState,
 	locked?: boolean
 ): ReactElement {
-	const input = ctx?.type ? ctx.input : null;
-	const error = ctx?.type === 'invalid' ? ctx?.message : null;
+	const { $T } = ctx;
+	const input = ctx.type !== 'not-set' ? ctx.input : null;
+	const error = ctx.type === 'invalid' ? ctx.message : null;
 
 	return (
 		<center>
 			<div>
 				<h1 style={locked ? { color: 'gray' } : {}}>
-					{locked ? ('Waiting for opponent to set their ships...' as ToTranslate) : ('Set your ships!' as ToTranslate)}
+					{locked ? $T('GAME.BATTLESHIP.WAITING_FOR_OPPONENT') : $T('GAME.BATTLESHIP.SET_YOUR_SHIPS')}
 				</h1>
 				<ShipGrid boards={ctx?.type === 'valid' ? { defense: EMPTY_BOARD, ships: ctx.board } : EMPTY_BOARD} />
 				{error ? <h3>{error}</h3> : null}

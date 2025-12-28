@@ -14,7 +14,7 @@ import { render, renderLog } from '@/ps/games/splendor/render';
 import { ChatError } from '@/utils/chatError';
 import { toId } from '@/utils/toId';
 
-import type { ToTranslate, TranslatedText } from '@/i18n/types';
+import type { TranslatedText } from '@/i18n/types';
 import type { BaseContext } from '@/ps/games/game';
 import type { Log } from '@/ps/games/splendor/logs';
 import type { Card, PlayerData, RenderCtx, State, TokenCount, Turn, ViewType, WinCtx } from '@/ps/games/splendor/types';
@@ -130,12 +130,12 @@ export class Splendor extends BaseGame<State> {
 
 	findWildCard(ctx: string): ActionResponse<Card> {
 		const card = this.lookupCard(ctx);
-		if (!card) return { success: false, error: `${ctx} is not a valid card.` as ToTranslate };
+		if (!card) return { success: false, error: this.$T('GAME.SPLENDOR.INVALID_CARD', { card: ctx }) };
 		const foundCard = Object.values(this.state.board.cards)
 			.flatMap(cards => cards.wild)
 			.find(wildCard => wildCard.id === card.id);
 
-		if (!foundCard) return { success: false, error: `Cannot access ${card.name} for the desired action.` as ToTranslate };
+		if (!foundCard) return { success: false, error: this.$T('GAME.SPLENDOR.CARD_NOT_ACCESSIBLE', { card: card.name }) };
 		return { success: true, data: foundCard };
 	}
 
@@ -168,7 +168,7 @@ export class Splendor extends BaseGame<State> {
 		const [action, actionCtx] = ctx.lazySplit(' ', 1);
 
 		if (this.state.actionState.action === VIEW_ACTION_TYPE.TOO_MANY_TOKENS && action !== VIEW_ACTION_TYPE.TOO_MANY_TOKENS)
-			throw new ChatError('You need to discard tokens!' as ToTranslate);
+			throw new ChatError(this.$T('GAME.SPLENDOR.DISCARD_TOKENS_REQUIRED'));
 
 		let logEntry: Log;
 		// VIEW_ACTION_TYPES update the user's state while staying on the same turn. Use 'return'.
@@ -182,7 +182,7 @@ export class Splendor extends BaseGame<State> {
 			}
 			case VIEW_ACTION_TYPE.CLICK_RESERVE: {
 				const card = this.lookupCard(actionCtx);
-				if (!card) throw new ChatError(`${actionCtx} is not available to reserve.` as ToTranslate);
+				if (!card) throw new ChatError(this.$T('GAME.SPLENDOR.CARD_NOT_AVAILABLE_RESERVE', { card: actionCtx }));
 
 				const canAfford = this.canAfford(card.cost, playerData.tokens, playerData.cards);
 
@@ -196,14 +196,14 @@ export class Splendor extends BaseGame<State> {
 			}
 			case VIEW_ACTION_TYPE.CLICK_WILD: {
 				const lookupCard = this.findWildCard(actionCtx);
-				if (!lookupCard.success) throw new ChatError(`${actionCtx} is not available to buy.` as ToTranslate);
+				if (!lookupCard.success) throw new ChatError(this.$T('GAME.SPLENDOR.CARD_NOT_AVAILABLE_BUY', { card: actionCtx }));
 
 				const card = lookupCard.data;
 
 				const canBuy = this.canAfford(card.cost, playerData.tokens, playerData.cards);
 				const canReserve = this.canReserve(player);
 
-				if (!canBuy && !canReserve) throw new ChatError(`You can neither buy nor reserve ${card.name}.` as ToTranslate);
+				if (!canBuy && !canReserve) throw new ChatError(this.$T('GAME.SPLENDOR.CANNOT_BUY_OR_RESERVE', { card: card.name }));
 				this.state.actionState = {
 					action: VIEW_ACTION_TYPE.CLICK_WILD,
 					id: card.id,
@@ -214,13 +214,13 @@ export class Splendor extends BaseGame<State> {
 				return;
 			}
 			case VIEW_ACTION_TYPE.CLICK_DECK: {
-				if (!['1', '2', '3'].includes(actionCtx)) throw new ChatError('Which tier did you click on?' as ToTranslate);
+				if (!['1', '2', '3'].includes(actionCtx)) throw new ChatError(this.$T('GAME.SPLENDOR.WHICH_TIER'));
 				const tier = +actionCtx as 1 | 2 | 3;
 				if (this.state.board.cards[tier].deck.length === 0)
-					throw new ChatError(`The deck for tier ${tier} cards is empty!` as ToTranslate);
+					throw new ChatError(this.$T('GAME.SPLENDOR.DECK_EMPTY', { tier }));
 
 				const canReserve = this.canReserve(player);
-				if (!canReserve) throw new ChatError('You cannot reserve more than 3 cards at a time.' as ToTranslate);
+				if (!canReserve) throw new ChatError(this.$T('GAME.SPLENDOR.RESERVE_LIMIT'));
 
 				this.state.actionState = { action: VIEW_ACTION_TYPE.CLICK_DECK, tier };
 				this.update(user.id);
@@ -229,15 +229,15 @@ export class Splendor extends BaseGame<State> {
 
 			case VIEW_ACTION_TYPE.TOO_MANY_TOKENS: {
 				if (this.state.actionState.action !== VIEW_ACTION_TYPE.TOO_MANY_TOKENS)
-					throw new ChatError("You don't need to discard any tokens yet." as ToTranslate);
+					throw new ChatError(this.$T('GAME.SPLENDOR.NO_DISCARD_NEEDED'));
 				const toDiscard = this.state.actionState.discard;
 				const tokens = this.parseTokens(actionCtx, true);
 				const discarding = Object.values(tokens).sum();
 
 				if (discarding < toDiscard)
-					throw new ChatError(`You must discard at least ${toDiscard} tokens! ${discarding} isn't enough.` as ToTranslate);
+					throw new ChatError(this.$T('GAME.SPLENDOR.DISCARD_MORE', { required: toDiscard, discarding }));
 				if (!this.canAfford(tokens, playerData.tokens, null, false))
-					throw new ChatError("Unfortunately it doesn't look like you don't have those to discard." as ToTranslate);
+					throw new ChatError(this.$T('GAME.SPLENDOR.CANNOT_DISCARD'));
 
 				this.spendTokens(tokens, playerData);
 				logEntry = { turn: player.turn, time: new Date(), action: VIEW_ACTION_TYPE.TOO_MANY_TOKENS, ctx: { discard: tokens } };
@@ -252,10 +252,10 @@ export class Splendor extends BaseGame<State> {
 
 				const paying = this.parseTokens(tokenInfo, true);
 				const canAfford = this.canAfford(card.cost, paying, playerData.cards);
-				if (!canAfford) throw new ChatError(`The given tokens are insufficient to purchase ${card.name}!` as ToTranslate);
+				if (!canAfford) throw new ChatError(this.$T('GAME.SPLENDOR.INSUFFICIENT_TOKENS', { card: card.name }));
 
 				if (Object.values(paying).sum() !== Object.values(canAfford.recommendation).sum())
-					throw new ChatError(`You're overpaying!` as ToTranslate);
+					throw new ChatError(this.$T('GAME.SPLENDOR.OVERPAYING'));
 
 				playerData.cards.push(card);
 
@@ -271,10 +271,7 @@ export class Splendor extends BaseGame<State> {
 
 			case ACTIONS.RESERVE: {
 				if (!this.canReserve(player)) {
-					throw new ChatError(
-						('You cannot reserve a card.' +
-							'You may only reserve a card if a Dragon token is available AND you have less than three cards currently reserved.') as ToTranslate
-					);
+					throw new ChatError(this.$T('GAME.SPLENDOR.CANNOT_RESERVE'));
 				}
 
 				const deckReserve = ['1', '2', '3'].includes(actionCtx) ? +actionCtx : null;
@@ -282,7 +279,7 @@ export class Splendor extends BaseGame<State> {
 				if (deckReserve) {
 					const tier = deckReserve as 1 | 2 | 3;
 					if (this.state.board.cards[tier].deck.length === 0)
-						throw new ChatError(`The deck for tier ${tier} cards is empty!` as ToTranslate);
+						throw new ChatError(this.$T('GAME.SPLENDOR.DECK_EMPTY', { tier }));
 
 					const [card] = this.state.board.cards[tier].deck.splice(0, 1);
 					playerData.reserved.push(card);
@@ -305,7 +302,7 @@ export class Splendor extends BaseGame<State> {
 
 				const willReceiveDragon = this.state.board.tokens[TOKEN_TYPE.DRAGON] > 0;
 				if (willReceiveDragon) this.receiveTokens({ [TOKEN_TYPE.DRAGON]: 1 }, playerData);
-				else this.room.privateSend(player.id, 'You reserved a card, but there were no Dragon tokens left to receive.' as ToTranslate);
+				else this.room.privateSend(player.id, this.$T('GAME.SPLENDOR.NO_DRAGON_RECEIVED'));
 
 				logEntry = {
 					turn: player.turn,
@@ -319,13 +316,13 @@ export class Splendor extends BaseGame<State> {
 			case ACTIONS.BUY_RESERVE: {
 				const [mon, tokenInfo = ''] = actionCtx.lazySplit(' ', 1);
 				const baseCard = this.lookupCard(mon);
-				if (!baseCard) throw new ChatError(`${mon} is not a valid card!` as ToTranslate);
+				if (!baseCard) throw new ChatError(this.$T('GAME.SPLENDOR.INVALID_CARD', { card: mon }));
 				const reservedCard = playerData.reserved.find(card => card.id === baseCard.id);
-				if (!reservedCard) throw new ChatError(`You have not reserved ${baseCard.name}!` as ToTranslate);
+				if (!reservedCard) throw new ChatError(this.$T('GAME.SPLENDOR.NOT_RESERVED', { card: baseCard.name }));
 
 				const paying = this.parseTokens(tokenInfo, true);
 				if (!this.canAfford(reservedCard.cost, paying, playerData.cards))
-					throw new ChatError(`The given tokens are insufficient to purchase ${reservedCard.name}!` as ToTranslate);
+					throw new ChatError(this.$T('GAME.SPLENDOR.INSUFFICIENT_TOKENS', { card: reservedCard.name }));
 
 				this.spendTokens(paying, playerData);
 				playerData.reserved.remove(reservedCard);
@@ -351,7 +348,7 @@ export class Splendor extends BaseGame<State> {
 			}
 
 			default: {
-				throw new ChatError(`Unrecognized action ${action} (${actionCtx})` as ToTranslate);
+				throw new ChatError(this.$T('GAME.SPLENDOR.UNRECOGNIZED_ACTION', { action, context: actionCtx }));
 			}
 		}
 
@@ -422,10 +419,10 @@ export class Splendor extends BaseGame<State> {
 		input.split(/ /i).forEach(entry => {
 			const type = entry.replace(/[^a-z]/gi, '').toLowerCase() as TOKEN_TYPE;
 			const amt = +(entry.match(/\d/) ?? '0');
-			if (!(amt >= 0 && amt < 10)) throw new ChatError(`${entry.substring(1)} is not a valid count.` as ToTranslate);
-			if (!AllTokenTypes.includes(type)) throw new ChatError(`${type} is not a recognized type.` as ToTranslate);
+			if (!(amt >= 0 && amt < 10)) throw new ChatError(this.$T('GAME.SPLENDOR.INVALID_COUNT', { value: entry.substring(1) }));
+			if (!AllTokenTypes.includes(type)) throw new ChatError(this.$T('GAME.SPLENDOR.UNRECOGNIZED_TYPE', { type }));
 			if (type === TOKEN_TYPE.DRAGON && !allowDragon)
-				throw new ChatError("Dragon isn't allowed as a valid token here." as ToTranslate);
+				throw new ChatError(this.$T('GAME.SPLENDOR.DRAGON_NOT_ALLOWED'));
 			tokens[type] += amt;
 		});
 		return tokens;
@@ -437,39 +434,39 @@ export class Splendor extends BaseGame<State> {
 		});
 
 		if (tokens[TOKEN_TYPE.DRAGON])
-			return { success: false, error: 'You may only obtain Dragon tokens by reserving cards!' as ToTranslate };
+			return { success: false, error: this.$T('GAME.SPLENDOR.DRAGON_ONLY_BY_RESERVE') };
 
 		const tooMany = input.filter(({ count, available }) => count > available);
 		if (tooMany.length > 0) {
 			const extraInfo = ` (${tooMany.map(({ count, available, name }) => `${count} from ${name} (${available})`).list(this.$T)})`;
 			return {
 				success: false,
-				error: `Tried to take more tokens than available!${extraInfo}` as ToTranslate,
+				error: this.$T('GAME.SPLENDOR.TOO_MANY_TOKENS_TAKEN', { info: extraInfo }),
 			};
 		}
 
-		if (input.length > 3) return { success: false, error: "You can't take that many tokens!" as ToTranslate };
-		if (input.length === 0) return { success: false, error: 'You must take at least 2 tokens!' as ToTranslate };
+		if (input.length > 3) return { success: false, error: this.$T('GAME.SPLENDOR.TOO_MANY_TOKENS') };
+		if (input.length === 0) return { success: false, error: this.$T('GAME.SPLENDOR.TAKE_AT_LEAST_TWO') };
 		if (input.length < 3 && input.every(({ count }) => count === 1)) {
 			// Support people taking one-of-a-kind for _less_ than 3
 			// Mainly matters when either the bank doesn't have enough types or the player can't take 3 more
 			const typesInBank = TokenTypes.filter(tokenType => this.state.board.tokens[tokenType] > 0);
 			const playerTokens = Object.values(this.state.playerData[this.turn!].tokens).sum();
 			if (!(typesInBank.length < 3 || playerTokens + 3 > MAX_TOKEN_COUNT))
-				return { success: false, error: 'You should probably be taking one token of three different types...' as ToTranslate };
+				return { success: false, error: this.$T('GAME.SPLENDOR.TAKE_THREE_TYPES') };
 			return { success: true, data: null };
 		}
 		if (input.length === 2) {
-			return { success: false, error: 'You can only take 2 from 1 type or 1 each from 3 types!' as ToTranslate };
+			return { success: false, error: this.$T('GAME.SPLENDOR.TAKE_RULES') };
 		}
 
 		if (input.length === 1) {
 			const { count, name, available } = input[0];
-			if (count !== 2) return { success: false, error: 'When taking from one stack you can only take exactly 2.' as ToTranslate };
+			if (count !== 2) return { success: false, error: this.$T('GAME.SPLENDOR.TAKE_EXACTLY_TWO') };
 			if (available < 4)
 				return {
 					success: false,
-					error: `You can only take 2 tokens if the stack has 4 or more. ${name} only had ${available}.` as ToTranslate,
+					error: this.$T('GAME.SPLENDOR.STACK_TOO_SMALL', { name, available }),
 				};
 		}
 
@@ -479,7 +476,7 @@ export class Splendor extends BaseGame<State> {
 				const extraInfo = ` Tried to take ${moreThanOne.map(({ count, name }) => `${count} from ${name}`).list(this.$T)}`;
 				return {
 					success: false,
-					error: `You can only take 1 token from each of the 3 types!${extraInfo}` as ToTranslate,
+					error: this.$T('GAME.SPLENDOR.ONE_EACH_TYPE', { info: extraInfo }),
 				};
 			}
 		}
@@ -516,7 +513,7 @@ export class Splendor extends BaseGame<State> {
 			else view = { type: 'player', active: false, self: side };
 		} else view = { type: 'spectator', active: false, action: this.winCtx ? VIEW_ACTION_TYPE.GAME_END : null };
 
-		const ctx: RenderCtx = { id: this.id, board: this.state.board, players: this.state.playerData, turns: this.turns, view };
+		const ctx: RenderCtx = { id: this.id, board: this.state.board, players: this.state.playerData, turns: this.turns, view, $T: this.$T };
 
 		if (this.winCtx) {
 			ctx.header = this.$T('GAME.GAME_ENDED');

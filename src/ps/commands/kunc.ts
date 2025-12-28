@@ -10,7 +10,7 @@ import { DeferredPromise } from '@/utils/deferredPromise';
 import { fromHumanTime } from '@/utils/humanTime';
 import { levenshtein } from '@/utils/levenshtein';
 
-import type { NoTranslate, ToTranslate } from '@/i18n/types';
+import type { NoTranslate } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { User } from 'ps-client';
 
@@ -25,11 +25,11 @@ export const command: PSCommand = {
 	async run({ message, arg, $T }): Promise<User[] | null> {
 		const id = message.type === 'chat' ? message.target.id : `pm-${message.author.id}`;
 		if (PSKuncInProgress[id]) {
-			throw new ChatError(`Kunc in progress! Finish it first or end with \`\`${prefix}kunc end\`\`` as ToTranslate);
+			throw new ChatError($T('COMMANDS.KUNC.IN_PROGRESS', { prefix }));
 		}
 		const time = arg.trim() ? fromHumanTime(arg) : fromHumanTime('30 sec');
 		if (!time || time < fromHumanTime('5 sec') || time > fromHumanTime('1 min')) {
-			throw new ChatError('Set a reasonable time please (5s - 1min)' as ToTranslate);
+			throw new ChatError($T('COMMANDS.KUNC.INVALID_TIME'));
 		}
 
 		const kuncData = ShowdownData[ShowdownDataKeys.RandomSetsGen9];
@@ -73,10 +73,12 @@ export const command: PSCommand = {
 
 				if (solved.length > 0) {
 					const guessers = solved.map(user => user.name).list($T);
-					message.reply(`${guessers} guessed correctly! Solution: ${matchingNames.list($T('GRAMMAR.OR'))}.` as ToTranslate);
+					message.reply(
+						$T('COMMANDS.KUNC.CORRECT_GUESSERS', { guessers, solution: matchingNames.list($T('GRAMMAR.OR')) })
+					);
 					return solved;
 				} else {
-					message.reply(`No one guessed ${matchingNames.list($T('GRAMMAR.OR'))} in time...` as ToTranslate);
+					message.reply($T('COMMANDS.KUNC.NO_GUESSERS', { solution: matchingNames.list($T('GRAMMAR.OR')) }));
 					return null;
 				}
 			}

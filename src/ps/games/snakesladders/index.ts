@@ -8,7 +8,7 @@ import { colorSampler } from '@/utils/colorSampler';
 import { sample } from '@/utils/random';
 import { range } from '@/utils/range';
 
-import type { ToTranslate, TranslatedText } from '@/i18n/types';
+import type { TranslatedText } from '@/i18n/types';
 import type { BaseContext } from '@/ps/games/game';
 import type { Log } from '@/ps/games/snakesladders/logs';
 import type { RenderCtx, State, WinCtx } from '@/ps/games/snakesladders/types';
@@ -69,7 +69,7 @@ export class SnakesLadders extends BaseGame<State> {
 
 	onReplacePlayer(turn: string, withPlayer: User): ActionResponse {
 		const oldBoardPlayer = this.state.board[turn];
-		if (!oldBoardPlayer) return { success: false, error: 'Could not find old player' as ToTranslate };
+		if (!oldBoardPlayer) return { success: false, error: this.$T('GAME.SNAKESLADDERS.PLAYER_NOT_FOUND') };
 		delete this.state.board[turn];
 		this.state.board[withPlayer.id] = { ...oldBoardPlayer, name: withPlayer.name };
 		return { success: true, data: null };
@@ -87,9 +87,13 @@ export class SnakesLadders extends BaseGame<State> {
 		const dice = 1 + sample(6, this.prng);
 		this.state.lastRoll = dice;
 		if (current + dice > 100) {
+			const needed = 100 - current;
 			this.room.privateSend(
 				player,
-				`You rolled a ${dice}, but needed a ${100 - current}${100 - current === 1 ? '' : ' or lower'}...` as ToTranslate
+				this.$T(needed === 1 ? 'GAME.SNAKESLADDERS.ROLL_TOO_HIGH_EXACT' : 'GAME.SNAKESLADDERS.ROLL_TOO_HIGH', {
+					dice,
+					needed,
+				})
 			);
 			this.endTurn();
 			return;

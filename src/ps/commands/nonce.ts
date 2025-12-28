@@ -2,7 +2,7 @@ import { PSNonces } from '@/cache';
 import { ChatError } from '@/utils/chatError';
 import { randomString } from '@/utils/random';
 
-import type { ToTranslate, TranslatedText } from '@/i18n/types';
+import type { TranslatedText } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { Perms } from '@/types/perms';
 
@@ -22,7 +22,7 @@ export const command: PSCommand = {
 	async run({ arg, message, checkPermissions, $T }) {
 		const nonce = arg.trim();
 		if (nonce === 'constructor') throw new ChatError($T('SCREW_YOU'));
-		if (!(nonce in PSNonces)) throw new ChatError('This command is unavailable (you were possibly sniped!)' as ToTranslate);
+		if (!(nonce in PSNonces)) throw new ChatError($T('COMMANDS.NONCE.UNAVAILABLE'));
 
 		const event = PSNonces[nonce]!;
 		if (!checkPermissions(event.perms ?? 'regular')) throw new ChatError($T('ACCESS_DENIED'));
@@ -30,7 +30,7 @@ export const command: PSCommand = {
 		delete PSNonces[nonce];
 		try {
 			const res = event.callback();
-			message.privateReply(res ?? ('Done!' as ToTranslate));
+			message.privateReply(res ?? $T('COMMANDS.NONCE.DONE'));
 		} catch (err) {
 			PSNonces[nonce] = event;
 			throw err;

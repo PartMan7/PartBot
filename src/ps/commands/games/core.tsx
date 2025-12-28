@@ -8,7 +8,7 @@ import { fromHumanTime, toHumanTime } from '@/utils/humanTime';
 import { Timer } from '@/utils/timer';
 import { toId } from '@/utils/toId';
 
-import type { NoTranslate, ToTranslate, TranslationFn } from '@/i18n/types';
+import type { NoTranslate, TranslationFn } from '@/i18n/types';
 import type { CommonGame } from '@/ps/games/game';
 import type { BaseModEntry } from '@/ps/games/mods';
 import type { PSCommand, PSCommandChild } from '@/types/chat';
@@ -162,7 +162,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				syntax: 'CMD [mods?]',
 				perms: Game.meta.players === 'single' ? 'regular' : Symbol.for('games.create'),
 				async run({ message, args, $T }) {
-					if (message.type === 'pm') throw new ChatError("Can't create a game in DMs!" as ToTranslate);
+					if (message.type === 'pm') throw new ChatError($T('GAME.NO_DMS'));
 					if (Game.meta.players === 'single') {
 						if (Object.values(PSGames[gameId] ?? {}).find(game => message.author.id in game.players)) {
 							throw new ChatError($T('GAME.ALREADY_JOINED'));
@@ -173,7 +173,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T, args, by: message.author });
 					if (game.meta.players === 'many') {
 						message.reply(
-							`/notifyrank all, ${Game.meta.name}, A game of ${Game.meta.name} has been created!,${gameId}signup` as ToTranslate
+							$T('GAME.NOTIFY_CREATED', { game: Game.meta.name, id: gameId })
 						);
 						game.signups();
 					} else if (game.meta.players === 'single') {
@@ -192,9 +192,13 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 					if (!res.success) throw new ChatError(res.error);
 					const turnMsg = Game.meta.turns ? ` as ${Game.meta.turns[res.data!.as]}` : '';
 					message.reply(
-						`${message.author.name} joined the game of ${Game.meta.name}${turnMsg}${
-							ctx === '-' ? ' (randomly chosen)' : ''
-						}! [${game.id}]` as ToTranslate
+						$T('GAME.PLAYER_JOINED', {
+							player: message.author.name,
+							game: Game.meta.name,
+							turn: turnMsg,
+							random: ctx === '-' ? ' (randomly chosen)' : '',
+							id: game.id,
+						})
 					);
 					if (res.data.started) game.closeSignups(false);
 					else game.signups();
@@ -377,7 +381,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 					const [_gameId, _userId = ''] = arg.lazySplit(',', 1);
 					const gameId = '#' + toId(_gameId).toUpperCase();
 					const userId = toId(_userId);
-					if (!userId) throw new ChatError('You must specify the game ID for forcewin!' as ToTranslate);
+					if (!userId) throw new ChatError($T('GAME.FORCEWIN_SPECIFY_ID'));
 					const game = PSGames[Game.meta.id]?.[gameId];
 					if (!game) throw new ChatError($T('GAME.NOT_FOUND'));
 					const player = game.getPlayer(userId);

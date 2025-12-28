@@ -25,7 +25,7 @@ import { toId } from '@/utils/toId';
 
 import type { UGOUserPoints } from '@/cache/ugo';
 import type { ScrabbleDexEntry } from '@/database/games';
-import type { ToTranslate, TranslationFn } from '@/i18n/types';
+import type { TranslationFn } from '@/i18n/types';
 import type { Trainer } from '@/ps/games/splendor/types';
 import type { GamesList } from '@/ps/games/types';
 import type { PSCommand } from '@/types/chat';
@@ -245,13 +245,13 @@ export const command: PSCommand[] = [
 				results.map(res => res.pokemonName.toUpperCase()).groupBy(mon => toId(mon).length),
 				mons => mons?.unique().sort()
 			);
-			const count = Object.values(grouped)
-				.map(num => num?.length ?? 0)
-				.sum();
+		const count = Object.values(grouped)
+			.map(num => num?.length ?? 0)
+			.sum();
 
-			if (!results.length) throw new ChatError('No entries yet!' as ToTranslate);
+		if (!results.length) throw new ChatError($T('GAME.SCRABBLEDEX_NO_ENTRIES'));
 
-			broadcastHTML(
+		broadcastHTML(
 				<details>
 					<summary>ScrabbleDex ({count} entries)</summary>
 					{Object.entries(grouped).filterMap(([length, mons]) => {
@@ -275,8 +275,8 @@ export const command: PSCommand[] = [
 		flags: { allowPMs: true, pmOnly: true },
 		perms: message => message.author.id === 'partprofessor',
 		categories: ['game'],
-		async run({ arg, message }) {
-			if (!isUGOActive()) throw new ChatError("UGO isn't active!" as ToTranslate);
+		async run({ arg, message, $T }) {
+			if (!isUGOActive()) throw new ChatError($T('GAME.UGO_NOT_ACTIVE'));
 			const players = arg.split(',');
 			const winner = players[0];
 
