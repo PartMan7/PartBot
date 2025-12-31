@@ -30,7 +30,7 @@ function _postGGSSEvent(this: Client) {
 	ggssRoom.send('Khelne ke liye shukriya!'); // TODO: Use i18n instead
 	ggssRoom.send('/modchat +');
 	if (Math.random() < 0.1) {
-		const randomAuth = ggssRoom.users.filter(user => ![' ', '*'].includes(user.charAt(0))).random();
+		const randomAuth = ggssRoom.users.filter(user => ![' ', '*', '!', '‽'].includes(user.charAt(0))).random();
 		if (!randomAuth) return;
 		ggssRoom.send(`${randomAuth.slice(1)} hi nerd`);
 	}
