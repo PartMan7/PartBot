@@ -82,6 +82,7 @@ export type ViewType =
 	| (ActivePlayer & ActionState);
 
 export type State = {
+	pointsToWin: number;
 	turn: Turn;
 	board: Board;
 	playerData: Record<Turn, PlayerData>;

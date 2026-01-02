@@ -29,6 +29,11 @@ export class Splendor extends BaseGame<State> {
 
 	constructor(ctx: BaseContext) {
 		super(ctx);
+
+		this.state.pointsToWin = parseInt(ctx.args.join(''));
+		if (this.state.pointsToWin < 8 || this.state.pointsToWin > 20) this.throw();
+		if (isNaN(this.state.pointsToWin)) this.state.pointsToWin = POINTS_TO_WIN;
+
 		super.persist(ctx);
 
 		if (ctx.backup) return;
@@ -67,7 +72,7 @@ export class Splendor extends BaseGame<State> {
 			this.turn === lastPlayerInRound &&
 			Object.values(this.players)
 				.filter(player => !player.out)
-				.some(player => this.state.playerData[player.turn].points >= POINTS_TO_WIN)
+				.some(player => this.state.playerData[player.turn].points >= this.state.pointsToWin)
 		);
 	}
 
@@ -216,8 +221,7 @@ export class Splendor extends BaseGame<State> {
 			case VIEW_ACTION_TYPE.CLICK_DECK: {
 				if (!['1', '2', '3'].includes(actionCtx)) throw new ChatError(this.$T('GAME.SPLENDOR.WHICH_TIER'));
 				const tier = +actionCtx as 1 | 2 | 3;
-				if (this.state.board.cards[tier].deck.length === 0)
-					throw new ChatError(this.$T('GAME.SPLENDOR.DECK_EMPTY', { tier }));
+				if (this.state.board.cards[tier].deck.length === 0) throw new ChatError(this.$T('GAME.SPLENDOR.DECK_EMPTY', { tier }));
 
 				const canReserve = this.canReserve(player);
 				if (!canReserve) throw new ChatError(this.$T('GAME.SPLENDOR.RESERVE_LIMIT'));
@@ -234,10 +238,8 @@ export class Splendor extends BaseGame<State> {
 				const tokens = this.parseTokens(actionCtx, true);
 				const discarding = Object.values(tokens).sum();
 
-				if (discarding < toDiscard)
-					throw new ChatError(this.$T('GAME.SPLENDOR.DISCARD_MORE', { required: toDiscard, discarding }));
-				if (!this.canAfford(tokens, playerData.tokens, null, false))
-					throw new ChatError(this.$T('GAME.SPLENDOR.CANNOT_DISCARD'));
+				if (discarding < toDiscard) throw new ChatError(this.$T('GAME.SPLENDOR.DISCARD_MORE', { required: toDiscard, discarding }));
+				if (!this.canAfford(tokens, playerData.tokens, null, false)) throw new ChatError(this.$T('GAME.SPLENDOR.CANNOT_DISCARD'));
 
 				this.spendTokens(tokens, playerData);
 				logEntry = { turn: player.turn, time: new Date(), action: VIEW_ACTION_TYPE.TOO_MANY_TOKENS, ctx: { discard: tokens } };
@@ -278,8 +280,7 @@ export class Splendor extends BaseGame<State> {
 				let reservedId: string;
 				if (deckReserve) {
 					const tier = deckReserve as 1 | 2 | 3;
-					if (this.state.board.cards[tier].deck.length === 0)
-						throw new ChatError(this.$T('GAME.SPLENDOR.DECK_EMPTY', { tier }));
+					if (this.state.board.cards[tier].deck.length === 0) throw new ChatError(this.$T('GAME.SPLENDOR.DECK_EMPTY', { tier }));
 
 					const [card] = this.state.board.cards[tier].deck.splice(0, 1);
 					playerData.reserved.push(card);
@@ -421,8 +422,7 @@ export class Splendor extends BaseGame<State> {
 			const amt = +(entry.match(/\d/) ?? '0');
 			if (!(amt >= 0 && amt < 10)) throw new ChatError(this.$T('GAME.SPLENDOR.INVALID_COUNT', { value: entry.substring(1) }));
 			if (!AllTokenTypes.includes(type)) throw new ChatError(this.$T('GAME.SPLENDOR.UNRECOGNIZED_TYPE', { type }));
-			if (type === TOKEN_TYPE.DRAGON && !allowDragon)
-				throw new ChatError(this.$T('GAME.SPLENDOR.DRAGON_NOT_ALLOWED'));
+			if (type === TOKEN_TYPE.DRAGON && !allowDragon) throw new ChatError(this.$T('GAME.SPLENDOR.DRAGON_NOT_ALLOWED'));
 			tokens[type] += amt;
 		});
 		return tokens;
@@ -433,8 +433,7 @@ export class Splendor extends BaseGame<State> {
 			if (count > 0) return { type, count, available: this.state.board.tokens[type], name: metadata.types[type].name };
 		});
 
-		if (tokens[TOKEN_TYPE.DRAGON])
-			return { success: false, error: this.$T('GAME.SPLENDOR.DRAGON_ONLY_BY_RESERVE') };
+		if (tokens[TOKEN_TYPE.DRAGON]) return { success: false, error: this.$T('GAME.SPLENDOR.DRAGON_ONLY_BY_RESERVE') };
 
 		const tooMany = input.filter(({ count, available }) => count > available);
 		if (tooMany.length > 0) {
@@ -513,7 +512,14 @@ export class Splendor extends BaseGame<State> {
 			else view = { type: 'player', active: false, self: side };
 		} else view = { type: 'spectator', active: false, action: this.winCtx ? VIEW_ACTION_TYPE.GAME_END : null };
 
-		const ctx: RenderCtx = { id: this.id, board: this.state.board, players: this.state.playerData, turns: this.turns, view, $T: this.$T };
+		const ctx: RenderCtx = {
+			id: this.id,
+			board: this.state.board,
+			players: this.state.playerData,
+			turns: this.turns,
+			view,
+			$T: this.$T,
+		};
 
 		if (this.winCtx) {
 			ctx.header = this.$T('GAME.GAME_ENDED');
