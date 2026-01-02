@@ -2,9 +2,9 @@ import { BaseGame } from '@/ps/games/game';
 import {
 	ACTIONS,
 	AllTokenTypes,
+	DEFAULT_POINTS_TO_WIN,
 	MAX_RESERVE_COUNT,
 	MAX_TOKEN_COUNT,
-	POINTS_TO_WIN,
 	TOKEN_TYPE,
 	TokenTypes,
 	VIEW_ACTION_TYPE,
@@ -32,7 +32,7 @@ export class Splendor extends BaseGame<State> {
 
 		this.state.pointsToWin = parseInt(ctx.args.join(''));
 		if (this.state.pointsToWin < 8 || this.state.pointsToWin > 20) this.throw();
-		if (isNaN(this.state.pointsToWin)) this.state.pointsToWin = POINTS_TO_WIN;
+		if (isNaN(this.state.pointsToWin)) this.state.pointsToWin = DEFAULT_POINTS_TO_WIN;
 
 		super.persist(ctx);
 
