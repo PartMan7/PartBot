@@ -56,8 +56,7 @@ export class BaseGame<State extends BaseState> {
 	room: PSRoomTranslated;
 	parent: Client;
 	roomid: string;
-	// @ts-expect-error -- State isn't initialized yet
-	state: State = {};
+	state = {} as State; // will be updated when game starts
 	log: BaseLog[] = [];
 	sides: boolean;
 
