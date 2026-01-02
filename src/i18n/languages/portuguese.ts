@@ -10,6 +10,7 @@ export default {
 
 	ACCESS_DENIED: 'Acesso negado.',
 	SCREW_YOU: 'Vai se danar.',
+	GOOD_LUCK: 'Boa sorte!',
 	CANCELLED: 'Esta ação foi cancelada.',
 	CMD_NOT_FOUND: 'Comando não encontrado.',
 	CONFIRM: "Tem certeza? Digite 'confirm' para confirmar.",
@@ -278,9 +279,10 @@ export default {
 			PROVIDE_ROOM_COMMAND: 'Por favor, forneça uma sala e um comando.',
 			ROOM_PREF_SET: 'Preferência de sala de citação definida para {{room}}.',
 			SPECIFY_ROOM_COMMAND: 'Por favor, especifique uma sala e um comando.',
-			NO_QUOTES_FOUND: 'Nenhuma citação encontrada.',
-			NO_QUOTES_FOUND_MATCHING: 'Nenhuma citação encontrada correspondendo a "{{search}}".',
-		},
+		NO_QUOTES_FOUND: 'Nenhuma citação encontrada.',
+		NO_QUOTES_FOUND_MATCHING: 'Nenhuma citação encontrada correspondendo a "{{search}}".',
+		WHICH_ROOM: 'Em qual sala você está procurando uma citação? Responda com o nome.',
+	},
 
 		MODNOTE: {
 			NO_COMMON_ROOMS: 'Não temos nenhuma sala em comum onde você é staff...',

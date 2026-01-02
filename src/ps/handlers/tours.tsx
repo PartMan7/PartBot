@@ -15,6 +15,7 @@ import { pluralize } from '@/utils/pluralize';
 import { randomString } from '@/utils/random';
 import { toId } from '@/utils/toId';
 
+import type { TranslatedText } from '@/i18n/types';
 import type { PSCommandContext } from '@/types/chat';
 import type { RecursivePartial } from '@/types/common';
 import type { PSMessage } from '@/types/ps';
@@ -62,6 +63,7 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 	if (!event) return;
 
 	const room = this.getRoom(roomId);
+	const $T = i18n(getLanguage(room));
 
 	const wishLuck = ['hindi', 'capproject'].includes(roomId);
 	const wallTourFinals = ['hindi', 'capproject'].includes(roomId);
@@ -84,7 +86,7 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 		case 'battlestart': {
 			if (wishLuck) {
 				const [_p1, _p2, battleRoom] = data.lazySplit('|', 2);
-				this.joinRoom(battleRoom).then(() => this.getRoom(battleRoom).send("G'luck!\n/part"));
+				this.joinRoom(battleRoom).then(() => this.getRoom(battleRoom).send(`${$T('GOOD_LUCK')}\n/part` as TranslatedText));
 			}
 			break;
 		}

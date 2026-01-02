@@ -8,6 +8,7 @@ export default {
 
 	ACCESS_DENIED: 'Access denied.',
 	SCREW_YOU: ['Yeah no', 'Buzz off!', 'Screw you.'],
+	GOOD_LUCK: "G'luck!",
 	CANCELLED: 'This action was cancelled.',
 	CMD_NOT_FOUND: 'Command not found.',
 	CONFIRM: "Are you sure? Type 'confirm' to confirm.",
@@ -278,6 +279,7 @@ export default {
 			SPECIFY_ROOM_COMMAND: 'Please specify a room and a command.',
 			NO_QUOTES_FOUND: 'No quotes found.',
 			NO_QUOTES_FOUND_MATCHING: 'No quotes found matching "{{search}}".',
+			WHICH_ROOM: 'Which room are you looking for a quote in? Reply with the name.',
 		},
 
 		MODNOTE: {

@@ -43,7 +43,7 @@ async function getRoom(givenRoom: unknown, message: PSMessage, $T: TranslationFn
 	if (message.type === 'chat') return message.target.roomid;
 	const prefs = PSQuoteRoomPrefs[message.author.userid];
 	if (prefs && message.time - prefs.at.getTime() < fromHumanTime('1 hour')) return prefs.room;
-	message.reply(`Which room are you looking for a quote in?`);
+	message.reply($T('COMMANDS.QUOTES.WHICH_ROOM'));
 	const answer = await message.target
 		.waitFor(msg => {
 			return msg.content.length > 0 && !!msg.parent.getRoom(msg.content);

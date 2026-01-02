@@ -10,6 +10,7 @@ export default {
 
 	ACCESS_DENIED: 'Anumati nahin hai.',
 	SCREW_YOU: 'Bhaad mein jao.',
+	GOOD_LUCK: 'Good luck!',
 	CANCELLED: 'Yeh command radd kar di gayi thi.',
 	CMD_NOT_FOUND: 'Command nahi mili.',
 	CONFIRM: "Kya aap nishchit hain? Pushti ke liye 'confirm' likhein.",
@@ -265,9 +266,10 @@ export default {
 			PROVIDE_ROOM_COMMAND: 'Room aur command dijiye.',
 			ROOM_PREF_SET: 'Quote room preference {{room}} par set ho gayi.',
 			SPECIFY_ROOM_COMMAND: 'Room aur command specify karein.',
-			NO_QUOTES_FOUND: 'Koi quotes nahi mile.',
-			NO_QUOTES_FOUND_MATCHING: '"{{search}}" se match karne wale koi quotes nahi mile.',
-		},
+		NO_QUOTES_FOUND: 'Koi quotes nahi mile.',
+		NO_QUOTES_FOUND_MATCHING: '"{{search}}" se match karne wale koi quotes nahi mile.',
+		WHICH_ROOM: 'Aap konse room mein quote dhoond rahe hain? Naam se jawab dein.',
+	},
 
 		MODNOTE: {
 			NO_COMMON_ROOMS: 'Humare paas koi common rooms nahi hain jahan aap staff hain...',
