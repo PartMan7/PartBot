@@ -172,9 +172,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 					if (PSGames[gameId]?.[id]) throw new ChatError($T('GAME.ALREADY_STARTED'));
 					const game = new Game.instance({ id, meta: Game.meta, room: message.target, $T, args, by: message.author });
 					if (game.meta.players === 'many') {
-						message.reply(
-							$T('GAME.NOTIFY_CREATED', { game: Game.meta.name, id: gameId })
-						);
+						message.reply($T('GAME.NOTIFY_CREATED', { game: Game.meta.name, id: gameId }));
 						game.signups();
 					} else if (game.meta.players === 'single') {
 						game.update();

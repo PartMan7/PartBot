@@ -18,7 +18,7 @@ import { Timer } from '@/utils/timer';
 import { toId } from '@/utils/toId';
 
 import type { GameModel } from '@/database/games';
-import type { NoTranslate, PSRoomTranslated, TranslatedText, TranslationFn } from '@/i18n/types';
+import type { BaseLookup, NoTranslate, PSRoomTranslated, TranslatedText, TranslationFn, VariablesFromLookup } from '@/i18n/types';
 import type { ActionResponse, BaseLog, BaseState, EndType, Meta, Player } from '@/ps/games/types';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
@@ -118,7 +118,7 @@ export class BaseGame<State extends BaseState> {
 	applyMod?(mod: string): ActionResponse<TranslatedText>;
 	canBroadcastFinish?(): boolean;
 
-	throw(msg?: Parameters<TranslationFn>[0], vars?: Parameters<TranslationFn>[1]): never {
+	throw<Lookup extends BaseLookup>(msg?: Lookup, vars?: Record<VariablesFromLookup<Lookup>, string | number | undefined>): never {
 		if (!msg) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
 		throw new ChatError(this.$T(msg, vars));
 	}

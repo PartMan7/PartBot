@@ -57,7 +57,7 @@ export const command: PSCommand = {
 				delete Timers[id];
 				timer.execute();
 				const timeLeftText = toHumanTime(timer.endTime - Date.now(), undefined, $T);
-				return message.reply($T('COMMANDS.TIMER.WOULD_HAVE_ENDED_IN', { timeLeftText }));
+				return message.reply($T('COMMANDS.TIMER.WOULD_HAVE_ENDED_IN', { timeLeft: timeLeftText }));
 			},
 		},
 	},
