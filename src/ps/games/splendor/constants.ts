@@ -28,6 +28,8 @@ export enum VIEW_ACTION_TYPE {
 	GAME_END = 'end',
 }
 
-export const POINTS_TO_WIN = 15;
+export const MIN_POINTS_TO_WIN = 8;
+export const MAX_POINTS_TO_WIN = 21;
+export const DEFAULT_POINTS_TO_WIN = 15;
 export const MAX_TOKEN_COUNT = 10;
 export const MAX_RESERVE_COUNT = 3;
