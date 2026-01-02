@@ -38,12 +38,14 @@ type InferVariables<T extends string> = T extends `${infer Prefix}{{${infer Vari
 	? InferVariables<Prefix> | Variable | InferVariables<Suffix>
 	: never;
 export type BaseLookup = Exclude<keyof RefTextMap, number | symbol>;
-export type VariablesFromLookup<Lookup extends BaseLookup> = InferVariables<RefTextMap[Lookup]>;
+export type VariablesFromLookup<Lookup extends BaseLookup> =
+	InferVariables<RefTextMap[Lookup]> extends `${infer Variables}`
+		? [Variables] extends [never]
+			? []
+			: [Record<Variables, string | number | undefined>]
+		: [];
 
-export type TranslationFn = <Lookup extends BaseLookup>(
-	lookup: Lookup,
-	variables?: Record<VariablesFromLookup<Lookup>, string | number | undefined>
-) => TranslatedText;
+export type TranslationFn = <Lookup extends BaseLookup>(lookup: Lookup, ...variables: VariablesFromLookup<Lookup>) => TranslatedText;
 
 type ReplaceStringWithTranslatedText<TParams extends readonly unknown[]> = {
 	[K in keyof TParams]: TParams[K] extends string ? TranslatedText : TParams[K];

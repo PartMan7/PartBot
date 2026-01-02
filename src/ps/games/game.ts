@@ -118,9 +118,9 @@ export class BaseGame<State extends BaseState> {
 	applyMod?(mod: string): ActionResponse<TranslatedText>;
 	canBroadcastFinish?(): boolean;
 
-	throw<Lookup extends BaseLookup>(msg?: Lookup, vars?: Record<VariablesFromLookup<Lookup>, string | number | undefined>): never {
-		if (!msg) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
-		throw new ChatError(this.$T(msg, vars));
+	throw<Lookup extends BaseLookup>(...params: [Lookup, ...VariablesFromLookup<NonNullable<Lookup>>] | []): never {
+		if (params.length === 0) throw new ChatError(this.$T('GAME.INVALID_INPUT'));
+		throw new ChatError(this.$T(...(params as [Lookup, ...VariablesFromLookup<Lookup>])));
 	}
 
 	constructor(ctx: BaseContext) {
