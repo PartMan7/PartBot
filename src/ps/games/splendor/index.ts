@@ -3,8 +3,10 @@ import {
 	ACTIONS,
 	AllTokenTypes,
 	DEFAULT_POINTS_TO_WIN,
+	MAX_POINTS_TO_WIN,
 	MAX_RESERVE_COUNT,
 	MAX_TOKEN_COUNT,
+	MIN_POINTS_TO_WIN,
 	TOKEN_TYPE,
 	TokenTypes,
 	VIEW_ACTION_TYPE,
@@ -30,9 +32,11 @@ export class Splendor extends BaseGame<State> {
 	constructor(ctx: BaseContext) {
 		super(ctx);
 
-		this.state.pointsToWin = parseInt(ctx.args.join(''));
-		if (this.state.pointsToWin < 8 || this.state.pointsToWin > 20) this.throw();
-		if (isNaN(this.state.pointsToWin)) this.state.pointsToWin = DEFAULT_POINTS_TO_WIN;
+		const givenCap = ctx.args.join('').trim();
+		this.state.pointsToWin = givenCap ? parseInt(givenCap) : DEFAULT_POINTS_TO_WIN;
+		if (this.state.pointsToWin < MIN_POINTS_TO_WIN || this.state.pointsToWin > MAX_POINTS_TO_WIN || isNaN(this.state.pointsToWin)) {
+			this.throw('GAME.SPLENDOR.INVALID_POINTS_CAP', { cap: givenCap, minCap: MIN_POINTS_TO_WIN, maxCap: MAX_POINTS_TO_WIN });
+		}
 
 		super.persist(ctx);
 

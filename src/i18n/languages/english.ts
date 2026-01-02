@@ -168,6 +168,7 @@ export default {
 				RESERVE: 'Reserve!',
 				BUY_CARD: 'Buy {{card}}!',
 			},
+			INVALID_POINTS_CAP: 'The point cap must be between {{minCap}} and {{maxCap}}. {{cap}} is invalid.',
 			INVALID_CARD: '{{card}} is not a valid card.',
 			CARD_NOT_ACCESSIBLE: 'Cannot access {{card}} for the desired action.',
 			DISCARD_TOKENS_REQUIRED: 'You need to discard tokens!',

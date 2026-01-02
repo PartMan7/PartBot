@@ -153,6 +153,7 @@ export default {
 				RESERVE: 'Reserve karo!',
 				BUY_CARD: '{{card}} kharido!',
 			},
+			INVALID_POINTS_CAP: 'Point cap {{minCap}} aur {{maxCap}} ke beech hona chahiye. {{cap}} valid nahi hai.',
 			INVALID_CARD: '{{card}} ek valid card nahi hai.',
 			CARD_NOT_ACCESSIBLE: '{{card}} is action ke liye accessible nahi hai.',
 			DISCARD_TOKENS_REQUIRED: 'Aapko tokens discard karne honge!',

@@ -165,6 +165,7 @@ export default {
 				RESERVE: 'Réserver !',
 				BUY_CARD: 'Acheter {{card}} !',
 			},
+			INVALID_POINTS_CAP: 'Le plafond de points doit être entre {{minCap}} et {{maxCap}}. {{cap}} est invalide.',
 			INVALID_CARD: "{{card}} n'est pas une carte valide.",
 			CARD_NOT_ACCESSIBLE: "Impossible d'accéder à {{card}} pour l'action souhaitée.",
 			DISCARD_TOKENS_REQUIRED: 'Vous devez défausser des jetons !',
