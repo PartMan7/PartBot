@@ -279,10 +279,10 @@ export default {
 			PROVIDE_ROOM_COMMAND: 'Veuillez fournir un salon et une commande.',
 			ROOM_PREF_SET: 'Préférence de salon de citation définie sur {{room}}.',
 			SPECIFY_ROOM_COMMAND: 'Veuillez spécifier un salon et une commande.',
-		NO_QUOTES_FOUND: 'Aucune citation trouvée.',
-		NO_QUOTES_FOUND_MATCHING: 'Aucune citation trouvée correspondant à "{{search}}".',
-		WHICH_ROOM: 'Dans quel salon cherchez-vous une citation ? Répondez avec le nom.',
-	},
+			NO_QUOTES_FOUND: 'Aucune citation trouvée.',
+			NO_QUOTES_FOUND_MATCHING: 'Aucune citation trouvée correspondant à "{{search}}".',
+			WHICH_ROOM: 'Dans quel salon cherchez-vous une citation ? Répondez avec le nom.',
+		},
 
 		MODNOTE: {
 			NO_COMMON_ROOMS: "Nous n'avons aucun salon en commun où vous êtes staff...",
