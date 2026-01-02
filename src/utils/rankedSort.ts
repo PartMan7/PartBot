@@ -20,7 +20,7 @@ export function rankedSort<Data, List extends (string | number)[]>(
 	return sorted.map(({ list, serial: currentKey }, index) => {
 		let rank = index;
 		while (rank > 0) {
-			const prev = sorted[rank - 1];
+			const prev = sorted[rank - 1]!;
 			if (prev.serial !== currentKey) break;
 			rank--;
 		}

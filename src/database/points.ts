@@ -102,10 +102,12 @@ export async function getRank(user: string, roomId: string, order: string[]): Pr
 	const currentPoints = await getPoints(user, roomId);
 	if (!currentPoints) return null;
 
+	const firstOrder = order[0];
+	if (!firstOrder) return { ...currentPoints, rank: 1 };
 	const behindUsers = await model
 		.find({ roomId })
 		.sort(order.map(pointType => [`points.${pointType}`, 'desc'] as [string, 'desc']))
-		.gt(`points.${order[0]}`, currentPoints.points[order[0]])
+		.gt(`points.${firstOrder}`, currentPoints.points[firstOrder])
 		.lean();
 	return { ...currentPoints, rank: behindUsers.length + 1 };
 }

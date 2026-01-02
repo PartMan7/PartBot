@@ -21,9 +21,9 @@ export const command: PSCommand[] = [
 		async run({ broadcastHTML, arg, $T }) {
 			const query = toId(arg);
 			if (query === 'constructor') throw new ChatError($T('SCREW_YOU'));
-			if (query in GOData.pokedex) {
-				const mon = GOData.pokedex[query];
-				const stats = mon.baseStats;
+		if (query in GOData.pokedex) {
+			const mon = GOData.pokedex[query]!;
+			const stats = mon.baseStats;
 
 				return broadcastHTML(
 					<>
@@ -102,8 +102,8 @@ export const command: PSCommand[] = [
 				);
 			}
 
-			if (query in GOData.fastMoves) {
-				const move = GOData.fastMoves[query];
+		if (query in GOData.fastMoves) {
+			const move = GOData.fastMoves[query]!;
 				return broadcastHTML(
 					<ul className="utilichart">
 						<li className="result">
@@ -189,8 +189,8 @@ export const command: PSCommand[] = [
 				);
 			}
 
-			if (query in GOData.chargedMoves) {
-				const move = GOData.chargedMoves[query];
+		if (query in GOData.chargedMoves) {
+			const move = GOData.chargedMoves[query]!;
 				return broadcastHTML(
 					<ul className="utilichart">
 						<li className="result">

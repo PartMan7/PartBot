@@ -129,7 +129,7 @@ export function fromHumanTime(srcText: string): number {
 	const DAY_LENGTH = 24 * HOUR_LENGTH;
 	const digital = text.match(/^(?:(\d+):)?(\d+):(\d+):(\d+)$/);
 	if (digital) {
-		const [, day, hrs, min, sec]: number[] = digital.map(str => parseInt(str));
+		const [, day = 0, hrs = 0, min = 0, sec = 0] = digital.map(str => parseInt(str));
 		const dayTime = day * DAY_LENGTH;
 		const hourTime = hrs * HOUR_LENGTH;
 		const minTime = min * MIN_LENGTH;

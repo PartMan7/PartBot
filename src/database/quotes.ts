@@ -75,7 +75,7 @@ export async function deleteQuoteByIndex(index: number, quote: Model, room: stri
 
 	const allQuotes = await model.find({ room }).sort({ at: 1 });
 	if (index >= allQuotes.length) return null;
-	const toDelete = allQuotes[index];
+	const toDelete = allQuotes[index]!;
 	if (toDelete.quote !== quote.quote) throw new Error(`Quote mismatch! Try again, probably. ${toDelete.quote} !== ${quote.quote}`);
 	await toDelete.deleteOne();
 	return toDelete.toObject();

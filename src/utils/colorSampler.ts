@@ -61,21 +61,21 @@ export function colorSampler(
 
 			if (nextIndex >= prefs.length) continue;
 
-			const itemId = prefs[nextIndex];
-			userNextProposalIndex.set(user.id, nextIndex + 1);
+		const itemId = prefs[nextIndex]!;
+		userNextProposalIndex.set(user.id, nextIndex + 1);
 
-			const currentMatch = itemMatches.get(itemId);
-			if (!currentMatch) {
+		const currentMatch = itemMatches.get(itemId);
+		if (!currentMatch) {
+			itemMatches.set(itemId, user.id);
+			userMatches.set(user.id, itemId);
+		} else {
+			const itemPrefList = itemPrefs.get(itemId)!;
+			if (itemPrefList.findIndex(entry => entry.id === user.id) < itemPrefList.findIndex(entry => entry.id === currentMatch)) {
+				userMatches.set(currentMatch, null);
 				itemMatches.set(itemId, user.id);
 				userMatches.set(user.id, itemId);
-			} else {
-				const itemPrefList = itemPrefs.get(itemId)!;
-				if (itemPrefList.findIndex(entry => entry.id === user.id) < itemPrefList.findIndex(entry => entry.id === currentMatch)) {
-					userMatches.set(currentMatch, null);
-					itemMatches.set(itemId, user.id);
-					userMatches.set(user.id, itemId);
-				}
 			}
+		}
 		}
 
 		freeUsers = users.filter(

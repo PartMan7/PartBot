@@ -33,7 +33,7 @@ import type { ReactElement } from 'react';
 
 export function renderScrabbleDexLeaderboard(entries: ScrabbleDexEntry[], $T: TranslationFn): ReactElement {
 	const usersData = Object.values(entries.groupBy(entry => entry.by) as Record<string, ScrabbleDexEntry[]>).map(entries => {
-		const name = entries.findLast(entry => entry.byName)?.byName ?? entries[0].by;
+		const name = entries.findLast(entry => entry.byName)?.byName ?? entries[0]!.by;
 		const uniqueMons = entries.map(entry => entry.pokemonName).unique();
 		const count = uniqueMons.length;
 		const points = uniqueMons.map(mon => Math.max(1, mon.length - 4)).sum();
@@ -49,7 +49,7 @@ export function renderScrabbleDexLeaderboard(entries: ScrabbleDexEntry[], $T: Tr
 			headers={['#', $T('COMMANDS.POINTS.HEADERS.USER'), 'Unique', 'Points']}
 			data={sortedData}
 			asPage
-			styles={LB_STYLES.orange}
+			styles={LB_STYLES.orange ?? undefined}
 		/>
 	);
 }
@@ -87,7 +87,7 @@ export function renderUGOBoardGamesLeaderboard(data: Record<string, UGOUserPoint
 					data={sortedData}
 					asPage
 					style={{ width: 640 }}
-					styles={LB_STYLES.orange}
+					styles={LB_STYLES.orange ?? undefined}
 				/>
 			</div>
 		</center>
@@ -103,7 +103,7 @@ export const command: PSCommand[] = [
 		aliases: ['cw'],
 		categories: ['game'],
 		async run({ broadcast, arg, $T }) {
-			const [word, input = ScrabbleMods.CSW24] = arg
+			const [word = '', input = ScrabbleMods.CSW24] = arg
 				.toLowerCase()
 				.replace(/[^a-z0-9,]/g, '')
 				.lazySplit(',', 1);
@@ -133,16 +133,16 @@ export const command: PSCommand[] = [
 		async run({ message, broadcastHTML, arg, $T }) {
 			const id = toId(arg);
 			if (id === 'constructor') throw new ChatError($T('SCREW_YOU'));
-			if (id in metadata.pokemon) {
-				const card = metadata.pokemon[id];
-				const attr = card.attr ? metadata.artists[card.attr] : null;
-				broadcastHTML(
-					<>
-						<Small>
-							<PokemonCard data={card} />
-							<ArtOnlyCard data={card} />
-						</Small>
-						{attr ? (
+		if (id in metadata.pokemon) {
+			const card = metadata.pokemon[id]!;
+			const attr = card.attr ? metadata.artists[card.attr] : null;
+			broadcastHTML(
+				<>
+					<Small>
+						<PokemonCard data={card} />
+						<ArtOnlyCard data={card} />
+					</Small>
+					{attr ? (
 							<>
 								Art by <Username name={attr.name} clickable />!
 								{attr.url ? (
@@ -155,15 +155,15 @@ export const command: PSCommand[] = [
 						) : null}
 					</>
 				);
-			} else if (id in metadata.trainers) {
-				const card = metadata.trainers[id];
-				broadcastHTML(
-					<Small>
-						<TrainerCard data={card} />
-					</Small>
-				);
-			} else if (id === message.parent.status.userid) {
-				const card: Trainer = {
+		} else if (id in metadata.trainers) {
+			const card = metadata.trainers[id]!;
+			broadcastHTML(
+				<Small>
+					<TrainerCard data={card} />
+				</Small>
+			);
+		} else if (id === message.parent.status.userid) {
+			const card: Trainer = {
 					id,
 					name: message.parent.status.username ?? '-',
 					points: 15,
@@ -192,7 +192,7 @@ export const command: PSCommand[] = [
 				<>
 					<h3>Shoutouts to these nerds for setting up some amazing art for Splendor!</h3>
 					{Object.entries(groupedInfo).map(([attr, cards]) => {
-						const artist = metadata.artists[attr];
+						const artist = metadata.artists[attr]!;
 						return (
 							<details open>
 								<summary>
@@ -313,7 +313,7 @@ export const command: PSCommand[] = [
 			return isStaff(userInRoom);
 		},
 		async run({ message, broadcast, arg, $T }) {
-			const [_amount, _user = ''] = arg.lazySplit(',', 1);
+			const [_amount = '', _user = ''] = arg.lazySplit(',', 1);
 			const amount = +_amount > 0 || +_amount < 0 ? +_amount : +_user > 0 || +_user < 0 ? +_user : null;
 			const user = +_amount > 0 || +_amount < 0 ? _user.trim() : +_user > 0 || +_user < 0 ? _amount.trim() : null;
 			if (!amount || !user) throw new ChatError($T('INVALID_ARGUMENTS'));

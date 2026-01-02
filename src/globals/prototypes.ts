@@ -111,7 +111,7 @@ Object.defineProperties(Array.prototype, {
 		value: function <X, T = unknown>(this: T[], callback: (element: T, index: number, thisArray: T[]) => X | undefined): X[] {
 			const results: X[] = [];
 			for (let i = 0; i < this.length; i++) {
-				const result = callback(this[i], i, this);
+				const result = callback(this[i]!, i, this);
 				if (result === undefined) continue;
 				results.push(result);
 			}
@@ -170,7 +170,7 @@ Object.defineProperties(Array.prototype, {
 		value: function <T = unknown>(this: T[], rng?: RNGSource): T | null {
 			const lookup = sample(this.length, useRNG(rng));
 			if (lookup >= this.length) return null;
-			return this[lookup];
+			return this[lookup] ?? null;
 		},
 	},
 	remove: {
@@ -196,7 +196,7 @@ Object.defineProperties(Array.prototype, {
 				out: T[] = [];
 			let i = 0;
 			while (sample.length && i++ < amount) {
-				const term = sample[Math.floor(RNG() * sample.length)];
+				const term = sample[Math.floor(RNG() * sample.length)]!;
 				out.push(term);
 				sample.remove(term);
 			}
@@ -211,7 +211,7 @@ Object.defineProperties(Array.prototype, {
 			const RNG = useRNG(rng);
 			for (let i = this.length - 1; i > 0; i--) {
 				const j = Math.floor(RNG() * (i + 1));
-				[this[i], this[j]] = [this[j], this[i]];
+				[this[i], this[j]] = [this[j]!, this[i]!];
 			}
 			return Array.from(this);
 		},
@@ -229,20 +229,20 @@ Object.defineProperties(Array.prototype, {
 				map.set(term, getSort ? getSort(term, this) : (term as unknown as W));
 				return map;
 			}, new Map());
-			return this.sort((a, b) => {
-				const cachedA = cache.get(a)!;
-				const cachedB = cache.get(b)!;
-				const lookupA: (string | number)[] = Array.isArray(cachedA) ? cachedA : [cachedA];
-				const lookupB: (string | number)[] = Array.isArray(cachedB) ? cachedB : [cachedB];
+		return this.sort((a, b) => {
+			const cachedA = cache.get(a)!;
+			const cachedB = cache.get(b)!;
+			const lookupA: (string | number)[] = Array.isArray(cachedA) ? cachedA : [cachedA];
+			const lookupB: (string | number)[] = Array.isArray(cachedB) ? cachedB : [cachedB];
 
-				for (let i = 0; i < lookupA.length; i++) {
-					if (lookupA[i] === lookupB[i]) continue;
-					const AisBigger = lookupA[i] > lookupB[i];
-					return (dir === 'desc' ? -1 : 1) * (AisBigger ? 1 : -1);
-				}
+			for (let i = 0; i < lookupA.length; i++) {
+				if (lookupA[i] === lookupB[i]) continue;
+				const AisBigger = lookupA[i]! > lookupB[i]!;
+				return (dir === 'desc' ? -1 : 1) * (AisBigger ? 1 : -1);
+			}
 
-				return 0;
-			});
+			return 0;
+		});
 		},
 	},
 	space: {
@@ -251,14 +251,14 @@ Object.defineProperties(Array.prototype, {
 		configurable: false,
 		value: function <T, S>(this: T[], spacer: S, ends?: boolean): (T | S)[] {
 			if (this.length === 0) return [];
-			if (this.length === 1) return ends ? [spacer, this[0], spacer] : [this[0]];
+			if (this.length === 1) return ends ? [spacer, this[0]!, spacer] : [this[0]!];
 			return this.slice(1)
 				.reduce<(T | S)[]>(
 					(acc, term) => {
 						acc.push(spacer, term);
 						return acc;
 					},
-					ends ? [spacer, this[0]] : [this[0]]
+					ends ? [spacer, this[0]!] : [this[0]!]
 				)
 				.concat(ends ? [spacer] : []);
 		},
@@ -280,9 +280,10 @@ Object.defineProperties(Array.prototype, {
 			const output: T[] = [];
 			const cache = new Set();
 			for (let i = 0; i < this.length; i++) {
-				if (!cache.has(this[i])) {
-					cache.add(this[i]);
-					output.push(this[i]);
+				const el = this[i]!;
+				if (!cache.has(el)) {
+					cache.add(el);
+					output.push(el);
 				}
 			}
 			return output;
@@ -319,10 +320,10 @@ Object.defineProperties(String.prototype, {
 				if (delim instanceof RegExp) {
 					const match = input.match(delim);
 					if (!match) return [...out, input];
-					const m = match[0];
+					const m = match[0]!;
 					out.push(input.slice(0, match.index));
 					input = input.slice(match.index! + m.length);
-					for (let j = 1; j < match.length; j++) out.push(match[j]);
+					for (let j = 1; j < match.length; j++) out.push(match[j]!);
 				} else {
 					const match = input.indexOf(delim);
 					if (match < 0) return [...out, input];

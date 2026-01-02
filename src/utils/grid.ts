@@ -10,7 +10,7 @@ export type Point = [number, number];
 export function parsePoint(input: string): Point | null {
 	const matched = input.match(/^(\d+)\s*(?:x|,|\s)*(\d+)$/);
 	if (!matched) return null;
-	return [+matched[1], +matched[2]];
+	return [+matched[1]!, +matched[2]!];
 }
 
 /**
@@ -21,7 +21,7 @@ export function parsePoint(input: string): Point | null {
 export function parsePointA1(input: string): Point | null {
 	const matched = input.match(/^([a-z])(\d+)$/i);
 	if (!matched) return null;
-	return [matched[1].toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0), +matched[2] - 1];
+	return [matched[1]!.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0), +matched[2]! - 1];
 }
 
 export function pointToA1(input: Point): string {
@@ -51,7 +51,7 @@ export function rangePoints(from: Point, to: Point, length?: number): Point[] {
 	}
 	const xRange = range(from[0], to[0], count!);
 	const yRange = range(from[1], to[1], count!);
-	return Array.from({ length: count! }, (_, index) => [xRange[index], yRange[index]]);
+	return Array.from({ length: count! }, (_, index) => [xRange[index]!, yRange[index]!]);
 }
 
 export function stepPoint(point: Point, by: Point): Point {

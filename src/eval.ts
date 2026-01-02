@@ -81,8 +81,8 @@ export function formatValue(value: unknown, mode: EvalModes): string {
 						if (funcStr.startsWith('function')) {
 							if (funcLines.length <= 3) {
 								const [header, content] = funcStr.split('\n');
-								return `${header.match(/\(.*\)/)!.toString()} => { ${content} }`;
-							} else return `${funcLines[0].match(/\(.*\)/)!.toString()} => { ... }`;
+								return `${header!.match(/\(.*\)/)!.toString()} => { ${content} }`;
+							} else return `${funcLines[0]!.match(/\(.*\)/)!.toString()} => { ... }`;
 						} else {
 							if (funcLines.length === 1) return funcStr;
 							else return `${funcLines[0]} ... }`;

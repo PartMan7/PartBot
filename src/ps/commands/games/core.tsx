@@ -51,15 +51,15 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 			}
 			if (ctx.action === 'any') return true;
 			const hasJoined = !!ctx.user && game.hasPlayer(ctx.user);
-			const hasSpace =
-				(game.sides && Object.keys(game.players).length < game.turns.length) || Object.keys(game.players).length < game.meta.maxSize!;
-			switch (ctx.action) {
-				case 'start':
-					return game.startable() ?? false;
-				case 'join':
-					return !game.started && !hasJoined && hasSpace;
-				case 'play':
-					return game.started && hasJoined && game.players[game.turn!].id === ctx.user;
+		const hasSpace =
+			(game.sides && Object.keys(game.players).length < game.turns.length) || Object.keys(game.players).length < game.meta.maxSize!;
+		switch (ctx.action) {
+			case 'start':
+				return game.startable() ?? false;
+			case 'join':
+				return !game.started && !hasJoined && hasSpace;
+			case 'play':
+				return game.started && hasJoined && game.players[game.turn!]!.id === ctx.user;
 				case 'reaction':
 					return game.started && hasJoined;
 				case 'audience':
@@ -100,18 +100,20 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 		}
 		if (searchCtx.action === 'sub') {
 			if (!restCtx) throw new ChatError(roomCtx.$T('GAME.INVALID_INPUT'));
-			[searchCtx.user1, searchCtx.user2] = restCtx.split(',').map(toId);
+			const [user1, user2] = restCtx.split(',').map(toId);
+			searchCtx.user1 = user1;
+			searchCtx.user2 = user2;
 			if (!searchCtx.user2) return null;
 		}
 		if (searchCtx.action === 'leave' && !searchCtx.user) {
 			if (!restCtx) return null;
 			searchCtx.user = toId(restCtx);
 		}
-		const allGames = Object.values(PSGames[gameId]).filter(game => game.roomid === roomCtx.room.id);
+		const allGames = Object.values(PSGames[gameId]!).filter(game => game.roomid === roomCtx.room.id);
 		const byContext = getByContext(searchCtx);
 		if (!specifier) {
 			const validGames = allGames.filter(byContext);
-			if (validGames.length === 1) return validGames[0];
+			if (validGames.length === 1) return validGames[0] ?? null;
 			return null;
 		}
 		if (specifier?.includes(' vs ')) {
@@ -124,9 +126,9 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 						.sort()
 						.join('|') === lookup
 			);
-			if (matchingGames.length === 1) return matchingGames[0];
+			if (matchingGames.length === 1) return matchingGames[0] ?? null;
 			const validGames = matchingGames.filter(byContext);
-			if (validGames.length === 1) return validGames[0];
+			if (validGames.length === 1) return validGames[0] ?? null;
 			return null;
 		}
 		return null;
@@ -134,7 +136,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 
 	function getGame(feed: string, searchCtx: SearchContext, roomCtx: RoomContext): { game: CommonGame; ctx: string } {
 		const { $T } = roomCtx;
-		const [fullSpec, fullCtx = ''] = feed.lazySplit(/\s*,\s*/, 1);
+		const [fullSpec = '', fullCtx = ''] = feed.lazySplit(/\s*,\s*/, 1);
 		const fullGame = gameFromContext(fullSpec, searchCtx, roomCtx, fullCtx);
 		if (fullGame) return { game: fullGame, ctx: fullCtx };
 		const inferredGame = gameFromContext(null, searchCtx, roomCtx, feed);
@@ -320,7 +322,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 					const { game, ctx } = getGame(arg, { action: 'sub' }, { room: message.target, $T });
 					const users = ctx.split(',').map(toId);
 					const outUser = users.find(user => Object.values(game.players).some(player => player.id === user));
-					const outTurn = Object.keys(game.players).find(turn => game.players[turn].id === outUser) as typeof game.turn;
+					const outTurn = Object.keys(game.players).find(turn => game.players[turn]!.id === outUser) as typeof game.turn;
 					const inUserId = users.find(user => !Object.values(game.players).some(player => player.id === user));
 					const inUser = inUserId ? message.parent.getUser(inUserId) : false;
 					if (!inUser || !outUser || !outTurn) throw new ChatError($T('GAME.IMPOSTOR_ALERT'));
@@ -378,7 +380,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				perms: 'driver',
 				syntax: 'CMD [#id], [user]',
 				async run({ arg, $T }) {
-					const [_gameId, _userId = ''] = arg.lazySplit(',', 1);
+					const [_gameId = '', _userId = ''] = arg.lazySplit(',', 1);
 					const gameId = '#' + toId(_gameId).toUpperCase();
 					const userId = toId(_userId);
 					if (!userId) throw new ChatError($T('GAME.FORCEWIN_SPECIFY_ID'));

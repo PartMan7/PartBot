@@ -24,7 +24,7 @@ export const command: DiscordCommand = {
 		const jsonData = matchedData.groups!.json;
 		const scoringAlgo = getSecretFunction<(tourBracket: string) => Record<string, number> | null>('hindiTourPointsAlgo', () => null);
 
-		const pointsData = scoringAlgo(jsonData);
+		const pointsData = scoringAlgo(jsonData!);
 		if (!pointsData) return interaction.reply('Unable to add data - no response / invalid input!');
 
 		const pointsType = PSRoomConfigs[ROOM]?.points?.priority[0];

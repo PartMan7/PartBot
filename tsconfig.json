@@ -10,6 +10,7 @@
 		"esModuleInterop": true, // Allow default-importing stuff like path
 		"resolveJsonModule": true, // Allow importing JSON files
 		"exactOptionalPropertyTypes": true, // Stricter checks!
+		"noUncheckedIndexedAccess": true, // EVEN stricter checks!
 		"strict": true,
 		"paths": {
 			"@/secrets/*": ["./secrets/src/*"],
