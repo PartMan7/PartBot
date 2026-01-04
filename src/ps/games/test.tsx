@@ -18,6 +18,7 @@ export const test: () => Promise<string> = async () => {
 		const MOCK_RENDER_CTX: RenderCtx = {
 			id: '#TEMP',
 			header: 'Your turn!',
+			cap: 15,
 			$T: i18n('english'),
 			board: {
 				cards: {

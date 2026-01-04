@@ -91,6 +91,7 @@ export type State = {
 
 export type RenderCtx = {
 	id: string;
+	cap: number;
 	board: Board;
 	header?: string;
 	dimHeader?: boolean;

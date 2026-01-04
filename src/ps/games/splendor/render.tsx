@@ -569,7 +569,9 @@ export function BaseBoard({
 				)}
 			</div>
 			{view.active && view.action === VIEW_ACTION_TYPE.CLICK_WILD ? <WildCardInput action={view} onClick={onClick!} $T={$T} /> : null}
-			{view.active && view.action === VIEW_ACTION_TYPE.CLICK_DECK ? <DeckReserveInput action={view} onClick={onClick!} $T={$T} /> : null}
+			{view.active && view.action === VIEW_ACTION_TYPE.CLICK_DECK ? (
+				<DeckReserveInput action={view} onClick={onClick!} $T={$T} />
+			) : null}
 			<div style={{ height: 48 }} />
 			{([3, 2, 1] as const).map(tier => {
 				const { wild, deck } = board.cards[tier];
@@ -616,11 +618,13 @@ export function ActivePlayer({
 	data,
 	action,
 	onClick,
+	cap,
 	$T,
 }: {
 	data: PlayerData;
 	action: ViewType & { type: 'player' };
 	onClick: string;
+	cap: number;
 	$T: TranslationFn;
 }): ReactElement {
 	const cardsGroup = data.cards.groupBy(card => card.type);
@@ -638,7 +642,7 @@ export function ActivePlayer({
 			<div style={{ display: 'inline-block', verticalAlign: 'top' }}>
 				<div className="header" style={{ height: 'auto', position: 'initial', borderRadius: 12, padding: '8px 12px', margin: 12 }}>
 					<Username name={data.name} clickable />(<b style={{ fontSize: 48 }}>{data.points}</b>
-					<small>/15</small>)
+					<small>/{cap}</small>)
 				</div>
 				<div style={{ zoom: '75%' }}>
 					{data.trainers.map(trainer => (
@@ -697,9 +701,7 @@ export function ActivePlayer({
 			) : null}
 			{action.active && action.action === VIEW_ACTION_TYPE.TOO_MANY_TOKENS ? (
 				<div style={{ color: 'white' }}>
-					<p>
-						{$T('GAME.SPLENDOR.TOO_MANY_TOKENS_MESSAGE', { max: MAX_TOKEN_COUNT, discard: action.discard })}
-					</p>
+					<p>{$T('GAME.SPLENDOR.TOO_MANY_TOKENS_MESSAGE', { max: MAX_TOKEN_COUNT, discard: action.discard })}</p>
 					<TokenInput
 						allowDragon
 						preset={null}
@@ -775,7 +777,7 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 				<div style={{ height: 48 }} />
 				{ctx.view.type === 'player' ? (
 					<>
-						<ActivePlayer data={ctx.players[ctx.view.self]} action={ctx.view} onClick={this.msg} $T={ctx.$T} />
+						<ActivePlayer data={ctx.players[ctx.view.self]} action={ctx.view} onClick={this.msg} cap={ctx.cap} $T={ctx.$T} />
 						<hr />
 					</>
 				) : null}

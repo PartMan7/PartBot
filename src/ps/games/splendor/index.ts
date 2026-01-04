@@ -522,6 +522,7 @@ export class Splendor extends BaseGame<State> {
 			players: this.state.playerData,
 			turns: this.turns,
 			view,
+			cap: this.state.pointsToWin,
 			$T: this.$T,
 		};
 
