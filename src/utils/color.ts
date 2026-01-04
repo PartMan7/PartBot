@@ -293,7 +293,7 @@ export function OklchToHex(oklch: Oklch): Hex {
  * Converts a number to a decimal as needed with default precision 4
  */
 function n(num: number): string {
-	return num.toFixed(4).replace(/(?<=\.\d+)0+$|\.0+/, '');
+	return num.toFixed(4).replace(/(?<=\.\d+)0+$|\.0+$/, '');
 }
 
 // region Stringifiers
