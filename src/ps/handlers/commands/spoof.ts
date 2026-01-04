@@ -3,6 +3,7 @@ import { type Client, Message, type Room } from 'ps-client';
 import { PSGames } from '@/cache';
 import { prefix } from '@/config/ps';
 import { ChatError } from '@/utils/chatError';
+import { escapeRegEx } from '@/utils/regexEscape';
 import { toId } from '@/utils/toId';
 
 import type { TranslationFn } from '@/i18n/types';
@@ -28,7 +29,7 @@ export function spoof(argData: string, message: PSMessage, $T: TranslationFn): P
 	if (!room) throw new ChatError($T('INVALID_ROOM_ID'));
 	const by = room.users.find(user => toId(user) === message.author.id);
 	if (!by) throw new ChatError($T('NOT_IN_ROOM'));
-	const [empty, _type, _from, rest] = message.raw.replace(new RegExp(`${prefix}@\\S* `), prefix).lazySplit('|', 3);
+	const [empty, _type, _from, rest] = message.raw.replace(new RegExp(`${escapeRegEx(prefix)}@\\S* `), prefix).lazySplit('|', 3);
 	return new Message({
 		type: 'chat',
 		raw: [empty, 'spoof', by, rest].join('|'),
