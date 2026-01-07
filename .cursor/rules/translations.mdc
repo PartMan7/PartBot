@@ -1,0 +1,149 @@
+---
+description: Guidelines for updating i18n translations across language files
+globs:
+  - src/i18n/**/*.ts
+alwaysApply: false
+---
+
+# Translation Update Guidelines
+
+When updating translations in this project, follow these steps carefully.
+
+## File Structure
+
+- **English (source of truth)**: `src/i18n/languages/english.ts`
+- **Other languages**: `src/i18n/languages/french.ts`, `src/i18n/languages/hindi.ts`, `src/i18n/languages/portuguese.ts`
+
+English is the authoritative source. All other language files are partial translations typed as `AvailableTranslations`.
+
+## Step-by-Step Process
+
+### 1. Identify Missing Translations
+
+Compare the English file against each other language file to find translation keys that exist in English but are missing from other languages.
+
+Use a recursive comparison approach:
+- For each key in the English file, check if it exists in the target language
+- Track the full path (e.g., `GAME.SPLENDOR.LABELS.BUY`)
+
+### 2. Translate Missing Entries
+
+For each missing entry:
+- Translate the English text to the target language
+- **CRITICAL**: Preserve all variable placeholders exactly as `{{varName}}` - do NOT translate or modify variable names inside the double braces
+- Maintain the same data structure (if it's a string, translate to a string; if it's an array of strings, translate to an array)
+
+### 3. Pluralization Patterns
+
+When `pluralize()` cannot handle language-specific pluralization rules, use the pattern:
+- `KEY_SINGULAR` for singular form
+- `KEY_PLURAL` for plural form
+
+Example from English:
+```typescript
+OPTION_LIST_SINGULAR: 'There are {{optionsCount}} option!',
+OPTION_LIST_PLURAL: 'There are {{optionsCount}} options!',
+```
+
+When adding new entries that require pluralization, always create both `_SINGULAR` and `_PLURAL` variants.
+
+### 4. Variable Preservation Rules
+
+Variables are denoted by `{{varName}}`. When translating:
+
+✅ Correct:
+```typescript
+// English
+ADDED_POINTS_TO_USERS: 'Added {{pointsText}} to {{users}}.'
+// French
+ADDED_POINTS_TO_USERS: 'Ajouté {{pointsText}} à {{users}}.'
+```
+
+❌ Incorrect:
+```typescript
+// DON'T translate variable names!
+ADDED_POINTS_TO_USERS: 'Ajouté {{textePoints}} à {{utilisateurs}}.'
+```
+
+### 5. Commit Process
+
+After making translation updates:
+
+1. **Stage ONLY translation files**:
+   ```bash
+   git add src/i18n/languages/french.ts src/i18n/languages/hindi.ts src/i18n/languages/portuguese.ts
+   ```
+
+2. **Commit with the proper message format**:
+   
+   For **3 or fewer** new entries:
+   ```bash
+   git commit -m "i18n: Add translations for GAME.SPLENDOR.LABELS, COMMANDS.TIMER.SEC (auto)"
+   ```
+   
+   For **more than 3** new entries, use a short title with count and list entries in the description:
+   ```bash
+   git commit -m "i18n: Add translations for 8 entries (auto)" -m "New entries:
+   - GAME.SPLENDOR.LABELS.BUY
+   - GAME.SPLENDOR.LABELS.RESERVE
+   - COMMANDS.TIMER.MS
+   - COMMANDS.TIMER.SEC
+   - COMMANDS.TIMER.MIN
+   - COMMANDS.TIMER.HR
+   - COMMANDS.TIMER.DAY
+   - COMMANDS.TIMER.WK"
+   ```
+
+3. **DO NOT** include any other file changes in translation commits - only the language files should be committed.
+
+## Translation Quality Guidelines
+
+- Maintain consistent tone with existing translations in each language
+- For Hindi translations, use Romanized Hindi (as established in the codebase)
+- Preserve formatting characters like `[[]]`, backticks, and HTML-like tags (`<USERNAME />`, `<COMMANDS />`)
+- Arrays and strings are interchangeable. When translating from an English array, translate only the first string and use that.
+- Regardless of language, try to ensure that lines that start with a variable have a `[[ ]]` prefixed (eg: `[[ ]]{{player}} won!`)
+
+## Example Workflow
+
+1. New English entry added:
+   ```typescript
+   // english.ts
+   NEW_FEATURE: {
+     TITLE: 'New Feature',
+     DESCRIPTION: 'This is a {{feature}} with {{count}} options.',
+   }
+   ```
+
+2. Add to French:
+   ```typescript
+   // french.ts
+   NEW_FEATURE: {
+     TITLE: 'Nouvelle Fonctionnalité',
+     DESCRIPTION: 'Ceci est une {{feature}} avec {{count}} options.',
+   }
+   ```
+
+3. Add to Hindi (Romanized):
+   ```typescript
+   // hindi.ts
+   NEW_FEATURE: {
+     TITLE: 'Nayi Feature',
+     DESCRIPTION: 'Yeh ek {{feature}} hai jismein {{count}} options hain.',
+   }
+   ```
+
+4. Add to Portuguese:
+   ```typescript
+   // portuguese.ts
+   NEW_FEATURE: {
+     TITLE: 'Nova Funcionalidade',
+     DESCRIPTION: 'Esta é uma {{feature}} com {{count}} opções.',
+   }
+   ```
+
+5. Commit:
+   ```bash
+   git add src/i18n/languages/french.ts src/i18n/languages/hindi.ts src/i18n/languages/portuguese.ts
+   git commit -m "i18n: Add translations for NEW_FEATURE.TITLE, NEW_FEATURE.DESCRIPTION (auto)"
+   ```
