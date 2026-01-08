@@ -52,54 +52,7 @@ export function battleHandler(message: PSMessage): void {
 	if (message.isIntro) return;
 
 	if (message.type === 'pm' && message.author.id !== message.parent.status.userid && message.command === '/challenge') {
-		const [format, alsoFormatWhatTheHeckIsThis] = message.content.replace('/challenge ', '').lazySplit('|', 2);
-		handleChallenge(message.target.id, format);
+		const [format, _alsoFormatWhatTheHeckIsThis] = message.content.replace('/challenge ', '').lazySplit('|', 2);
+		battleManager.acceptChallenge(message.target.id, format);
 	}
-
-	// Only handle battle room messages
-	const room = message.target;
-	if (!room || !room.id.startsWith('battle-')) return;
-
-	// Get the raw line content
-	const line = message.raw || message.content;
-	if (!line) return;
-
-	// Handle asynchronously but don't block
-	battleManager.handleMessage(room, line, message.isIntro).catch(err => {
-		if (err instanceof Error) {
-			Logger.errorLog(err);
-		}
-	});
-}
-
-/**
- * Raw message handler for battle rooms.
- * Use this for messages that don't go through the normal message handler.
- */
-export function battleRawHandler(this: Client, roomId: string, data: string, isIntro: boolean): void {
-	if (!battleManager) return;
-	if (isIntro) return;
-	if (!roomId.startsWith('battle-')) return;
-
-	const room = this.getRoom(roomId);
-	if (!room) return;
-
-	// Split data into lines and process each
-	const lines = data.split('\n');
-	for (const line of lines) {
-		if (line) {
-			battleManager.handleMessage(room, line, isIntro).catch(err => {
-				if (err instanceof Error) Logger.errorLog(err);
-			});
-		}
-	}
-}
-
-/**
- * Handle challenges.
- * Call this when receiving a challenge notification.
- */
-export function handleChallenge(user: string, format: string): void {
-	if (!battleManager) return;
-	battleManager.acceptChallenge(user, format);
 }

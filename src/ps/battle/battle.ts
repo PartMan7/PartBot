@@ -87,45 +87,6 @@ export class Battle {
 		};
 	}
 
-	/**
-	 * Process a protocol line and potentially return a command.
-	 */
-	async processLine(line: string): Promise<string | null> {
-		if (!line) return null;
-
-		// Handle request separately (contains JSON)
-		if (line.startsWith('|request|')) {
-			const json = line.slice(9);
-			return this.handleRequest(json);
-		}
-
-		// Parse protocol line and update state
-		if (line.startsWith('|')) {
-			// donotpush TODO
-			// parseProtocolLine(this.state, line);
-		}
-
-		// Handle battle end
-		if (line.startsWith('|win|') || line.startsWith('|tie|')) {
-			this.state.phase = 'ended';
-			const won = this.didWeWin(line);
-			await this.engine.onBattleEnd?.(this.state, won);
-			Logger.log(`[Battle] ${this.state.roomId} ended - ${won ? 'Won' : 'Lost'}`);
-		}
-
-		return null;
-	}
-
-	private didWeWin(line: string): boolean {
-		// |win|Username or |tie|
-		if (line.startsWith('|tie|')) return false;
-
-		const winner = line.slice(5);
-		const ourName = this.state[this.state.ourSide].name;
-
-		return winner.toLowerCase() === ourName.toLowerCase();
-	}
-
 	async handleRequest(json: string): Promise<string | null> {
 		if (!json) return null;
 

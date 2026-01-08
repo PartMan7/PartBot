@@ -87,11 +87,19 @@ const BattleProtocolEvents: Record<string, (state: BattleState, args: string[], 
 	'-burst': parseMega,
 	'-terastallize': parseTerastallize,
 	faint: parseFaint,
-	win: (state, _args) => {
+	win: (state, args, battle) => {
 		state.phase = 'ended';
+		const battleManager = getBattleManager();
+		if (!battleManager) return;
+		const winner = args[0];
+		const isOurWin = toId(winner) === toId(battleManager.client.status.username || '');
+		battleManager.onBattleEnd(battle.roomId, isOurWin ? 'win' : 'loss');
 	},
-	tie: (state, _args) => {
+	tie: (state, _args, battle) => {
 		state.phase = 'ended';
+		const battleManager = getBattleManager();
+		if (!battleManager) return;
+		battleManager.onBattleEnd(battle.roomId, 'tie');
 	},
 	'-transform': parseTransform,
 };
@@ -141,173 +149,6 @@ function onUpdateSearch(this: Client, room: string, line: string): void {
 		manager.battles.set(room, battle);
 	}
 }
-
-/**
- * Parse a battle protocol line and update state.
- */
-export function ____deprecatedParseProtocolLine(state: BattleState, line: string): void {
-	if (!line.startsWith('|')) return;
-
-	const parts = line.slice(1).split('|');
-	const cmd = parts[0];
-	const args = parts.slice(1);
-
-	switch (cmd) {
-		case 'player':
-			parsePlayer(state, args);
-			break;
-		case 'teamsize':
-			parseTeamSize(state, args);
-			break;
-		case 'gametype':
-			// Singles, doubles, etc - could track if needed
-			break;
-		case 'gen':
-			state.format.generation = parseInt(args[0]) || state.format.generation;
-			break;
-		case 'tier':
-			// Format name
-			break;
-		case 'rule':
-			// Rules - could track if needed
-			break;
-		case 'start':
-			state.phase = 'active';
-			break;
-		case 'turn':
-			state.turn = parseInt(args[0]) || state.turn;
-			break;
-
-		// Pokemon actions
-		case 'switch':
-		case 'drag':
-			parseSwitch(state, args);
-			break;
-		case 'move':
-			parseMove(state, args);
-			break;
-		case 'detailschange':
-		case '-formechange':
-			parseDetailsChange(state, args);
-			break;
-
-		// Damage/healing
-		case '-damage':
-			parseDamage(state, args);
-			break;
-		case '-heal':
-			parseHeal(state, args);
-			break;
-
-		// Status
-		case '-status':
-			parseStatus(state, args);
-			break;
-		case '-curestatus':
-			parseCureStatus(state, args);
-			break;
-		case '-cureteam':
-			parseCureTeam(state, args);
-			break;
-
-		// Boosts
-		case '-boost':
-			parseBoost(state, args, 1);
-			break;
-		case '-unboost':
-			parseBoost(state, args, -1);
-			break;
-		case '-setboost':
-			parseSetBoost(state, args);
-			break;
-		case '-clearboost':
-		case '-clearpositiveboost':
-		case '-clearnegativeboost':
-			parseClearBoost(state, args);
-			break;
-		case '-copyboost':
-			parseCopyBoost(state, args);
-			break;
-		case '-invertboost':
-			parseInvertBoost(state, args);
-			break;
-		case '-swapboost':
-			parseSwapBoost(state, args);
-			break;
-
-		// Abilities/items
-		case '-ability':
-			parseAbility(state, args);
-			break;
-		case '-endability':
-			parseEndAbility(state, args);
-			break;
-		case '-item':
-			parseItem(state, args);
-			break;
-		case '-enditem':
-			parseEndItem(state, args);
-			break;
-
-		// Field effects
-		case '-weather':
-			parseWeather(state, args);
-			break;
-		case '-fieldstart':
-			parseFieldStart(state, args);
-			break;
-		case '-fieldend':
-			parseFieldEnd(state, args);
-			break;
-
-		// Side effects
-		case '-sidestart':
-			parseSideStart(state, args);
-			break;
-		case '-sideend':
-			parseSideEnd(state, args);
-			break;
-
-		// Volatile status
-		case '-start':
-			parseVolatileStart(state, args);
-			break;
-		case '-end':
-			parseVolatileEnd(state, args);
-			break;
-
-		// Mega/Dynamax/Tera
-		case '-mega':
-		case '-burst': // Ultra Burst
-			parseMega(state, args);
-			break;
-		case '-terastallize':
-			parseTerastallize(state, args);
-			break;
-
-		// Fainting
-		case 'faint':
-			parseFaint(state, args);
-			break;
-
-		// Battle end
-		case 'win':
-		case 'tie':
-			state.phase = 'ended';
-			break;
-
-		// Transform/Ditto
-		case '-transform':
-			parseTransform(state, args);
-			break;
-
-		default:
-			// Many other messages we don't need to track
-			break;
-	}
-}
-
-// ============ Parse Helpers ============
 
 function getSide(state: BattleState, ident: string): Side {
 	return ident.startsWith('p1') ? state.p1 : state.p2;

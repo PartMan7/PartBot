@@ -3,15 +3,16 @@
  * Handles ladder queue, challenge acceptance, and routing.
  */
 
-import { Battle } from '@/ps/battle/battle';
+import { usePersistedCache } from '@/cache/persisted';
 import { APIDecisionEngine, DecisionEngineChain, HeuristicDecisionEngine, RandomDecisionEngine } from '@/ps/battle/decision';
 import { FORMATS } from '@/ps/battle/types';
 import { Logger } from '@/utils/logger';
 import { toId } from '@/utils/toId';
 
+import type { Battle } from '@/ps/battle/battle';
 import type { DecisionEngine } from '@/ps/battle/decision';
 import type { AILevel, FormatConfig } from '@/ps/battle/types';
-import type { Client, Room } from 'ps-client';
+import type { Client } from 'ps-client';
 
 export interface BattleManagerConfig {
 	/** External decision API URL (optional) */
@@ -51,11 +52,8 @@ export class BattleManager {
 	private ladderInterval: ReturnType<typeof setInterval> | null = null;
 
 	// Statistics
-	stats = {
-		battlesStarted: 0,
-		battlesWon: 0,
-		battlesLost: 0,
-	};
+	battleStatsCache = usePersistedCache('battleStats');
+	stats = this.battleStatsCache.get();
 
 	constructor(client: Client, config: BattleManagerConfig = {}) {
 		this.client = client;
@@ -95,70 +93,6 @@ export class BattleManager {
 		engines.push(new RandomDecisionEngine());
 
 		return new DecisionEngineChain(engines);
-	}
-
-	// ============ Message Handling ============
-
-	/**
-	 * Handle a message from any room.
-	 * Call this for all messages; it will filter for battle rooms.
-	 */
-	async handleMessage(room: Room | null, line: string, isIntro?: boolean): Promise<void> {
-		if (isIntro) return;
-		if (!room || !room.id.startsWith('battle-')) return;
-
-		const roomId = room.id;
-
-		// Get or create battle instance
-		let battle = this.battles.get(roomId);
-
-		if (!battle) {
-			// New battle
-			const format = this.parseFormatFromRoom(roomId);
-			const ourSide = this.detectOurSide(line);
-
-			if (!ourSide) {
-				// Can't determine side yet, store line for later?
-				// For now, default to p1 and correct later from request
-				battle = new Battle(this.client, roomId, format, 'p1', this.decisionEngine);
-			} else {
-				battle = new Battle(this.client, roomId, format, ourSide, this.decisionEngine);
-			}
-
-			this.battles.set(roomId, battle);
-			this.stats.battlesStarted++;
-
-			await this.decisionEngine.onBattleStart?.(battle.state);
-			Logger.log(`[Battle] Started ${roomId}`);
-		}
-
-		// Process the line
-		const command = await battle.processLine(line);
-
-		if (command) {
-			room.send(`/choose ${command}`);
-		}
-
-		// Clean up ended battles
-		if (battle.isEnded()) {
-			// Track win/loss
-			const ourFainted = battle.state[battle.state.ourSide].faintedCount;
-			const theirFainted = battle.state[battle.state.ourSide === 'p1' ? 'p2' : 'p1'].faintedCount;
-			const didWin = ourFainted < theirFainted;
-			if (didWin) {
-				this.stats.battlesWon++;
-			} else {
-				this.stats.battlesLost++;
-			}
-
-			this.battles.delete(roomId);
-			this.currentSearches.clear();
-
-			// Continue laddering if enabled
-			if (this.isLaddering) {
-				this.maybeStartSearch();
-			}
-		}
 	}
 
 	parseFormatFromRoom(roomId: string): FormatConfig {
@@ -329,6 +263,33 @@ export class BattleManager {
 		Logger.log(`[Challenge] Sent to ${user} for ${formatId}`);
 	}
 
+	/**
+	 * Handles battle conclusion, updates stats, and cleans up.
+	 * @param roomId The ID of the battle room.
+	 * @param result The outcome of the battle ('win', 'loss', or 'tie').
+	 */
+	onBattleEnd(roomId: string, result: 'win' | 'loss' | 'tie'): void {
+		Logger.log(`[BattleManager] Battle ${roomId} ended with result: ${result}`);
+
+		// Update stats
+		if (result === 'win') {
+			this.stats.battlesWon++;
+		} else if (result === 'loss') {
+			this.stats.battlesLost++;
+		} else {
+			this.stats.battlesTied++;
+		}
+		this.battleStatsCache.set(this.stats);
+
+		// Clean up battle state
+		this.battles.delete(roomId);
+
+		// If we were laddering, try to start a new search
+		if (this.isLaddering) {
+			this.maybeStartSearch();
+		}
+	}
+
 	// ============ Statistics ============
 
 	/**
@@ -341,9 +302,10 @@ export class BattleManager {
 		battlesStarted: number;
 		battlesWon: number;
 		battlesLost: number;
+		battlesTied: number;
 		winRate: string;
 	} {
-		const total = this.stats.battlesWon + this.stats.battlesLost;
+		const total = this.stats.battlesWon + this.stats.battlesLost + this.stats.battlesTied;
 		const winRate = total > 0 ? ((this.stats.battlesWon / total) * 100).toFixed(1) + '%' : 'N/A';
 
 		return {
@@ -363,7 +325,9 @@ export class BattleManager {
 			battlesStarted: 0,
 			battlesWon: 0,
 			battlesLost: 0,
+			battlesTied: 0,
 		};
+		this.battleStatsCache.set(this.stats);
 	}
 
 	/**
