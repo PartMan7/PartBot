@@ -36,7 +36,7 @@ export function autoResHandler(message: PSMessage) {
 	if (message.type === 'chat') {
 		if (['lunarnewyear'].includes(message.target.id)) {
 			const HONSE_REGEX = /(\w*)horse(\w*)/i;
-			if (HONSE_REGEX.test(message.content) && sample(20) === 0) {
+			if (HONSE_REGEX.test(message.content) && sample('5%')) {
 				const honse = message.content.match(HONSE_REGEX)!;
 				const honseText = honse[1] || honse[2] ? `*${honse[1]}HONSE${honse[2]}` : '*honse';
 				message.reply(honseText);

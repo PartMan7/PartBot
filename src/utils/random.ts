@@ -22,11 +22,16 @@ export function useRNG(rng?: RNGSource): () => number {
 	return JSRNG;
 }
 
+type Percent = `${number}%`;
 function sample(input: null, rng?: RNGSource): number;
 function sample(input: number, rng?: RNGSource): number;
 function sample(input: [number, number], rng?: RNGSource): number;
 function sample(input: Record<string, number>, rng?: RNGSource): string;
-function sample(input: null | number | [number, number] | Record<string, number>, rng?: RNGSource): number | string {
+function sample(input: Percent, rng?: RNGSource): boolean;
+function sample(
+	input: null | number | [number, number] | Record<string, number> | Percent,
+	rng?: RNGSource
+): number | string | boolean {
 	const RNG = useRNG(rng);
 	if (!input) return RNG();
 	if (typeof input === 'number') return Math.floor(input * RNG());
@@ -41,6 +46,11 @@ function sample(input: null | number | [number, number] | Record<string, number>
 		if (totalWeight <= 0) throw new Error('Called RNG on record set with invalid weights');
 		const lookup = totalWeight * RNG();
 		return thresholds.find(([, weight]) => lookup < weight)![0];
+	}
+	if (typeof input === 'string' && input.endsWith('%')) {
+		const percentage = parseFloat(input.slice(0, -1));
+		if (isNaN(percentage)) throw new Error(`Invalid percentage ${input}`);
+		return RNG() * 100 < percentage;
 	}
 	return RNG();
 }
