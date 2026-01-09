@@ -1,6 +1,7 @@
 import { PSNoPrefixHelp } from '@/cache';
 import { owner, prefix, username } from '@/config/ps';
 import { fromHumanTime } from '@/utils/humanTime';
+import { sample } from '@/utils/random';
 import { toId } from '@/utils/toId';
 
 import type { PSMessage } from '@/types/ps';
@@ -30,5 +31,18 @@ export function autoResHandler(message: PSMessage) {
 		if (Date.now() - (PSNoPrefixHelp[userid]?.getTime() ?? 0) < fromHumanTime('5 minutes')) return;
 		PSNoPrefixHelp[userid] = new Date();
 		return message.reply(helpMessage);
+	}
+
+	if (message.type === 'chat') {
+		if (!message.content.startsWith(prefix)) {
+			if (['lunarnewyear'].includes(message.target.id)) {
+				const HONSE_REGEX = /(\w*)horse(\w*)/i;
+				if (HONSE_REGEX.test(message.content) && sample(20) === 0) {
+					const honse = message.content.match(HONSE_REGEX)!;
+					const honseText = honse[1] || honse[2] ? `*${honse[1]}HONSE${honse[2]}` : '*honse';
+					message.reply(honseText);
+				}
+			}
+		}
 	}
 }
