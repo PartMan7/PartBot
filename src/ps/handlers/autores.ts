@@ -34,14 +34,12 @@ export function autoResHandler(message: PSMessage) {
 	}
 
 	if (message.type === 'chat') {
-		if (!message.content.startsWith(prefix)) {
-			if (['lunarnewyear'].includes(message.target.id)) {
-				const HONSE_REGEX = /(\w*)horse(\w*)/i;
-				if (HONSE_REGEX.test(message.content) && sample(20) === 0) {
-					const honse = message.content.match(HONSE_REGEX)!;
-					const honseText = honse[1] || honse[2] ? `*${honse[1]}HONSE${honse[2]}` : '*honse';
-					message.reply(honseText);
-				}
+		if (['lunarnewyear'].includes(message.target.id)) {
+			const HONSE_REGEX = /(\w*)horse(\w*)/i;
+			if (HONSE_REGEX.test(message.content) && sample(20) === 0) {
+				const honse = message.content.match(HONSE_REGEX)!;
+				const honseText = honse[1] || honse[2] ? `*${honse[1]}HONSE${honse[2]}` : '*honse';
+				message.reply(honseText);
 			}
 		}
 	}
