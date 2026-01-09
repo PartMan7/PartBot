@@ -282,6 +282,8 @@ export class BattleManager {
 		this.battleStatsCache.set(this.stats);
 
 		// Clean up battle state
+		this.battles.get(roomId)?.send('GG!');
+		this.battles.get(roomId)?.send('/part');
 		this.battles.delete(roomId);
 
 		// If we were laddering, try to start a new search
