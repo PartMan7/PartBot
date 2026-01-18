@@ -48,3 +48,13 @@ export type PSRoomConfig = {
 		[key: string]: unknown;
 	} | null;
 };
+
+export type PSRepeat = {
+	room: string;
+	startedBy: string;
+	startedAt: number;
+	id: string;
+	interval: number;
+	author: string;
+	content: string;
+};

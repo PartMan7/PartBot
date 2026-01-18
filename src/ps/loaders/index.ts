@@ -5,8 +5,11 @@ import { loadCommands } from '@/ps/loaders/commands';
 import { loadJoinphrases } from '@/ps/loaders/joinphrases';
 import { loadRoomConfigs } from '@/ps/loaders/roomconfigs';
 import { loadSeens } from '@/ps/loaders/seens';
+import { loadRepeats } from '@/ps/repeats';
 
-export default async function init() {
+import type { Client } from 'ps-client';
+
+export default async function init(PS: Client) {
 	await connection;
 	await loadCommands();
 	if (IS_ENABLED.DB) {
@@ -16,5 +19,6 @@ export default async function init() {
 		}
 		await loadJoinphrases();
 		await loadRoomConfigs();
+		await loadRepeats(PS);
 	}
 }

@@ -40,6 +40,7 @@ export const PSQuoteRoomPrefs: Partial<{ [key: string]: { room: string; at: Date
 export const PSKuncInProgress: Partial<{ [key: string]: boolean }> = {};
 export const PSNonces: Partial<{ [key: string]: { callback: () => TranslatedText | void; perms?: Perms } }> = {};
 export const PSPointsNonce: Partial<{ [key: string]: Record<string, Record<string, number>> | null }> = {};
+export const PSActiveRepeats: Map<string, NodeJS.Timeout> = new Map();
 
 // Games
 export const PSGames: { [key in keyof Games]?: Record<string, CommonGame> } = {};

@@ -9,9 +9,9 @@ import loadPS from '@/ps/loaders';
 import { Logger } from '@/utils/logger';
 
 const PS = new Client({ username, password, rooms, transformHTML, avatar });
-PS.on('login', () => Logger.log(`Connected to PS! [${username}]`));
+PS.on('login', () => Logger.log(`Connected to PS! [${PS.status.username}]`));
 
-if (IS_ENABLED.PS) loadPS().then(() => PS.connect());
+if (IS_ENABLED.PS) loadPS(PS).then(() => PS.connect());
 
 PS.on('message', msg => registerEvent(PS, 'commandHandler')(msg));
 PS.on('message', msg => registerEvent(PS, 'interfaceHandler')(msg));

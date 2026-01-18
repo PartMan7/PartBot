@@ -65,6 +65,19 @@ export const PS_REGISTERS: Register[] = IS_ENABLED.PS
 			},
 
 			{
+				label: 'repeats',
+				pattern: /\/ps\/repeats/,
+				reload: async () => {
+					const oldRepeats = await import('@/ps/repeats');
+					oldRepeats.clearAllRepeats();
+					cachebust('@/ps/repeats');
+					const newRepeats = await import('@/ps/repeats');
+					const { default: PS } = await import('@/ps');
+					await newRepeats.loadRepeats(PS);
+				},
+			},
+
+			{
 				label: 'commands-handler',
 				pattern: /\/ps\/handlers\/commands/,
 				reload: async () => {
