@@ -359,7 +359,8 @@ export default {
 			},
 		},
 		REPEAT: {
-			ALREADY_EXISTS: "Is room mein '{{id}}' id ke saath pehle se ek repeat maujood hai. Ise band karne ke liye pehle ``{{prefix}}endrepeat`` use karein.",
+			ALREADY_EXISTS:
+				"Is room mein '{{id}}' id ke saath pehle se ek repeat maujood hai. Ise band karne ke liye pehle ``{{prefix}}endrepeat`` use karein.",
 			MESSAGE_TOO_LONG: 'Sandesh bahut lamba hai (adhiktam {{max}} characters).',
 			NO_COMMANDS: 'Commands repeat karne ki anumati nahi hai.',
 			MIN_INTERVAL: 'Interval kam se kam 1 minute hona chahiye.',

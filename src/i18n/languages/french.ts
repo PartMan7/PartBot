@@ -341,7 +341,8 @@ export default {
 			DEC: { ABBR: 'déc', NAME: 'décennie', PLUR: 'décennies' },
 		},
 		REPEAT: {
-			ALREADY_EXISTS: "Un repeat avec l'id '{{id}}' existe déjà dans ce salon. Utilisez ``{{prefix}}endrepeat`` pour l'arrêter d'abord.",
+			ALREADY_EXISTS:
+				"Un repeat avec l'id '{{id}}' existe déjà dans ce salon. Utilisez ``{{prefix}}endrepeat`` pour l'arrêter d'abord.",
 			MESSAGE_TOO_LONG: 'Le message est trop long (maximum {{max}} caractères).',
 			NO_COMMANDS: "La répétition de commandes n'est pas autorisée.",
 			MIN_INTERVAL: "L'intervalle doit être d'au moins 1 minute.",
