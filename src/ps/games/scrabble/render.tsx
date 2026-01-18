@@ -27,8 +27,7 @@ export function renderMove(logEntry: Log, game: Scrabble): [ReactElement, { name
 					{words.length === 1 && !logEntry.ctx.points.bingo
 						? words[0][0]
 						: words.map(([word, points]) => `${word} (${points})`).list(game.$T)}{' '}
-					for {pluralize(logEntry.ctx.points.total, 'point', 'points')}!
-					{logEntry.ctx.points.bingo ? ' BINGO!' : null}
+					for {pluralize(logEntry.ctx.points.total, 'point', 'points')}!{logEntry.ctx.points.bingo ? ' BINGO!' : null}
 				</LogEntry>,
 				opts,
 			];
@@ -79,6 +78,10 @@ function getBackgroundHex(bonus: Bonus | null): string {
 			return '#e65';
 		case '3L':
 			return '#49a';
+		case '4W':
+			return '#a12';
+		case '4L':
+			return '#14a';
 		default:
 			return '#cca';
 	}

@@ -70,8 +70,8 @@ export class Scrabble extends BaseGame<State> {
 			if (!applyMons.success) throw new Error(applyMons.error);
 			this.room.send(this.$T('GAME.SCRABBLE.AUTO_MOD_APPLIED', { id: this.id, mod: ScrabbleModData[defaultMod].name }));
 		}
-		this.state.baseBoard = BaseBoard;
-		this.state.board = createGrid<BoardTile | null>(BaseBoard.length, BaseBoard[0].length, () => null);
+		this.state.baseBoard = (this.mod ? ScrabbleModData[this.mod].board : null) ?? BaseBoard;
+		this.state.board = createGrid<BoardTile | null>(this.state.baseBoard.length, this.state.baseBoard[0].length, () => null);
 		this.state.bag = Object.entries((this.mod ? ScrabbleModData[this.mod].counts : null) ?? LETTER_COUNTS)
 			.flatMap(([letter, count]) => letter.repeat(count).split(''))
 			.shuffle(this.prng);
