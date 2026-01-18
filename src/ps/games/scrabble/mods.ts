@@ -1,11 +1,11 @@
 import { DICTIONARY, ScrabbleMods } from '@/ps/games/scrabble/constants';
 
 import type { BaseModEntry } from '@/ps/games/mods';
-import type { LetterMetadata, WordScore } from '@/ps/games/scrabble/types';
+import type { BaseBoard as BaseBoardType, LetterMetadata, WordScore } from '@/ps/games/scrabble/types';
 
 export const ScrabbleModData: Record<
 	ScrabbleMods,
-	BaseModEntry & { dict: DICTIONARY; points?: LetterMetadata; counts?: LetterMetadata }
+	BaseModEntry & { dict: DICTIONARY; points?: LetterMetadata; counts?: LetterMetadata; board?: BaseBoardType }
 > = {
 	[ScrabbleMods.CSW19]: {
 		id: ScrabbleMods.CSW19,
@@ -110,6 +110,43 @@ export const ScrabbleModData: Record<
 		desc: 'PokéScrabble, but INsANe BONuSEs!',
 		dict: DICTIONARY.CSW24,
 		aliases: ['crazy'],
+	},
+	[ScrabbleMods.SUPER]: {
+		id: ScrabbleMods.SUPER,
+		name: 'Super Scrabble',
+		desc: 'Super Scrabble, with a super board! See https://en.wikipedia.org/wiki/Super_Scrabble',
+		dict: DICTIONARY.CSW24,
+		counts: {
+			A: 16,
+			B: 4,
+			C: 6,
+			D: 8,
+			E: 24,
+			F: 4,
+			G: 5,
+			H: 5,
+			I: 13,
+			J: 2,
+			K: 2,
+			L: 7,
+			M: 6,
+			N: 13,
+			O: 15,
+			P: 4,
+			Q: 2,
+			R: 13,
+			S: 10,
+			T: 15,
+			U: 7,
+			V: 3,
+			W: 4,
+			X: 2,
+			Y: 4,
+			Z: 2,
+			_: 4,
+		},
+		board: [],
+		aliases: ['superscrabble'],
 	},
 };
 

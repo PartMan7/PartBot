@@ -120,4 +120,5 @@ export enum ScrabbleMods {
 	CLABBERS = 'clabbers',
 	POKEMON = 'pokemon',
 	CRAZYMONS = 'crazymons',
+	SUPER = 'super',
 }
