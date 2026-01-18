@@ -65,9 +65,12 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 		} catch (originalError) {
 			try {
 				// Custom 'commands' with `,add*`. Try parsing `,addpoints abc def` as `,add points, abc, def`.
-				if (!argData.startsWith('add')) throw new ChatError($T('CMD_NOT_FOUND'));
-				const pointsType = baseSpacedArgs.shift()!.toLowerCase().replace(/^add/, '');
-				const newArgData = `add ${pointsType}, ${baseSpacedArgs.join('')}`;
+				if (!argData.startsWith('add') && !argData.startsWith('remove')) throw new ChatError($T('CMD_NOT_FOUND'));
+				const pointsType = baseSpacedArgs
+					.shift()!
+					.toLowerCase()
+					.replace(/^add|^remove/, '');
+				const newArgData = `${argData.startsWith('add') ? 'add' : 'remove'} ${pointsType}, ${baseSpacedArgs.join('')}`;
 				const args = newArgData.split(/ +/);
 				const spacedArgs = newArgData.split(/( +)/);
 				({ command: commandObj, sourceCommand, cascade, context: parsedCtx } = parse(args, spacedArgs, $T));
