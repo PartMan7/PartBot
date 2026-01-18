@@ -1,0 +1,12 @@
+---
+description: Prototypes and global extensions in the codebase
+globs: src/**/*.ts, src/**/*.tsx
+---
+
+# Prototypes and Global Extensions
+
+This project uses custom prototype extensions for built-in objects like `Array`, `String`, and `Number`. 
+
+Whenever you are working with these types, you **MUST** read `src/globals/prototypes.ts` to understand the available utility methods. 
+
+Do not reinvent these utilities or use more verbose alternatives when these are available. Always check the file for the most up-to-date list of prototypes.
