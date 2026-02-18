@@ -118,6 +118,10 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 			throw new ChatError(conceal ?? $T('PM_ONLY_COMMAND'));
 		}
 
+		if (cascade.rooms && message.type === 'chat' && !cascade.rooms.includes(message.target.id)) {
+			throw new ChatError(conceal ?? $T('WRONG_ROOM'));
+		}
+
 		context.hasFeature = function (feature, room) {
 			if (message.type === 'pm') return null;
 			const roomConfig = PSRoomConfigs[room ?? message.target.id];

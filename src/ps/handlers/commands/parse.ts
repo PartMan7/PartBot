@@ -4,7 +4,11 @@ import { ChatError } from '@/utils/chatError';
 import type { TranslationFn } from '@/i18n/types';
 import type { PSCommand, PSCommandChild, PSCommandContext } from '@/types/chat';
 
-type Cascade = { flags: NonNullable<PSCommand['flags']>; perms: NonNullable<PSCommand['perms']> };
+type Cascade = {
+	flags: NonNullable<PSCommand['flags']>;
+	perms: NonNullable<PSCommand['perms']>;
+	rooms: PSCommand['rooms'];
+};
 
 export function parse(
 	aliasArgs: string[],
@@ -46,6 +50,7 @@ export function parse(
 	const cascade: Cascade = {
 		flags: Object.assign({}, commandObj.flags ?? {}),
 		perms: commandObj.perms ?? 'regular',
+		rooms: commandObj.rooms,
 	};
 	while (command.length > 0 && commandObj) {
 		const next: PSCommandChild | undefined = commandObj.children?.[command[0]];
@@ -56,6 +61,7 @@ export function parse(
 			});
 		}
 		if (next.perms) cascade.perms = next.perms;
+		if (next.rooms) cascade.rooms = next.rooms;
 		commandObj = next;
 		command.shift();
 	}
