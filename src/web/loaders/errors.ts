@@ -6,7 +6,7 @@ import { WebError } from '@/utils/webError';
 import type { Application, NextFunction, Request, Response } from 'express';
 
 function errorHandler(err: Error, req: Request, res: Response, _next: NextFunction): void {
-	if (!(err instanceof WebError)) Logger.log(req, err);
+	if (!(err instanceof WebError)) Logger.log(`[${req.method}] ${req.url}`, err);
 	const message = escapeHTML(err.message ?? 'An internal server error occurred!');
 	res
 		.status('statusCode' in err && typeof err.statusCode === 'number' ? err.statusCode : 501)
