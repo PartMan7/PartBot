@@ -1,7 +1,10 @@
+
 import { PSCommands } from '@/cache';
 import { prefix } from '@/config/ps';
 import { permissions } from '@/ps/handlers/commands/permissions';
 import { getSpoofMessage } from '@/ps/handlers/commands/spoof';
+import { ChatError } from '@/utils/chatError';
+import { Logger } from '@/utils/logger';
 
 import type { PSCommand } from '@/types/chat';
 
@@ -25,9 +28,16 @@ export const command: PSCommand = {
 		const visibleCommands = allCommands
 			.filter(command => !command.flags?.noDisplay)
 			.filter(command => {
-				if (!command.perms) return true;
-				if (permissions(command.perms, [command.name], spoofedMessage)) return true;
-				return false;
+				try {
+					if (!command.perms) return true;
+					if (permissions(command.perms, [command.name], spoofedMessage)) return true;
+					return false;
+				} catch (err: unknown) {
+					if (err instanceof Error)
+						if (!(err instanceof ChatError)) Logger.errorLog(err);
+
+					return false; // No need to show error responses from permissions validation
+				}
 			});
 
 		const otherCommands: PSCommand[] = [];
