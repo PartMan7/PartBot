@@ -1,4 +1,3 @@
-
 import { PSCommands } from '@/cache';
 import { prefix } from '@/config/ps';
 import { permissions } from '@/ps/handlers/commands/permissions';
@@ -33,8 +32,7 @@ export const command: PSCommand = {
 					if (permissions(command.perms, [command.name], spoofedMessage)) return true;
 					return false;
 				} catch (err: unknown) {
-					if (err instanceof Error)
-						if (!(err instanceof ChatError)) Logger.errorLog(err);
+					if (err instanceof Error) if (!(err instanceof ChatError)) Logger.errorLog(err);
 
 					return false; // No need to show error responses from permissions validation
 				}
