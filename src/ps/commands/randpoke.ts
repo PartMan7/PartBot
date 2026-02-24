@@ -5,7 +5,7 @@ export const command: PSCommand = {
 	name: 'randpoke',
 	help: 'Starts a randpoke param search.',
 	syntax: 'CMD',
-	rooms: ['scavengers'],
+	rooms: ['scavengers', 'indonesia'],
 	perms: 'voice',
 	categories: ['casual'],
 	async run({ message }) {
