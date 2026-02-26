@@ -299,6 +299,7 @@ export const command: PSCommand = {
 	categories: ['utility'],
 	extendedAliases: {
 		addquote: ['quotes', 'add'],
+		randquote: ['quotes', 'random'],
 	},
 	children: {
 		help: {
