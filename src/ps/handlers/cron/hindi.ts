@@ -1,8 +1,13 @@
 import { pokedex } from 'ps-client/data';
+import { uploadToPastie } from 'ps-client/tools';
 
-import { PSCommands } from '@/cache';
+import { PSCommands, PSRoomConfigs } from '@/cache';
+import { queryPoints, resetPoints } from '@/database/points';
+import { HINDI_LOGS } from '@/discord/constants/servers/hindi';
+import { getChannel } from '@/discord/loaders/channels';
 import { i18n } from '@/i18n';
 import { TimeZone } from '@/ps/handlers/cron/constants';
+import { Logger } from '@/utils/logger';
 import { sample } from '@/utils/random';
 import { sleep } from '@/utils/sleep';
 
@@ -11,6 +16,15 @@ import type { PSCommandContext } from '@/types/chat';
 import type { RecursivePartial } from '@/types/common';
 import type { PSMessage } from '@/types/ps';
 import type { Client, User } from 'ps-client';
+
+function hasPoints<Points extends number[]>(user: Points, targetPoints: Points): boolean {
+	for (const [index, targetPoint] of targetPoints.entries()) {
+		if (user[index] > targetPoint) return true;
+		if (user[index] === targetPoint) continue;
+		return false;
+	}
+	return true;
+}
 
 function _preGGSSEvent(this: Client, eventType: string) {
 	const hindiRoom = this.getRoom('hindi');
@@ -83,6 +97,45 @@ export function register(this: Client, Jobs: PSCronJobManager): void {
 		const room = this.getRoom('hindi');
 		room?.send('/modchat ac');
 		room?.send('/automodchat off');
+	});
+
+	// Midnight on the 1st of every month
+	Jobs.register('hindi-monthly-lb-reset', '0 0 1 * *', TimeZone.IST, async () => {
+		const room = this.getRoom('hindi');
+		if (!room) return;
+
+		const roomConfig = PSRoomConfigs['hindi']?.points;
+		if (!roomConfig) return;
+
+		const leaderboard = await queryPoints('hindi', roomConfig.priority, Infinity);
+		if (!leaderboard?.length) return;
+
+		const topThreeScore = roomConfig.priority.map(type => leaderboard[2].points[type]);
+		const hasSomePoints = topThreeScore.some(v => v > 0);
+		if (!hasSomePoints) return;
+
+		const topUsers = leaderboard.filter(user =>
+			hasPoints(
+				roomConfig.priority.map(type => user.points[type]),
+				topThreeScore
+			)
+		);
+
+		room.send(`/wall Congratulations to ${topUsers.map(u => u.name).list()} for topping this month's leaderboard!`);
+
+		const backupURL = await uploadToPastie(JSON.stringify(leaderboard, null, 2));
+		Logger.log(`Monthly leaderboard backup for hindi: ${backupURL}`);
+		room.send(`/modnote Monthly leaderboard backup: ${backupURL}`);
+
+		const channel = getChannel(HINDI_LOGS);
+		if (!channel) return;
+		channel.send(
+			`Top users: ${topUsers
+				.map(user => `${user.name} (${roomConfig.priority.map(type => user.points[type]).join(', ')})`)
+				.list()}. Monthly leaderboard backup: ${backupURL}.`
+		);
+
+		await resetPoints('hindi', true);
 	});
 
 	// TODO: RkR, DkR
