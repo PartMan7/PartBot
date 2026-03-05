@@ -11,7 +11,7 @@ export type BoardTile = {
 type Letter = 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'|'_';
 export type LetterMetadata = Record<Letter, number>;
 
-export type Bonus = '3W' | '2W' | '3L' | '2L' | '2*';
+export type Bonus = '4W' | '3W' | '2W' | '4L' | '3L' | '2L' | '2*';
 export type BonusReducer = { apply: (score: number) => number; weight: number };
 
 export type BaseBoard = (Bonus | null)[][];
