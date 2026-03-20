@@ -10,20 +10,17 @@ import { sample } from '@/utils/random';
 import { range } from '@/utils/range';
 
 import type { NoTranslate, TranslatedText } from '@/i18n/types';
-import type { BaseContext } from '@/ps/games/game';
+import type { BaseContext, GameUser } from '@/ps/games/game';
 import type { Log } from '@/ps/games/snakesladders/logs';
 import type { RenderCtx, State, WinCtx } from '@/ps/games/snakesladders/types';
 import type { ActionResponse, EndType } from '@/ps/games/types';
 import type { Hex } from '@/utils/color';
-import type { User } from 'ps-client';
-import type { ReactNode } from 'react';
 
 export { meta } from '@/ps/games/snakesladders/meta';
 
 export class SnakesLadders extends BaseGame<State> {
 	log: Log[] = [];
 	declare winCtx?: WinCtx | { type: EndType };
-	frames: ReactNode[] = [];
 
 	ladders: [number, number][] = [
 		[1, 38],
@@ -69,7 +66,7 @@ export class SnakesLadders extends BaseGame<State> {
 		return { success: true, data: null };
 	}
 
-	onReplacePlayer(turn: string, withPlayer: User): ActionResponse {
+	onReplacePlayer(turn: string, withPlayer: GameUser): ActionResponse {
 		const oldBoardPlayer = this.state.board[turn];
 		if (!oldBoardPlayer) return { success: false, error: this.$T('GAME.SNAKESLADDERS.PLAYER_NOT_FOUND') };
 		delete this.state.board[turn];
@@ -77,7 +74,7 @@ export class SnakesLadders extends BaseGame<State> {
 		return { success: true, data: null };
 	}
 
-	action(user: User): void {
+	action(user: GameUser): void {
 		if (!this.started) this.throw('GAME.NOT_STARTED');
 		if (user.id !== this.players[this.turn!].id) this.throw('GAME.IMPOSTOR_ALERT');
 		this.roll();
@@ -127,28 +124,9 @@ export class SnakesLadders extends BaseGame<State> {
 			return this.end();
 		}
 
-		this.frames = frameNums.map(pos => this.render(null, pos));
+		this.queueAnimation(frameNums.map(pos => this.render(null, pos)));
 
 		this.endTurn();
-	}
-
-	update(user?: string): void {
-		if (this.frames.length > 0) {
-			if (user) return; // Don't send the page if animating
-			this.room.pageHTML(
-				[
-					...Object.values(this.players)
-						.filter(player => !player.out)
-						.map(player => player.id),
-					...this.spectators,
-				],
-				this.frames.shift(),
-				{ name: this.id }
-			);
-			if (this.frames.length > 0) setTimeout(() => this.update(), 500);
-			else setTimeout(() => super.update(), 500);
-			return;
-		} else super.update(user);
 	}
 
 	onEnd(type?: EndType): TranslatedText {
@@ -170,17 +148,8 @@ export class SnakesLadders extends BaseGame<State> {
 			lastRoll: this.state.lastRoll,
 			id: this.id,
 			active: side === this.turn && !!side,
+			...(typeof override === 'number' ? { header: `${this.turn} rolled a ${this.state.lastRoll}...` } : this.getHeader(side)),
 		};
-		if (this.winCtx) {
-			ctx.header = this.$T('GAME.GAME_ENDED');
-		} else if (typeof override === 'number') {
-			ctx.header = `${this.turn} rolled a ${this.state.lastRoll}...`;
-		} else if (side === this.turn) {
-			ctx.header = this.$T('GAME.YOUR_TURN');
-		} else if (this.turn) {
-			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: this.players[this.turn].name });
-			if (side) ctx.dimHeader = true;
-		}
-		return render.bind(this.renderCtx)(ctx);
+		return this.runRender(() => render(ctx));
 	}
 }

@@ -9,10 +9,9 @@ import { pick } from '@/utils/pick';
 import type { TranslatedText } from '@/i18n/types';
 import type { Log } from '@/ps/games/chess/logs';
 import type { RenderCtx, State, ThemeColours, Turn, WinCtx } from '@/ps/games/chess/types';
-import type { BaseContext } from '@/ps/games/game';
+import type { BaseContext, GameUser } from '@/ps/games/game';
 import type { ActionResponse, EndType, Meta, Theme } from '@/ps/games/types';
 import type { Move, Square } from 'chess.js';
-import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/chess/meta';
 
@@ -55,7 +54,7 @@ export class Chess extends BaseGame<State> {
 		return { success: true, data: null };
 	}
 
-	action(user: User, ctx: string): void {
+	action(user: GameUser, ctx: string): void {
 		if (!this.started) this.throw('GAME.NOT_STARTED');
 		if (user.id !== this.players[this.turn!].id) this.throw('GAME.IMPOSTOR_ALERT');
 		const [actionType, action] = ctx.lazySplit(' ', 1);
@@ -122,7 +121,7 @@ export class Chess extends BaseGame<State> {
 		this.clearDrawOffer();
 	}
 
-	onReplacePlayer(turn: Turn, withPlayer: User): ActionResponse<null> {
+	onReplacePlayer(turn: Turn, withPlayer: GameUser): ActionResponse<null> {
 		this.cleanup();
 		this.lib.setHeader(turn === 'W' ? 'White' : 'Black', withPlayer.name);
 		return { success: true, data: null };
@@ -184,23 +183,13 @@ export class Chess extends BaseGame<State> {
 			id: this.id,
 			turn: this.turn!,
 			theme: isAprilFoolsActive() ? this.meta.themes.wario.colors : this.meta.themes[this.theme!].colors,
+			...this.getHeader(side),
 		};
-		if (this.winCtx) {
-			ctx.header = this.$T('GAME.GAME_ENDED');
-		} else if (side === this.turn) {
-			ctx.header = this.$T('GAME.YOUR_TURN');
-			if (this.selected) {
-				const selectedPiece = this.lib.get(this.selected);
-				const seventhRanks = { w: 7, b: 2 };
-				if (selectedPiece?.type === 'p' && seventhRanks[selectedPiece.color] === +this.selected.charAt(1)) ctx.promotion = true;
-			}
-		} else if (side) {
-			ctx.header = this.$T('GAME.WAITING_FOR_OPPONENT');
-			ctx.dimHeader = true;
-		} else if (this.turn) {
-			const current = this.players[this.turn];
-			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` });
+		if (side === this.turn && this.selected) {
+			const selectedPiece = this.lib.get(this.selected);
+			const seventhRanks = { w: 7, b: 2 };
+			if (selectedPiece?.type === 'p' && seventhRanks[selectedPiece.color] === +this.selected.charAt(1)) ctx.promotion = true;
 		}
-		return render.bind(this.renderCtx)(ctx);
+		return this.runRender(() => render(ctx));
 	}
 }
