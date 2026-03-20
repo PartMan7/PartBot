@@ -1,3 +1,4 @@
+import { getGame, getSimpleMsg } from '@/ps/games/game';
 import { Button, Form } from '@/utils/components/ps';
 import { repeat } from '@/utils/repeat';
 
@@ -5,26 +6,27 @@ import type { Mastermind } from '@/ps/games/mastermind/index';
 import type { Guess, GuessResult, State } from '@/ps/games/mastermind/types';
 import type { ReactElement } from 'react';
 
-export function renderCloseSignups(this: Mastermind): ReactElement {
-	const hasGuessed = this.state.board.length > 0;
-	const player = Object.values(this.players)[0].name;
+export function renderCloseSignups(): ReactElement {
+	const game = getGame<Mastermind>();
+	const hasGuessed = game.state.board.length > 0;
+	const player = Object.values(game.players)[0].name;
 	return (
 		<>
 			<hr />
-			{player} is playing a round of {this.meta.name}!
-			<Button value={`${this.renderCtx.simpleMsg} watch ${this.id}`} style={{ marginLeft: 16 }}>
-				{this.$T('GAME.LABELS.WATCH')}
+			{player} is playing a round of {game.meta.name}!
+			<Button value={`${getSimpleMsg()} watch ${game.id}`} style={{ marginLeft: 16 }}>
+				{game.$T('GAME.LABELS.WATCH')}
 			</Button>
-			{this.setBy || !hasGuessed ? (
+			{game.setBy || !hasGuessed ? (
 				<>
 					<br />
 					<br />
 				</>
 			) : null}
-			{this.setBy ? (
-				`${this.setBy.name} has set a code for ${player}.`
+			{game.setBy ? (
+				`${game.setBy.name} has set a code for ${player}.`
 			) : !hasGuessed ? (
-				<Form value={`${this.renderCtx.simpleMsg} audience ${this.id}, {code}`}>
+				<Form value={`${getSimpleMsg()} audience ${game.id}, {code}`}>
 					<label htmlFor="choosecode">Set Code: </label>
 					<input type="text" id="choosecode" name="code" style={{ width: 30 }} /> &nbsp;&nbsp;
 					<input type="submit" value="Set" />
@@ -47,8 +49,6 @@ const COLORS: { color: string; text: string; index: number }[] = [
 ];
 
 const scale = 3.5;
-
-type This = { msg: string; simpleMsg: string };
 function Pin({ red, white }: { red?: boolean; white?: boolean }): ReactElement {
 	return (
 		<div
@@ -144,7 +144,8 @@ function Entry({ data }: { data: { guess: Guess; result: GuessResult } | null })
 		</>
 	);
 }
-export function render(this: This, data: State, mode: 'playing' | 'over' | 'spectator'): ReactElement {
+export function render(data: State, mode: 'playing' | 'over' | 'spectator'): ReactElement {
+	const simpleMsg = getSimpleMsg();
 	return (
 		<div style={{ marginLeft: 50, marginTop: 20 }}>
 			<div
@@ -196,9 +197,9 @@ export function render(this: This, data: State, mode: 'playing' | 'over' | 'spec
 			{mode !== 'spectator' ? (
 				<div style={{ border: '1px solid', padding: 20, display: 'inline-block', verticalAlign: 'top' }}>
 					{mode === 'over' ? (
-						<Button value={`${this.simpleMsg} create ${data.cap}`}>Play Again</Button>
+						<Button value={`${simpleMsg} create ${data.cap}`}>Play Again</Button>
 					) : (
-						<Form value={`${this.simpleMsg} play {guess}`}>
+						<Form value={`${simpleMsg} play {guess}`}>
 							<input type="text" name="guess" placeholder="Your guess!" />
 							<br />
 							<br />

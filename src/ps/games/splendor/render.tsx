@@ -1,4 +1,5 @@
 import { LogEntry } from '@/ps/games/render';
+import { getMsg } from '@/ps/games/game';
 import {
 	ACTIONS,
 	AllTokenTypes,
@@ -842,16 +843,17 @@ export function PlayerSummary({ data }: { data: PlayerData }): ReactElement {
 	);
 }
 
-export function render(this: This, ctx: RenderCtx): ReactElement {
+export function render(ctx: RenderCtx): ReactElement {
+	const msg = getMsg();
 	return (
 		<center>
-			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
+			<GameHeader header={ctx.header} dimHeader={ctx.dimHeader} />
 			<div style={{ zoom: '50%' }}>
-				<BaseBoard board={ctx.board} onClick={ctx.view.active ? this.msg : undefined} view={ctx.view} $T={ctx.$T} />
+				<BaseBoard board={ctx.board} onClick={ctx.view.active ? msg : undefined} view={ctx.view} $T={ctx.$T} />
 				<div style={{ height: 48 }} />
 				{ctx.view.type === 'player' ? (
 					<>
-						<ActivePlayer data={ctx.players[ctx.view.self]} action={ctx.view} onClick={this.msg} cap={ctx.cap} $T={ctx.$T} />
+						<ActivePlayer data={ctx.players[ctx.view.self]} action={ctx.view} onClick={msg} cap={ctx.cap} $T={ctx.$T} />
 						<hr />
 					</>
 				) : null}
