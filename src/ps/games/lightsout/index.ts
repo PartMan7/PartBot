@@ -8,16 +8,16 @@ import { deepClone } from '@/utils/deepClone';
 import { type Point, parsePoint, stepPoint } from '@/utils/grid';
 
 import type { TranslatedText } from '@/i18n/types';
-import type { BaseContext } from '@/ps/games/game';
+import type { BaseContext, GameUser } from '@/ps/games/game';
 import type { State } from '@/ps/games/lightsout/types';
 import type { EndType } from '@/ps/games/types';
-import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/lightsout/meta';
 
 export class LightsOut extends BaseGame<State> {
 	ended = false;
 	size: [number, number];
+	setBy: GameUser | null = null;
 
 	constructor(ctx: BaseContext) {
 		super(ctx);
@@ -45,7 +45,7 @@ export class LightsOut extends BaseGame<State> {
 		super.after(ctx);
 	}
 	renderCloseSignups(): ReactElement {
-		return renderCloseSignups.bind(this)();
+		return renderCloseSignups();
 	}
 
 	canBroadcastFinish(): boolean {
@@ -74,7 +74,7 @@ export class LightsOut extends BaseGame<State> {
 		}
 	}
 
-	action(user: User, ctx: string): void {
+	action(user: GameUser, ctx: string): void {
 		if (!this.started) this.throw('GAME.NOT_STARTED');
 		if (!(user.id in this.players)) this.throw('GAME.IMPOSTOR_ALERT');
 
@@ -96,11 +96,13 @@ export class LightsOut extends BaseGame<State> {
 	}
 
 	render(asPlayer: string | null): ReactElement {
-		return render.bind(this.renderCtx)(this.state, {
-			size: this.size,
-			player: !!asPlayer,
-			ended: this.ended,
-			genClicks: this.state.genClicks,
-		});
+		return this.runRender(() =>
+			render(this.state, {
+				size: this.size,
+				player: !!asPlayer,
+				ended: this.ended,
+				genClicks: this.state.genClicks,
+			})
+		);
 	}
 }

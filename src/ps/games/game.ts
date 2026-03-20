@@ -1,3 +1,5 @@
+import { AsyncLocalStorage } from 'node:async_hooks';
+
 import { PSGames } from '@/cache';
 import { gameCache } from '@/cache/games';
 import { addUGOPoints, getUGOPlayed, setUGOPlayed } from '@/cache/ugo';
@@ -22,6 +24,8 @@ import type { BaseLookup, NoTranslate, PSRoomTranslated, TranslatedText, Transla
 import type { ActionResponse, BaseLog, BaseState, EndType, Meta, Player } from '@/ps/games/types';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
+/** The subset of a ps-client User actually required by game logic. */ // this is wrong; DONOTPUSH fix this!
+export type GameUser = Pick<User, 'id' | 'name' | 'userid'>;
 import type { ReactElement } from 'react';
 
 const backupKeys = [
@@ -74,12 +78,13 @@ export class BaseGame<State extends BaseState> {
 	turn: State['turn'] | null = null;
 	turns: State['turn'][] = [];
 
-	renderCtx: {
-		// Automatically include info like room and game ID in the command
-		msg: string;
-		// Remove game ID handling and use the generic message instead
-		simpleMsg: string;
-	};
+	/** Full game-scoped bot command prefix — routes to this specific game instance. */
+	msg: string;
+	/** Room-scoped bot command prefix — routes to the game type command handler in the room. */
+	simpleMsg: string;
+
+	animationFrames: ReactElement[] = [];
+	animationDelay = 500;
 
 	players: Record<BaseState['turn'], Player> = {};
 	spectators: string[] = [];
@@ -104,15 +109,15 @@ export class BaseGame<State extends BaseState> {
 	}
 	renderEmbed?(): Promise<EmbedBuilder | null>;
 
-	action(user: User, ctx: string, reaction: boolean): void;
+	action(user: GameUser, ctx: string, reaction: boolean): void;
 	action() {}
 
-	external?(user: User, ctx: string): void;
+	external?(user: GameUser, ctx: string): void;
 
-	onAddPlayer?(user: User, ctx: string): ActionResponse;
+	onAddPlayer?(user: GameUser, ctx: string): ActionResponse;
 	onAfterAddPlayer?(player: Player): void;
-	onRemovePlayer?(player: Player, ctx: string | User): ActionResponse<'end' | null>;
-	onReplacePlayer?(turn: BaseState['turn'], withPlayer: User): ActionResponse;
+	onRemovePlayer?(player: Player, ctx: string | GameUser): ActionResponse<'end' | null>;
+	onReplacePlayer?(turn: BaseState['turn'], withPlayer: GameUser): ActionResponse;
 	onAfterReplacePlayer?(player: Player): void;
 	onStart?(): ActionResponse;
 	onAfterStart?(): void;
@@ -130,6 +135,30 @@ export class BaseGame<State extends BaseState> {
 		throw new ChatError(this.$T(...(params as [Lookup, ...VariablesFromLookup<Lookup>])));
 	}
 
+	queueAnimation(frames: ReactElement[]): void {
+		this.animationFrames = frames;
+	}
+
+	runRender<T>(callback: () => T): T {
+		return gameStorage.run(this as unknown as CommonGame, callback);
+	}
+
+	getHeader(side: State['turn'] | null): { header: string; dimHeader?: true } {
+		if (this.winCtx) return { header: this.$T('GAME.GAME_ENDED') };
+		if (side === this.turn) return { header: this.$T('GAME.YOUR_TURN') };
+		if (side) {
+			const header = this.sides
+				? this.$T('GAME.WAITING_FOR_OPPONENT')
+				: this.$T('GAME.WAITING_FOR_PLAYER', { player: this.players[this.turn!]?.name });
+			return { header, dimHeader: true };
+		}
+		if (this.turn) {
+			const current = this.players[this.turn];
+			return { header: this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` }) };
+		}
+		return { header: '' };
+	}
+
 	constructor(ctx: BaseContext) {
 		this.id = ctx.id;
 		this.room = ctx.room;
@@ -138,14 +167,12 @@ export class BaseGame<State extends BaseState> {
 		this.$T = ctx.$T;
 
 		this.meta = ctx.meta;
-		this.renderCtx = {
-			msg: isGlobalBot
-				? `/botmsg ${this.parent.status.userid},${prefix}@${ctx.id}`
-				: `/msgroom ${ctx.room.id},/botmsg ${this.parent.status.userid},${prefix}@${ctx.id}`,
-			simpleMsg: isGlobalBot
-				? `/botmsg ${this.parent.status.userid},${prefix}@${ctx.room.id} ${ctx.meta.id}`
-				: `/msgroom ${ctx.room.id},/botmsg ${this.parent.status.userid},${prefix}@${ctx.room.id} ${ctx.meta.id}`,
-		};
+		this.msg = isGlobalBot
+			? `/botmsg ${this.parent.status.userid},${prefix}@${ctx.id}`
+			: `/msgroom ${ctx.room.id},/botmsg ${this.parent.status.userid},${prefix}@${ctx.id}`;
+		this.simpleMsg = isGlobalBot
+			? `/botmsg ${this.parent.status.userid},${prefix}@${ctx.room.id} ${ctx.meta.id}`
+			: `/msgroom ${ctx.room.id},/botmsg ${this.parent.status.userid},${prefix}@${ctx.room.id} ${ctx.meta.id}`;
 
 		if (ctx.meta.turns) this.turns = Object.keys(ctx.meta.turns);
 		this.sides = !!ctx.meta.turns;
@@ -325,27 +352,31 @@ export class BaseGame<State extends BaseState> {
 	renderSignups?(staff: boolean): ReactElement | null;
 	signups(): void {
 		if (this.started) this.throw('GAME.ALREADY_STARTED');
-		const signupRenderer = (this.renderSignups ?? renderSignups).bind(this);
-		const signupsHTML = signupRenderer(false);
-		if (signupsHTML) this.room.sendHTML(signupsHTML, { name: this.id });
-		if (this.meta.autostart === false) {
-			const staffHTML = signupRenderer(true);
-			// TODO: Sync this rank with games.create perms
-			if (staffHTML) this.room.sendHTML(staffHTML, { name: this.id, rank: '+', change: true });
-		}
+		this.runRender(() => {
+			const signupRenderer = (this.renderSignups ?? renderSignups).bind(this);
+			const signupsHTML = signupRenderer(false);
+			if (signupsHTML) this.room.sendHTML(signupsHTML, { name: this.id });
+			if (this.meta.autostart === false) {
+				const staffHTML = signupRenderer(true);
+				// TODO: Sync this rank with games.create perms
+				if (staffHTML) this.room.sendHTML(staffHTML, { name: this.id, rank: '+', change: true });
+			}
+		});
 	}
 	renderCloseSignups?(): ReactElement;
 	closeSignups(change = true): void {
-		const closeSignupsHTML = (this.renderCloseSignups ?? renderCloseSignups).bind(this)();
-		if (closeSignupsHTML) this.room.sendHTML(closeSignupsHTML, { name: this.id, change });
+		this.runRender(() => {
+			const closeSignupsHTML = (this.renderCloseSignups ?? renderCloseSignups).bind(this)();
+			if (closeSignupsHTML) this.room.sendHTML(closeSignupsHTML, { name: this.id, change });
+		});
 	}
 
-	getPlayer(user: User | string): Player | null {
+	getPlayer(user: GameUser | string): Player | null {
 		const userId = typeof user === 'string' ? toId(user) : user.id;
 		return Object.values(this.players).find(player => player.id === userId) ?? null;
 	}
 
-	addPlayer(user: User, ctx: string | null): ActionResponse<{ started: boolean; as: BaseState['turn'] }> {
+	addPlayer(user: GameUser, ctx: string | null): ActionResponse<{ started: boolean; as: BaseState['turn'] }> {
 		if (this.started) return { success: false, error: this.$T('GAME.ALREADY_STARTED') };
 		if (this.meta.players === 'single' && Object.keys(this.players).length >= 1) this.throw('GAME.IS_FULL');
 		const availableSlots: number | State['turn'][] = this.sides
@@ -404,8 +435,8 @@ export class BaseGame<State extends BaseState> {
 		return { success: true, data: { started: false, as: newPlayer.turn } };
 	}
 
-	// ctx: string for DQ; ctx: User for self-leave
-	removePlayer(ctx: string | User): ActionResponse<{ message: TranslatedText; cb?: () => void }> {
+	// ctx: string for DQ; ctx: GameUser for self-leave
+	removePlayer(ctx: string | GameUser): ActionResponse<{ message: TranslatedText; cb?: () => void }> {
 		const staffAction = typeof ctx === 'string';
 		const player = Object.values(this.players).find(p => p.id === (typeof ctx === 'string' ? ctx : ctx.id));
 		if (!player) return { success: false, error: this.$T('GAME.NOT_PLAYING') };
@@ -542,11 +573,24 @@ export class BaseGame<State extends BaseState> {
 
 	sendHTML(to: string | User, html: ReactElement | string): void {
 		const user = typeof to === 'object' ? to : this.parent.addUser({ userid: toId(to) });
-		user.pageHTML(html, { name: this.id, room: this.room });
+		this.runRender(() => user.pageHTML(html, { name: this.id, room: this.room }));
 	}
 
 	update(user?: string): void {
 		if (!this.started) return;
+		if (this.animationFrames.length > 0) {
+			if (user) return;
+			const recipients = [
+				...Object.values(this.players)
+					.filter((p: Player) => !p.out)
+					.map((p: Player) => p.id),
+				...this.spectators,
+			];
+			const frame = this.animationFrames.shift()!;
+			this.runRender(() => this.room.pageHTML(recipients, frame, { name: this.id }));
+			setTimeout(() => this.update(), this.animationDelay);
+			return;
+		}
 		if (user) {
 			const asPlayer = this.getPlayer(user);
 			if (asPlayer && !asPlayer.out) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
@@ -559,7 +603,7 @@ export class BaseGame<State extends BaseState> {
 		});
 		if (this.turn) {
 			this.room.send(`/highlighthtmlpage ${this.players[this.turn].id}, ${this.id}, ${this.$T('GAME.YOUR_TURN')}` as TranslatedText);
-			if (this.spectators.length > 0) this.room.pageHTML(this.spectators, this.render(null), { name: this.id });
+			if (this.spectators.length > 0) this.runRender(() => this.room.pageHTML(this.spectators, this.render(null), { name: this.id }));
 		}
 	}
 
@@ -598,12 +642,14 @@ export class BaseGame<State extends BaseState> {
 		this.room.send(message);
 		if (this.started && typeof this.renderEmbed === 'function' && this.roomid === 'boardgames') {
 			// Send only for games from BG
-			this.renderEmbed().then(embed => {
-				if (embed) {
-					const channel = getChannel(BOT_LOG_CHANNEL);
-					channel?.send({ embeds: [embed] });
-				}
-			});
+			this.renderEmbed()
+				.then(embed => {
+					if (embed) {
+						const channel = getChannel(BOT_LOG_CHANNEL);
+						channel?.send({ embeds: [embed] });
+					}
+				})
+				.catch(err => Logger.errorLog(err));
 		}
 		// Upload to DB
 		if (IS_ENABLED.DB && this.started && this.meta.players !== 'single') {
@@ -704,7 +750,7 @@ export class BaseGame<State extends BaseState> {
 }
 
 export type BaseContext = {
-	by: User;
+	by: GameUser;
 	room: PSRoomTranslated;
 	id: string;
 	meta: Meta;
@@ -715,3 +761,20 @@ export type BaseContext = {
 
 /** Non-generic type representing only the things all games have in common */
 export type CommonGame = BaseGame<BaseState>;
+
+const gameStorage = new AsyncLocalStorage<CommonGame>();
+
+/** Returns the game currently being rendered. Must be called within a render() context. */
+export function getGame<G extends CommonGame = CommonGame>(): G {
+	return gameStorage.getStore() as G;
+}
+
+/** Returns the full game-scoped command prefix for the game currently being rendered. */
+export function getMsg(): string {
+	return getGame().msg;
+}
+
+/** Returns the room-scoped command prefix for the game currently being rendered. */
+export function getSimpleMsg(): string {
+	return getGame().simpleMsg;
+}

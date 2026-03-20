@@ -1,4 +1,5 @@
-import { Dice, Table } from '@/ps/games/render';
+import { getMsg } from '@/ps/games/game';
+import { Dice, GameHeader, Table } from '@/ps/games/render';
 import { createGrid } from '@/ps/games/utils';
 import { Username } from '@/utils/components';
 import { Button } from '@/utils/components/ps';
@@ -6,8 +7,6 @@ import { Button } from '@/utils/components/ps';
 import type { CellRenderer } from '@/ps/games/render';
 import type { RenderCtx } from '@/ps/games/snakesladders/types';
 import type { ReactElement } from 'react';
-
-type This = { msg: string };
 
 function Player({ color, as: As = 'td' }: { color: string; as?: 'td' | 'div' }): ReactElement {
 	return (
@@ -49,7 +48,7 @@ function Players({ players }: { players: { pos: number; color: string }[] }): Re
 
 const TEN_BY_TEN = createGrid<null>(10, 10, () => null);
 
-export function renderBoard(this: This, ctx: RenderCtx) {
+function renderBoard(ctx: RenderCtx) {
 	const Cell: CellRenderer<null> = ({ i, j }) => {
 		const displayNum = (10 - i - 1) * 10 + (i % 2 ? j + 1 : 10 - j);
 		const players = Object.values(ctx.board).filter(player => player.pos === displayNum);
@@ -75,11 +74,12 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 	);
 }
 
-export function render(this: This, ctx: RenderCtx): ReactElement {
+export function render(ctx: RenderCtx): ReactElement {
+	const msg = getMsg();
 	return (
 		<center>
-			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
-			{renderBoard.bind(this)(ctx)}
+			<GameHeader header={ctx.header} dimHeader={ctx.dimHeader} />
+			{renderBoard(ctx)}
 			<b style={{ margin: 10 }}>
 				{ctx.lastRoll ? (
 					<>
@@ -91,7 +91,7 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 			{ctx.active ? (
 				<>
 					<br />
-					<Button value={`${this.msg} !`}>Roll!</Button>
+					<Button value={`${msg} !`}>Roll!</Button>
 				</>
 			) : null}
 			<br />

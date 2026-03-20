@@ -1,10 +1,11 @@
+import { getMsg } from '@/ps/games/game';
+import { GameHeader } from '@/ps/games/render';
 import { Button } from '@/utils/components/ps';
 import { repeat } from '@/utils/repeat';
 
 import type { RenderCtx, Turn } from '@/ps/games/connectfour/types';
 import type { ReactElement } from 'react';
 
-type This = { msg: string };
 function getColor(cell: Turn | null): string {
 	if (cell === 'Y') return '#ff0';
 	if (cell === 'R') return '#e00';
@@ -27,7 +28,8 @@ function Column({ data }: { data: (Turn | null)[] }): ReactElement {
 		</>
 	);
 }
-function renderBoard(this: This, ctx: RenderCtx): ReactElement {
+function renderBoard(ctx: RenderCtx): ReactElement {
+	const msg = getMsg();
 	return (
 		<div style={{ backgroundColor: '#0080ff', borderRadius: 16, display: 'inline-block', padding: 2 }}>
 			{repeat(null, ctx.board[0].length).map((_, col) => {
@@ -37,7 +39,7 @@ function renderBoard(this: This, ctx: RenderCtx): ReactElement {
 						<Column data={column} />
 					</div>
 				) : (
-					<Button value={`${this.msg} play ${col}`} style={{ background: 'none', border: 'none', padding: 0 }}>
+					<Button value={`${msg} ! ${col}`} style={{ background: 'none', border: 'none', padding: 0 }}>
 						<Column data={column} />
 					</Button>
 				);
@@ -46,11 +48,11 @@ function renderBoard(this: This, ctx: RenderCtx): ReactElement {
 	);
 }
 
-export function render(this: This, ctx: RenderCtx): ReactElement {
+export function render(ctx: RenderCtx): ReactElement {
 	return (
 		<center>
-			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
-			{renderBoard.bind(this)(ctx)}
+			<GameHeader header={ctx.header} dimHeader={ctx.dimHeader} />
+			{renderBoard(ctx)}
 		</center>
 	);
 }

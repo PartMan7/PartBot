@@ -18,11 +18,10 @@ import { ChatError } from '@/utils/chatError';
 import { toId } from '@/utils/toId';
 
 import type { TranslatedText } from '@/i18n/types';
-import type { BaseContext } from '@/ps/games/game';
+import type { BaseContext, GameUser } from '@/ps/games/game';
 import type { Log } from '@/ps/games/splendor/logs';
 import type { Card, PlayerData, RenderCtx, State, TokenCount, Turn, ViewType, WinCtx } from '@/ps/games/splendor/types';
 import type { ActionResponse, BaseState, EndType, Player } from '@/ps/games/types';
-import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/splendor/meta';
 
@@ -102,7 +101,7 @@ export class Splendor extends BaseGame<State> {
 		return { success: true, data: null };
 	}
 
-	onReplacePlayer(turn: BaseState['turn'], withPlayer: User): ActionResponse {
+	onReplacePlayer(turn: BaseState['turn'], withPlayer: GameUser): ActionResponse {
 		const newData = this.createPlayerData(withPlayer.name, this.state.playerData[turn]);
 		delete this.state.playerData[turn];
 		this.state.playerData[withPlayer.id] = newData;
@@ -170,7 +169,7 @@ export class Splendor extends BaseGame<State> {
 		});
 	}
 
-	action(user: User, ctx: string): void {
+	action(user: GameUser, ctx: string): void {
 		if (!this.started) this.throw('GAME.NOT_STARTED');
 		if (user.id !== this.players[this.turn!].id) this.throw('GAME.IMPOSTOR_ALERT');
 		const player = this.getPlayer(user)!;
@@ -576,19 +575,8 @@ export class Splendor extends BaseGame<State> {
 			view,
 			cap: this.state.pointsToWin,
 			$T: this.$T,
+			...this.getHeader(side),
 		};
-
-		if (this.winCtx) {
-			ctx.header = this.$T('GAME.GAME_ENDED');
-		} else if (side === this.turn) {
-			ctx.header = this.$T('GAME.YOUR_TURN');
-		} else if (side) {
-			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: this.players[this.turn!]?.name });
-			ctx.dimHeader = true;
-		} else if (this.turn) {
-			const current = this.players[this.turn];
-			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` });
-		}
-		return render.bind(this.renderCtx)(ctx);
+		return this.runRender(() => render(ctx));
 	}
 }

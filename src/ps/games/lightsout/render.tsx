@@ -1,3 +1,4 @@
+import { getGame, getSimpleMsg } from '@/ps/games/game';
 import { type CellRenderer, Table } from '@/ps/games/render';
 import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { Button } from '@/utils/components/ps';
@@ -7,14 +8,15 @@ import type { LightsOut } from '@/ps/games/lightsout/index';
 import type { State } from '@/ps/games/lightsout/types';
 import type { ReactElement } from 'react';
 
-export function renderCloseSignups(this: LightsOut): ReactElement {
-	const player = Object.values(this.players)[0].name;
+export function renderCloseSignups(): ReactElement {
+	const game = getGame<LightsOut>();
+	const player = Object.values(game.players)[0].name;
 	return (
 		<>
 			<hr />
-			{player} is playing a round of {this.meta.name}!
-			<Button value={`${this.renderCtx.simpleMsg} watch`} style={{ marginLeft: 16 }}>
-				{this.$T('GAME.LABELS.WATCH')}
+			{player} is playing a round of {game.meta.name}!
+			<Button value={`${getSimpleMsg()} watch`} style={{ marginLeft: 16 }}>
+				{game.$T('GAME.LABELS.WATCH')}
 			</Button>
 			<hr />
 		</>
@@ -46,17 +48,16 @@ function Bulb({ on, small }: { on: boolean; small: boolean }): ReactElement {
 	);
 }
 
-type This = { msg: string; simpleMsg: string };
-
 export function render(
-	this: This,
 	data: State,
 	{ size, player, ended, genClicks }: { size: [number, number]; ended: boolean; player: boolean; genClicks: number }
 ): ReactElement {
+	const simpleMsg = getSimpleMsg();
+
 	const Cell: CellRenderer<boolean> = ({ cell, i, j }) => (
 		<td>
 			{player && !ended ? (
-				<Button name="send" value={`${this.simpleMsg} play ${i} ${j}`} style={{ background: 'none', border: 'none', padding: 0 }}>
+				<Button name="send" value={`${simpleMsg} play ${i} ${j}`} style={{ background: 'none', border: 'none', padding: 0 }}>
 					<Bulb on={cell} small={ended && !player} />
 				</Button>
 			) : (
@@ -76,7 +77,7 @@ export function render(
 			<center style={ended && !player ? { maxHeight: 200, overflowY: 'scroll' } : {}}>
 				<Table board={board} labels={null} Cell={Cell} style={{ border: 'none', background: '#111' }} />
 				{ended && player ? (
-					<Button name="send" value={`${this.simpleMsg} create ${size.join(' ')}`}>
+					<Button name="send" value={`${simpleMsg} create ${size.join(' ')}`}>
 						Play Again
 					</Button>
 				) : null}

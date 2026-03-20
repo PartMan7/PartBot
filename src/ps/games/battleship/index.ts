@@ -1,6 +1,6 @@
 import { SHIP_DATA, Ships } from '@/ps/games/battleship/constants';
 import { render, renderMove, renderSelection, renderSummary } from '@/ps/games/battleship/render';
-import { type BaseContext, BaseGame } from '@/ps/games/game';
+import { type BaseContext, BaseGame, type GameUser } from '@/ps/games/game';
 import { createGrid } from '@/ps/games/utils';
 import { ChatError } from '@/utils/chatError';
 import { type Point, parsePointA1, pointToA1, rangePoints, sameRowOrCol, taxicab } from '@/utils/grid';
@@ -10,7 +10,6 @@ import type { ShipType } from '@/ps/games/battleship/constants';
 import type { Log } from '@/ps/games/battleship/logs';
 import type { RenderCtx, SelectionInProgressState, ShipBoard, State, Turn, WinCtx } from '@/ps/games/battleship/types';
 import type { ActionResponse, EndType, Player } from '@/ps/games/types';
-import type { User } from 'ps-client';
 import type { ReactElement } from 'react';
 
 export { meta } from '@/ps/games/battleship/meta';
@@ -48,7 +47,7 @@ export class Battleship extends BaseGame<State> {
 		this.clearTimer();
 	}
 
-	action(user: User, input: string) {
+	action(user: GameUser, input: string) {
 		const [action, ctx] = input.lazySplit(' ', 1);
 		const player = this.getPlayer(user)! as Player & { turn: Turn };
 		switch (action) {
@@ -150,53 +149,42 @@ export class Battleship extends BaseGame<State> {
 	}
 
 	render(side: Turn | null): ReactElement {
-		if (side) {
-			const readyState = this.state.ready[side];
-			if (readyState === false) return renderSelection.bind(this.renderCtx)({ type: 'not-set', $T: this.$T });
-			if (readyState && typeof readyState !== 'boolean') return renderSelection.bind(this.renderCtx)(readyState);
-			if (!this.state.allReady)
-				return renderSelection.bind(this.renderCtx)(
-					{ type: 'valid', board: this.state.board.ships[side], input: [], $T: this.$T },
-					true
-				);
-		}
+		return this.runRender(() => {
+			if (side) {
+				const readyState = this.state.ready[side];
+				if (readyState === false) return renderSelection({ type: 'not-set', $T: this.$T });
+				if (readyState && typeof readyState !== 'boolean') return renderSelection(readyState);
+				if (!this.state.allReady)
+					return renderSelection({ type: 'valid', board: this.state.board.ships[side], input: [], $T: this.$T }, true);
+			}
 
-		let ctx: RenderCtx;
-		if (side) {
-			ctx = {
-				type: 'player',
-				id: this.id,
-				attack: this.state.board.attacks[side],
-				defense: this.state.board.attacks[this.getNext(side)],
-				actual: this.state.board.ships[side],
-				active: side === this.turn,
-			};
-		} else {
-			ctx = {
-				type: 'spectator',
-				id: this.id,
-				boards: this.state.board.attacks,
-				players: this.players,
-			};
-		}
+			if (this.winCtx) {
+				return renderSummary({ boards: this.state.board, players: this.players, winCtx: this.winCtx });
+			}
 
-		if (this.winCtx) {
-			return renderSummary.bind(this.renderCtx)({
-				boards: this.state.board,
-				players: this.players,
-				winCtx: this.winCtx,
-			});
-		} else if (side === this.turn) {
-			ctx.header = this.$T('GAME.YOUR_TURN');
-		} else if (side) {
-			ctx.header = this.$T('GAME.WAITING_FOR_OPPONENT');
-			ctx.dimHeader = true;
-		} else if (this.turn) {
-			const current = this.players[this.turn];
-			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: current.name });
-		}
+			let ctx: RenderCtx;
+			if (side) {
+				ctx = {
+					type: 'player',
+					id: this.id,
+					attack: this.state.board.attacks[side],
+					defense: this.state.board.attacks[this.getNext(side)],
+					actual: this.state.board.ships[side],
+					active: side === this.turn,
+					...this.getHeader(side),
+				};
+			} else {
+				ctx = {
+					type: 'spectator',
+					id: this.id,
+					boards: this.state.board.attacks,
+					players: this.players,
+					...this.getHeader(side),
+				};
+			}
 
-		return render.bind(this.renderCtx)(ctx as RenderCtx);
+			return render(ctx as RenderCtx);
+		});
 	}
 
 	update(user?: string): void {
