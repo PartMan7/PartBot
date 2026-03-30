@@ -1,4 +1,5 @@
 import { type CellRenderer, Table } from '@/ps/games/render';
+import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { Button } from '@/utils/components/ps';
 import { pluralize } from '@/utils/pluralize';
 
@@ -30,12 +31,14 @@ function Bulb({ on, small }: { on: boolean; small: boolean }): ReactElement {
 	const radius = small ? 3.75 : 10;
 	const margin = small ? 1.5 : 3;
 
+	const showOn = isAprilFoolsActive() ? !on : on;
+
 	return (
 		<div
 			style={{
 				height: size,
 				width: size,
-				backgroundImage: `radial-gradient(${on ? LIGHTS.ON : LIGHTS.OFF} 60%,#333333)`,
+				backgroundImage: `radial-gradient(${showOn ? LIGHTS.ON : LIGHTS.OFF} 60%,#333333)`,
 				borderRadius: radius,
 				margin,
 			}}
