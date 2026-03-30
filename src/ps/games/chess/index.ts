@@ -3,6 +3,7 @@ import { EmbedBuilder } from 'discord.js';
 
 import { render } from '@/ps/games/chess/render';
 import { BaseGame } from '@/ps/games/game';
+import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { pick } from '@/utils/pick';
 
 import type { TranslatedText } from '@/i18n/types';
@@ -184,7 +185,7 @@ export class Chess extends BaseGame<State> {
 			side,
 			id: this.id,
 			turn: this.turn!,
-			theme: this.meta.themes[this.theme!].colors,
+			theme: isAprilFoolsActive() ? this.meta.themes.wario.colors : this.meta.themes[this.theme!].colors,
 		};
 		if (this.winCtx) {
 			ctx.header = this.$T('GAME.GAME_ENDED');

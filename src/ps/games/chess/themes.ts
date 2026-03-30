@@ -64,4 +64,16 @@ export const CHESS_THEMES: Record<string, Theme<ThemeColours>> = {
 			last: '#801c5fbf',
 		},
 	},
+	wario: {
+		id: 'wario',
+		name: 'Wario',
+		aliases: [],
+		colors: {
+			W: '#ffeb00',
+			B: '#8e209f',
+			sel: '#87cefa',
+			hl: '#adff2f',
+			last: null,
+		},
+	},
 };
