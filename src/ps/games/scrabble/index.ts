@@ -15,6 +15,7 @@ import {
 import { ScrabbleModData } from '@/ps/games/scrabble/mods';
 import { render, renderMove } from '@/ps/games/scrabble/render';
 import { checkUGO, createGrid } from '@/ps/games/utils';
+import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { ChatError } from '@/utils/chatError';
 import { type Point, coincident, flipPoint, multiStepPoint, rangePoints, stepPoint } from '@/utils/grid';
 
@@ -72,9 +73,12 @@ export class Scrabble extends BaseGame<State> {
 		}
 		this.state.baseBoard = BaseBoard;
 		this.state.board = createGrid<BoardTile | null>(BaseBoard.length, BaseBoard[0].length, () => null);
-		this.state.bag = Object.entries((this.mod ? ScrabbleModData[this.mod].counts : null) ?? LETTER_COUNTS)
-			.flatMap(([letter, count]) => letter.repeat(count).split(''))
-			.shuffle(this.prng);
+		this.state.bag =
+			!this.mod && isAprilFoolsActive()
+				? 'NEVERGONNAGIVEYOUUP NEVERGONNALETYOUDOWN NEVERGONNARUNAROUNDAND DESERTYOU'.split('')
+				: Object.entries((this.mod ? ScrabbleModData[this.mod].counts : null) ?? LETTER_COUNTS)
+						.flatMap(([letter, count]) => letter.repeat(count).split(''))
+						.shuffle(this.prng);
 		this.state.score = {};
 		this.state.best = {};
 		this.state.racks = {};
