@@ -27,8 +27,7 @@ export class LightsOut extends BaseGame<State> {
 		this.size = (passedSize ?? [5, 5]).reverse() as [number, number]; // more intuitive to have width x height than X x Y
 		this.state.board = createGrid<boolean>(...this.size, () => false);
 
-		if (this.size.some(size => size < 2 || size > 15))
-			this.throw('GAME.LIGHTS_OUT.INVALID_SIZE');
+		if (this.size.some(size => size < 2 || size > 15)) this.throw('GAME.LIGHTS_OUT.INVALID_SIZE');
 
 		super.persist(ctx);
 

@@ -245,13 +245,13 @@ export const command: PSCommand[] = [
 				results.map(res => res.pokemonName.toUpperCase()).groupBy(mon => toId(mon).length),
 				mons => mons?.unique().sort()
 			);
-		const count = Object.values(grouped)
-			.map(num => num?.length ?? 0)
-			.sum();
+			const count = Object.values(grouped)
+				.map(num => num?.length ?? 0)
+				.sum();
 
-		if (!results.length) throw new ChatError($T('GAME.SCRABBLEDEX_NO_ENTRIES'));
+			if (!results.length) throw new ChatError($T('GAME.SCRABBLEDEX_NO_ENTRIES'));
 
-		broadcastHTML(
+			broadcastHTML(
 				<details>
 					<summary>ScrabbleDex ({count} entries)</summary>
 					{Object.entries(grouped).filterMap(([length, mons]) => {
