@@ -1,4 +1,5 @@
 import { Table } from '@/ps/games/render';
+import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { Button, Form } from '@/utils/components/ps';
 
 import type { RenderCtx } from '@/ps/games/chess/types';
@@ -14,20 +15,14 @@ function getSquare(x: number, y: number, flip: boolean): Square {
 
 type BoardCell = ReturnType<Chess['board']>[number][number];
 
-const PIECE_IMAGES: Record<string, string> = {
-	wk: `${process.env.WEB_URL}/static/chess/WK.png`,
-	wq: `${process.env.WEB_URL}/static/chess/WQ.png`,
-	wb: `${process.env.WEB_URL}/static/chess/WB.png`,
-	wn: `${process.env.WEB_URL}/static/chess/WN.png`,
-	wr: `${process.env.WEB_URL}/static/chess/WR.png`,
-	wp: `${process.env.WEB_URL}/static/chess/WP.png`,
-	bk: `${process.env.WEB_URL}/static/chess/BK.png`,
-	bq: `${process.env.WEB_URL}/static/chess/BQ.png`,
-	bb: `${process.env.WEB_URL}/static/chess/BB.png`,
-	bn: `${process.env.WEB_URL}/static/chess/BN.png`,
-	br: `${process.env.WEB_URL}/static/chess/BR.png`,
-	bp: `${process.env.WEB_URL}/static/chess/BP.png`,
-};
+function getPieceImage(_piece: string): string {
+	const piece = _piece.toUpperCase();
+	// Knook override for April Fools
+	if ((piece.endsWith('N') || piece.endsWith('R')) && isAprilFoolsActive()) {
+		return `${process.env.WEB_URL}/static/chess/${piece.charAt(0).toUpperCase()}KN.png`;
+	}
+	return `${process.env.WEB_URL}/static/chess/${piece}.png`;
+}
 
 function adaptBoard(board: BoardCell[][], flip: boolean): BoardCell[][] {
 	if (!flip) return board;
@@ -61,11 +56,11 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 						value={action ? `${this.msg} ! move ${action.san}` : `${this.msg} ! select ${square}`}
 						style={{ background: overlay, border: 'none', height: size, width: size, padding: 0, display: 'block' }}
 					>
-						{label ? <img src={PIECE_IMAGES[label]} height={size} width={size} alt={label} /> : null}
+						{label ? <img src={getPieceImage(label)} height={size} width={size} alt={label} /> : null}
 					</Button>
 				) : (
 					<div style={{ background: overlay, height: size, width: size, padding: 0 }}>
-						{label ? <img src={PIECE_IMAGES[label]} height={size} width={size} alt={label} style={{ display: 'block' }} /> : null}
+						{label ? <img src={getPieceImage(label)} height={size} width={size} alt={label} style={{ display: 'block' }} /> : null}
 					</div>
 				)}
 			</td>
