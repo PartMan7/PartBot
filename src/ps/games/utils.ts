@@ -1,11 +1,11 @@
 import { RegExpMatcher, englishDataset, englishRecommendedTransformers } from 'obscenity';
 
 import { usePersistedCache } from '@/cache/persisted';
-import { isUGOActive } from '@/ps/ugo';
+import { isUGOActive } from '@/ps/specialEvents';
 
 import type { CommonGame } from '@/ps/games/game';
 import type { Meta } from '@/ps/games/types';
-import type { UGOBoardGames } from '@/ps/ugo/constants';
+import type { UGOBoardGames } from '@/ps/specialEvents/constants';
 
 const idCache = usePersistedCache('gameId');
 

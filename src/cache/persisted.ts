@@ -4,7 +4,7 @@ import { fsPath } from '@/utils/fsPath';
 
 import type { UGOPoints } from '@/cache/ugo';
 import type { GamesList } from '@/ps/games/types';
-import type { UGOBoardGames } from '@/ps/ugo/constants';
+import type { UGOBoardGames } from '@/ps/specialEvents/constants';
 
 type CacheTypes = {
 	gameId: number;

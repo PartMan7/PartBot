@@ -3,12 +3,12 @@ import { uploadToPastie } from 'ps-client/tools';
 
 import { usePersistedCache } from '@/cache/persisted';
 import { TimeZone } from '@/ps/handlers/cron/constants';
-import { BG_STRUCHNI_MODIFIER, BOARD_GAMES_STRUCHNI_ORDER, UGO_2025_SPOTLIGHTS } from '@/ps/ugo/constants';
+import { BG_STRUCHNI_MODIFIER, BOARD_GAMES_STRUCHNI_ORDER, UGO_2025_SPOTLIGHTS } from '@/ps/specialEvents/constants';
 import { Logger } from '@/utils/logger';
 import { mapValues } from '@/utils/map';
 import { toId } from '@/utils/toId';
 
-import type { UGOBoardGames } from '@/ps/ugo/constants';
+import type { UGOBoardGames } from '@/ps/specialEvents/constants';
 import type { Client } from 'ps-client';
 
 export const UGO_PLAYED = usePersistedCache('ugoCap');

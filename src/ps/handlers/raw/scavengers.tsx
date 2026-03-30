@@ -5,7 +5,7 @@ import { HUNT_ANNOUNCEMENTS_CHANNEL, HUNT_BY_ROLE } from '@/discord/constants/se
 import { getChannel } from '@/discord/loaders/channels';
 import { IS_ENABLED } from '@/enabled';
 import { createNonce } from '@/ps/commands/nonce';
-import { isUGOActive } from '@/ps/ugo';
+import { isUGOActive } from '@/ps/specialEvents';
 import { Button } from '@/utils/components/ps';
 import { toId } from '@/utils/toId';
 

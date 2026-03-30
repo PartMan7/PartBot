@@ -3,7 +3,7 @@ import { type ReactElement } from 'react';
 import { BaseGame } from '@/ps/games/game';
 import { render, renderCloseSignups } from '@/ps/games/lightsout/render';
 import { createGrid } from '@/ps/games/utils';
-import { isUGOActive } from '@/ps/ugo';
+import { isUGOActive } from '@/ps/specialEvents';
 import { deepClone } from '@/utils/deepClone';
 import { type Point, parsePoint, stepPoint } from '@/utils/grid';
 
