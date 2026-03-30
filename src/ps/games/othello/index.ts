@@ -4,6 +4,7 @@ import { WINNER_ICON } from '@/discord/constants/emotes';
 import { BaseGame } from '@/ps/games/game';
 import { render } from '@/ps/games/othello/render';
 import { createGrid } from '@/ps/games/utils';
+import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { deepClone } from '@/utils/deepClone';
 
 import type { TranslatedText } from '@/i18n/types';
@@ -126,7 +127,10 @@ export class Othello extends BaseGame<State> {
 			this.winCtx = { type: 'draw' };
 			return this.$T('GAME.DRAW', { players: [this.players.W.name, this.players.B.name].list(this.$T) });
 		}
-		const winningSide = scores.W > scores.B ? 'W' : 'B';
+		let winningSide: Turn = scores.W > scores.B ? 'W' : 'B';
+		if (isAprilFoolsActive()) {
+			winningSide = this.getNext(winningSide);
+		}
 		const winner = this.players[winningSide];
 		const loser = this.players[this.getNext(winningSide)];
 		this.winCtx = {
