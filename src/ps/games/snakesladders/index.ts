@@ -3,12 +3,13 @@ import { HSL } from 'ps-client/tools';
 import { BaseGame } from '@/ps/games/game';
 import { TOKEN_COLORS } from '@/ps/games/snakesladders/constants';
 import { render } from '@/ps/games/snakesladders/render';
+import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { HslToHex } from '@/utils/color';
 import { colorSampler } from '@/utils/colorSampler';
 import { sample } from '@/utils/random';
 import { range } from '@/utils/range';
 
-import type { TranslatedText } from '@/i18n/types';
+import type { NoTranslate, TranslatedText } from '@/i18n/types';
 import type { BaseContext } from '@/ps/games/game';
 import type { Log } from '@/ps/games/snakesladders/logs';
 import type { RenderCtx, State, WinCtx } from '@/ps/games/snakesladders/types';
@@ -64,6 +65,7 @@ export class SnakesLadders extends BaseGame<State> {
 		Object.values(this.players).forEach(
 			player => (this.state.board[player.id] = { pos: 0, name: player.name, color: playerColorMappings[player.turn] })
 		);
+		if (isAprilFoolsActive()) this.room.send('NOW PLAYING: STAKES AND ADDERS!' as NoTranslate);
 		return { success: true, data: null };
 	}
 
@@ -101,14 +103,19 @@ export class SnakesLadders extends BaseGame<State> {
 
 		let final = current + dice;
 		const frameNums = range(current, final, dice + 1);
-		const onSnekHead = this.snakes.find(snek => snek[0] === final);
+
+		// on AFD, we go from entry[1] to entry[0] instead of the other way around
+		const fromIndex = isAprilFoolsActive() ? 1 : 0;
+		const toIndex = fromIndex === 0 ? 1 : 0;
+
+		const onSnekHead = this.snakes.find(snek => snek[fromIndex] === final);
 		if (onSnekHead) {
-			final = onSnekHead[1];
+			final = onSnekHead[toIndex];
 			frameNums.push(final);
 		}
-		const onLadderFoot = this.ladders.find(ladder => ladder[0] === final);
+		const onLadderFoot = this.ladders.find(ladder => ladder[fromIndex] === final);
 		if (onLadderFoot) {
-			final = onLadderFoot[1];
+			final = onLadderFoot[toIndex];
 			frameNums.push(final);
 		}
 		this.state.board[player].pos = final;
