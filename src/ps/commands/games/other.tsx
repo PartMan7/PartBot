@@ -205,7 +205,9 @@ export const command: PSCommand[] = [
 						const artist = metadata.artists[attr];
 						// Audiino did all the AFD cards
 						const cards: (Card & { afd?: boolean })[] =
-							artist.id === 'audiino' ? _cards!.concat(customCards.map(card => ({ ...card, afd: true }))) : _cards!;
+							artist.id === 'audiino'
+								? _cards!.concat(Object.values(metadata.pokemon).map(card => ({ ...card, afd: true })))
+								: _cards!;
 						return (
 							<details open>
 								<summary>
