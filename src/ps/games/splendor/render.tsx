@@ -1,6 +1,7 @@
 import { LogEntry } from '@/ps/games/render';
 import { ACTIONS, AllTokenTypes, MAX_TOKEN_COUNT, TOKEN_TYPE, TokenTypes, VIEW_ACTION_TYPE } from '@/ps/games/splendor/constants';
 import metadata from '@/ps/games/splendor/metadata.json';
+import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { Username } from '@/utils/components';
 import { Button, Form } from '@/utils/components/ps';
 import { Logger } from '@/utils/logger';
@@ -14,7 +15,8 @@ import type { CSSProperties, ReactElement, ReactNode } from 'react';
 type This = { msg: string };
 
 function getArtUrl(type: 'pokemon' | 'trainers' | 'type' | 'other', path: string, tag: 'img' | 'bg' = 'bg'): string {
-	const baseURL = path.startsWith('http') ? path : `${process.env.WEB_URL}/static/splendor/${type}/${path}`;
+	const routeType = type === 'pokemon' && isAprilFoolsActive() ? 'pokemon-afd' : type;
+	const baseURL = path.startsWith('http') ? path : `${process.env.WEB_URL}/static/splendor/${routeType}/${path}`;
 	return tag === 'bg' ? `url(${baseURL})` : baseURL;
 }
 
