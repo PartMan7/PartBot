@@ -135,7 +135,9 @@ export const command: PSCommand[] = [
 			if (id === 'constructor') throw new ChatError($T('SCREW_YOU'));
 			if (id in metadata.pokemon) {
 				const card = metadata.pokemon[id];
-				const attr = card.attr ? [metadata.artists[card.attr]] : [];
+				const attr: ((typeof metadata.artists)[keyof typeof metadata.artists] | null)[] = card.attr
+					? [metadata.artists[card.attr]]
+					: [null];
 				const afdArtist = 'audiino';
 				if (attr[0]?.id !== afdArtist) attr.push(metadata.artists[afdArtist]);
 				broadcastHTML(
@@ -146,17 +148,20 @@ export const command: PSCommand[] = [
 							<ArtOnlyCard data={card} afd />
 						</Small>
 						{attr
-							.map((artist, isAfd) => (
-								<>
-									{isAfd ? "April Fools'" : ''} Art by <Username name={artist.name} clickable />!
-									{artist.url ? (
-										<>
-											{' '}
-											Check them out at <a href={artist.url}>{artist.url}</a>!
-										</>
-									) : null}
-								</>
-							))
+							.map((artist, isAfd) =>
+								artist ? (
+									<>
+										{isAfd ? "April Fools'" : ''} Art by <Username name={artist.name} clickable />!
+										{artist.url ? (
+											<>
+												{' '}
+												Check them out at <a href={artist.url}>{artist.url}</a>!
+											</>
+										) : null}
+									</>
+								) : null
+							)
+							.filter(Boolean)
 							.space(<br />)}
 					</>
 				);
