@@ -14,8 +14,12 @@ import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
 type This = { msg: string };
 
-function getArtUrl(type: 'pokemon' | 'trainers' | 'type' | 'other', path: string, tag: 'img' | 'bg' = 'bg'): string {
-	const routeType = type === 'pokemon' && isAprilFoolsActive() ? 'pokemon-afd' : type;
+function getArtUrl(
+	type: 'pokemon' | 'pokemon-afd' | 'trainers' | 'type' | 'other',
+	path: string,
+	tag: 'img' | 'bg' | 'attr' = 'bg'
+): string {
+	const routeType = type === 'pokemon' && tag !== 'attr' && isAprilFoolsActive() ? 'pokemon-afd' : type;
 	const baseURL = path.startsWith('http') ? path : `${process.env.WEB_URL}/static/splendor/${routeType}/${path}`;
 	return tag === 'bg' ? `url(${baseURL})` : baseURL;
 }
@@ -213,8 +217,16 @@ function CardWrapper({
 	);
 }
 
-export function ArtOnlyCard({ data }: { data: Card }): ReactElement {
-	return <img src={getArtUrl('pokemon', data.art, 'img')} height={280} width={200} style={{ margin: 12 }} alt={data.name} />;
+export function ArtOnlyCard({ data, afd }: { data: Card; afd?: boolean | undefined }): ReactElement {
+	return (
+		<img
+			src={getArtUrl(afd ? 'pokemon-afd' : 'pokemon', data.art, 'attr')}
+			height={280}
+			width={200}
+			style={{ margin: 12 }}
+			alt={data.name}
+		/>
+	);
 }
 
 export function PokemonCard({

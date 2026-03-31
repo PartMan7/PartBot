@@ -26,7 +26,7 @@ import { toId } from '@/utils/toId';
 import type { UGOUserPoints } from '@/cache/ugo';
 import type { ScrabbleDexEntry } from '@/database/games';
 import type { TranslationFn } from '@/i18n/types';
-import type { Trainer } from '@/ps/games/splendor/types';
+import type { Card, Trainer } from '@/ps/games/splendor/types';
 import type { GamesList } from '@/ps/games/types';
 import type { PSCommand } from '@/types/chat';
 import type { ReactElement } from 'react';
@@ -135,24 +135,26 @@ export const command: PSCommand[] = [
 			if (id === 'constructor') throw new ChatError($T('SCREW_YOU'));
 			if (id in metadata.pokemon) {
 				const card = metadata.pokemon[id];
-				const attr = card.attr ? metadata.artists[card.attr] : null;
+				const attr = card.attr ? [metadata.artists[card.attr]] : [];
+				const afdArtist = 'audiino';
+				if (attr[0]?.id !== afdArtist) attr.push(metadata.artists[afdArtist]);
 				broadcastHTML(
 					<>
 						<Small>
 							<PokemonCard data={card} />
 							<ArtOnlyCard data={card} />
 						</Small>
-						{attr ? (
+						{attr.map((artist, isAfd) => (
 							<>
-								Art by <Username name={attr.name} clickable />!
-								{attr.url ? (
+								{isAfd ? 'April Fools' : ''} Art by <Username name={artist.name} clickable />!
+								{artist.url ? (
 									<>
 										{' '}
-										Check them out at <a href={attr.url}>{attr.url}</a>!
+										Check them out at <a href={artist.url}>{artist.url}</a>!
 									</>
 								) : null}
 							</>
-						) : null}
+						))}
 					</>
 				);
 			} else if (id in metadata.trainers) {
@@ -191,8 +193,11 @@ export const command: PSCommand[] = [
 			return broadcastHTML(
 				<>
 					<h3>Shoutouts to these nerds for setting up some amazing art for Splendor!</h3>
-					{Object.entries(groupedInfo).map(([attr, cards]) => {
+					{Object.entries(groupedInfo).map(([attr, _cards]) => {
 						const artist = metadata.artists[attr];
+						// Audiino did all the AFD cards
+						const cards: (Card & { afd?: boolean })[] =
+							artist.id === 'audiino' ? _cards!.concat(customCards.map(card => ({ ...card, afd: true }))) : _cards!;
 						return (
 							<details open>
 								<summary>
@@ -205,8 +210,8 @@ export const command: PSCommand[] = [
 									) : null}
 								</summary>
 								<div style={{ zoom: '40%', overflowX: 'auto', whiteSpace: 'nowrap' }}>
-									{cards!.map(card => (
-										<ArtOnlyCard data={card} />
+									{cards.map(card => (
+										<ArtOnlyCard data={card} afd={card.afd} />
 									))}
 								</div>
 							</details>
