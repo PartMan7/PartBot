@@ -145,17 +145,19 @@ export const command: PSCommand[] = [
 							<ArtOnlyCard data={card} />
 							<ArtOnlyCard data={card} afd />
 						</Small>
-						{attr.map((artist, isAfd) => (
-							<>
-								{isAfd ? 'April Fools' : ''} Art by <Username name={artist.name} clickable />!
-								{artist.url ? (
-									<>
-										{' '}
-										Check them out at <a href={artist.url}>{artist.url}</a>!
-									</>
-								) : null}
-							</>
-						)).space(<br />)}
+						{attr
+							.map((artist, isAfd) => (
+								<>
+									{isAfd ? "April Fools'" : ''} Art by <Username name={artist.name} clickable />!
+									{artist.url ? (
+										<>
+											{' '}
+											Check them out at <a href={artist.url}>{artist.url}</a>!
+										</>
+									) : null}
+								</>
+							))
+							.space(<br />)}
 					</>
 				);
 			} else if (id in metadata.trainers) {
