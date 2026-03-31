@@ -47,7 +47,8 @@
 			"cost": {
 				"fire": 5
 			},
-			"art": "audino.png"
+			"art": "audino.png",
+			"attr": "audiino"
 		},
 		"bellsprout": {
 			"id": "bellsprout",
