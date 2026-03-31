@@ -143,6 +143,7 @@ export const command: PSCommand[] = [
 						<Small>
 							<PokemonCard data={card} />
 							<ArtOnlyCard data={card} />
+							<ArtOnlyCard data={card} afd />
 						</Small>
 						{attr.map((artist, isAfd) => (
 							<>
