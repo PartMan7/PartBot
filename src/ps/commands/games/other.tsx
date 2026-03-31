@@ -155,7 +155,7 @@ export const command: PSCommand[] = [
 									</>
 								) : null}
 							</>
-						))}
+						)).space(<br />)}
 					</>
 				);
 			} else if (id in metadata.trainers) {
