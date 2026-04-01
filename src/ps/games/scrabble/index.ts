@@ -75,7 +75,7 @@ export class Scrabble extends BaseGame<State> {
 		this.state.board = createGrid<BoardTile | null>(BaseBoard.length, BaseBoard[0].length, () => null);
 		this.state.bag =
 			!this.mod && isAprilFoolsActive()
-				? 'NEVERGONNAGIVEYOUUP NEVERGONNALETYOUDOWN NEVERGONNARUNAROUNDAND DESERTYOU'.split('')
+				? 'NEVERGONNAGIVEYOUUP_NEVERGONNALETYOUDOWN_NEVERGONNARUNAROUNDAND_DESERTYOU'.split('')
 				: Object.entries((this.mod ? ScrabbleModData[this.mod].counts : null) ?? LETTER_COUNTS)
 						.flatMap(([letter, count]) => letter.repeat(count).split(''))
 						.shuffle(this.prng);
