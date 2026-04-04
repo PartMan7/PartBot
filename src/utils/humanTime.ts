@@ -1,3 +1,5 @@
+import { i18n } from '@/i18n';
+
 import type { TranslationFn } from '@/i18n/types';
 
 type Entry = {
@@ -8,7 +10,7 @@ type Entry = {
 	count?: number;
 };
 
-export function toHumanTime(timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' = 'f2s', $T: TranslationFn): string {
+export function toHumanTime(timeInMs: number, format: 'f2s' | 'hhmmss' | 'abs' = 'f2s', $T: TranslationFn = i18n()): string {
 	const timeList: (
 		| {
 				abbr: string;
