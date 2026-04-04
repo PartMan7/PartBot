@@ -29,7 +29,7 @@ export const command: PSCommand[] = [
 					<>
 						<div className="message">
 							<ul className="utilichart">
-								<li className="result">
+								<li className="result" style={{ height: 'auto', contain: 'content' }}>
 									<span className="col numcol">{mon.unreleased ? 'UR' : 'GO'}</span>{' '}
 									<span className="col iconcol">
 										<PSIcon pokemon={toId(mon.name)} />
