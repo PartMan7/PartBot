@@ -29,7 +29,7 @@ export const command: PSCommand[] = [
 					<>
 						<div className="message">
 							<ul className="utilichart">
-								<li className="result" style={{ height: 'auto', contain: 'content' }}>
+								<li className="result">
 									<span className="col numcol">{mon.unreleased ? 'UR' : 'GO'}</span>{' '}
 									<span className="col iconcol">
 										<PSIcon pokemon={toId(mon.name)} />
@@ -106,7 +106,7 @@ export const command: PSCommand[] = [
 				const move = GOData.fastMoves[query];
 				return broadcastHTML(
 					<ul className="utilichart">
-						<li className="result">
+						<li className="result" style={{ height: 'auto', contain: 'content' }}>
 							<span className="col movenamecol">
 								&nbsp;
 								<a href={`https://gamepress.gg/pokemongo/pokemon-move/${move.name.replace(/ /g, '-').toLowerCase()}`} target="_blank">
@@ -119,7 +119,7 @@ export const command: PSCommand[] = [
 							</span>
 						</li>
 
-						<li className="result">
+						<li className="result" style={{ height: 'auto', contain: 'content' }}>
 							<span className="col widelabelcol" style={{ marginTop: 10, color: '#999' }}>
 								PvP
 							</span>
@@ -150,7 +150,7 @@ export const command: PSCommand[] = [
 							</span>
 						</li>
 
-						<li className="result">
+						<li className="result" style={{ height: 'auto', contain: 'content' }}>
 							<span className="col widelabelcol" style={{ marginTop: 10, color: '#999' }}>
 								PvE
 							</span>
@@ -193,7 +193,7 @@ export const command: PSCommand[] = [
 				const move = GOData.chargedMoves[query];
 				return broadcastHTML(
 					<ul className="utilichart">
-						<li className="result">
+						<li className="result" style={{ height: 'auto', contain: 'content' }}>
 							<span className="col movenamecol">
 								&nbsp;
 								<a href={`https://gamepress.gg/pokemongo/pokemon-move/${move.name.replace(/ /g, '-').toLowerCase()}`} target="_blank">
@@ -205,7 +205,7 @@ export const command: PSCommand[] = [
 								<img src={`https://play.pokemonshowdown.com/sprites/categories/Physical.png`} alt="Charged" width="32" height="14" />
 							</span>
 						</li>
-						<li className="result">
+						<li className="result" style={{ height: 'auto', contain: 'content' }}>
 							<span className="col widelabelcol" style={{ marginTop: 10, color: '#999' }}>
 								PvP
 							</span>
@@ -226,7 +226,7 @@ export const command: PSCommand[] = [
 							</span>
 							<span className="col movedesccol">&nbsp;&nbsp;{move.desc}</span>
 						</li>
-						<li className="result">
+						<li className="result" style={{ height: 'auto', contain: 'content' }}>
 							<span className="col widelabelcol" style={{ marginTop: 10, color: '#999' }}>
 								PvE
 							</span>
