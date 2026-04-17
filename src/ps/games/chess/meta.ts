@@ -16,6 +16,7 @@ export const meta: Meta = {
 	},
 
 	autostart: true,
+	canOfferDraws: true,
 	pokeTimer: fromHumanTime('3 min'),
 	timer: fromHumanTime('5 min'),
 

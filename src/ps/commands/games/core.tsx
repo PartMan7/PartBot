@@ -26,6 +26,7 @@ type SearchContext =
 	| { action: 'watch'; user: string }
 	| { action: 'unwatch'; user: string }
 	| { action: 'mod'; user: string }
+	| { action: 'offerdraw'; user: string }
 	| { action: 'any' };
 
 type RoomContext = { room: Room; $T: TranslationFn };
@@ -61,6 +62,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				case 'play':
 					return game.started && hasJoined && game.players[game.turn!].id === ctx.user;
 				case 'reaction':
+				case 'offerdraw':
 					return game.started && hasJoined;
 				case 'audience':
 					return game.started && !hasJoined;
@@ -283,6 +285,17 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 					game.action(message.author, ctx, true);
 				},
 			},
+			...conditionalCommand(Game.meta.canOfferDraws, {
+				name: 'offerdraw',
+				aliases: ['od', 'acceptdraw', 'ad'],
+				help: 'Offers a draw, or accepts a pending offer (expires in 1 minute or when someone plays).',
+				syntax: 'CMD [id]',
+				async run({ message, arg, $T }) {
+					const { game } = getGame(arg, { action: 'offerdraw', user: message.author.id }, { room: message.target, $T });
+					const reply = game.offerDraw(message.author);
+					if (reply) message.privateReply(reply);
+				},
+			}),
 			...conditionalCommand('external' in Game.instance.prototype, {
 				name: 'audience',
 				help: 'Allows an audience member to perform an action.',
@@ -533,6 +546,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 						delete PSGames[gameId]?.[game.id];
 						game.pokeTimer?.cancel();
 						game.timer?.cancel();
+						game.clearDrawOffer();
 						message.reply($T('GAME.STASHED', { id: game.id }));
 					},
 				},

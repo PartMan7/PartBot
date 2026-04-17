@@ -57,6 +57,13 @@ export default {
 		ALREADY_WATCHING: 'Aap is game ko pehle hi dekh rahe hain!',
 		COMMAND_NOT_ENABLED: 'Yeh command {{game}} ke liye sakriya nahi hai.',
 		DRAW: 'Game {{players}} ke beech mein barabar raha!',
+		DRAW_OFFER_SENT:
+			'Aapne draw offer kiya. Aapka opponent 1 minute ke andar accept kar sakta hai (ya koi chal chale to offer khatam).',
+		DRAW_OFFER_ALREADY_SENT: 'Aapka draw offer pehle se pending hai.',
+		DRAW_OFFER_PUBLIC: '{{player}} ne draw offer kiya.',
+		DRAW_OFFER_RECEIVED:
+			'Aapke liye draw offer kiya gaya hai - ``{{prefix}}{{game}} acceptdraw`` ka istemal karein taki accept kar sakte ho.',
+		DRAW_OFFER_EXPIRED: '{{player}} ka draw offer khatam ho gaya.',
 		ENDED: 'Game {{game}} [{{id}}] samapt ho gaya hai.',
 		ENDED_AUTOMATICALLY: 'Game {{game}} [{{id}}] svachalit roop se samapt ho gaya hai.',
 		IMPOSTOR_ALERT: 'Ruko! Aap sahi player nahi ho!',

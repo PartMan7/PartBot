@@ -57,6 +57,11 @@ export default {
 		ALREADY_WATCHING: 'Você já está assistindo este jogo!',
 		COMMAND_NOT_ENABLED: 'Este comando não está habilitado para {{game}}.',
 		DRAW: 'O jogo entre {{players}} terminou em empate!',
+		DRAW_OFFER_SENT: 'Você ofereceu empate. Seu oponente pode aceitar em até 1 minuto (ou a oferta expira se alguém jogar).',
+		DRAW_OFFER_ALREADY_SENT: 'Você já tem uma oferta de empate pendente.',
+		DRAW_OFFER_PUBLIC: '{{player}} ofereceu empate.',
+		DRAW_OFFER_RECEIVED: 'Você foi oferecido empate - use ``{{prefix}}{{game}} acceptdraw`` para aceitar.',
+		DRAW_OFFER_EXPIRED: 'A oferta de empate de {{player}} expirou.',
 		ENDED: 'O jogo de {{game}} [{{id}}] foi encerrado.',
 		ENDED_AUTOMATICALLY: 'O jogo de {{game}} [{{id}}] acabou automaticamente.',
 		IMPOSTOR_ALERT: [

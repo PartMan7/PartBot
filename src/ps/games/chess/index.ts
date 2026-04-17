@@ -23,7 +23,6 @@ function isValidSquare(input: string): input is Square {
 export class Chess extends BaseGame<State> {
 	selected: Square | null = null;
 	showMoves: Move[] = [];
-	drawOffered: null | string = null;
 
 	lib: ChessLib;
 
@@ -60,7 +59,6 @@ export class Chess extends BaseGame<State> {
 		if (!this.started) this.throw('GAME.NOT_STARTED');
 		if (user.id !== this.players[this.turn!].id) this.throw('GAME.IMPOSTOR_ALERT');
 		const [actionType, action] = ctx.lazySplit(' ', 1);
-		// TODO: Support offering draws
 		switch (actionType) {
 			case 'select': {
 				this.getMoves(action);
@@ -121,7 +119,7 @@ export class Chess extends BaseGame<State> {
 	cleanup() {
 		this.selected = null;
 		this.showMoves = [];
-		this.drawOffered = null;
+		this.clearDrawOffer();
 	}
 
 	onReplacePlayer(turn: Turn, withPlayer: User): ActionResponse<null> {
@@ -136,7 +134,7 @@ export class Chess extends BaseGame<State> {
 			if (type === 'dq') return this.$T('GAME.ENDED_AUTOMATICALLY', { game: this.meta.name, id: this.id });
 			return this.$T('GAME.ENDED', { game: this.meta.name, id: this.id });
 		}
-		if (this.lib.isDraw()) {
+		if (this.winCtx?.type === 'draw' || this.lib.isDraw()) {
 			this.winCtx = { type: 'draw' };
 			return this.$T('GAME.DRAW', { players: [this.players.W.name, this.players.B.name].list(this.$T) });
 		}

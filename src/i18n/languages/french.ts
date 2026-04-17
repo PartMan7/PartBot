@@ -57,6 +57,12 @@ export default {
 		ALREADY_WATCHING: 'Vous regardez déjà cette partie !',
 		COMMAND_NOT_ENABLED: "Cette commande n'est pas activée pour {{game}}.",
 		DRAW: "La partie entre {{players}} s'est terminée par une égalité !",
+		DRAW_OFFER_SENT:
+			"Vous avez proposé la nulle. Votre adversaire peut accepter dans la minute (ou l'offre expire si quelqu'un joue).",
+		DRAW_OFFER_ALREADY_SENT: 'Vous avez déjà une proposition de nulle en attente.',
+		DRAW_OFFER_PUBLIC: '{{player}} propose la nulle.',
+		DRAW_OFFER_RECEIVED: "Vous avez été proposé une nulle - utilisez ``{{prefix}}{{game}} acceptdraw`` pour l'accepter.",
+		DRAW_OFFER_EXPIRED: 'La proposition de nulle de {{player}} a expiré.',
 		ENDED: 'La partie de {{game}} [{{id}}] a été terminée.',
 		ENDED_AUTOMATICALLY: "La partie de {{game}} [{{id}}] s'est terminée automatiquement.",
 		IMPOSTOR_ALERT: [

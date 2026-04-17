@@ -55,6 +55,11 @@ export default {
 		ALREADY_WATCHING: 'You are already watching this game!',
 		COMMAND_NOT_ENABLED: 'This command is not enabled for {{game}}.',
 		DRAW: 'The game between {{players}} ended in a draw!',
+		DRAW_OFFER_SENT: 'You offered a draw. Your opponent can accept within 1 minute (or it expires if someone plays).',
+		DRAW_OFFER_ALREADY_SENT: 'You already have a pending draw offer.',
+		DRAW_OFFER_PUBLIC: '{{player}} offered a draw.',
+		DRAW_OFFER_RECEIVED: 'You have been offered a draw - use ``{{prefix}}{{game}} acceptdraw`` to accept it.',
+		DRAW_OFFER_EXPIRED: "{{player}}'s draw offer expired.",
 		ENDED: 'The game of {{game}} [{{id}}] has been ended.',
 		ENDED_AUTOMATICALLY: 'The game of {{game}} [{{id}}] has ended automatically.',
 		IMPOSTOR_ALERT: [

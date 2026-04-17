@@ -10,7 +10,7 @@ import { parseMod } from '@/ps/games/mods';
 import { Small, renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { checkUGO } from '@/ps/games/utils';
 import { ChatError } from '@/utils/chatError';
-import { toHumanTime } from '@/utils/humanTime';
+import { fromHumanTime, toHumanTime } from '@/utils/humanTime';
 import { Logger } from '@/utils/logger';
 import { pick } from '@/utils/pick';
 import { sample, useRNG } from '@/utils/random';
@@ -89,6 +89,9 @@ export class BaseGame<State extends BaseState> {
 
 	winCtx?: { type: 'win'; winner: Player } | { type: 'win'; winnerIds: string[] } | { type: 'draw' } | { type: string };
 	forcewinPlayers?: string[];
+
+	/** Pending draw offer; cleared on expiry, accept, move, or end. */
+	drawOffer: { from: string; to: string; timer: Timer } | null = null;
 
 	// Game-provided methods:
 	render(side: State['turn'] | null): ReactElement;
@@ -247,6 +250,50 @@ export class BaseGame<State extends BaseState> {
 	clearTimer(): void {
 		this.timer?.cancel();
 		this.pokeTimer?.cancel();
+	}
+
+	clearDrawOffer(): void {
+		if (!this.drawOffer) return;
+		this.drawOffer.timer.cancel();
+		this.drawOffer = null;
+	}
+
+	offerDraw(user: User): TranslatedText | null {
+		if (!this.meta.canOfferDraws) this.throw('GAME.COMMAND_NOT_ENABLED', { game: this.meta.name });
+		if (!this.started) this.throw('GAME.NOT_STARTED');
+		const player = this.getPlayer(user);
+		if (!player) this.throw('GAME.IMPOSTOR_ALERT');
+
+		if (this.drawOffer) {
+			if (this.drawOffer.from === player.id) {
+				return this.$T('GAME.DRAW_OFFER_ALREADY_SENT');
+			} else {
+				this.winCtx = { type: 'draw' };
+				this.end();
+				return null;
+			}
+		}
+
+		this.drawOffer = {
+			from: player.id,
+			to: this.players[this.getNext(player.turn)]?.id,
+			timer: new Timer(
+				() => {
+					if (!this.drawOffer || this.drawOffer.from !== player.id) return;
+					this.drawOffer = null;
+					if (!this.started || this.endedAt) return;
+					this.room.send(this.$T('GAME.DRAW_OFFER_EXPIRED', { player: player.name }));
+				},
+				fromHumanTime('1 min'),
+				`Draw offer [${this.id}]`
+			),
+		};
+		this.room.send(this.$T('GAME.DRAW_OFFER_PUBLIC', { player: user.name }));
+		this.room.send(`/notifyuser ${this.drawOffer.to}, ${this.meta.name}, ${this.$T('GAME.DRAW_OFFER_SENT')}` as TranslatedText);
+		this.room.privateSend(this.drawOffer.to, this.$T('GAME.DRAW_OFFER_RECEIVED', { prefix: prefix, game: this.meta.id }));
+		// TODO: Use ping when ps-client supports
+		// this.room.ping(this.drawOffer.to, { title: this.meta.name, label: 'Your opponent offered a draw.' });
+		return this.$T('GAME.DRAW_OFFER_SENT');
 	}
 
 	serialize(): string {
@@ -460,13 +507,13 @@ export class BaseGame<State extends BaseState> {
 		return { success: true, data: null };
 	}
 
-	// Only gets next turn. No side effects.
+	/** Only gets next turn. No side effects. */
 	getNext(current = this.turn): State['turn'] {
 		const baseIndex = this.turns.indexOf(current!);
 		return this.turns[(baseIndex + 1) % this.turns.length];
 	}
 
-	// Increments turn as needed and backs up state.
+	/** Increments turn as needed and backs up state. */
 	endTurn(): State['turn'] | null {
 		let current = this.turn;
 		do {
@@ -525,6 +572,7 @@ export class BaseGame<State extends BaseState> {
 	}
 
 	end(type?: EndType): void {
+		this.clearDrawOffer();
 		let message = this.onEnd(type);
 		// Override message for forcewin
 		if (type === 'dq' && this.forcewinPlayers) {

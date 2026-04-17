@@ -30,6 +30,9 @@ export type Meta = Readonly<
 		timer?: number | false;
 		pokeTimer?: number | false | undefined;
 
+		/** Enables `offerdraw`: pending offer expires after 1 minute or when any player makes a move. */
+		canOfferDraws?: boolean;
+
 		// UGO-CODE
 		/**
 		 * Metadata for automatic UGO points.
