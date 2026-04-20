@@ -145,7 +145,7 @@ function ShipInput({ msg, filled }: { msg: string; filled?: string[] | null }): 
 			})}
 			<br />
 			<center>
-				<button>Go!</button>
+				<button type="submit">Go!</button>
 			</center>
 		</Form>
 	);

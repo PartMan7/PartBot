@@ -211,7 +211,7 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 							</p>
 							<p>
 								<Form value={`/botmsg ${this.status.username},${prefix}@${roomId} addnonce ${nonce}`}>
-									<button>Add Points!</button>
+									<button type="submit">Add Points!</button>
 								</Form>
 							</p>
 						</div>,

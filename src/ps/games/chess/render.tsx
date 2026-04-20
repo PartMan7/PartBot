@@ -93,7 +93,9 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 							))}
 						</select>
 					</label>
-					<button style={{ margin: 8 }}>Go!</button>
+					<button type="submit" style={{ margin: 8 }}>
+						Go!
+					</button>
 				</Form>
 			) : null}
 		</center>

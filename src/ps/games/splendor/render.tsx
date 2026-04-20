@@ -431,7 +431,7 @@ function TokenInput({
 				</div>
 			))}
 			<div style={{ zoom: '240%', verticalAlign: 'top', marginTop: 18 }}>
-				<button>{label}</button>
+				<button type="submit">{label}</button>
 			</div>
 		</Form>
 	);
@@ -563,7 +563,9 @@ export function BaseBoard({
 							</div>
 						))}
 						<div style={{ display: 'inline-block', verticalAlign: 'top', paddingTop: 72 }}>
-							<button style={{ zoom: '320%' }}>Draw!</button>
+							<button type="submit" style={{ zoom: '320%' }}>
+								Draw!
+							</button>
 						</div>
 					</Form>
 				) : (

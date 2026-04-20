@@ -27,8 +27,7 @@ export function renderMove(logEntry: Log, game: Scrabble): [ReactElement, { name
 					{words.length === 1 && !logEntry.ctx.points.bingo
 						? words[0][0]
 						: words.map(([word, points]) => `${word} (${points})`).list(game.$T)}{' '}
-					for {pluralize(logEntry.ctx.points.total, 'point', 'points')}!
-					{logEntry.ctx.points.bingo ? ' BINGO!' : null}
+					for {pluralize(logEntry.ctx.points.total, 'point', 'points')}!{logEntry.ctx.points.bingo ? ' BINGO!' : null}
 				</LogEntry>,
 				opts,
 			];
@@ -237,7 +236,12 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 													<input type="radio" name="dir" value="d" />
 													<span style={{ position: 'relative', top: -2 }}>Down</span>
 												</label>
-												<button style={{ float: 'right', fontWeight: 'bold', border: '2px solid green', borderRadius: 4 }}>Go!</button>
+												<button
+													type="submit"
+													style={{ float: 'right', fontWeight: 'bold', border: '2px solid green', borderRadius: 4 }}
+												>
+													Go!
+												</button>
 											</div>
 										</center>
 									</Form>
@@ -247,7 +251,7 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 								<hr />
 								<Form value={`${this.msg} ! x {tiles}`} style={{ margin: '4px 0' }}>
 									<input name="tiles" placeholder="Exchange tiles" width="100" style={{ marginRight: 4 }} />
-									<button>Exchange</button>
+									<button type="submit">Exchange</button>
 								</Form>
 							</UserPanel>
 						</>
