@@ -22,12 +22,12 @@ import type { PSMessage } from '@/types/ps';
 import type { Client } from 'ps-client';
 
 export type BracketNode = {
-	team: string;
-	children?: [BracketNode, BracketNode] | null;
+	team?: string;
+	children?: BracketNode[] | null;
 } & (
 	| {
 			state: 'finished';
-			result: 'win';
+			result: 'win' | 'loss';
 			score: [number, number];
 	  }
 	| {
@@ -37,16 +37,90 @@ export type BracketNode = {
 	| {
 			state: 'available' | 'unavailable' | 'challenging';
 	  }
+	| {
+			state?: undefined;
+	  }
 );
 
 export type BracketTree = {
 	format: string;
 	generator: string;
-	bracketData: {
+	results?: string[][];
+	bracketData?: {
 		type: 'tree';
 		rootNode: BracketNode;
 	};
 };
+
+function isFinishedMatchNode(
+	node: BracketNode | undefined | null
+): node is BracketNode & { state: 'finished'; result: 'win' | 'loss'; team: string } {
+	return !!node && node.state === 'finished' && (node.result === 'win' || node.result === 'loss') && typeof node.team === 'string';
+}
+
+/** Winner emerging from the subtree rooted at `node` (handles PS `result: 'loss'` on the losing finalist). */
+function getSubtreeChampion(node: BracketNode | undefined | null): string | null {
+	if (!node) return null;
+	const kids = node.children?.filter((c): c is BracketNode => !!c);
+	if (!kids?.length) return node.team ?? null;
+	if (kids.length !== 2) return node.team ?? getSubtreeChampion(kids[0]!) ?? null;
+
+	const [c0, c1] = kids;
+	const f0 = getSubtreeChampion(c0);
+	const f1 = getSubtreeChampion(c1);
+	if (!isFinishedMatchNode(node)) return node.team ?? f0 ?? f1;
+
+	if (node.result === 'win') return node.team;
+	if (node.team === f0) return f1;
+	if (node.team === f1) return f0;
+	return f0 ?? f1;
+}
+
+/** The loser of the match at `node` (two subtrees); null if not a binary match. */
+function getMatchLoser(node: BracketNode | undefined | null): string | null {
+	const kids = node?.children?.filter((c): c is BracketNode => !!c);
+	if (!kids || kids.length !== 2) return null;
+	const [c0, c1] = kids;
+	const f0 = getSubtreeChampion(c0);
+	const f1 = getSubtreeChampion(c1);
+	const winner = isFinishedMatchNode(node)
+		? node.result === 'win'
+			? node.team
+			: node.team === f0
+				? f1
+				: node.team === f1
+					? f0
+					: (f0 ?? f1)
+		: (f0 ?? f1);
+	if (!winner) return null;
+	if (winner === f0) return f1;
+	if (winner === f1) return f0;
+	return null;
+}
+
+/** Placements for single-elim tree: champion, runner-up, two semifinal losers (order preserved). */
+export function getTopFourFromBracketTree(json: BracketTree): string[] {
+	const root = json.bracketData?.rootNode;
+	if (!root) return [];
+
+	const first = getSubtreeChampion(root);
+	const second = getMatchLoser(root);
+	const semiLosers =
+		root.children
+			?.filter((c): c is BracketNode => !!c)
+			.map(c => getMatchLoser(c))
+			.filter((n): n is string => !!n) ?? [];
+
+	const out: string[] = [];
+	const pushUnique = (name: string | null) => {
+		if (name && !out.includes(name)) out.push(name);
+	};
+	pushUnique(first);
+	pushUnique(second);
+	for (const s of semiLosers) pushUnique(s);
+
+	return out.slice(0, 4);
+}
 
 function labelPoints(data: Record<string, number>, pointsType: string): Record<string, Record<string, number>> {
 	return mapValues(data, amount => ({ [pointsType]: amount }));
@@ -136,28 +210,6 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 				lbCommand.run(partialContext as PSCommandContext);
 			};
 
-			/** [#1, #2, #3 and #4] */
-			const getTopFour = (): string[] => {
-				const winners: string[] = [];
-				const root = json.bracketData.rootNode;
-
-				// add first place
-				winners.push(root.team);
-				// add second place
-				root.children?.forEach(child => {
-					if (child.team !== winners[0]) winners.push(child.team);
-				});
-				// add runners-up
-				root.children?.forEach(child => {
-					if (Array.isArray(child.children))
-						child.children.forEach(kid => {
-							if (!winners.includes(kid.team)) winners.push(kid.team);
-						});
-				});
-
-				return winners;
-			};
-
 			switch (roomId) {
 				case 'hindi': {
 					if (/casual|ignore|no ?points/i.test(json.format || '')) return;
@@ -181,7 +233,7 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 				case 'capproject': {
 					if (json.generator !== 'Single Elimination') return;
 
-					const winners = getTopFour();
+					const winners = getTopFourFromBracketTree(json);
 					const pointsToAdd: Record<string, number> = {};
 
 					[3, 2, 1, 1].forEach((amt, index) => {
@@ -221,7 +273,7 @@ export function tourHandler(this: Client, roomId: string, line: string, isIntro?
 				}
 
 				case 'petmods': {
-					const winners = getTopFour();
+					const winners = getTopFourFromBracketTree(json);
 					if (winners.length < 4) {
 						room.sendHTML(<div className="infobox">Not adding points for this (only {winners.length} players).</div>, { rank: '%' });
 						return;
