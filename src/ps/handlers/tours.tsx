@@ -63,39 +63,38 @@ function getSubtreeChampion(node: BracketNode | undefined | null): string | null
 	if (!node) return null;
 	const kids = node.children?.filter((c): c is BracketNode => !!c);
 	if (!kids?.length) return node.team ?? null;
-	if (kids.length !== 2) return node.team ?? getSubtreeChampion(kids[0]!) ?? null;
 
-	const [c0, c1] = kids;
-	const f0 = getSubtreeChampion(c0);
-	const f1 = getSubtreeChampion(c1);
-	if (!isFinishedMatchNode(node)) return node.team ?? f0 ?? f1;
+	const f0 = getSubtreeChampion(kids[0]);
+	const f1 = getSubtreeChampion(kids[1]);
 
-	if (node.result === 'win') return node.team;
-	if (node.team === f0) return f1;
-	if (node.team === f1) return f0;
-	return f0 ?? f1;
+	if (isFinishedMatchNode(node)) {
+		if (node.result === 'win') return node.team;
+		// If the node says 'loss', the winner is the child who is NOT node.team
+		if (f0 && f0 === node.team) return f1 || f0;
+		if (f1 && f1 === node.team) return f0 || f1;
+		return node.team || f0 || f1;
+	}
+
+	return node.team || f0 || f1;
 }
 
 /** The loser of the match at `node` (two subtrees); null if not a binary match. */
 function getMatchLoser(node: BracketNode | undefined | null): string | null {
-	const kids = node?.children?.filter((c): c is BracketNode => !!c);
+	if (!node) return null;
+	const kids = node.children?.filter((c): c is BracketNode => !!c);
 	if (!kids || kids.length !== 2) return null;
-	const [c0, c1] = kids;
-	const f0 = getSubtreeChampion(c0);
-	const f1 = getSubtreeChampion(c1);
-	const winner = isFinishedMatchNode(node)
-		? node.result === 'win'
-			? node.team
-			: node.team === f0
-				? f1
-				: node.team === f1
-					? f0
-					: (f0 ?? f1)
-		: (f0 ?? f1);
+
+	const f0 = getSubtreeChampion(kids[0]);
+	const f1 = getSubtreeChampion(kids[1]);
+	const winner = getSubtreeChampion(node);
+
 	if (!winner) return null;
 	if (winner === f0) return f1;
 	if (winner === f1) return f0;
-	return null;
+
+	// Fallback: if winner is neither f0 nor f1, the loser is whichever one is not the winner
+	// This handles cases where node.team might be slightly different from f0/f1 or other inconsistencies
+	return winner === f0 ? f1 : f0;
 }
 
 /** Placements for single-elim tree: champion, runner-up, two semifinal losers (order preserved). */
@@ -105,18 +104,33 @@ export function getTopFourFromBracketTree(json: BracketTree): string[] {
 
 	const first = getSubtreeChampion(root);
 	const second = getMatchLoser(root);
-	const semiLosers =
-		root.children
-			?.filter((c): c is BracketNode => !!c)
-			.map(c => getMatchLoser(c))
-			.filter((n): n is string => !!n) ?? [];
+
+	const semiFinalists: string[] = [];
+	if (root.children) {
+		for (const child of root.children) {
+			const champ = getSubtreeChampion(child);
+			if (champ) semiFinalists.push(champ);
+		}
+	}
+
+	const semiLosers: string[] = [];
+	if (root.children) {
+		for (const child of root.children) {
+			const loser = getMatchLoser(child);
+			if (loser) semiLosers.push(loser);
+		}
+	}
 
 	const out: string[] = [];
 	const pushUnique = (name: string | null) => {
 		if (name && !out.includes(name)) out.push(name);
 	};
+
 	pushUnique(first);
 	pushUnique(second);
+
+	// If second place is still missing, it might be one of the semifinalists who isn't the winner
+	for (const s of semiFinalists) pushUnique(s);
 	for (const s of semiLosers) pushUnique(s);
 
 	return out.slice(0, 4);
