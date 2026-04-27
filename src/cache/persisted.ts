@@ -12,6 +12,7 @@ type CacheTypes = {
 	openGames: { gameType: GamesList; id: string; roomid: string }[];
 	ugoCap: Record<string, Partial<Record<UGOBoardGames, number>>>;
 	ugoPoints: Record<string, { name: string; points: Partial<UGOPoints> }>;
+	battleStats: { battlesStarted: number; battlesWon: number; battlesLost: number; battlesTied: number; };
 };
 
 const defaults: CacheTypes = {
@@ -20,6 +21,7 @@ const defaults: CacheTypes = {
 	openGames: [],
 	ugoCap: {},
 	ugoPoints: {},
+	battleStats: { battlesStarted: 0, battlesWon: 0, battlesLost: 0, battlesTied: 0 },
 };
 
 export type Cache<T> = {

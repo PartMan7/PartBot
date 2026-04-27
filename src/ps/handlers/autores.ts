@@ -13,6 +13,8 @@ export function autoResHandler(message: PSMessage) {
 
 	if (message.awaited) return; // Don't do this if the user submitted a valid prompt response
 
+	if (message.type === 'pm' && (message.command === '/challenge' || message.command === '/log')) return;
+
 	const helpMessage = `Hi, I'm ${username}, a chatbot by ${owner}! My prefix is \`\`${prefix}\`\` - try \`\`${prefix}help\`\` or \`\`${prefix}commands!\`\``;
 	if (toId(message.content) === message.parent.status.userid && message.content.endsWith('?')) {
 		return message.author.send(helpMessage);

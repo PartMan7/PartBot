@@ -1,6 +1,7 @@
 // The first versions can be imported directly; we'll update them via dynamic import calls.
 
 import { autoResHandler } from '@/ps/handlers/autores';
+import { battleHandler } from '@/ps/handlers/battle';
 import { commandHandler } from '@/ps/handlers/commands';
 import { GROUPED_PERMS } from '@/ps/handlers/commands/customPerms';
 import { parse } from '@/ps/handlers/commands/parse';
@@ -29,6 +30,7 @@ export const LiveData = {};
 /** @see {@link LiveData} */
 export const LivePSHandlers = {
 	autoResHandler,
+	battleHandler,
 	commandHandler,
 	interfaceHandler,
 	joinRoomHandler,
