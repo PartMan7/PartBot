@@ -7,6 +7,7 @@ import { HINDI_LOGS } from '@/discord/constants/servers/hindi';
 import { getChannel } from '@/discord/loaders/channels';
 import { i18n } from '@/i18n';
 import { TimeZone } from '@/ps/handlers/cron/constants';
+import { hasPoints } from '@/ps/handlers/cron/utils';
 import { Logger } from '@/utils/logger';
 import { sample } from '@/utils/random';
 import { sleep } from '@/utils/sleep';
@@ -16,15 +17,6 @@ import type { PSCommandContext } from '@/types/chat';
 import type { RecursivePartial } from '@/types/common';
 import type { PSMessage } from '@/types/ps';
 import type { Client, User } from 'ps-client';
-
-function hasPoints<Points extends number[]>(user: Points, targetPoints: Points): boolean {
-	for (const [index, targetPoint] of targetPoints.entries()) {
-		if (user[index] > targetPoint) return true;
-		if (user[index] === targetPoint) continue;
-		return false;
-	}
-	return true;
-}
 
 function _preGGSSEvent(this: Client, eventType: string) {
 	const hindiRoom = this.getRoom('hindi');
