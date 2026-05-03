@@ -35,7 +35,7 @@ export function create(emitter: Emitter): FSWatcher {
 			},
 		}));
 
-	const sentinel = watch([fsPath('..', 'src'), fsPath('..', 'package.json'), fsPath('..', 'package-lock.json')], {
+	const sentinel = watch([fsPath('..', 'src'), fsPath('..', 'package.json')], {
 		ignoreInitial: true,
 	});
 	sentinel.on('all', async (event, filepath) => {

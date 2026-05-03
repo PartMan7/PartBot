@@ -6,7 +6,7 @@ import type { Register } from '@/sentinel/types';
 export const GLOBAL_REGISTERS: Register[] = [
 	{
 		label: 'npm',
-		pattern: /(?:package\.json|package-lock\.json)$/,
+		pattern: /package\.json$/,
 		reload: () => {
 			$('npm install', { cwd: fsPath('..'), stdio: 'inherit', encoding: 'utf8' });
 		},

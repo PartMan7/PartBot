@@ -38,8 +38,6 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 		switch (hotpatchType) {
 			case 'code': {
 				$`git pull`;
-				// Run npm install if package-lock.json has been updated
-				$`if git diff --name-only '@{1}' -- package-lock.json | grep -q .; then npm install; fi`;
 				break;
 			}
 
