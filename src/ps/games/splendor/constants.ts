@@ -24,8 +24,12 @@ export enum VIEW_ACTION_TYPE {
 	CLICK_DECK = 'deck',
 	CLICK_RESERVE = 'payback',
 	CLICK_TOKENS = 'tokens',
-	TOO_MANY_TOKENS = 'discard',
 	GAME_END = 'end',
+}
+
+export enum POST_TURN_ACTIONS {
+	TOO_MANY_TOKENS = 'discard',
+	CLAIM_TRAINER = 'noble',
 }
 
 export const MIN_POINTS_TO_WIN = 8;
