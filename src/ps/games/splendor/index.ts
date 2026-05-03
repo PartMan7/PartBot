@@ -7,6 +7,7 @@ import {
 	MAX_RESERVE_COUNT,
 	MAX_TOKEN_COUNT,
 	MIN_POINTS_TO_WIN,
+	POST_TURN_ACTIONS,
 	TOKEN_TYPE,
 	TokenTypes,
 	VIEW_ACTION_TYPE,
@@ -176,12 +177,14 @@ export class Splendor extends BaseGame<State> {
 		const playerData = this.state.playerData[player.turn];
 		const [action, actionCtx] = ctx.lazySplit(' ', 1);
 
-		if (this.state.actionState.action === VIEW_ACTION_TYPE.TOO_MANY_TOKENS && action !== VIEW_ACTION_TYPE.TOO_MANY_TOKENS)
+		if (this.state.actionState.action === POST_TURN_ACTIONS.TOO_MANY_TOKENS && action !== POST_TURN_ACTIONS.TOO_MANY_TOKENS)
 			throw new ChatError(this.$T('GAME.SPLENDOR.DISCARD_TOKENS_REQUIRED'));
+		if (this.state.actionState.action === POST_TURN_ACTIONS.CLAIM_TRAINER && action !== POST_TURN_ACTIONS.CLAIM_TRAINER)
+			throw new ChatError(this.$T('GAME.SPLENDOR.CLAIM_TRAINER_REQUIRED'));
 
 		let logEntry: Log;
 		// VIEW_ACTION_TYPES update the user's state while staying on the same turn. Use 'return'.
-		// The exception to this is TOO_MANY_TOKENS, which is deferred from ACTIONS and uses 'break'.
+		// POST_TURN_ACTIONS happen after actual actions. They are deferred from actions. Use 'break'.
 		// ACTIONS are actual actions, and will end the turn and stuff if valid. Use 'break'.
 		switch (action) {
 			case VIEW_ACTION_TYPE.CLICK_TOKENS: {
@@ -235,8 +238,8 @@ export class Splendor extends BaseGame<State> {
 				return;
 			}
 
-			case VIEW_ACTION_TYPE.TOO_MANY_TOKENS: {
-				if (this.state.actionState.action !== VIEW_ACTION_TYPE.TOO_MANY_TOKENS)
+			case POST_TURN_ACTIONS.TOO_MANY_TOKENS: {
+				if (this.state.actionState.action !== POST_TURN_ACTIONS.TOO_MANY_TOKENS)
 					throw new ChatError(this.$T('GAME.SPLENDOR.NO_DISCARD_NEEDED'));
 				const toDiscard = this.state.actionState.discard;
 				const tokens = this.parseTokens(actionCtx, true);
@@ -246,7 +249,21 @@ export class Splendor extends BaseGame<State> {
 				if (!this.canAfford(tokens, playerData.tokens, null, false)) throw new ChatError(this.$T('GAME.SPLENDOR.CANNOT_DISCARD'));
 
 				this.spendTokens(tokens, playerData);
-				logEntry = { turn: player.turn, time: new Date(), action: VIEW_ACTION_TYPE.TOO_MANY_TOKENS, ctx: { discard: tokens } };
+				logEntry = { turn: player.turn, time: new Date(), action: POST_TURN_ACTIONS.TOO_MANY_TOKENS, ctx: { discard: tokens } };
+				break;
+			}
+
+			case POST_TURN_ACTIONS.CLAIM_TRAINER: {
+				const trainer = metadata.trainers[actionCtx];
+
+				this.state.board.trainers.remove(trainer);
+				playerData.trainers.push(trainer);
+				logEntry = {
+					turn: player.turn,
+					time: new Date(),
+					action: POST_TURN_ACTIONS.CLAIM_TRAINER,
+					ctx: { trainerId: trainer.id },
+				};
 				break;
 			}
 
@@ -343,7 +360,8 @@ export class Splendor extends BaseGame<State> {
 				if (!validateTokens.success) throw new ChatError(validateTokens.error);
 				this.receiveTokens(tokens, playerData);
 
-				logEntry = { turn: player.turn, time: new Date(), action: ACTIONS.DRAW, ctx: { tokens } };
+				const totalTokens = Object.values(playerData.tokens).sum();
+				logEntry = { turn: player.turn, time: new Date(), action: ACTIONS.DRAW, ctx: { tokens, totalTokens } };
 				break;
 			}
 
@@ -357,11 +375,6 @@ export class Splendor extends BaseGame<State> {
 			}
 		}
 
-		// TODO: Add a UI for one-at-a-time
-		const newTrainers = this.state.board.trainers.filter(trainer => this.canAfford(trainer.types, {}, playerData.cards));
-		this.state.board.trainers.remove(...newTrainers);
-		playerData.trainers.push(...newTrainers);
-		if (logEntry.ctx) logEntry.ctx.trainers = newTrainers.map(trainer => trainer.id);
 		this.chatLog(logEntry);
 
 		playerData.points = playerData.cards.map(card => card.points).sum() + playerData.trainers.map(trainer => trainer.points).sum();
@@ -369,12 +382,7 @@ export class Splendor extends BaseGame<State> {
 		this.state.actionState = { action: VIEW_ACTION_TYPE.NONE };
 
 		if (this.gameCanEnd()) return this.end();
-		else if (Object.values(playerData.tokens).sum() > MAX_TOKEN_COUNT) {
-			const count = Object.values(playerData.tokens).sum();
-			this.state.actionState = { action: VIEW_ACTION_TYPE.TOO_MANY_TOKENS, discard: count - MAX_TOKEN_COUNT };
-			this.update(user.id);
-			this.backup();
-		} else this.endTurn();
+		else this.handlePostTurn(action, playerData, user, player, logEntry);
 	}
 
 	canAfford(
@@ -485,6 +493,50 @@ export class Splendor extends BaseGame<State> {
 		}
 
 		return { success: true, data: null };
+	}
+
+	handlePostTurn(action: POST_TURN_ACTIONS | ACTIONS, playerData: PlayerData, user: User, player: Player, logEntry: Log): void {
+		if (Object.values(playerData.tokens).sum() > MAX_TOKEN_COUNT) {
+			const count = Object.values(playerData.tokens).sum();
+			this.state.actionState = { action: POST_TURN_ACTIONS.TOO_MANY_TOKENS, discard: count - MAX_TOKEN_COUNT };
+			this.update(user.id);
+			this.backup();
+			return;
+		}
+
+		if (action === POST_TURN_ACTIONS.CLAIM_TRAINER) {
+			this.endTurn();
+			return;
+		}
+
+		const affordableTrainers = this.state.board.trainers.filter(trainer => this.canAfford(trainer.types, {}, playerData.cards));
+
+		if (affordableTrainers.length === 0) {
+			this.endTurn();
+			return;
+		}
+
+		if (affordableTrainers.length > 1) {
+			this.state.actionState = { action: POST_TURN_ACTIONS.CLAIM_TRAINER, canAfford: affordableTrainers };
+			this.update(user.id);
+			this.backup();
+			return;
+		}
+
+		this.state.board.trainers.remove(affordableTrainers[0]);
+		playerData.trainers.push(affordableTrainers[0]);
+		logEntry = {
+			turn: player.turn,
+			time: new Date(),
+			action: POST_TURN_ACTIONS.CLAIM_TRAINER,
+			ctx: { trainerId: affordableTrainers[0].id },
+		};
+
+		playerData.points += affordableTrainers[0].points;
+		this.state.actionState = { action: VIEW_ACTION_TYPE.NONE };
+		this.update(user.id);
+		this.chatLog(logEntry);
+		this.endTurn();
 	}
 
 	onEnd(type?: EndType): TranslatedText {

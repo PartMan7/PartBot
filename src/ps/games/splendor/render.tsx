@@ -1,5 +1,13 @@
 import { LogEntry } from '@/ps/games/render';
-import { ACTIONS, AllTokenTypes, MAX_TOKEN_COUNT, TOKEN_TYPE, TokenTypes, VIEW_ACTION_TYPE } from '@/ps/games/splendor/constants';
+import {
+	ACTIONS,
+	AllTokenTypes,
+	MAX_TOKEN_COUNT,
+	POST_TURN_ACTIONS,
+	TOKEN_TYPE,
+	TokenTypes,
+	VIEW_ACTION_TYPE,
+} from '@/ps/games/splendor/constants';
 import metadata from '@/ps/games/splendor/metadata.json';
 import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { Username } from '@/utils/components';
@@ -7,7 +15,7 @@ import { Button, Form } from '@/utils/components/ps';
 import { Logger } from '@/utils/logger';
 
 import type { TranslatedText, TranslationFn } from '@/i18n/types';
-import type { Splendor } from '@/ps/games/splendor/index';
+import { Splendor } from '@/ps/games/splendor/index';
 import type { Log } from '@/ps/games/splendor/logs';
 import type { Board, Card, PlayerData, RenderCtx, TokenCount, Trainer, ViewType } from '@/ps/games/splendor/types';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
@@ -34,18 +42,10 @@ const TOKEN_COLOURS: Record<TOKEN_TYPE, string> = {
 };
 
 export function renderLog(logEntry: Log, game: Splendor): [ReactElement, { name: string }] {
-	const Wrapper = ({ children }: { children: ReactNode }): ReactElement => (
-		<LogEntry game={game}>
-			{children}
-			{logEntry.ctx?.trainers?.length
-				? ` ${logEntry.ctx.trainers.map(id => metadata.trainers[id].name).list(game.$T)} joined them!`
-				: null}
-		</LogEntry>
-	);
+	const Wrapper = ({ children }: { children: ReactNode }): ReactElement => <LogEntry game={game}>{children}</LogEntry>;
 
 	const playerName = game.players[logEntry.turn]?.name;
 	const opts = { name: `${game.id}-chatlog` };
-
 	switch (logEntry.action) {
 		case ACTIONS.BUY:
 		case ACTIONS.BUY_RESERVE: {
@@ -66,8 +66,16 @@ export function renderLog(logEntry: Log, game: Splendor): [ReactElement, { name:
 				opts,
 			];
 		}
+		case POST_TURN_ACTIONS.CLAIM_TRAINER: {
+			return [
+				<Wrapper>
+					{metadata.trainers[logEntry.ctx.trainerId].name} joined {<Username name={playerName} clickable />}!
+				</Wrapper>,
+				opts,
+			];
+		}
 		case ACTIONS.DRAW:
-		case VIEW_ACTION_TYPE.TOO_MANY_TOKENS: {
+		case POST_TURN_ACTIONS.TOO_MANY_TOKENS: {
 			const tokens = logEntry.action === ACTIONS.DRAW ? logEntry.ctx.tokens : logEntry.ctx.discard;
 			return [
 				<Wrapper>
@@ -79,7 +87,16 @@ export function renderLog(logEntry: Log, game: Splendor): [ReactElement, { name:
 								<TypeTokenCount type={type} count={count} />
 							))}
 					</span>
-					.
+					{logEntry.action === ACTIONS.DRAW && logEntry.ctx.totalTokens > 10 ? (
+						<>
+							<span style={{ opacity: 0.45, paddingTop: '0.5em', fontSize: '0.9em' }}>
+								<br />
+								{`They have ${logEntry.ctx.totalTokens} tokens and must discard ${logEntry.ctx.totalTokens - MAX_TOKEN_COUNT}`}.
+							</span>
+						</>
+					) : (
+						'.'
+					)}
 				</Wrapper>,
 				opts,
 			];
@@ -529,6 +546,37 @@ function ReservedCardInput({
 	);
 }
 
+function ChooseTrainerInput({
+	onClick,
+	affordableTrainers,
+	label,
+}: {
+	onClick: string;
+	affordableTrainers: Trainer[];
+	label: string;
+}): ReactElement {
+	return (
+		<Form
+			value={`${onClick} {selectedTrainer}`}
+			style={{ border: '1px solid', display: 'inline-block', padding: 12, borderRadius: 12, textAlign: 'left' }}
+		>
+			{affordableTrainers.map(trainer => (
+				<>
+					<input style={{ zoom: '180%' }} type="radio" value={trainer.id} name="selectedTrainer" id={trainer.id} required />
+					<label htmlFor={trainer.id}>
+						<span style={{ zoom: '67%', display: 'inline-block', transform: 'translateY(1em)' }}>
+							<TrainerCard data={trainer} />
+						</span>
+						<span style={{ marginTop: '-1 em' }}>{trainer.name}</span>
+					</label>
+					<br />
+				</>
+			))}
+			<button style={{ display: 'block', margin: '1em auto' }}>{label}</button>
+		</Form>
+	);
+}
+
 export function BaseBoard({
 	board,
 	view,
@@ -693,7 +741,7 @@ export function ActivePlayer({
 							data={card}
 							onClick={
 								action.active &&
-								action.action !== VIEW_ACTION_TYPE.TOO_MANY_TOKENS &&
+								action.action !== POST_TURN_ACTIONS.TOO_MANY_TOKENS &&
 								!(action.action === VIEW_ACTION_TYPE.CLICK_RESERVE && card.id === action.id)
 									? `${onClick} ! ${VIEW_ACTION_TYPE.CLICK_RESERVE}`
 									: undefined
@@ -715,14 +763,24 @@ export function ActivePlayer({
 					<div>{`You can't afford ${metadata.pokemon[action.id].name}...`}</div>
 				)
 			) : null}
-			{action.active && action.action === VIEW_ACTION_TYPE.TOO_MANY_TOKENS ? (
+			{action.active && action.action === POST_TURN_ACTIONS.TOO_MANY_TOKENS ? (
 				<div style={{ color: 'white' }}>
 					<p>{$T('GAME.SPLENDOR.TOO_MANY_TOKENS_MESSAGE', { max: MAX_TOKEN_COUNT, discard: action.discard })}</p>
 					<TokenInput
 						allowDragon
 						preset={null}
 						label={$T('GAME.LABELS.DISCARD')}
-						onClick={`${onClick} ! ${VIEW_ACTION_TYPE.TOO_MANY_TOKENS}`}
+						onClick={`${onClick} ! ${POST_TURN_ACTIONS.TOO_MANY_TOKENS}`}
+					/>
+				</div>
+			) : null}
+			{action.active && action.action === POST_TURN_ACTIONS.CLAIM_TRAINER ? (
+				<div style={{ color: 'white', width: '80%' }}>
+					<p>{$T('GAME.SPLENDOR.CLAIM_TRAINER_MESSAGE')}</p>
+					<ChooseTrainerInput
+						affordableTrainers={action.canAfford}
+						onClick={`${onClick} ! ${POST_TURN_ACTIONS.CLAIM_TRAINER}`}
+						label={$T('GAME.SPLENDOR.LABELS.CHOOSE')}
 					/>
 				</div>
 			) : null}

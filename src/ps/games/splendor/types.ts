@@ -1,5 +1,5 @@
 import type { TranslationFn } from '@/i18n/types';
-import type { TOKEN_TYPE, VIEW_ACTION_TYPE } from '@/ps/games/splendor/constants';
+import type { POST_TURN_ACTIONS, TOKEN_TYPE, VIEW_ACTION_TYPE } from '@/ps/games/splendor/constants';
 
 export type Turn = string;
 
@@ -66,7 +66,8 @@ export type ActionState =
 	  ))
 	| { action: VIEW_ACTION_TYPE.CLICK_DECK; tier: 1 | 2 | 3 }
 	| { action: VIEW_ACTION_TYPE.CLICK_RESERVE; id: string; preset: TokenCount | null }
-	| { action: VIEW_ACTION_TYPE.TOO_MANY_TOKENS; discard: number };
+	| { action: POST_TURN_ACTIONS.TOO_MANY_TOKENS; discard: number }
+	| { action: POST_TURN_ACTIONS.CLAIM_TRAINER; canAfford: Trainer[] };
 
 export type ViewType =
 	| {

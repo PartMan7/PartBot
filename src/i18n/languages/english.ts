@@ -174,11 +174,13 @@ export default {
 				BUY: 'Buy!',
 				RESERVE: 'Reserve!',
 				BUY_CARD: 'Buy {{card}}!',
+				CHOOSE: 'Choose!',
 			},
 			INVALID_POINTS_CAP: 'The point cap must be between {{minCap}} and {{maxCap}}. {{cap}} is invalid.',
 			INVALID_CARD: '{{card}} is not a valid card.',
 			CARD_NOT_ACCESSIBLE: 'Cannot access {{card}} for the desired action.',
 			DISCARD_TOKENS_REQUIRED: 'You need to discard tokens!',
+			CLAIM_TRAINER_REQUIRED: 'You need to select a trainer!',
 			CARD_NOT_AVAILABLE_RESERVE: '{{card}} is not available to reserve.',
 			CARD_NOT_AVAILABLE_BUY: '{{card}} is not available to buy.',
 			CANNOT_BUY_OR_RESERVE: 'You can neither buy nor reserve {{card}}.',
@@ -209,6 +211,8 @@ export default {
 			ONE_EACH_TYPE: 'You can only take 1 token from each of the 3 types!{{info}}',
 			TOO_MANY_TOKENS_MESSAGE:
 				'You have too many tokens! The maximum you can have at a time is {{max}}; please discard at least {{discard}}.',
+			CLAIM_TRAINER_MESSAGE:
+				'You have attracted the attention of multiple trainers! Please choose one of them to join you this turn. You may accept other trainers on future turns.',
 		},
 	},
 
