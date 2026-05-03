@@ -7,7 +7,7 @@ import { getChannel } from '@/discord/loaders/channels';
 import { TimeZone } from '@/ps/handlers/cron/constants';
 import { Logger } from '@/utils/logger';
 
-const XKCD_CHANNEL_ID = '762324232948023316';
+const XKCD_CHANNEL_ID = '774631738072236032';
 const COMIC_IN_LINK = /xkcd\.com\/(\d+)(?:\/|$)/;
 
 const cache = usePersistedCache('xkcdLastProcessedIndex');
