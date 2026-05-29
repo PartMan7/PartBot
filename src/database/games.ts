@@ -1,9 +1,12 @@
+import { Temporal } from '@js-temporal/polyfill';
 import mongoose, { type HydratedDocument } from 'mongoose';
 import { pokedex } from 'ps-client/data';
 
 import { IS_ENABLED } from '@/enabled';
 import { ScrabbleMods } from '@/ps/games/scrabble/constants';
 import { GamesList } from '@/ps/games/types';
+import { TimeZone } from '@/ps/handlers/cron/constants';
+import { generateOklchColors } from '@/utils/color';
 import { toId } from '@/utils/toId';
 
 import type { Log as ScrabbleLog } from '@/ps/games/scrabble/logs';
@@ -110,6 +113,71 @@ export type ScrabbleDexEntry = {
 	mod: string;
 	won: boolean;
 };
+export type GamesChartDay = {
+	date: string;
+	games: Record<string, number>;
+	total: number;
+};
+
+export type GamesChartResponse = {
+	days: GamesChartDay[];
+	colors: Record<string, string>;
+};
+
+const CHART_OKLCH_L = 0.65;
+const CHART_OKLCH_C = 0.15;
+
+let gamesChartCache: { date: string; byRoom: Map<string, GamesChartResponse> } | null = null;
+
+export async function getGamesChartData(room: string): Promise<GamesChartResponse> {
+	if (!IS_ENABLED.DB) return { days: [], colors: {} };
+
+	const today = Temporal.Now.plainDateISO(TimeZone.GMT).toString();
+	if (gamesChartCache?.date === today) {
+		const cached = gamesChartCache.byRoom.get(room);
+		if (cached) return cached;
+	}
+
+	const since = Temporal.Now.plainDateISO(TimeZone.GMT)
+		.subtract({ days: 364 })
+		.toZonedDateTime({ timeZone: TimeZone.GMT })
+		.toInstant();
+
+	const games = await model
+		.find({ room, ended: { $gte: new Date(since.epochMilliseconds) } })
+		.select('game ended')
+		.lean();
+	const byDate = new Map<string, GamesChartDay>();
+	const gameTypes = new Set<string>();
+
+	for (const game of games) {
+		gameTypes.add(game.game);
+		const date = Temporal.Instant.fromEpochMilliseconds(game.ended.getTime())
+			.toZonedDateTimeISO(TimeZone.GMT)
+			.toPlainDate()
+			.toString();
+		let day = byDate.get(date);
+		if (!day) {
+			day = { date, games: {}, total: 0 };
+			byDate.set(date, day);
+		}
+
+		day.games[game.game] = (day.games[game.game] ?? 0) + 1;
+		day.total++;
+	}
+
+	const result: GamesChartResponse = {
+		days: [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date)),
+		colors: generateOklchColors([...gameTypes].sort(), CHART_OKLCH_L, CHART_OKLCH_C),
+	};
+
+	if (!gamesChartCache || gamesChartCache.date !== today) {
+		gamesChartCache = { date: today, byRoom: new Map() };
+	}
+	gamesChartCache.byRoom.set(room, result);
+	return result;
+}
+
 export async function getScrabbleDex(): Promise<ScrabbleDexEntry[] | null> {
 	if (!IS_ENABLED.DB) return null;
 	const scrabbleGames = await model.find({ game: GamesList.Scrabble, mod: [ScrabbleMods.CRAZYMONS, ScrabbleMods.POKEMON] }).lean();

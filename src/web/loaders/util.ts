@@ -5,7 +5,7 @@ import { fsPath } from '@/utils/fsPath';
 
 export async function readFileStructure(root: string): Promise<Record<string, string>> {
 	const files = await fs.readdir(root, { recursive: true });
-	return files
+	const routes = files
 		.filter(file => /\.tsx?$/.test(file))
 		.reduce<Record<string, string>>((acc, file) => {
 			const label = file
@@ -15,6 +15,13 @@ export async function readFileStructure(root: string): Promise<Record<string, st
 			acc[`/${label}`] = path.join(root, file);
 			return acc;
 		}, {});
+
+	return Object.fromEntries(
+		Object.entries(routes).sortBy(([urlPath]) => {
+			const segments = urlPath.split('/').filter(Boolean);
+			return [segments.filter(seg => seg.startsWith(':')).length, -segments.filter(seg => !seg.startsWith(':')).length];
+		})
+	);
 }
 
 export async function renderTemplate(path: string, variables: Record<string, string> = {}): Promise<string> {
