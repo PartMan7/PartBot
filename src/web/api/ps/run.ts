@@ -5,6 +5,8 @@ import type { RequestHandler } from 'express';
 
 const ACCESS_TOKEN = process.env.WEB_PS_ACCESS_TOKEN;
 
+export const verb = 'post';
+
 export const handler: RequestHandler = async (req, res) => {
 	const { room, text, accessToken } = req.body as { room?: string; text?: string; accessToken?: string };
 	if (!room || !text || !accessToken) throw new WebError(400);
