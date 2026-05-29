@@ -68,6 +68,8 @@
 	},
 	"optionalDependencies": {
 		"@parcel/watcher-linux-x64-glibc": "^2.5.1",
-		"@swc/core-linux-x64-gnu": "^1.2.160"
+		"@swc/core-linux-x64-gnu": "^1.2.160",
+		"@tailwindcss/oxide-linux-x64-gnu": "^4.0.1",
+		"lightningcss-linux-x64-gnu": "^1.29.1"
 	}
 }
