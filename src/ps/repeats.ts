@@ -18,7 +18,7 @@ export function startRepeat(PS: Client, repeat: PSRepeat, delay: number | null) 
 
 	const handler = () => {
 		if (PS.status.connected && PS.status.loggedIn) {
-			PS.getRoom(repeat.room).send(repeat.content as NoTranslate);
+			PS.getRoom(repeat.room)?.send(repeat.content as NoTranslate);
 		}
 	};
 
