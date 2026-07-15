@@ -39,7 +39,7 @@ function parseGOArgs(arg: string): RandpokeGOOpts {
 		.filter(Boolean)) {
 		if (/^\d+$/.test(token)) {
 			const n = +token;
-			if (n < 1) throw new ChatError(`${token} is not a valid count.` as NoTranslate);
+			if (n < 1 || n > 12) throw new ChatError(`${token} is not a valid count.` as NoTranslate);
 			count = n;
 		} else if (toId(token) === 'fe') {
 			fe = true;
