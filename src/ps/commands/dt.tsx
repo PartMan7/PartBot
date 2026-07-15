@@ -13,7 +13,10 @@ function getPokemonGen(num: number): number {
 export const command: PSCommand[] = [
 	{
 		name: 'dt',
-		help: 'Shows the data for a Pokémon.',
+		help: {
+			pokemongo: 'Shows Pokémon GO data for a Pokémon or move.',
+			default: 'Shows the data for a Pokémon.',
+		},
 		syntax: 'CMD [mon/move]',
 		flags: { allowPMs: true },
 		categories: ['utility'],

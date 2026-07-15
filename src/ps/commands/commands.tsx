@@ -4,6 +4,7 @@ import { permissions } from '@/ps/handlers/commands/permissions';
 import { getSpoofMessage } from '@/ps/handlers/commands/spoof';
 import { ChatError } from '@/utils/chatError';
 import { Logger } from '@/utils/logger';
+import { resolveRoomScopedText } from '@/utils/resolveRoomScopedText';
 
 import type { PSCommand } from '@/types/chat';
 
@@ -52,6 +53,8 @@ export const command: PSCommand = {
 			{ utility: [], points: [], game: [], casual: [] }
 		);
 
+		const helpRoom = targetRoom?.id ?? (message.type === 'chat' ? message.target.id : undefined);
+
 		message.replyHTML(
 			<div className="infobox">
 				<h2>Commands</h2>
@@ -69,7 +72,7 @@ export const command: PSCommand = {
 							<summary style={{ marginBottom: 4 }}>{key} Commands</summary>
 							{commands
 								.sortBy(command => command.name)
-								.map(command => <b title={command.help ?? undefined}>{command.name}</b>)
+								.map(command => <b title={command.help ? resolveRoomScopedText(command.help, helpRoom) : undefined}>{command.name}</b>)
 								.space(', ')}
 						</details>
 					))

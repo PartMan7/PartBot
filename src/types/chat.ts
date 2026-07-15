@@ -10,6 +10,8 @@ import type { ReactElement } from 'react';
 
 export type PSCommandCategory = 'game' | 'points' | 'utility' | 'casual';
 
+export type RoomScopedText = { default: string } & Record<string, string>;
+
 export type PSCommandContext = {
 	/**
 	 * The message this command is acting on
@@ -115,13 +117,13 @@ export type PSCommand = {
 	 * Command help message to be shown if executor function rejects without a message.
 	 * Disable explicitly by passing null
 	 */
-	help: string | null; // Force command help if not explicitly opted-out
+	help: string | RoomScopedText | null; // Force command help if not explicitly opted-out
 	/**
 	 * Command syntax.
 	 * Disable explicitly by passing null.
 	 * Start with a CMD.
 	 */
-	syntax: string | null;
+	syntax: string | RoomScopedText | null;
 	/**
 	 * Aliases for the current (sub) command.
 	 * @example aliases: ['c4', 'cfour'] // for the connectfour command

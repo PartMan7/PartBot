@@ -6,19 +6,29 @@ import { Perms } from '@/types/perms';
 import { ChatError } from '@/utils/chatError';
 import { Button, Username } from '@/utils/components/ps';
 import { groupSub } from '@/utils/groupSub';
+import { resolveRoomScopedText } from '@/utils/resolveRoomScopedText';
 
 import type { parse } from '@/ps/handlers/commands/parse';
-import type { PSCommand, PSCommandChild } from '@/types/chat';
+import type { PSCommand, PSCommandChild, RoomScopedText } from '@/types/chat';
 import type { ReactElement } from 'react';
 
-function Syntax({ syntax, originalCommand }: { syntax: string | null; originalCommand: string }): ReactElement | null {
+function Syntax({
+	syntax,
+	originalCommand,
+	room,
+}: {
+	syntax: string | RoomScopedText | null;
+	originalCommand: string;
+	room?: string;
+}): ReactElement | null {
 	if (!syntax) return null;
+	const resolved = resolveRoomScopedText(syntax, room);
 	return (
 		<p>
 			Syntax:{' '}
 			<code>
 				{prefix}
-				{syntax.replace(/^CMD/, originalCommand)}
+				{resolved.replace(/^CMD/, originalCommand)}
 			</code>
 		</p>
 	);
@@ -106,9 +116,11 @@ function Aliases({ parsed }: { parsed: ReturnType<typeof parse> }): ReactElement
 function SubCommands({
 	parsed,
 	checkPermissions,
+	room,
 }: {
 	parsed: ReturnType<typeof parse>;
 	checkPermissions: (perms: Perms) => boolean;
+	room?: string;
 }): ReactElement | null {
 	const { command } = parsed;
 	if (!command.children) return null;
@@ -126,7 +138,9 @@ function SubCommands({
 				{validChildren.map(child => (
 					<p style={{ paddingLeft: 12 }}>
 						<b>{child.name}</b>
-						{child.help ? <span dangerouslySetInnerHTML={{ __html: `: ${formatText(child.help)}` }} /> : null}
+						{child.help ? (
+							<span dangerouslySetInnerHTML={{ __html: `: ${formatText(resolveRoomScopedText(child.help, room))}` }} />
+						) : null}
 						{child.perms ? (
 							<>
 								{' '}
@@ -185,6 +199,7 @@ export const command: PSCommand = {
 			throw new ChatError($T('COMMANDS.HELP.COULD_NOT_FIND_COMMAND'));
 		}
 		const { command, context } = parsed;
+		const room = message.type === 'chat' ? message.target.id : undefined;
 		const closeEnough = context.args.length > 0 ? context.args.join('>') : null;
 		if (command.perms && !checkPermissions(command.perms))
 			throw new ChatError($T(command.flags?.conceal ? 'COMMANDS.HELP.COULD_NOT_FIND_COMMAND' : 'ACCESS_DENIED'));
@@ -198,8 +213,8 @@ export const command: PSCommand = {
 							<br />
 						</>
 					) : null}
-					<p dangerouslySetInnerHTML={{ __html: formatText(command.help) }} />
-					<Syntax syntax={command.syntax} originalCommand={context.originalCommand.join(' ')} />
+					<p dangerouslySetInnerHTML={{ __html: formatText(resolveRoomScopedText(command.help, room)) }} />
+					<Syntax syntax={command.syntax} originalCommand={context.originalCommand.join(' ')} {...(room ? { room } : {})} />
 					<Perms perms={command.perms} />
 					{command.flags ? (
 						<p>
@@ -211,7 +226,7 @@ export const command: PSCommand = {
 						</p>
 					) : null}
 					<Aliases parsed={parsed} />
-					<SubCommands parsed={parsed} checkPermissions={checkPermissions} />
+					<SubCommands parsed={parsed} checkPermissions={checkPermissions} {...(room ? { room } : {})} />
 				</div>
 			);
 		}
