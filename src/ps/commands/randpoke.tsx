@@ -8,6 +8,22 @@ import type { PokemonGO } from '@/cache/pokemonGo';
 import type { NoTranslate, TranslationFn } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 
+const NORMALIZED_MONS = {
+	pikachu: 'Pikachu',
+	unown: 'Unown-A',
+	castform: 'Castform',
+	wormadam: 'Wormadam-Plant',
+	arceus: 'Arceus',
+	pumpkaboo: 'Pumpkaboo',
+	gourgeist: 'Gourgeist',
+	silvally: 'Silvally',
+};
+function isBaseMon(mon: string): boolean {
+	const forme = toId(mon.split('-')[0]);
+	if (!(forme in NORMALIZED_MONS)) return true;
+	return NORMALIZED_MONS[forme as keyof typeof NORMALIZED_MONS] === mon;
+}
+
 type RandpokeGOOpts = { count: number; type?: string; fe?: boolean; ur?: boolean };
 
 function parseGOArgs(arg: string): RandpokeGOOpts {
@@ -43,6 +59,7 @@ function goPool(opts: RandpokeGOOpts, $T: TranslationFn): PokemonGO.Pokemon[] {
 		if (!opts.ur && mon.unreleased) return false;
 		if (opts.type && !mon.types.includes(opts.type)) return false;
 		if (opts.fe && mon.evos?.length) return false;
+		if (!isBaseMon(mon.name)) return false;
 		return true;
 	});
 	if (!pool.length) throw new ChatError($T('ENTRY_NOT_FOUND'));
