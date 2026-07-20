@@ -11,9 +11,49 @@ import { toId } from '@/utils/toId';
 import type { NoTranslate, TranslationFn } from '@/i18n/types';
 import type { CommonGame } from '@/ps/games/game';
 import type { BaseModEntry } from '@/ps/games/mods';
+import type { HTPDropdown, GameHTPData } from '@/ps/games/types';
 import type { PSCommand, PSCommandChild } from '@/types/chat';
 import type { Room } from 'ps-client';
 import type { HTMLopts } from 'ps-client/classes/common';
+
+const HTPSection = ({ section }: { section: HTPDropdown }) => {
+	return (
+		<details style={{ margin: '4px 0 4px 8px', cursor: 'pointer' }}>
+			<summary style={{ fontWeight: 'bold', color: '#e4e4e4' }}>
+				{section.title}
+			</summary>
+			<div style={{ padding: '2px 0 2px 8px', color: '#ddd', fontSize: '13px' }}>
+				{section.lines.map((line, idx) => (
+					<div key={idx} style={{ margin: '2px 0' }}>{line}</div>
+				))}
+				{section.subsections?.map((sub, idx) => (
+					<HTPSection key={idx} section={sub} />
+				))}
+			</div>
+		</details>
+	);
+};
+
+const HowToPlayBox = ({ gameName, data }: { gameName: string; data: GameHTPData }) => {
+	return (
+		<div className="infobox" style={{
+			padding: '10px',
+			borderRadius: '5px',
+			backgroundColor: '#1b1c1d',
+			border: '1px solid #444',
+			color: '#fff',
+			fontFamily: 'sans-serif'
+		}}>
+			<div style={{ fontWeight: 'bold', marginBottom: '8px', borderBottom: '1px solid #444', paddingBottom: '4px' }}>
+				Goal: <span style={{ fontWeight: 'normal' }}>{data.goal}</span>
+			</div>
+
+			{data.sections.map((sec, idx) => (
+				<HTPSection key={idx} section={sec} />
+			))}
+		</div>
+	);
+};
 
 type SearchContext =
 	| { action: 'start'; user: string }
@@ -221,6 +261,17 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 						}
 						throw err;
 					}
+				},
+			},
+			help: {
+				name: 'help',
+				aliases: ['htp', 'howtoplay'],
+				help: 'Shows the how-to-play for this game.',
+				syntax: 'CMD',
+				run: ({ message, $T }) => {
+					const htpData = Game.meta.htp;
+					if (!htpData) throw new ChatError($T('GAME.NO_HTP'));
+					return message.reply(<HowToPlayBox gameName={Game.meta.name} data={htpData} />);
 				},
 			},
 			...conditionalCommand(

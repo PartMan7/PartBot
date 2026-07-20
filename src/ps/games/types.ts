@@ -2,6 +2,17 @@ import type { TranslatedText } from '@/i18n/types';
 import type { ModData, ModEnum } from '@/ps/games/mods';
 import type { Satisfies } from '@/types/common';
 
+export interface HTPDropdown {
+	title: string;
+	lines: string[];
+	subsections?: HTPDropdown[];
+}
+
+export interface GameHTPData {
+	goal: string;
+	sections: HTPDropdown[];
+}
+
 export type Theme<Colors extends Partial<Record<string, string | null>> = Partial<Record<string, string | null>>> = {
 	id: string;
 	name: string;
@@ -32,6 +43,9 @@ export type Meta = Readonly<
 
 		/** Enables `offerdraw`: pending offer expires after 1 minute or when any player makes a move. */
 		canOfferDraws?: boolean;
+
+		/** How to play instructions. */
+		htp?: GameHTPData;
 
 		// UGO-CODE
 		/**
