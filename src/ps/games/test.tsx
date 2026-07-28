@@ -1,122 +1,104 @@
 import '@/globals';
 
-import { i18n } from '@/i18n';
-import { TOKEN_TYPE, VIEW_ACTION_TYPE } from '@/ps/games/splendor/constants';
+import { Tile, VIEW_ACTION_TYPE } from '@/ps/games/azul/constants';
 import { ansiToHtml } from '@/utils/ansiToHtml';
 import { cachebustDir } from '@/utils/cachebust';
 import { fsPath } from '@/utils/fsPath';
 import { jsxToHTML } from '@/utils/jsxToHTML';
 
-import type { Metadata, RenderCtx } from '@/ps/games/splendor/types';
+import type { PlayerBoard, RenderCtx } from '@/ps/games/azul/types';
+
+function mockPlayer(id: string, name: string, partial: Partial<PlayerBoard> = {}): PlayerBoard {
+	return {
+		id,
+		name,
+		score: 0,
+		pattern: [[null], [null, null], [null, null, null], [null, null, null, null], [null, null, null, null, null]],
+		wall: Array.from({ length: 5 }, () => Array.from({ length: 5 }, () => null)),
+		floor: [],
+		...partial,
+	};
+}
 
 export const test: () => Promise<string> = async () => {
 	try {
 		cachebustDir(fsPath('ps', 'games'));
-		const { render } = await import('@/ps/games/splendor/render');
-		const { default: metadata } = (await import('@/ps/games/splendor/metadata.json')) as unknown as { default: Metadata };
+		const { render } = await import('@/ps/games/azul/render');
+
+		const partman = mockPlayer('partman', 'PartMan', {
+			score: 12,
+			pattern: [
+				[Tile.Water],
+				[Tile.Fire, Tile.Fire],
+				[Tile.Electric, null, null],
+				[null, null, null, null],
+				[Tile.Dark, Tile.Dark, Tile.Dark, null, null],
+			],
+			wall: [
+				[Tile.Water, null, null, null, null],
+				[null, Tile.Water, null, null, null],
+				[null, null, null, null, null],
+				[null, null, null, Tile.Water, null],
+				[null, null, null, null, null],
+			],
+			floor: [Tile.Fire, 'first'],
+		});
+
+		const partbot = mockPlayer('partbot', 'PartBot', {
+			score: 8,
+			wall: [
+				[null, Tile.Electric, null, null, null],
+				[null, null, null, null, null],
+				[Tile.Dark, null, Tile.Water, null, null],
+				[null, null, null, null, null],
+				[null, null, null, null, Tile.Fire],
+			],
+			pattern: [
+				[null],
+				[Tile.Grass, null],
+				[null, null, null],
+				[Tile.Electric, Tile.Electric, Tile.Electric, null],
+				[null, null, null, null, null],
+			],
+		});
+
+		const spectator = mockPlayer('partspec', 'PartSpec', { score: 3 });
 
 		const MOCK_RENDER_CTX: RenderCtx = {
 			id: '#TEMP',
 			header: 'Your turn!',
-			cap: 15,
-			$T: i18n('english'),
+			freeGrid: false,
 			board: {
-				cards: {
-					'1': {
-						wild: Object.values(metadata.pokemon)
-							.filter(mon => mon.tier === 1)
-							.sample(4, 1),
-						deck: [],
-					},
-					'2': {
-						wild: Object.values(metadata.pokemon)
-							.filter(mon => mon.tier === 2)
-							.sample(4, 2),
-						deck: [metadata.pokemon.celebi],
-					},
-					'3': {
-						wild: Object.values(metadata.pokemon)
-							.filter(mon => mon.tier === 3)
-							.sample(4, 6),
-						deck: [metadata.pokemon.celebi, metadata.pokemon.eevee],
-					},
-				},
-				trainers: Object.values(metadata.trainers).sample(5, 1),
-				tokens: {
-					[TOKEN_TYPE.FIRE]: 4,
-					[TOKEN_TYPE.GRASS]: 5,
-					[TOKEN_TYPE.DARK]: 7,
-					[TOKEN_TYPE.DRAGON]: 1,
-					[TOKEN_TYPE.WATER]: 0,
-					[TOKEN_TYPE.COLORLESS]: 2,
+				factories: [
+					{ [Tile.Water]: 2, [Tile.Fire]: 1, [Tile.Electric]: 1 },
+					{ [Tile.Dark]: 2, [Tile.Grass]: 2 },
+					{ [Tile.Fire]: 3, [Tile.Water]: 1 },
+					{ [Tile.Electric]: 1, [Tile.Dark]: 1, [Tile.Fire]: 1, [Tile.Grass]: 1 },
+					{ [Tile.Water]: 4 },
+					{ [Tile.Electric]: 2, [Tile.Fire]: 2 },
+					{ [Tile.Grass]: 1, [Tile.Dark]: 3 },
+				],
+				center: {
+					first: true,
+					[Tile.Water]: 3,
+					[Tile.Electric]: 2,
+					[Tile.Fire]: 2,
+					[Tile.Dark]: 2,
+					[Tile.Grass]: 1,
 				},
 			},
-			view: 1
-				? {
-						type: 'player',
-						active: false,
-						self: 'partman',
-					}
-				: {
-						type: 'player',
-						active: true,
-						self: 'partman',
-						action: VIEW_ACTION_TYPE.CLICK_WILD,
-						id: 'klang',
-						canBuy: true,
-						preset: {
-							[TOKEN_TYPE.GRASS]: 2,
-							[TOKEN_TYPE.WATER]: 1,
-							[TOKEN_TYPE.FIRE]: 0,
-							[TOKEN_TYPE.COLORLESS]: 0,
-							[TOKEN_TYPE.DARK]: 0,
-							[TOKEN_TYPE.DRAGON]: 0,
-						},
-						canReserve: true,
-						// preset: null,
-					},
-			turns: ['partbot', 'partman'],
+			view: {
+				type: 'player',
+				active: true,
+				self: 'partman',
+				action: VIEW_ACTION_TYPE.CLICK_FACTORY,
+				factoryIndex: 0,
+			},
+			turns: ['partman', 'partbot', 'partspec'],
 			players: {
-				partbot: {
-					id: 'partbot',
-					name: 'PartBot',
-					points: 9,
-					tokens: {
-						[TOKEN_TYPE.FIRE]: 0,
-						[TOKEN_TYPE.GRASS]: 0,
-						[TOKEN_TYPE.DARK]: 0,
-						[TOKEN_TYPE.DRAGON]: 1,
-						[TOKEN_TYPE.WATER]: 3,
-						[TOKEN_TYPE.COLORLESS]: 0,
-					},
-					cards: [metadata.pokemon.murkrow, metadata.pokemon.tapulele],
-					trainers: [metadata.trainers.larry, metadata.trainers.siebold],
-					reserved: [metadata.pokemon.klink],
-				},
-				partman: {
-					id: 'partman',
-					name: 'PartMan',
-					points: 10,
-					tokens: {
-						[TOKEN_TYPE.FIRE]: 0,
-						[TOKEN_TYPE.GRASS]: 0,
-						[TOKEN_TYPE.DARK]: 0,
-						[TOKEN_TYPE.DRAGON]: 1,
-						[TOKEN_TYPE.WATER]: 3,
-						[TOKEN_TYPE.COLORLESS]: 0,
-					},
-					cards: [
-						metadata.pokemon.murkrow,
-						metadata.pokemon.tapulele,
-						metadata.pokemon.espeon,
-						metadata.pokemon.vulpix,
-						metadata.pokemon.marill,
-						metadata.pokemon.pichu,
-						metadata.pokemon.celebi,
-					],
-					trainers: [metadata.trainers.larry],
-					reserved: [metadata.pokemon.klink],
-				},
+				partman,
+				partbot,
+				partspec: spectator,
 			},
 		};
 

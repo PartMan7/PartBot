@@ -1,3 +1,5 @@
+import { AzulMods } from '@/ps/games/azul/constants';
+import { AzulModData } from '@/ps/games/azul/mods';
 import { GamesList } from '@/ps/games/types';
 import { fromHumanTime } from '@/utils/humanTime';
 
@@ -12,6 +14,11 @@ export const meta: Meta = {
 	players: 'many',
 	minSize: 2,
 	maxSize: 4,
+
+	mods: {
+		list: AzulMods,
+		data: AzulModData,
+	},
 
 	autostart: false,
 	pokeTimer: fromHumanTime('30 sec'),

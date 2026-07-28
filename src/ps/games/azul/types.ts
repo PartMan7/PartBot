@@ -1,39 +1,90 @@
-// Types for Azul
+import type { POST_TURN_ACTIONS, Tile, VIEW_ACTION_TYPE } from '@/ps/games/azul/constants';
 
-export enum Tile {
-	Blue = 'blue',
-	Yellow = 'yellow',
-	Red = 'red',
-	LightBlue = 'lightBlue',
-	Black = 'black',
-}
-
-export type PlayerBoard = {
-	rows: (Tile | null)[];
-	grid: (Tile | null)[][];
-};
+export type Turn = string;
 
 export type Factory = Partial<Record<Tile, number>>;
 
-export type Board = {
-	players: Record<string, PlayerBoard>;
-	factories: Factory[];
-	center: Factory;
+export type FloorTile = Tile | 'first';
+
+export type PlayerBoard = {
+	id: string;
+	name: string;
+	score: number;
+	/** Pattern lines; row i has length i+1 */
+	pattern: (Tile | null)[][];
+	/** 5x5 wall */
+	wall: (Tile | null)[][];
+	floor: FloorTile[];
+	out?: boolean;
 };
 
+export type Center = Factory & { first: boolean };
+
+export type Board = {
+	factories: Factory[];
+	center: Center;
+};
+
+export type PendingWall = {
+	turn: Turn;
+	row: number;
+	color: Tile;
+};
+
+export type ActionState =
+	| { action: VIEW_ACTION_TYPE.NONE }
+	| { action: VIEW_ACTION_TYPE.CLICK_FACTORY; factoryIndex: number }
+	| { action: VIEW_ACTION_TYPE.CLICK_CENTER }
+	| { action: VIEW_ACTION_TYPE.PLACE; color: Tile; count: number; tookFirst: boolean }
+	| { action: POST_TURN_ACTIONS.WALL; pending: PendingWall };
+
+type ActivePlayer = {
+	type: 'player';
+	active: true;
+	self: Turn;
+};
+
+export type ViewType =
+	| {
+			type: 'spectator';
+			active: false;
+			action: VIEW_ACTION_TYPE.GAME_END | null;
+	  }
+	| {
+			type: 'player';
+			active: false;
+			self: Turn;
+	  }
+	| (ActivePlayer & ActionState);
+
 export type State = {
-	turn: string;
+	turn: Turn;
 	board: Board;
-	lastRoll: number;
+	bag: Tile[];
+	lid: Tile[];
+	playerData: Record<Turn, PlayerBoard>;
+	actionState: ActionState;
+	/** Queue of free-grid wall placements still needing a column */
+	wallQueue: PendingWall[];
+	/** Who took the starting-player marker this round (null until taken) */
+	nextStarter: Turn | null;
+	/** After wall tiling, end the game instead of refilling */
+	ending: boolean;
 };
 
 export type RenderCtx = {
 	id: string;
-	turns: string[];
 	board: Board;
-	lastRoll: number;
-	active?: boolean;
+	players: Record<Turn, PlayerBoard>;
+	turns: Turn[];
+	view: ViewType;
+	freeGrid: boolean;
 	header?: string;
 	dimHeader?: boolean;
 };
-export type WinCtx = { type: 'win'; winner: { name: string; id: string; turn: string; board: Board } };
+
+export type WinCtx = {
+	type: 'win';
+	winner: PlayerBoard;
+	ranked: PlayerBoard[];
+};
