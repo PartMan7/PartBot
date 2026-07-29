@@ -387,6 +387,7 @@ export class BaseGame<State extends BaseState> {
 				);
 			}
 		}
+
 		if (this.meta.players === 'single' || (Array.isArray(availableSlots) && availableSlots.length === 1) || availableSlots === 1) {
 			// Join was successful and game is now full
 			this.start();

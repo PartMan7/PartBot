@@ -1,6 +1,8 @@
 import {
 	ACTIONS,
 	FACTORY_LAYOUT,
+	FLOOR_PENALTIES,
+	FLOOR_SIZE,
 	PATTERN_LENGTHS,
 	POST_TURN_ACTIONS,
 	TILES,
@@ -10,10 +12,14 @@ import {
 	VIEW_ACTION_TYPE,
 	WALL_PATTERN,
 } from '@/ps/games/azul/constants';
+import { LogEntry } from '@/ps/games/render';
 import { Username } from '@/utils/components';
 import { Button } from '@/utils/components/ps';
+import { pluralize } from '@/utils/pluralize';
 
 import type { Tile } from '@/ps/games/azul/constants';
+import type { Azul } from '@/ps/games/azul/index';
+import type { Log } from '@/ps/games/azul/logs';
 import type { Factory, FloorTile, PlayerBoard, RenderCtx, ViewType } from '@/ps/games/azul/types';
 import type { CSSProperties, ReactElement } from 'react';
 
@@ -25,7 +31,6 @@ const TILE_SIZE = 22;
 /** Theme-neutral translucent surfaces */
 const SURFACE = 'rgba(128,128,128,0.22)';
 const SURFACE_STRONG = 'rgba(128,128,128,0.35)';
-const WASTE_BG = 'rgba(28,28,28,0.92)';
 const BORDER = 'rgba(128,128,128,0.55)';
 const MENU_BG = 'rgba(128,128,128,0.3)';
 
@@ -132,74 +137,120 @@ function TileChip({
 	);
 }
 
+export function renderLog(logEntry: Log, game: Azul): ReactElement {
+	const playerName = game.players[logEntry.turn]?.name;
+
+	switch (logEntry.action) {
+		case ACTIONS.TAKE: {
+			const source = logEntry.ctx.source === 'center' ? 'the waste' : `factory ${logEntry.ctx.source + 1}`;
+			return (
+				<LogEntry game={game}>
+					<Username name={playerName} clickable /> took {logEntry.ctx.count}x{' '}
+					<TileChip tile={logEntry.ctx.color} size={16} style={{ margin: 0 }} /> from {source}
+					{logEntry.ctx.tookFirst ? ' and the -1 marker' : ''}.
+				</LogEntry>
+			);
+		}
+		case ACTIONS.PLACE: {
+			const where = logEntry.ctx.row === 'floor' ? 'penalties' : 'a pattern line';
+			return (
+				<LogEntry game={game}>
+					<Username name={playerName} clickable /> placed {logEntry.ctx.count}x{' '}
+					<TileChip tile={logEntry.ctx.color} size={16} style={{ margin: 0 }} /> on {where}
+					{logEntry.ctx.overflow > 0 && logEntry.ctx.row !== 'floor' ? ` (${logEntry.ctx.overflow} to penalties)` : ''}.
+				</LogEntry>
+			);
+		}
+		case POST_TURN_ACTIONS.WALL:
+			return (
+				<LogEntry game={game}>
+					<Username name={playerName} clickable /> tiled <TileChip tile={logEntry.ctx.color} size={16} style={{ margin: 0 }} /> for{' '}
+					{pluralize(logEntry.ctx.points, 'point', 'points')}.
+				</LogEntry>
+			);
+		default:
+			return (
+				<LogEntry game={game}>
+					<Username name={playerName} clickable /> skipped.
+				</LogEntry>
+			);
+	}
+}
+
 function factoryColors(factory: Factory): Tile[] {
 	return TILES.filter(tile => (factory[tile] ?? 0) > 0);
 }
 
+function TileCountList({ pile, first }: { pile: Factory; first?: boolean }): ReactElement {
+	const entries = TILES.filterMap(tile => {
+		const n = pile[tile] ?? 0;
+		if (n > 0) return { tile, n };
+	});
+	const chip = 18;
+	return (
+		<table style={{ borderCollapse: 'collapse', margin: '0 auto' }}>
+			<tbody>
+				{entries.map(({ tile, n }) => (
+					<tr>
+						<td style={{ padding: '1px 2px', verticalAlign: 'middle' }}>
+							<TileChip tile={tile} size={chip} style={{ margin: 0 }} />
+						</td>
+						<td
+							style={{
+								padding: '1px 2px',
+								verticalAlign: 'middle',
+								fontWeight: 'bold',
+								fontSize: 11,
+								opacity: 0.85,
+								whiteSpace: 'nowrap',
+							}}
+						>
+							x{n}
+						</td>
+					</tr>
+				))}
+				{first ? (
+					<tr>
+						<td style={{ padding: '1px 2px', verticalAlign: 'middle' }} colSpan={2}>
+							<TileChip tile="first" size={chip} style={{ margin: 0 }} />
+						</td>
+					</tr>
+				) : null}
+				{!entries.length && !first ? (
+					<tr>
+						<td style={{ opacity: 0.55, fontSize: 12 }}>empty</td>
+					</tr>
+				) : null}
+			</tbody>
+		</table>
+	);
+}
+
 function FactoryDisplay({ factory, first, waste }: { factory: Factory; first?: boolean; waste?: boolean }): ReactElement {
 	if (waste) {
-		const entries = TILES.filterMap(tile => {
-			const n = factory[tile] ?? 0;
-			if (n > 0) return { tile, n };
-		});
-		const chip = 18;
 		return (
 			<div
 				style={{
 					minWidth: FACTORY_SIZE,
-					background: WASTE_BG,
-					border: '2px dashed rgba(180,180,180,0.45)',
-					borderRadius: 4,
+					background: SURFACE_STRONG,
+					border: `2px solid ${BORDER}`,
+					borderRadius: 12,
 					padding: 6,
 					boxSizing: 'border-box',
-					textAlign: 'left',
+					textAlign: 'center',
 				}}
 			>
-				<table style={{ borderCollapse: 'collapse', margin: '0 auto' }}>
-					<tbody>
-						{entries.map(({ tile, n }) => (
-							<tr>
-								<td style={{ padding: '1px 2px', verticalAlign: 'middle' }}>
-									<TileChip tile={tile} size={chip} style={{ margin: 0 }} />
-								</td>
-								<td
-									style={{
-										padding: '1px 2px',
-										verticalAlign: 'middle',
-										fontWeight: 'bold',
-										fontSize: 11,
-										color: 'rgba(200,200,200,0.95)',
-										whiteSpace: 'nowrap',
-									}}
-								>
-									x{n}
-								</td>
-							</tr>
-						))}
-						{first ? (
-							<tr>
-								<td style={{ padding: '1px 2px', verticalAlign: 'middle' }} colSpan={2}>
-									<TileChip tile="first" size={chip} style={{ margin: 0 }} />
-								</td>
-							</tr>
-						) : null}
-						{!entries.length && !first ? (
-							<tr>
-								<td style={{ opacity: 0.55, fontSize: 12 }}>empty</td>
-							</tr>
-						) : null}
-					</tbody>
-				</table>
+				<TileCountList pile={factory} {...(first ? { first: true } : {})} />
 			</div>
 		);
 	}
 
-	const chips: (Tile | 'empty')[] = [];
+	const chips: (Tile | null)[] = [];
 	TILES.forEach(tile => {
 		const n = factory[tile] ?? 0;
 		for (let i = 0; i < n; i++) chips.push(tile);
 	});
-	while (chips.length < 4) chips.push('empty');
+	while (chips.length < 4) chips.push(null);
 
 	return (
 		<div
@@ -217,18 +268,18 @@ function FactoryDisplay({ factory, first, waste }: { factory: Factory; first?: b
 				<tbody>
 					<tr>
 						<td style={{ width: '50%', height: '50%', textAlign: 'center', verticalAlign: 'middle', padding: 1 }}>
-							<TileChip tile={chips[0]} size={28} style={{ margin: 0 }} />
+							{chips[0] ? <TileChip tile={chips[0]} size={28} style={{ margin: 0 }} /> : null}
 						</td>
 						<td style={{ width: '50%', height: '50%', textAlign: 'center', verticalAlign: 'middle', padding: 1 }}>
-							<TileChip tile={chips[1]} size={28} style={{ margin: 0 }} />
+							{chips[1] ? <TileChip tile={chips[1]} size={28} style={{ margin: 0 }} /> : null}
 						</td>
 					</tr>
 					<tr>
 						<td style={{ width: '50%', height: '50%', textAlign: 'center', verticalAlign: 'middle', padding: 1 }}>
-							<TileChip tile={chips[2]} size={28} style={{ margin: 0 }} />
+							{chips[2] ? <TileChip tile={chips[2]} size={28} style={{ margin: 0 }} /> : null}
 						</td>
 						<td style={{ width: '50%', height: '50%', textAlign: 'center', verticalAlign: 'middle', padding: 1 }}>
-							<TileChip tile={chips[3]} size={28} style={{ margin: 0 }} />
+							{chips[3] ? <TileChip tile={chips[3]} size={28} style={{ margin: 0 }} /> : null}
 						</td>
 					</tr>
 				</tbody>
@@ -240,7 +291,7 @@ function FactoryDisplay({ factory, first, waste }: { factory: Factory; first?: b
 function ColorPickMenu({ pile, onClick, source }: { pile: Factory; onClick: string; source: string }): ReactElement {
 	return (
 		<div style={{ borderRadius: 12, padding: 8, background: MENU_BG, margin: '12px auto', display: 'inline-block' }}>
-			<div style={{ marginBottom: 4, fontSize: 12, opacity: 0.85 }}>Pick a tile</div>
+			<div style={{ marginBottom: 4, fontSize: 12, opacity: 0.85 }}>Pick a type</div>
 			{TILES.filterMap(tile => {
 				const n = pile[tile] ?? 0;
 				if (n <= 0) return;
@@ -267,44 +318,17 @@ function ColorPickMenu({ pile, onClick, source }: { pile: Factory; onClick: stri
 	);
 }
 
-function canPlaceOnRow(player: PlayerBoard, row: number, color: Tile): boolean {
-	const line = player.pattern[row];
+function canPlaceOnRow(pattern: (Tile | null)[][], wall: (Tile | null)[][], row: number, color: Tile, freeGrid: boolean): boolean {
+	const line = pattern[row];
 	if (line.every(t => t !== null)) return false;
 	const existing = line.find(t => t !== null);
 	if (existing && existing !== color) return false;
-	if (player.wall[row].some(cell => cell === color)) return false;
+	if (wall[row].some(cell => cell === color)) return false;
+	if (freeGrid) {
+		const hasLegalCol = [0, 1, 2, 3, 4].some(col => wall[row][col] === null && !wall.some(wallRow => wallRow[col] === color));
+		if (!hasLegalCol) return false;
+	}
 	return true;
-}
-
-function PlaceMenu({
-	player,
-	color,
-	count,
-	onClick,
-}: {
-	player: PlayerBoard;
-	color: Tile;
-	count: number;
-	onClick: string;
-}): ReactElement {
-	return (
-		<div style={{ borderRadius: 12, padding: 8, background: MENU_BG, margin: '8px auto', display: 'inline-block' }}>
-			<div style={{ marginBottom: 6 }}>
-				Place {count}x <TileChip tile={color} />
-			</div>
-			{PATTERN_LENGTHS.map((_, row) => {
-				if (!canPlaceOnRow(player, row, color)) return null;
-				return (
-					<Button value={`${onClick} ! ${ACTIONS.PLACE} ${row}`} style={{ cursor: 'pointer', margin: 2, padding: '4px 8px' }}>
-						Row {row + 1}
-					</Button>
-				);
-			})}
-			<Button value={`${onClick} ! ${ACTIONS.PLACE} floor`} style={{ cursor: 'pointer', margin: 2, padding: '4px 8px' }}>
-				Floor
-			</Button>
-		</div>
-	);
 }
 
 function WallMenu({ player, row, color, onClick }: { player: PlayerBoard; row: number; color: Tile; onClick: string }): ReactElement {
@@ -312,7 +336,7 @@ function WallMenu({ player, row, color, onClick }: { player: PlayerBoard; row: n
 	return (
 		<div style={{ borderRadius: 12, padding: 8, background: MENU_BG, margin: '8px auto', display: 'inline-block' }}>
 			<div style={{ marginBottom: 6 }}>
-				Wall row {row + 1}: <TileChip tile={color} />
+				Choose wall column: <TileChip tile={color} />
 			</div>
 			{cols.map(col => (
 				<Button value={`${onClick} ! ${POST_TURN_ACTIONS.WALL} ${col}`} style={{ cursor: 'pointer', margin: 2 }}>
@@ -327,99 +351,215 @@ function BoardRows({
 	pattern,
 	wall,
 	freeGrid,
+	place,
 }: {
 	pattern: (Tile | null)[][];
 	wall: (Tile | null)[][];
 	freeGrid: boolean;
+	place?: { color: Tile; onClick: string };
 }): ReactElement {
 	const cell = TILE_SIZE + 4;
-	return (
-		<table style={{ borderCollapse: 'collapse', display: 'inline-block', verticalAlign: 'top' }}>
-			<tbody>
-				{pattern.map((line, i) => (
-					<tr>
-						<td style={{ opacity: 0.6, paddingRight: 4, fontSize: 11, height: cell, verticalAlign: 'middle' }}>{i + 1}</td>
-						{Array.from({ length: 5 - line.length }).map(() => (
-							<td style={{ width: cell, height: cell, padding: 0 }} />
-						))}
-						{line.map(tile => (
-							<td style={{ width: cell, height: cell, padding: 0, textAlign: 'center', verticalAlign: 'middle' }}>
-								<TileChip tile={tile ?? 'empty'} size={TILE_SIZE} style={{ margin: 0 }} />
-							</td>
-						))}
-						<td style={{ width: 10, height: cell, padding: 0 }} />
-						{wall[i].map((filled, j) => {
-							const hint = freeGrid ? null : WALL_PATTERN[i][j];
-							if (filled) {
-								return (
-									<td
-										style={{
-											width: cell,
-											height: cell,
-											padding: 1,
-											boxSizing: 'border-box',
-											border: `1px solid ${BORDER}`,
-											background: `${TILE_COLORS[filled]}55`,
-										}}
-										title={TILE_LABELS[filled]}
-									>
-										<div
-											style={{
-												width: '100%',
-												height: '100%',
-												background: tileFill(filled),
-												border: '1px solid rgba(255,255,255,0.75)',
-												borderRadius: 6,
-												boxSizing: 'border-box',
-												boxShadow: '0 0 0 1px rgba(0,0,0,0.55)',
-											}}
-										/>
-									</td>
-								);
-							}
-							const hintColor = hint ? TILE_COLORS[hint] : undefined;
-							return (
-								<td
-									style={{
-										width: cell,
-										height: cell,
-										border: `1px solid ${BORDER}`,
-										background: hintColor ? `${hintColor}28` : 'transparent',
-										boxSizing: 'border-box',
-										padding: 0,
-									}}
-									title={hint ? TILE_LABELS[hint] : undefined}
-								>
-									<EmptyCircle size={cell} {...(hintColor ? { color: hintColor } : {})} />
-								</td>
-							);
-						})}
-					</tr>
-				))}
-			</tbody>
-		</table>
-	);
-}
 
-function FloorLine({ floor }: { floor: FloorTile[] }): ReactElement {
-	return (
-		<div style={{ marginTop: 8 }}>
-			<span style={{ fontSize: 12, opacity: 0.65, marginRight: 6 }}>Floor</span>
-			{Array.from({ length: 7 }).map((_, i) => (
-				<TileChip tile={floor[i] ?? 'empty'} size={18} />
+	const rowCells = (line: (Tile | null)[], i: number): ReactElement => (
+		<>
+			{Array.from({ length: 5 - line.length }).map(() => (
+				<td style={{ width: cell, height: cell, padding: 0 }} />
 			))}
+			{line.map(tile => (
+				<td style={{ width: cell, height: cell, padding: 0, textAlign: 'center', verticalAlign: 'middle' }}>
+					<TileChip tile={tile ?? 'empty'} size={TILE_SIZE} style={{ margin: 0 }} />
+				</td>
+			))}
+			<td style={{ width: 10, height: cell, padding: 0 }} />
+			{wall[i].map((filled, j) => {
+				const hint = freeGrid ? null : WALL_PATTERN[i][j];
+				if (filled) {
+					return (
+						<td
+							style={{
+								width: cell,
+								height: cell,
+								padding: 1,
+								boxSizing: 'border-box',
+								border: `1px solid ${BORDER}`,
+								background: `${TILE_COLORS[filled]}55`,
+							}}
+							title={TILE_LABELS[filled]}
+						>
+							<div
+								style={{
+									width: '100%',
+									height: '100%',
+									background: tileFill(filled),
+									border: '1px solid rgba(255,255,255,0.75)',
+									borderRadius: 6,
+									boxSizing: 'border-box',
+									boxShadow: '0 0 0 1px rgba(0,0,0,0.55)',
+								}}
+							/>
+						</td>
+					);
+				}
+				const hintColor = hint ? TILE_COLORS[hint] : undefined;
+				return (
+					<td
+						style={{
+							width: cell,
+							height: cell,
+							border: `1px solid ${BORDER}`,
+							background: hintColor ? `${hintColor}28` : 'transparent',
+							boxSizing: 'border-box',
+							padding: 0,
+							textAlign: 'center',
+							verticalAlign: 'middle',
+						}}
+						title={hint ? TILE_LABELS[hint] : undefined}
+					>
+						<EmptyCircle size={cell} {...(hintColor ? { color: hintColor } : {})} />
+					</td>
+				);
+			})}
+		</>
+	);
+
+	return (
+		<div style={{ display: 'inline-block', verticalAlign: 'top' }}>
+			{pattern.map((line, i) => {
+				const rowTable = (
+					<table style={{ borderCollapse: 'collapse' }}>
+						<tbody>
+							<tr>{rowCells(line, i)}</tr>
+						</tbody>
+					</table>
+				);
+				if (place && canPlaceOnRow(pattern, wall, i, place.color, freeGrid)) {
+					return (
+						<Button
+							value={`${place.onClick} ! ${ACTIONS.PLACE} ${i}`}
+							style={{
+								cursor: 'pointer',
+								display: 'block',
+								padding: 2,
+								margin: '1px 0',
+								border: `1px solid ${BORDER}`,
+								borderRadius: 4,
+								background: MENU_BG,
+							}}
+						>
+							{rowTable}
+						</Button>
+					);
+				}
+				return <div style={{ margin: '1px 0' }}>{rowTable}</div>;
+			})}
 		</div>
 	);
 }
 
-function PlayerBoardView({ data, freeGrid, compact }: { data: PlayerBoard; freeGrid: boolean; compact?: boolean }): ReactElement {
+function FloorLine({ floor, placeOnClick }: { floor: FloorTile[]; placeOnClick?: string }): ReactElement {
+	const size = 18;
+	const cell = size + 4;
+	const content = (
+		<table style={{ borderCollapse: 'collapse', display: 'inline-table', verticalAlign: 'middle' }}>
+			<tbody>
+				<tr>
+					{Array.from({ length: FLOOR_SIZE }).map((_, i) => (
+						<td
+							style={{
+								width: cell,
+								height: cell,
+								padding: 0,
+								textAlign: 'center',
+								verticalAlign: 'middle',
+							}}
+						>
+							{floor[i] ? (
+								<TileChip tile={floor[i]} size={size} style={{ margin: 0 }} />
+							) : (
+								<div
+									style={{
+										display: 'inline-block',
+										width: size,
+										height: size,
+										border: `1px solid ${BORDER}`,
+										borderRadius: 4,
+										boxSizing: 'border-box',
+										verticalAlign: 'middle',
+									}}
+								/>
+							)}
+						</td>
+					))}
+				</tr>
+				<tr>
+					{Array.from({ length: FLOOR_SIZE }).map((_, i) => (
+						<td
+							style={{
+								padding: '1px 0 0',
+								textAlign: 'center',
+								fontSize: 10,
+								fontWeight: 'bold',
+								lineHeight: 1.1,
+								opacity: floor[i] ? 0.95 : 0.35,
+							}}
+						>
+							{FLOOR_PENALTIES[i]}
+						</td>
+					))}
+				</tr>
+			</tbody>
+		</table>
+	);
+	return (
+		<div style={{ marginTop: 8 }}>
+			<span style={{ fontSize: 12, opacity: 0.65, marginRight: 6 }}>Penalties</span>
+			{placeOnClick ? (
+				<Button
+					value={`${placeOnClick} ! ${ACTIONS.PLACE} floor`}
+					style={{
+						cursor: 'pointer',
+						padding: 2,
+						border: `1px solid ${BORDER}`,
+						borderRadius: 4,
+						background: MENU_BG,
+						verticalAlign: 'middle',
+					}}
+				>
+					{content}
+				</Button>
+			) : (
+				content
+			)}
+		</div>
+	);
+}
+
+function PlayerBoardView({
+	data,
+	freeGrid,
+	compact,
+	place,
+}: {
+	data: PlayerBoard;
+	freeGrid: boolean;
+	compact?: boolean;
+	place?: { color: Tile; count: number; onClick: string };
+}): ReactElement {
+	const willOverflow =
+		!!place &&
+		PATTERN_LENGTHS.some(
+			(_, row) =>
+				canPlaceOnRow(data.pattern, data.wall, row, place.color, freeGrid) &&
+				place.count > data.pattern[row].filter(t => t === null).length
+		);
+
 	return (
 		<div
 			style={{
 				display: 'inline-block',
 				verticalAlign: 'top',
 				margin: 8,
-				padding: 8,
+				padding: compact ? 8 : '8px 20px',
 				background: SURFACE,
 				border: `1px solid ${BORDER}`,
 				borderRadius: 8,
@@ -429,8 +569,21 @@ function PlayerBoardView({ data, freeGrid, compact }: { data: PlayerBoard; freeG
 			<div style={{ marginBottom: 6 }}>
 				<Username name={data.name} clickable /> - <b>{data.score}</b>
 			</div>
-			<BoardRows pattern={data.pattern} wall={data.wall} freeGrid={freeGrid} />
-			{!compact || data.floor.length > 0 ? <FloorLine floor={data.floor} /> : null}
+			{place ? (
+				<div style={{ marginBottom: 6, fontSize: 12 }}>
+					{place.count}x <TileChip tile={place.color} size={18} style={{ margin: 0 }} />
+					{willOverflow ? <div style={{ marginTop: 4, opacity: 0.85 }}>Extra tiles will go to penalties.</div> : null}
+				</div>
+			) : null}
+			<BoardRows
+				pattern={data.pattern}
+				wall={data.wall}
+				freeGrid={freeGrid}
+				{...(place ? { place: { color: place.color, onClick: place.onClick } } : {})}
+			/>
+			{!compact || data.floor.length > 0 || place ? (
+				<FloorLine floor={data.floor} {...(place ? { placeOnClick: place.onClick } : {})} />
+			) : null}
 		</div>
 	);
 }
@@ -438,11 +591,13 @@ function PlayerBoardView({ data, freeGrid, compact }: { data: PlayerBoard; freeG
 function FactoriesBoard({
 	factories,
 	center,
+	bag,
 	view,
 	onClick,
 }: {
 	factories: Factory[];
 	center: RenderCtx['board']['center'];
+	bag: Factory;
 	view: ViewType;
 	onClick?: string;
 }): ReactElement {
@@ -488,7 +643,7 @@ function FactoriesBoard({
 					))}
 				</tbody>
 			</table>
-			<div style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 12 }}>
+			<div style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 12, textAlign: 'center' }}>
 				<div style={{ fontSize: 12, opacity: 0.7, marginBottom: 4 }}>Waste</div>
 				{(() => {
 					const colors = factoryColors(center);
@@ -505,9 +660,33 @@ function FactoriesBoard({
 						content
 					);
 				})()}
+				<details style={{ marginTop: 8, textAlign: 'left' }}>
+					<summary style={{ cursor: 'pointer', fontSize: 12, opacity: 0.7 }}>Bag</summary>
+					<div
+						style={{
+							minWidth: FACTORY_SIZE,
+							background: SURFACE_STRONG,
+							border: `1px solid ${BORDER}`,
+							borderRadius: 8,
+							padding: 6,
+							marginTop: 4,
+							boxSizing: 'border-box',
+						}}
+					>
+						<TileCountList pile={bag} />
+					</div>
+				</details>
 			</div>
 		</div>
 	);
+}
+
+function bagAsFactory(bag: Tile[]): Factory {
+	const pile: Factory = {};
+	bag.forEach(tile => {
+		pile[tile] = (pile[tile] ?? 0) + 1;
+	});
+	return pile;
 }
 
 export function render(this: This, ctx: RenderCtx): ReactElement {
@@ -516,9 +695,11 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 
 	const selectingFactory = ctx.view.active && ctx.view.action === VIEW_ACTION_TYPE.CLICK_FACTORY ? ctx.view.factoryIndex : null;
 	const selectingCenter = ctx.view.active && ctx.view.action === VIEW_ACTION_TYPE.CLICK_CENTER;
+	const placing = ctx.view.active && ctx.view.action === VIEW_ACTION_TYPE.PLACE ? ctx.view : null;
 
 	return (
 		<center>
+			<div style={{ margin: '4px 0', fontSize: 14, opacity: 0.85 }}>Round {ctx.round}</div>
 			{ctx.header ? (
 				<h1
 					style={{
@@ -531,7 +712,13 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 				</h1>
 			) : null}
 			<div>
-				<FactoriesBoard factories={ctx.board.factories} center={ctx.board.center} view={ctx.view} {...(onClick ? { onClick } : {})} />
+				<FactoriesBoard
+					factories={ctx.board.factories}
+					center={ctx.board.center}
+					bag={bagAsFactory(ctx.bag)}
+					view={ctx.view}
+					{...(onClick ? { onClick } : {})}
+				/>
 			</div>
 			{onClick && selectingFactory !== null ? (
 				<div>
@@ -545,12 +732,11 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 			) : null}
 			{self ? (
 				<div>
-					<PlayerBoardView data={self} freeGrid={ctx.freeGrid} />
-				</div>
-			) : null}
-			{ctx.view.active && ctx.view.action === VIEW_ACTION_TYPE.PLACE && onClick && self ? (
-				<div>
-					<PlaceMenu player={self} color={ctx.view.color} count={ctx.view.count} onClick={onClick} />
+					<PlayerBoardView
+						data={self}
+						freeGrid={ctx.freeGrid}
+						{...(placing && onClick ? { place: { color: placing.color, count: placing.count, onClick } } : {})}
+					/>
 				</div>
 			) : null}
 			{ctx.view.active && ctx.view.action === POST_TURN_ACTIONS.WALL && onClick && self ? (

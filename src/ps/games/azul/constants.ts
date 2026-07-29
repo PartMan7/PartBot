@@ -26,7 +26,7 @@ export const TILE_LABELS: Record<Tile, string> = {
 	[Tile.Dark]: 'Dark',
 };
 
-/** Type art under static/splendor/type/ */
+/** We reuse Splendor assets */
 export const TILE_ART: Record<Tile, string> = {
 	[Tile.Water]: 'water.png',
 	[Tile.Electric]: 'electric.png',
@@ -35,16 +35,8 @@ export const TILE_ART: Record<Tile, string> = {
 	[Tile.Dark]: 'dark.png',
 };
 
-/** 20 of each type */
 export const TILES_PER_COLOR = 20;
-
-/** Factories by player count: 2->5, 3->7, 4->9 */
-export const FACTORY_COUNT: Record<2 | 3 | 4, number> = {
-	2: 5,
-	3: 7,
-	4: 9,
-};
-
+export const FACTORY_COUNT: Record<2 | 3 | 4, number> = { 2: 5, 3: 7, 4: 9 };
 export const TILES_PER_FACTORY = 4;
 
 /**

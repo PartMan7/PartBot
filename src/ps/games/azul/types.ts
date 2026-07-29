@@ -70,15 +70,18 @@ export type State = {
 	nextStarter: Turn | null;
 	/** After wall tiling, end the game instead of refilling */
 	ending: boolean;
+	round: number;
 };
 
 export type RenderCtx = {
 	id: string;
 	board: Board;
+	bag: Tile[];
 	players: Record<Turn, PlayerBoard>;
 	turns: Turn[];
 	view: ViewType;
 	freeGrid: boolean;
+	round: number;
 	header?: string;
 	dimHeader?: boolean;
 };

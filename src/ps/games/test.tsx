@@ -68,6 +68,14 @@ export const test: () => Promise<string> = async () => {
 			id: '#TEMP',
 			header: 'Your turn!',
 			freeGrid: false,
+			round: 2,
+			bag: [
+				...Array.from({ length: 8 }, () => Tile.Water),
+				...Array.from({ length: 6 }, () => Tile.Electric),
+				...Array.from({ length: 5 }, () => Tile.Fire),
+				...Array.from({ length: 7 }, () => Tile.Grass),
+				...Array.from({ length: 4 }, () => Tile.Dark),
+			],
 			board: {
 				factories: [
 					{ [Tile.Water]: 2, [Tile.Fire]: 1, [Tile.Electric]: 1 },

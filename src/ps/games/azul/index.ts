@@ -17,7 +17,7 @@ import {
 	WALL_PATTERN,
 } from '@/ps/games/azul/constants';
 import { AzulModData } from '@/ps/games/azul/mods';
-import { render } from '@/ps/games/azul/render';
+import { render, renderLog } from '@/ps/games/azul/render';
 import { BaseGame } from '@/ps/games/game';
 import { createGrid } from '@/ps/games/utils';
 import { ChatError } from '@/utils/chatError';
@@ -61,6 +61,12 @@ export class Azul extends BaseGame<State> {
 		this.state.wallQueue = [];
 		this.state.nextStarter = null;
 		this.state.ending = false;
+		this.state.round = 0;
+	}
+
+	chatLog(log: Log): void {
+		this.log.push(log);
+		this.room.sendHTML(renderLog(log, this), { name: `${this.id}-chatlog` });
 	}
 
 	moddable() {
@@ -101,6 +107,7 @@ export class Azul extends BaseGame<State> {
 		this.state.wallQueue = [];
 		this.state.nextStarter = null;
 		this.state.ending = false;
+		this.state.round = 1;
 
 		this.refillFactories();
 		return { success: true, data: null };
@@ -163,7 +170,7 @@ export class Azul extends BaseGame<State> {
 			throw new ChatError('Choose a column for your wall tile.' as ToTranslate);
 		}
 		if (this.state.actionState.action === VIEW_ACTION_TYPE.PLACE && action !== ACTIONS.PLACE) {
-			throw new ChatError('Place your tiles on a pattern line or the floor.' as ToTranslate);
+			throw new ChatError('Place your tiles on a pattern line or penalties.' as ToTranslate);
 		}
 
 		switch (action) {
@@ -250,7 +257,7 @@ export class Azul extends BaseGame<State> {
 			});
 		}
 
-		this.log.push({
+		this.chatLog({
 			turn: player.turn,
 			time: new Date(),
 			action: ACTIONS.TAKE,
@@ -277,7 +284,7 @@ export class Azul extends BaseGame<State> {
 		} else {
 			const rowIndex = +target;
 			if (!Number.isInteger(rowIndex) || rowIndex < 0 || rowIndex >= 5) {
-				throw new ChatError('Choose a pattern line (0-4) or floor.' as ToTranslate);
+				throw new ChatError('Choose a pattern line (0-4) or penalties.' as ToTranslate);
 			}
 			if (!this.canPlaceOnRow(playerData, rowIndex, color)) {
 				throw new ChatError('That pattern line cannot take those tiles.' as ToTranslate);
@@ -298,7 +305,7 @@ export class Azul extends BaseGame<State> {
 		if (tookFirst) this.addToFloor(playerData, 'first');
 		for (let i = 0; i < overflow; i++) this.addToFloor(playerData, color);
 
-		this.log.push({
+		this.chatLog({
 			turn: player.turn,
 			time: new Date(),
 			action: ACTIONS.PLACE,
@@ -320,6 +327,12 @@ export class Azul extends BaseGame<State> {
 		const existing = line.find(t => t !== null);
 		if (existing && existing !== color) return false;
 		if (playerData.wall[row].some(cell => cell === color)) return false;
+		if (this.mod === AzulMods.FREE_GRID) {
+			const hasLegalCol = [0, 1, 2, 3, 4].some(
+				col => playerData.wall[row][col] === null && !playerData.wall.some(wallRow => wallRow[col] === color)
+			);
+			if (!hasLegalCol) return false;
+		}
 		return true;
 	}
 
@@ -415,7 +428,7 @@ export class Azul extends BaseGame<State> {
 		for (let i = 0; i < line.length - 1; i++) this.state.lid.push(color);
 		playerData.pattern[row] = Array.from({ length: line.length }, () => null);
 
-		this.log.push({
+		this.chatLog({
 			turn,
 			time: new Date(),
 			action: POST_TURN_ACTIONS.WALL,
@@ -472,6 +485,7 @@ export class Azul extends BaseGame<State> {
 
 		const starter = this.state.nextStarter ?? this.turns[0];
 		this.state.nextStarter = null;
+		this.state.round++;
 		this.refillFactories();
 		this.state.actionState = { action: VIEW_ACTION_TYPE.NONE };
 
@@ -510,10 +524,12 @@ export class Azul extends BaseGame<State> {
 		const ctx: RenderCtx = {
 			id: this.id,
 			board: this.state.board,
+			bag: this.state.bag,
 			players: this.state.playerData,
 			turns: this.turns,
 			view,
 			freeGrid: this.mod === AzulMods.FREE_GRID,
+			round: this.state.round,
 		};
 
 		if (this.winCtx) {
@@ -521,7 +537,7 @@ export class Azul extends BaseGame<State> {
 		} else if (this.state.actionState.action === POST_TURN_ACTIONS.WALL && side === this.turn) {
 			ctx.header = 'Choose a wall column for your tile.';
 		} else if (this.state.actionState.action === VIEW_ACTION_TYPE.PLACE && side === this.turn) {
-			ctx.header = 'Place your tiles on a pattern line or the floor.';
+			ctx.header = 'Select the row to place.';
 		} else if (side === this.turn) {
 			ctx.header = this.$T('GAME.YOUR_TURN');
 		} else if (side) {
