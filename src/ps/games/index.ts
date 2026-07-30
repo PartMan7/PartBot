@@ -1,3 +1,4 @@
+import { Azul, meta as AzulMeta } from '@/ps/games/azul';
 import { Battleship, meta as BattleshipMeta } from '@/ps/games/battleship';
 import { Chess, meta as ChessMeta } from '@/ps/games/chess';
 import { ConnectFour, meta as ConnectFourMeta } from '@/ps/games/connectfour';
@@ -10,6 +11,10 @@ import { Splendor, meta as SplendorMeta } from '@/ps/games/splendor';
 import { GamesList, type Meta } from '@/ps/games/types';
 
 export const Games = {
+	[GamesList.Azul]: {
+		meta: AzulMeta,
+		instance: Azul,
+	},
 	[GamesList.Battleship]: {
 		meta: BattleshipMeta,
 		instance: Battleship,

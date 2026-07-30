@@ -26,6 +26,8 @@ PS.on('notify', registerEvent(PS, 'notifyHandler'));
 PS.on('raw', registerEvent(PS, 'rawHandler'));
 PS.on('tournament', registerEvent(PS, 'tourHandler'));
 
+PS.on('chatError', (room, error) => Logger.log(`${room}: ${error}`));
+
 if (IS_ENABLED.PS) startPSCron.bind(PS)();
 
 export default PS;

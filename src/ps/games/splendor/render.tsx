@@ -15,7 +15,7 @@ import { Button, Form } from '@/utils/components/ps';
 import { Logger } from '@/utils/logger';
 
 import type { TranslatedText, TranslationFn } from '@/i18n/types';
-import { Splendor } from '@/ps/games/splendor/index';
+import type { Splendor } from '@/ps/games/splendor';
 import type { Log } from '@/ps/games/splendor/logs';
 import type { Board, Card, PlayerData, RenderCtx, TokenCount, Trainer, ViewType } from '@/ps/games/splendor/types';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
