@@ -75,8 +75,6 @@ export enum AzulMods {
 
 export enum VIEW_ACTION_TYPE {
 	NONE = 'none',
-	CLICK_FACTORY = 'factory',
-	CLICK_CENTER = 'center',
 	PLACE = 'place',
 	GAME_END = 'end',
 }

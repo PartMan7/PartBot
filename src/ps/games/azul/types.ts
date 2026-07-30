@@ -33,9 +33,13 @@ export type PendingWall = {
 
 export type ActionState =
 	| { action: VIEW_ACTION_TYPE.NONE }
-	| { action: VIEW_ACTION_TYPE.CLICK_FACTORY; factoryIndex: number }
-	| { action: VIEW_ACTION_TYPE.CLICK_CENTER }
-	| { action: VIEW_ACTION_TYPE.PLACE; color: Tile; count: number; tookFirst: boolean }
+	| {
+			action: VIEW_ACTION_TYPE.PLACE;
+			source: 'center' | number;
+			color: Tile;
+			count: number;
+			tookFirst: boolean;
+	  }
 	| { action: POST_TURN_ACTIONS.WALL; pending: PendingWall };
 
 type ActivePlayer = {
@@ -82,6 +86,9 @@ export type RenderCtx = {
 	view: ViewType;
 	freeGrid: boolean;
 	round: number;
+	ended?: boolean;
+	/** Chat finish broadcast: only 5x5 walls */
+	wallsOnly?: boolean;
 	header?: string;
 	dimHeader?: boolean;
 };

@@ -99,8 +99,11 @@ export const test: () => Promise<string> = async () => {
 				type: 'player',
 				active: true,
 				self: 'partman',
-				action: VIEW_ACTION_TYPE.CLICK_FACTORY,
-				factoryIndex: 0,
+				action: VIEW_ACTION_TYPE.PLACE,
+				source: 0,
+				color: Tile.Water,
+				count: 2,
+				tookFirst: false,
 			},
 			turns: ['partman', 'partbot', 'partspec'],
 			players: {

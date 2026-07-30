@@ -169,37 +169,11 @@ export class Azul extends BaseGame<State> {
 		if (this.state.actionState.action === POST_TURN_ACTIONS.WALL && action !== POST_TURN_ACTIONS.WALL) {
 			throw new ChatError('Choose a column for your wall tile.' as ToTranslate);
 		}
-		if (this.state.actionState.action === VIEW_ACTION_TYPE.PLACE && action !== ACTIONS.PLACE) {
+		if (this.state.actionState.action === VIEW_ACTION_TYPE.PLACE && action !== ACTIONS.PLACE && action !== ACTIONS.TAKE) {
 			throw new ChatError('Place your tiles on a pattern line or penalties.' as ToTranslate);
 		}
 
 		switch (action) {
-			case VIEW_ACTION_TYPE.CLICK_FACTORY: {
-				if (this.state.actionState.action === VIEW_ACTION_TYPE.PLACE) {
-					throw new ChatError('Place your tiles first.' as ToTranslate);
-				}
-				const factoryIndex = +actionCtx;
-				if (!Number.isInteger(factoryIndex) || factoryIndex < 0 || factoryIndex >= this.state.board.factories.length) {
-					throw new ChatError('Invalid factory.' as ToTranslate);
-				}
-				if (!factoryHasTiles(this.state.board.factories[factoryIndex])) {
-					throw new ChatError('That factory is empty.' as ToTranslate);
-				}
-				this.state.actionState = { action: VIEW_ACTION_TYPE.CLICK_FACTORY, factoryIndex };
-				this.update(user.id);
-				return;
-			}
-			case VIEW_ACTION_TYPE.CLICK_CENTER: {
-				if (this.state.actionState.action === VIEW_ACTION_TYPE.PLACE) {
-					throw new ChatError('Place your tiles first.' as ToTranslate);
-				}
-				if (!factoryHasTiles(this.state.board.center)) {
-					throw new ChatError('The center has no tiles.' as ToTranslate);
-				}
-				this.state.actionState = { action: VIEW_ACTION_TYPE.CLICK_CENTER };
-				this.update(user.id);
-				return;
-			}
 			case ACTIONS.TAKE: {
 				this.takeTiles(player, actionCtx);
 				this.update(user.id);
@@ -219,10 +193,7 @@ export class Azul extends BaseGame<State> {
 		}
 	}
 
-	takeTiles(player: Player, actionCtx: string): void {
-		if (this.state.actionState.action === VIEW_ACTION_TYPE.PLACE) {
-			throw new ChatError('Place your tiles first.' as ToTranslate);
-		}
+	takeTiles(_player: Player, actionCtx: string): void {
 		const [source, colorRaw] = actionCtx.lazySplit(' ', 1);
 		const color = this.parseTile(colorRaw);
 
@@ -233,12 +204,7 @@ export class Azul extends BaseGame<State> {
 			const pile = this.state.board.center;
 			count = pile[color] ?? 0;
 			if (count <= 0) throw new ChatError(`No ${TILE_LABELS[color]} tiles in the center.` as ToTranslate);
-			delete pile[color];
-			if (pile.first) {
-				pile.first = false;
-				tookFirst = true;
-				this.state.nextStarter = player.turn;
-			}
+			tookFirst = !!pile.first;
 		} else {
 			const factoryIndex = +source;
 			if (!Number.isInteger(factoryIndex) || factoryIndex < 0 || factoryIndex >= this.state.board.factories.length) {
@@ -247,31 +213,47 @@ export class Azul extends BaseGame<State> {
 			const factory = this.state.board.factories[factoryIndex];
 			count = factory[color] ?? 0;
 			if (count <= 0) throw new ChatError(`No ${TILE_LABELS[color]} tiles in that factory.` as ToTranslate);
-			delete factory[color];
-			TILES.forEach(tile => {
-				const leftover = factory[tile] ?? 0;
-				if (leftover > 0) {
-					this.state.board.center[tile] = (this.state.board.center[tile] ?? 0) + leftover;
-					delete factory[tile];
-				}
-			});
 		}
 
-		this.chatLog({
-			turn: player.turn,
-			time: new Date(),
-			action: ACTIONS.TAKE,
-			ctx: { source: source === 'center' ? 'center' : +source, color, count, tookFirst },
-		});
+		this.state.actionState = {
+			action: VIEW_ACTION_TYPE.PLACE,
+			source: source === 'center' ? 'center' : +source,
+			color,
+			count,
+			tookFirst,
+		};
+	}
 
-		this.state.actionState = { action: VIEW_ACTION_TYPE.PLACE, color, count, tookFirst };
+	commitTake(player: Player, source: 'center' | number, color: Tile, tookFirst: boolean): void {
+		if (source === 'center') {
+			const pile = this.state.board.center;
+			if ((pile[color] ?? 0) <= 0) throw new ChatError(`No ${TILE_LABELS[color]} tiles in the center.` as ToTranslate);
+			delete pile[color];
+			if (tookFirst && pile.first) {
+				pile.first = false;
+				this.state.nextStarter = player.turn;
+			}
+			return;
+		}
+		const factory = this.state.board.factories[source];
+		if ((factory[color] ?? 0) <= 0) {
+			throw new ChatError(`No ${TILE_LABELS[color]} tiles in that factory.` as ToTranslate);
+		}
+		delete factory[color];
+		TILES.forEach(tile => {
+			const leftover = factory[tile] ?? 0;
+			if (leftover > 0) {
+				this.state.board.center[tile] = (this.state.board.center[tile] ?? 0) + leftover;
+				delete factory[tile];
+			}
+		});
 	}
 
 	placeTiles(player: Player, actionCtx: string): void {
 		if (this.state.actionState.action !== VIEW_ACTION_TYPE.PLACE) {
 			throw new ChatError('You have no tiles to place.' as ToTranslate);
 		}
-		const { color, count, tookFirst } = this.state.actionState;
+		const { source, color, count, tookFirst } = this.state.actionState;
 		const playerData = this.state.playerData[player.turn];
 		const target = actionCtx.trim();
 
@@ -290,9 +272,14 @@ export class Azul extends BaseGame<State> {
 				throw new ChatError('That pattern line cannot take those tiles.' as ToTranslate);
 			}
 			row = rowIndex;
-			const line = playerData.pattern[rowIndex];
-			const capacity = line.filter(t => t === null).length;
+			const capacity = playerData.pattern[rowIndex].filter(t => t === null).length;
 			overflow = count - Math.min(count, capacity);
+		}
+
+		this.commitTake(player, source, color, tookFirst);
+
+		if (row !== 'floor') {
+			const line = playerData.pattern[row];
 			let remaining = count - overflow;
 			for (let i = line.length - 1; i >= 0 && remaining > 0; i--) {
 				if (line[i] === null) {
@@ -362,6 +349,8 @@ export class Azul extends BaseGame<State> {
 	}
 
 	continueWallTiling(): void {
+		const batch: { turn: Turn; row: number; col: number; color: Tile; points: number }[] = [];
+
 		while (this.state.wallQueue.length > 0) {
 			const next = this.state.wallQueue[0];
 			const playerData = this.state.playerData[next.turn];
@@ -371,11 +360,12 @@ export class Azul extends BaseGame<State> {
 					col => playerData.wall[next.row][col] === null && !playerData.wall.some(wallRow => wallRow[col] === next.color)
 				);
 				if (legalCols.length === 1) {
-					this.applyWallTile(next.turn, next.row, legalCols[0], next.color);
+					batch.push(this.applyWallTile(next.turn, next.row, legalCols[0], next.color));
 					this.state.wallQueue.shift();
 					continue;
 				}
 				if (legalCols.length > 1) {
+					this.flushWallLog(batch);
 					this.turn = next.turn;
 					this.state.actionState = { action: POST_TURN_ACTIONS.WALL, pending: next };
 					this.update();
@@ -386,11 +376,22 @@ export class Azul extends BaseGame<State> {
 				throw new Error(`No legal wall column for ${next.color} on row ${next.row}`);
 			}
 
-			this.applyWallTile(next.turn, next.row, WALL_PATTERN[next.row].indexOf(next.color), next.color);
+			batch.push(this.applyWallTile(next.turn, next.row, WALL_PATTERN[next.row].indexOf(next.color), next.color));
 			this.state.wallQueue.shift();
 		}
 
+		this.flushWallLog(batch);
 		this.finishRoundScoring();
+	}
+
+	flushWallLog(tiles: { turn: Turn; row: number; col: number; color: Tile; points: number }[]): void {
+		if (!tiles.length) return;
+		this.chatLog({
+			turn: tiles[0].turn,
+			time: new Date(),
+			action: POST_TURN_ACTIONS.WALL,
+			ctx: { tiles },
+		});
 	}
 
 	placeWallColumn(player: Player, actionCtx: string): void {
@@ -412,13 +413,18 @@ export class Azul extends BaseGame<State> {
 			throw new ChatError('That column is not legal for this tile.' as ToTranslate);
 		}
 
-		this.applyWallTile(pending.turn, pending.row, col, pending.color);
+		this.flushWallLog([this.applyWallTile(pending.turn, pending.row, col, pending.color)]);
 		this.state.wallQueue.shift();
 		this.state.actionState = { action: VIEW_ACTION_TYPE.NONE };
 		this.continueWallTiling();
 	}
 
-	applyWallTile(turn: Turn, row: number, col: number, color: Tile): void {
+	applyWallTile(
+		turn: Turn,
+		row: number,
+		col: number,
+		color: Tile
+	): { turn: Turn; row: number; col: number; color: Tile; points: number } {
 		const playerData = this.state.playerData[turn];
 		playerData.wall[row][col] = color;
 		const points = this.scorePlacement(playerData.wall, row, col);
@@ -428,14 +434,9 @@ export class Azul extends BaseGame<State> {
 		for (let i = 0; i < line.length - 1; i++) this.state.lid.push(color);
 		playerData.pattern[row] = Array.from({ length: line.length }, () => null);
 
-		this.chatLog({
-			turn,
-			time: new Date(),
-			action: POST_TURN_ACTIONS.WALL,
-			ctx: { row, col, color, points },
-		});
-
 		if (playerData.wall[row].every(cell => cell !== null)) this.state.ending = true;
+
+		return { turn, row, col, color, points };
 	}
 
 	scorePlacement(wall: (Tile | null)[][], row: number, col: number): number {
@@ -530,6 +531,7 @@ export class Azul extends BaseGame<State> {
 			view,
 			freeGrid: this.mod === AzulMods.FREE_GRID,
 			round: this.state.round,
+			ended: !!this.winCtx,
 		};
 
 		if (this.winCtx) {
@@ -548,5 +550,21 @@ export class Azul extends BaseGame<State> {
 			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` });
 		}
 		return render.bind(this.renderCtx)(ctx);
+	}
+
+	renderFinish() {
+		return render.bind(this.renderCtx)({
+			id: this.id,
+			board: this.state.board,
+			bag: this.state.bag,
+			players: this.state.playerData,
+			turns: this.turns,
+			view: { type: 'spectator', active: false, action: VIEW_ACTION_TYPE.GAME_END },
+			freeGrid: this.mod === AzulMods.FREE_GRID,
+			round: this.state.round,
+			ended: true,
+			wallsOnly: true,
+			header: this.$T('GAME.GAME_ENDED'),
+		});
 	}
 }

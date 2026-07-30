@@ -10,16 +10,12 @@ export type Log = Satisfies<
 		turn: Turn;
 	} & (
 		| {
-				action: ACTIONS.TAKE;
-				ctx: { source: 'center' | number; color: Tile; count: number; tookFirst: boolean };
-		  }
-		| {
 				action: ACTIONS.PLACE;
 				ctx: { color: Tile; count: number; row: number | 'floor'; overflow: number };
 		  }
 		| {
 				action: POST_TURN_ACTIONS.WALL;
-				ctx: { row: number; col: number; color: Tile; points: number };
+				ctx: { tiles: { turn: Turn; row: number; col: number; color: Tile; points: number }[] };
 		  }
 		| { action: 'skip'; ctx: null }
 	)

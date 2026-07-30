@@ -27,40 +27,21 @@ type This = { msg: string };
 
 const FACTORY_SIZE = 96;
 const TILE_SIZE = 22;
+const CELL = TILE_SIZE + 4;
 
-/** Theme-neutral translucent surfaces */
-const SURFACE = 'rgba(128,128,128,0.22)';
-const SURFACE_STRONG = 'rgba(128,128,128,0.35)';
-const BORDER = 'rgba(128,128,128,0.55)';
-const MENU_BG = 'rgba(128,128,128,0.3)';
+/** Short hex tokens (UI-neutral greys) */
+const S = '#8883';
+const SS = '#8885';
+const B = '#8888';
+const M = '#8884';
 
-function tileFill(tile: Tile): string {
-	return `no-repeat center/95% url(${process.env.WEB_URL}/static/splendor/type/${TILE_ART[tile]}), ${TILE_COLORS[tile]}`;
-}
-function EmptyCircle({ size, color }: { size: number; color?: string }): ReactElement {
-	const dot = Math.max(10, Math.round(size * 0.55));
-	return (
-		<table style={{ width: size, height: size, borderCollapse: 'collapse', display: 'inline-table', verticalAlign: 'middle' }}>
-			<tbody>
-				<tr>
-					<td style={{ textAlign: 'center', verticalAlign: 'middle', padding: 0, width: size, height: size }}>
-						<div
-							style={{
-								display: 'inline-block',
-								width: dot,
-								height: dot,
-								borderRadius: '50%',
-								background: color ? `${color}77` : 'rgba(180,180,180,0.4)',
-								border: '1px solid rgba(180,180,180,0.35)',
-								boxSizing: 'border-box',
-							}}
-						/>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	);
-}
+const ART_BASE = `${process.env.WEB_URL}/static/splendor/type/`;
+const FILL: Record<Tile, string> = Object.fromEntries(
+	TILES.map(tile => [tile, `url(${ART_BASE}${TILE_ART[tile]}) center/95% no-repeat ${TILE_COLORS[tile]}`])
+) as Record<Tile, string>;
+
+const BTN: CSSProperties = { cursor: 'pointer', border: 0, padding: 0, background: 'none', color: 'inherit' };
+const CELL_TD: CSSProperties = { width: CELL, height: CELL, padding: 0, textAlign: 'center', verticalAlign: 'middle' };
 
 function TileChip({
 	tile,
@@ -79,19 +60,16 @@ function TileChip({
 					width: size,
 					height: size,
 					background: '#fff',
-					border: '1px solid rgba(0,0,0,0.45)',
+					border: '1px solid #0007',
 					borderRadius: 6,
-					margin: 1,
-					verticalAlign: 'middle',
-					boxSizing: 'border-box',
-					color: '#0d47a1',
+					color: '#04a',
 					fontWeight: 'bold',
-					fontSize: Math.max(11, size * 0.7),
+					fontSize: Math.max(11, (size * 0.7) | 0),
 					lineHeight: `${size - 2}px`,
 					textAlign: 'center',
+					verticalAlign: 'middle',
 					...style,
 				}}
-				title="1st Player (-1)"
 			>
 				-1
 			</div>
@@ -104,17 +82,12 @@ function TileChip({
 					display: 'inline-block',
 					width: size,
 					height: size,
-					background: 'transparent',
-					border: `1px solid ${BORDER}`,
+					border: `1px solid ${B}`,
 					borderRadius: 4,
-					margin: 1,
 					verticalAlign: 'middle',
-					boxSizing: 'border-box',
 					...style,
 				}}
-			>
-				<EmptyCircle size={size - 2} />
-			</div>
+			/>
 		);
 	}
 	return (
@@ -123,16 +96,12 @@ function TileChip({
 				display: 'inline-block',
 				width: size,
 				height: size,
-				background: tileFill(tile),
-				border: '1px solid rgba(255,255,255,0.75)',
+				background: FILL[tile],
+				border: '1px solid #fff9',
 				borderRadius: 6,
-				margin: 1,
 				verticalAlign: 'middle',
-				boxSizing: 'border-box',
-				boxShadow: '0 0 0 1px rgba(0,0,0,0.55)',
 				...style,
 			}}
-			title={TILE_LABELS[tile]}
 		/>
 	);
 }
@@ -141,33 +110,36 @@ export function renderLog(logEntry: Log, game: Azul): ReactElement {
 	const playerName = game.players[logEntry.turn]?.name;
 
 	switch (logEntry.action) {
-		case ACTIONS.TAKE: {
-			const source = logEntry.ctx.source === 'center' ? 'the waste' : `factory ${logEntry.ctx.source + 1}`;
-			return (
-				<LogEntry game={game}>
-					<Username name={playerName} clickable /> took {logEntry.ctx.count}x{' '}
-					<TileChip tile={logEntry.ctx.color} size={16} style={{ margin: 0 }} /> from {source}
-					{logEntry.ctx.tookFirst ? ' and the -1 marker' : ''}.
-				</LogEntry>
-			);
-		}
 		case ACTIONS.PLACE: {
-			const where = logEntry.ctx.row === 'floor' ? 'penalties' : 'a pattern line';
+			const where = logEntry.ctx.row === 'floor' ? 'penalties' : `row ${logEntry.ctx.row + 1}`;
 			return (
 				<LogEntry game={game}>
-					<Username name={playerName} clickable /> placed {logEntry.ctx.count}x{' '}
-					<TileChip tile={logEntry.ctx.color} size={16} style={{ margin: 0 }} /> on {where}
+					<Username name={playerName} clickable /> placed {logEntry.ctx.count}x <TileChip tile={logEntry.ctx.color} size={16} /> on{' '}
+					{where}
 					{logEntry.ctx.overflow > 0 && logEntry.ctx.row !== 'floor' ? ` (${logEntry.ctx.overflow} to penalties)` : ''}.
 				</LogEntry>
 			);
 		}
-		case POST_TURN_ACTIONS.WALL:
+		case POST_TURN_ACTIONS.WALL: {
+			const byPlayer = logEntry.ctx.tiles.groupBy(tile => tile.turn);
 			return (
 				<LogEntry game={game}>
-					<Username name={playerName} clickable /> tiled <TileChip tile={logEntry.ctx.color} size={16} style={{ margin: 0 }} /> for{' '}
-					{pluralize(logEntry.ctx.points, 'point', 'points')}.
+					{Object.entries(byPlayer).map(([turn, tiles], i) => (
+						<>
+							{i > 0 ? ' ' : null}
+							<Username name={game.players[turn]?.name} clickable /> tiled{' '}
+							{tiles!.map((tile, j) => (
+								<>
+									{j > 0 ? ', ' : null}
+									<TileChip tile={tile.color} size={16} />
+								</>
+							))}{' '}
+							for {pluralize(tiles!.map(tile => tile.points).sum(), 'point', 'points')}.
+						</>
+					))}
 				</LogEntry>
 			);
+		}
 		default:
 			return (
 				<LogEntry game={game}>
@@ -177,42 +149,61 @@ export function renderLog(logEntry: Log, game: Azul): ReactElement {
 	}
 }
 
-function factoryColors(factory: Factory): Tile[] {
-	return TILES.filter(tile => (factory[tile] ?? 0) > 0);
-}
-
-function TileCountList({ pile, first }: { pile: Factory; first?: boolean }): ReactElement {
+function TileCountList({
+	pile,
+	first,
+	onClick,
+	source,
+	selected,
+	size = 18,
+}: {
+	pile: Factory;
+	first?: boolean;
+	onClick?: string;
+	source?: string;
+	selected?: Tile | false | null;
+	size?: number;
+}): ReactElement {
 	const entries = TILES.filterMap(tile => {
 		const n = pile[tile] ?? 0;
 		if (n > 0) return { tile, n };
 	});
-	const chip = 18;
 	return (
 		<table style={{ borderCollapse: 'collapse', margin: '0 auto' }}>
 			<tbody>
-				{entries.map(({ tile, n }) => (
-					<tr>
-						<td style={{ padding: '1px 2px', verticalAlign: 'middle' }}>
-							<TileChip tile={tile} size={chip} style={{ margin: 0 }} />
-						</td>
-						<td
-							style={{
-								padding: '1px 2px',
-								verticalAlign: 'middle',
-								fontWeight: 'bold',
-								fontSize: 11,
-								opacity: 0.85,
-								whiteSpace: 'nowrap',
-							}}
-						>
-							x{n}
-						</td>
-					</tr>
-				))}
+				{entries.map(({ tile, n }) => {
+					const dimmed = selected === false || !!(selected && selected !== tile);
+					const row = (
+						<>
+							<TileChip
+								tile={tile}
+								size={size}
+								style={{
+									opacity: dimmed ? 0.4 : 1,
+									outline: selected && selected === tile ? `2px solid ${B}` : undefined,
+								}}
+							/>
+							<span style={{ marginLeft: 4, fontWeight: 'bold', fontSize: 11, opacity: dimmed ? 0.4 : 0.85 }}>x{n}</span>
+						</>
+					);
+					return (
+						<tr>
+							<td style={{ padding: '1px 2px' }}>
+								{onClick && source !== undefined ? (
+									<Button value={`${onClick} ! ${ACTIONS.TAKE} ${source} ${tile}`} style={BTN} title={TILE_LABELS[tile]}>
+										{row}
+									</Button>
+								) : (
+									row
+								)}
+							</td>
+						</tr>
+					);
+				})}
 				{first ? (
 					<tr>
-						<td style={{ padding: '1px 2px', verticalAlign: 'middle' }} colSpan={2}>
-							<TileChip tile="first" size={chip} style={{ margin: 0 }} />
+						<td style={{ padding: '1px 2px' }}>
+							<TileChip tile="first" size={size} style={{ opacity: selected === false ? 0.4 : 1 }} />
 						</td>
 					</tr>
 				) : null}
@@ -226,21 +217,33 @@ function TileCountList({ pile, first }: { pile: Factory; first?: boolean }): Rea
 	);
 }
 
-function FactoryDisplay({ factory, first, waste }: { factory: Factory; first?: boolean; waste?: boolean }): ReactElement {
+function FactoryDisplay({
+	factory,
+	first,
+	waste,
+	onClick,
+	source,
+	selected,
+}: {
+	factory: Factory;
+	first?: boolean;
+	waste?: boolean;
+	onClick?: string;
+	source?: string;
+	selected?: Tile | false | null;
+}): ReactElement {
 	if (waste) {
 		return (
 			<div
-				style={{
-					minWidth: FACTORY_SIZE,
-					background: SURFACE_STRONG,
-					border: `2px solid ${BORDER}`,
-					borderRadius: 12,
-					padding: 6,
-					boxSizing: 'border-box',
-					textAlign: 'center',
-				}}
+				style={{ minWidth: FACTORY_SIZE, background: SS, border: `2px solid ${B}`, borderRadius: 12, padding: 6, textAlign: 'center' }}
 			>
-				<TileCountList pile={factory} {...(first ? { first: true } : {})} />
+				<TileCountList
+					pile={factory}
+					size={28}
+					{...(first ? { first: true } : {})}
+					{...(onClick && source !== undefined ? { onClick, source } : {})}
+					{...(selected !== undefined && selected !== null ? { selected } : {})}
+				/>
 			</div>
 		);
 	}
@@ -252,68 +255,46 @@ function FactoryDisplay({ factory, first, waste }: { factory: Factory; first?: b
 	});
 	while (chips.length < 4) chips.push(null);
 
+	const cell = (tile: Tile | null): ReactElement => {
+		if (!tile) return <td style={{ width: '50%', height: '50%' }} />;
+		const dimmed = selected === false || !!(selected && selected !== tile);
+		const chip = (
+			<TileChip
+				tile={tile}
+				size={28}
+				style={{
+					opacity: dimmed ? 0.4 : 1,
+					outline: selected && selected === tile ? `2px solid ${B}` : undefined,
+				}}
+			/>
+		);
+		return (
+			<td style={{ width: '50%', height: '50%', textAlign: 'center' }}>
+				{onClick && source !== undefined ? (
+					<Button value={`${onClick} ! ${ACTIONS.TAKE} ${source} ${tile}`} style={BTN} title={TILE_LABELS[tile]}>
+						{chip}
+					</Button>
+				) : (
+					chip
+				)}
+			</td>
+		);
+	};
+
 	return (
-		<div
-			style={{
-				width: FACTORY_SIZE,
-				height: FACTORY_SIZE,
-				background: SURFACE_STRONG,
-				border: `2px solid ${BORDER}`,
-				borderRadius: 12,
-				padding: 6,
-				boxSizing: 'border-box',
-			}}
-		>
+		<div style={{ width: FACTORY_SIZE, height: FACTORY_SIZE, background: SS, border: `2px solid ${B}`, borderRadius: 12, padding: 6 }}>
 			<table style={{ width: '100%', height: '100%', borderCollapse: 'collapse' }}>
 				<tbody>
 					<tr>
-						<td style={{ width: '50%', height: '50%', textAlign: 'center', verticalAlign: 'middle', padding: 1 }}>
-							{chips[0] ? <TileChip tile={chips[0]} size={28} style={{ margin: 0 }} /> : null}
-						</td>
-						<td style={{ width: '50%', height: '50%', textAlign: 'center', verticalAlign: 'middle', padding: 1 }}>
-							{chips[1] ? <TileChip tile={chips[1]} size={28} style={{ margin: 0 }} /> : null}
-						</td>
+						{cell(chips[0])}
+						{cell(chips[1])}
 					</tr>
 					<tr>
-						<td style={{ width: '50%', height: '50%', textAlign: 'center', verticalAlign: 'middle', padding: 1 }}>
-							{chips[2] ? <TileChip tile={chips[2]} size={28} style={{ margin: 0 }} /> : null}
-						</td>
-						<td style={{ width: '50%', height: '50%', textAlign: 'center', verticalAlign: 'middle', padding: 1 }}>
-							{chips[3] ? <TileChip tile={chips[3]} size={28} style={{ margin: 0 }} /> : null}
-						</td>
+						{cell(chips[2])}
+						{cell(chips[3])}
 					</tr>
 				</tbody>
 			</table>
-		</div>
-	);
-}
-
-function ColorPickMenu({ pile, onClick, source }: { pile: Factory; onClick: string; source: string }): ReactElement {
-	return (
-		<div style={{ borderRadius: 12, padding: 8, background: MENU_BG, margin: '12px auto', display: 'inline-block' }}>
-			<div style={{ marginBottom: 4, fontSize: 12, opacity: 0.85 }}>Pick a type</div>
-			{TILES.filterMap(tile => {
-				const n = pile[tile] ?? 0;
-				if (n <= 0) return;
-				return (
-					<Button
-						value={`${onClick} ! ${ACTIONS.TAKE} ${source} ${tile}`}
-						style={{
-							cursor: 'pointer',
-							padding: 4,
-							margin: 2,
-							border: 'none',
-							background: 'transparent',
-							verticalAlign: 'middle',
-						}}
-						title={TILE_LABELS[tile]}
-					>
-						{Array.from({ length: n }).map(() => (
-							<TileChip tile={tile} size={28} style={{ margin: 1 }} />
-						))}
-					</Button>
-				);
-			})}
 		</div>
 	);
 }
@@ -334,7 +315,7 @@ function canPlaceOnRow(pattern: (Tile | null)[][], wall: (Tile | null)[][], row:
 function WallMenu({ player, row, color, onClick }: { player: PlayerBoard; row: number; color: Tile; onClick: string }): ReactElement {
 	const cols = [0, 1, 2, 3, 4].filter(col => player.wall[row][col] === null && !player.wall.some(wallRow => wallRow[col] === color));
 	return (
-		<div style={{ borderRadius: 12, padding: 8, background: MENU_BG, margin: '8px auto', display: 'inline-block' }}>
+		<div style={{ borderRadius: 12, padding: 8, background: M, margin: '8px auto', display: 'inline-block' }}>
 			<div style={{ marginBottom: 6 }}>
 				Choose wall column: <TileChip tile={color} />
 			</div>
@@ -358,81 +339,57 @@ function BoardRows({
 	freeGrid: boolean;
 	place?: { color: Tile; onClick: string };
 }): ReactElement {
-	const cell = TILE_SIZE + 4;
-
-	const rowCells = (line: (Tile | null)[], i: number): ReactElement => (
-		<>
+	const row = (line: (Tile | null)[], i: number): ReactElement => (
+		<tr>
 			{Array.from({ length: 5 - line.length }).map(() => (
-				<td style={{ width: cell, height: cell, padding: 0 }} />
+				<td style={CELL_TD} />
 			))}
 			{line.map(tile => (
-				<td style={{ width: cell, height: cell, padding: 0, textAlign: 'center', verticalAlign: 'middle' }}>
-					<TileChip tile={tile ?? 'empty'} size={TILE_SIZE} style={{ margin: 0 }} />
+				<td style={CELL_TD}>
+					<TileChip tile={tile ?? 'empty'} size={TILE_SIZE} />
 				</td>
 			))}
-			<td style={{ width: 10, height: cell, padding: 0 }} />
+			<td style={{ width: 10, height: CELL, padding: 0 }} />
 			{wall[i].map((filled, j) => {
 				const hint = freeGrid ? null : WALL_PATTERN[i][j];
 				if (filled) {
 					return (
-						<td
-							style={{
-								width: cell,
-								height: cell,
-								padding: 1,
-								boxSizing: 'border-box',
-								border: `1px solid ${BORDER}`,
-								background: `${TILE_COLORS[filled]}55`,
-							}}
-							title={TILE_LABELS[filled]}
-						>
-							<div
-								style={{
-									width: '100%',
-									height: '100%',
-									background: tileFill(filled),
-									border: '1px solid rgba(255,255,255,0.75)',
-									borderRadius: 6,
-									boxSizing: 'border-box',
-									boxShadow: '0 0 0 1px rgba(0,0,0,0.55)',
-								}}
-							/>
+						<td style={{ ...CELL_TD, border: `1px solid ${B}`, background: `${TILE_COLORS[filled]}55` }}>
+							<TileChip tile={filled} size={TILE_SIZE} />
 						</td>
 					);
 				}
-				const hintColor = hint ? TILE_COLORS[hint] : undefined;
 				return (
 					<td
 						style={{
-							width: cell,
-							height: cell,
-							border: `1px solid ${BORDER}`,
-							background: hintColor ? `${hintColor}28` : 'transparent',
-							boxSizing: 'border-box',
-							padding: 0,
-							textAlign: 'center',
-							verticalAlign: 'middle',
+							...CELL_TD,
+							border: `1px solid ${B}`,
+							background: hint ? `${TILE_COLORS[hint]}28` : undefined,
 						}}
-						title={hint ? TILE_LABELS[hint] : undefined}
-					>
-						<EmptyCircle size={cell} {...(hintColor ? { color: hintColor } : {})} />
-					</td>
+					/>
 				);
 			})}
-		</>
+		</tr>
 	);
 
+	const table = (
+		<table style={{ borderCollapse: 'collapse' }}>
+			<tbody>{pattern.map((line, i) => row(line, i))}</tbody>
+		</table>
+	);
+
+	if (!place) return <div style={{ display: 'inline-block' }}>{table}</div>;
+
 	return (
-		<div style={{ display: 'inline-block', verticalAlign: 'top' }}>
+		<div style={{ display: 'inline-block' }}>
 			{pattern.map((line, i) => {
+				const clickable = canPlaceOnRow(pattern, wall, i, place.color, freeGrid);
 				const rowTable = (
 					<table style={{ borderCollapse: 'collapse' }}>
-						<tbody>
-							<tr>{rowCells(line, i)}</tr>
-						</tbody>
+						<tbody>{row(line, i)}</tbody>
 					</table>
 				);
-				if (place && canPlaceOnRow(pattern, wall, i, place.color, freeGrid)) {
+				if (clickable) {
 					return (
 						<Button
 							value={`${place.onClick} ! ${ACTIONS.PLACE} ${i}`}
@@ -441,9 +398,9 @@ function BoardRows({
 								display: 'block',
 								padding: 2,
 								margin: '1px 0',
-								border: `1px solid ${BORDER}`,
+								border: `1px solid ${B}`,
 								borderRadius: 4,
-								background: MENU_BG,
+								background: M,
 							}}
 						>
 							{rowTable}
@@ -460,49 +417,22 @@ function FloorLine({ floor, placeOnClick }: { floor: FloorTile[]; placeOnClick?:
 	const size = 18;
 	const cell = size + 4;
 	const content = (
-		<table style={{ borderCollapse: 'collapse', display: 'inline-table', verticalAlign: 'middle' }}>
+		<table style={{ borderCollapse: 'collapse', display: 'inline-table' }}>
 			<tbody>
 				<tr>
 					{Array.from({ length: FLOOR_SIZE }).map((_, i) => (
-						<td
-							style={{
-								width: cell,
-								height: cell,
-								padding: 0,
-								textAlign: 'center',
-								verticalAlign: 'middle',
-							}}
-						>
+						<td style={{ width: cell, height: cell, padding: 0, textAlign: 'center' }}>
 							{floor[i] ? (
-								<TileChip tile={floor[i]} size={size} style={{ margin: 0 }} />
+								<TileChip tile={floor[i]} size={size} />
 							) : (
-								<div
-									style={{
-										display: 'inline-block',
-										width: size,
-										height: size,
-										border: `1px solid ${BORDER}`,
-										borderRadius: 4,
-										boxSizing: 'border-box',
-										verticalAlign: 'middle',
-									}}
-								/>
+								<div style={{ display: 'inline-block', width: size, height: size, border: `1px solid ${B}`, borderRadius: 4 }} />
 							)}
 						</td>
 					))}
 				</tr>
 				<tr>
 					{Array.from({ length: FLOOR_SIZE }).map((_, i) => (
-						<td
-							style={{
-								padding: '1px 0 0',
-								textAlign: 'center',
-								fontSize: 10,
-								fontWeight: 'bold',
-								lineHeight: 1.1,
-								opacity: floor[i] ? 0.95 : 0.35,
-							}}
-						>
+						<td style={{ padding: '1px 0 0', textAlign: 'center', fontSize: 10, fontWeight: 'bold', opacity: floor[i] ? 0.95 : 0.35 }}>
 							{FLOOR_PENALTIES[i]}
 						</td>
 					))}
@@ -516,14 +446,7 @@ function FloorLine({ floor, placeOnClick }: { floor: FloorTile[]; placeOnClick?:
 			{placeOnClick ? (
 				<Button
 					value={`${placeOnClick} ! ${ACTIONS.PLACE} floor`}
-					style={{
-						cursor: 'pointer',
-						padding: 2,
-						border: `1px solid ${BORDER}`,
-						borderRadius: 4,
-						background: MENU_BG,
-						verticalAlign: 'middle',
-					}}
+					style={{ cursor: 'pointer', padding: 2, border: `1px solid ${B}`, borderRadius: 4, background: M }}
 				>
 					{content}
 				</Button>
@@ -560,8 +483,8 @@ function PlayerBoardView({
 				verticalAlign: 'top',
 				margin: 8,
 				padding: compact ? 8 : '8px 20px',
-				background: SURFACE,
-				border: `1px solid ${BORDER}`,
+				background: S,
+				border: `1px solid ${B}`,
 				borderRadius: 8,
 				zoom: compact ? '70%' : undefined,
 			}}
@@ -571,7 +494,7 @@ function PlayerBoardView({
 			</div>
 			{place ? (
 				<div style={{ marginBottom: 6, fontSize: 12 }}>
-					{place.count}x <TileChip tile={place.color} size={18} style={{ margin: 0 }} />
+					{place.count}x <TileChip tile={place.color} size={18} />
 					{willOverflow ? <div style={{ marginTop: 4, opacity: 0.85 }}>Extra tiles will go to penalties.</div> : null}
 				</div>
 			) : null}
@@ -581,9 +504,54 @@ function PlayerBoardView({
 				freeGrid={freeGrid}
 				{...(place ? { place: { color: place.color, onClick: place.onClick } } : {})}
 			/>
-			{!compact || data.floor.length > 0 || place ? (
-				<FloorLine floor={data.floor} {...(place ? { placeOnClick: place.onClick } : {})} />
-			) : null}
+			<FloorLine floor={data.floor} {...(place ? { placeOnClick: place.onClick } : {})} />
+		</div>
+	);
+}
+
+function PlayerWallView({ data, freeGrid }: { data: PlayerBoard; freeGrid: boolean }): ReactElement {
+	return (
+		<div
+			style={{
+				display: 'inline-block',
+				verticalAlign: 'top',
+				margin: 8,
+				padding: 8,
+				background: S,
+				border: `1px solid ${B}`,
+				borderRadius: 8,
+			}}
+		>
+			<div style={{ marginBottom: 6 }}>
+				<Username name={data.name} clickable /> - <b>{data.score}</b>
+			</div>
+			<table style={{ borderCollapse: 'collapse' }}>
+				<tbody>
+					{data.wall.map((row, i) => (
+						<tr>
+							{row.map((filled, j) => {
+								const hint = freeGrid ? null : WALL_PATTERN[i][j];
+								if (filled) {
+									return (
+										<td style={{ ...CELL_TD, border: `1px solid ${B}`, background: `${TILE_COLORS[filled]}55` }}>
+											<TileChip tile={filled} size={TILE_SIZE} />
+										</td>
+									);
+								}
+								return (
+									<td
+										style={{
+											...CELL_TD,
+											border: `1px solid ${B}`,
+											background: hint ? `${TILE_COLORS[hint]}28` : undefined,
+										}}
+									/>
+								);
+							})}
+						</tr>
+					))}
+				</tbody>
+			</table>
 		</div>
 	);
 }
@@ -591,25 +559,24 @@ function PlayerBoardView({
 function FactoriesBoard({
 	factories,
 	center,
-	bag,
+	bagCount,
 	view,
 	onClick,
 }: {
 	factories: Factory[];
 	center: RenderCtx['board']['center'];
-	bag: Factory;
+	bagCount: number;
 	view: ViewType;
 	onClick?: string;
 }): ReactElement {
 	const layout = FACTORY_LAYOUT[factories.length] ?? factories.map((_, i) => i);
 	const cellToFactory = new Map(layout.map((cell, factoryIndex) => [cell, factoryIndex]));
-	const active = !!(view.active && onClick);
-	const selectingFactory = view.active && view.action === VIEW_ACTION_TYPE.CLICK_FACTORY ? view.factoryIndex : null;
-	const selectingCenter = view.active && view.action === VIEW_ACTION_TYPE.CLICK_CENTER;
+	const active = !!(view.active && onClick && (view.action === VIEW_ACTION_TYPE.NONE || view.action === VIEW_ACTION_TYPE.PLACE));
+	const selected = view.active && view.action === VIEW_ACTION_TYPE.PLACE ? { source: view.source, color: view.color } : null;
 
 	return (
 		<div style={{ display: 'inline-block', verticalAlign: 'top', margin: 8 }}>
-			<table style={{ borderCollapse: 'separate', borderSpacing: 6, display: 'inline-block', verticalAlign: 'middle' }}>
+			<table style={{ borderCollapse: 'separate', borderSpacing: 6, display: 'inline-block' }}>
 				<tbody>
 					{[0, 1, 2].map(row => (
 						<tr>
@@ -620,22 +587,19 @@ function FactoriesBoard({
 									return <td style={{ width: FACTORY_SIZE, height: FACTORY_SIZE }} />;
 								}
 								const factory = factories[factoryIndex];
-								const colors = factoryColors(factory);
-								const open = selectingFactory === factoryIndex;
-								const clickable = active && colors.length > 0 && !open && view.action !== VIEW_ACTION_TYPE.PLACE;
-								const content = <FactoryDisplay factory={factory} />;
+								const selectedProp = selected ? (selected.source === factoryIndex ? selected.color : false) : null;
 								return (
-									<td style={{ verticalAlign: 'middle' }}>
-										{clickable ? (
-											<Button
-												value={`${onClick} ! ${VIEW_ACTION_TYPE.CLICK_FACTORY} ${factoryIndex}`}
-												style={{ cursor: 'pointer', padding: 0, border: 'none', background: 'none', color: 'inherit' }}
-											>
-												{content}
-											</Button>
-										) : (
-											content
-										)}
+									<td>
+										<FactoryDisplay
+											factory={factory}
+											{...(active
+												? {
+														onClick,
+														source: String(factoryIndex),
+														selected: selectedProp,
+													}
+												: {})}
+										/>
 									</td>
 								);
 							})}
@@ -645,89 +609,56 @@ function FactoriesBoard({
 			</table>
 			<div style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 12, textAlign: 'center' }}>
 				<div style={{ fontSize: 12, opacity: 0.7, marginBottom: 4 }}>Waste</div>
-				{(() => {
-					const colors = factoryColors(center);
-					const clickable = active && colors.length > 0 && !selectingCenter && view.action !== VIEW_ACTION_TYPE.PLACE;
-					const content = <FactoryDisplay factory={center} first={center.first} waste />;
-					return clickable ? (
-						<Button
-							value={`${onClick} ! ${VIEW_ACTION_TYPE.CLICK_CENTER}`}
-							style={{ cursor: 'pointer', padding: 0, border: 'none', background: 'none', color: 'inherit' }}
-						>
-							{content}
-						</Button>
-					) : (
-						content
-					);
-				})()}
-				<details style={{ marginTop: 8, textAlign: 'left' }}>
-					<summary style={{ cursor: 'pointer', fontSize: 12, opacity: 0.7 }}>Bag</summary>
-					<div
-						style={{
-							minWidth: FACTORY_SIZE,
-							background: SURFACE_STRONG,
-							border: `1px solid ${BORDER}`,
-							borderRadius: 8,
-							padding: 6,
-							marginTop: 4,
-							boxSizing: 'border-box',
-						}}
-					>
-						<TileCountList pile={bag} />
-					</div>
-				</details>
+				<FactoryDisplay
+					factory={center}
+					first={center.first}
+					waste
+					{...(active
+						? {
+								onClick,
+								source: 'center',
+								selected: selected ? (selected.source === 'center' ? selected.color : false) : null,
+							}
+						: {})}
+				/>
+				<div style={{ marginTop: 8, fontSize: 12, opacity: 0.7 }}>Bag: {bagCount}</div>
 			</div>
 		</div>
 	);
-}
-
-function bagAsFactory(bag: Tile[]): Factory {
-	const pile: Factory = {};
-	bag.forEach(tile => {
-		pile[tile] = (pile[tile] ?? 0) + 1;
-	});
-	return pile;
 }
 
 export function render(this: This, ctx: RenderCtx): ReactElement {
 	const onClick = ctx.view.active ? this.msg : undefined;
 	const self = ctx.view.type === 'player' ? ctx.players[ctx.view.self] : null;
 
-	const selectingFactory = ctx.view.active && ctx.view.action === VIEW_ACTION_TYPE.CLICK_FACTORY ? ctx.view.factoryIndex : null;
-	const selectingCenter = ctx.view.active && ctx.view.action === VIEW_ACTION_TYPE.CLICK_CENTER;
 	const placing = ctx.view.active && ctx.view.action === VIEW_ACTION_TYPE.PLACE ? ctx.view : null;
+
+	if (ctx.wallsOnly) {
+		return (
+			<center>
+				{ctx.header ? <h1 style={{ margin: '8px 0', fontSize: 20 }}>{ctx.header}</h1> : null}
+				<div>
+					{ctx.turns.map(turn => (
+						<PlayerWallView data={ctx.players[turn]} freeGrid={ctx.freeGrid} />
+					))}
+				</div>
+			</center>
+		);
+	}
 
 	return (
 		<center>
 			<div style={{ margin: '4px 0', fontSize: 14, opacity: 0.85 }}>Round {ctx.round}</div>
-			{ctx.header ? (
-				<h1
-					style={{
-						margin: '8px 0',
-						opacity: ctx.dimHeader ? 0.5 : 1,
-						fontSize: 20,
-					}}
-				>
-					{ctx.header}
-				</h1>
-			) : null}
-			<div>
-				<FactoriesBoard
-					factories={ctx.board.factories}
-					center={ctx.board.center}
-					bag={bagAsFactory(ctx.bag)}
-					view={ctx.view}
-					{...(onClick ? { onClick } : {})}
-				/>
-			</div>
-			{onClick && selectingFactory !== null ? (
+			{ctx.header ? <h1 style={{ margin: '8px 0', opacity: ctx.dimHeader ? 0.5 : 1, fontSize: 20 }}>{ctx.header}</h1> : null}
+			{!ctx.ended ? (
 				<div>
-					<ColorPickMenu pile={ctx.board.factories[selectingFactory]} onClick={onClick} source={String(selectingFactory)} />
-				</div>
-			) : null}
-			{onClick && selectingCenter ? (
-				<div>
-					<ColorPickMenu pile={ctx.board.center} onClick={onClick} source="center" />
+					<FactoriesBoard
+						factories={ctx.board.factories}
+						center={ctx.board.center}
+						bagCount={ctx.bag.length}
+						view={ctx.view}
+						{...(onClick ? { onClick } : {})}
+					/>
 				</div>
 			) : null}
 			{self ? (
@@ -749,7 +680,7 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 				{ctx.turns
 					.filter(turn => turn !== (ctx.view.type === 'player' ? ctx.view.self : null))
 					.map(turn => (
-						<PlayerBoardView data={ctx.players[turn]} freeGrid={ctx.freeGrid} compact />
+						<PlayerBoardView data={ctx.players[turn]} freeGrid={ctx.freeGrid} {...(!ctx.ended ? { compact: true } : {})} />
 					))}
 			</div>
 		</center>

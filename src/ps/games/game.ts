@@ -98,6 +98,10 @@ export class BaseGame<State extends BaseState> {
 	render() {
 		return null as unknown as ReactElement;
 	}
+	/** HTML broadcast to the room when the game ends. Defaults to a zoomed-out board. */
+	renderFinish(): ReactElement {
+		return Small({ children: this.render(null) });
+	}
 	renderEmbed?(): Promise<EmbedBuilder | null>;
 
 	action(user: User, ctx: string, reaction: boolean): void;
@@ -587,7 +591,7 @@ export class BaseGame<State extends BaseState> {
 		this.clearTimer();
 		this.update();
 		if (this.started && (this.meta.players === 'many' || this.canBroadcastFinish?.())) {
-			this.room.sendHTML(Small({ children: this.render(null) }));
+			this.room.sendHTML(this.renderFinish());
 		}
 		this.endedAt = new Date();
 		this.room.send(message);
