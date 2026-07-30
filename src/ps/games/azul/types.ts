@@ -1,3 +1,4 @@
+import type { TranslationFn } from '@/i18n/types';
 import type { POST_TURN_ACTIONS, Tile, VIEW_ACTION_TYPE } from '@/ps/games/azul/constants';
 
 export type Turn = string;
@@ -91,6 +92,7 @@ export type RenderCtx = {
 	wallsOnly?: boolean;
 	header?: string;
 	dimHeader?: boolean;
+	$T: TranslationFn;
 };
 
 export type WinCtx = {

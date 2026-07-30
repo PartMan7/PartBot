@@ -1,5 +1,6 @@
 import '@/globals';
 
+import { i18n } from '@/i18n';
 import { Tile, VIEW_ACTION_TYPE } from '@/ps/games/azul/constants';
 import { ansiToHtml } from '@/utils/ansiToHtml';
 import { cachebustDir } from '@/utils/cachebust';
@@ -67,6 +68,7 @@ export const test: () => Promise<string> = async () => {
 		const MOCK_RENDER_CTX: RenderCtx = {
 			id: '#TEMP',
 			header: 'Your turn!',
+			$T: i18n(),
 			freeGrid: false,
 			round: 2,
 			bag: [
