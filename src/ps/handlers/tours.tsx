@@ -60,78 +60,20 @@ function isFinishedMatchNode(
 
 function getSubtreeChampion(node: BracketNode | undefined | null): string | null {
 	if (!node) return null;
-	const kids = node.children?.filter((c): c is BracketNode => !!c);
-
-	if (isFinishedMatchNode(node)) {
-		if (node.result === 'win') return node.team ?? null;
-
-		if (!kids || kids.length !== 2) return null;
-
-		const f0 = getSubtreeChampion(kids[0]);
-		const f1 = getSubtreeChampion(kids[1]);
-
-		if (f0 && node.team && toId(f0) === toId(node.team)) return f1 ?? f0;
-		if (f1 && node.team && toId(f1) === toId(node.team)) return f0 ?? f1;
-
-		return f0 ?? f1;
-	}
-
-	if (!kids?.length) return node.team ?? null;
-
-	const f0 = getSubtreeChampion(kids[0]);
-	const f1 = getSubtreeChampion(kids[1]);
-
-	return f0 ?? f1 ?? node.team ?? null;
+	if (isFinishedMatchNode(node)) return node.team ?? null;
+	if (!node.children?.length) return node.team ?? null;
+	return getSubtreeChampion(node.children[0]) ?? getSubtreeChampion(node.children[1]) ?? node.team ?? null;
 }
 
 function getMatchLoser(node: BracketNode | undefined | null): string | null {
-	if (!node) return null;
-	const kids = node.children?.filter((c): c is BracketNode => !!c);
-	if (!kids || kids.length !== 2) {
-		if (isFinishedMatchNode(node) && node.result === 'loss') return node.team ?? null;
-		return null;
-	}
-
-	const f0 = getSubtreeChampion(kids[0]);
-	const f1 = getSubtreeChampion(kids[1]);
-	const winner = getSubtreeChampion(node);
-
-	if (!winner) {
-		if (isFinishedMatchNode(node) && node.result === 'loss') return node.team ?? null;
-		return null;
-	}
-
-	if (f0 && toId(winner) === toId(f0))
-		return f1 ?? (isFinishedMatchNode(kids[1]) && kids[1].result === 'loss' ? (kids[1].team ?? null) : null);
-	if (f1 && toId(winner) === toId(f1))
-		return f0 ?? (isFinishedMatchNode(kids[0]) && kids[0].result === 'loss' ? (kids[0].team ?? null) : null);
-
-	return f0 && toId(winner) === toId(f0) ? f1 : f0;
+	if (!isFinishedMatchNode(node) || !node.children || node.children.length !== 2) return null;
+	return getSubtreeChampion(node.children[node.result === 'loss' ? 0 : 1]);
 }
 
 /** Placements for single-elim tree: champion, runner-up, two semifinal losers (order preserved). */
 export function getTopFourFromBracketTree(json: BracketTree): string[] {
 	const root = json.bracketData?.rootNode;
 	if (!root) return [];
-
-	const first = getSubtreeChampion(root);
-	const second = getMatchLoser(root);
-
-	const semiFinalists: string[] = [];
-	if (root.children) {
-		for (const child of root.children) {
-			const champ = getSubtreeChampion(child);
-			if (champ) semiFinalists.push(champ);
-		}
-	}
-
-	const semiLosers: string[] = [];
-	if (root.children) {
-		for (const child of root.children) {
-			const loser = getMatchLoser(child);
-			if (loser) semiLosers.push(loser);
-		}
-	}
 
 	const out: string[] = [];
 	const pushUnique = (name: string | null) => {
@@ -140,11 +82,14 @@ export function getTopFourFromBracketTree(json: BracketTree): string[] {
 		if (!out.some(n => toId(n) === id)) out.push(name);
 	};
 
-	pushUnique(first);
-	pushUnique(second);
+	pushUnique(getSubtreeChampion(root));
+	pushUnique(getMatchLoser(root));
 
-	for (const s of semiFinalists) pushUnique(s);
-	for (const s of semiLosers) pushUnique(s);
+	if (root.children) {
+		for (const child of root.children) {
+			pushUnique(getMatchLoser(child));
+		}
+	}
 
 	return out.slice(0, 4);
 }
