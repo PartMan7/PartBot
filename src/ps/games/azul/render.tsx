@@ -21,7 +21,7 @@ import type { TranslationFn } from '@/i18n/types';
 import type { Tile } from '@/ps/games/azul/constants';
 import type { Azul } from '@/ps/games/azul/index';
 import type { Log } from '@/ps/games/azul/logs';
-import type { Factory, FloorTile, PlayerBoard, RenderCtx, ViewType } from '@/ps/games/azul/types';
+import type { Factory, FloorTile, PlayerBoard, RenderCtx, TilePile, ViewType } from '@/ps/games/azul/types';
 import type { CSSProperties, ReactElement } from 'react';
 
 type This = { msg: string };
@@ -165,7 +165,7 @@ function TileCountList({
 	selected,
 	size = 18,
 }: {
-	pile: Factory;
+	pile: TilePile;
 	first?: boolean;
 	onClick?: string;
 	source?: string;
@@ -227,40 +227,16 @@ function TileCountList({
 
 function FactoryDisplay({
 	factory,
-	first,
-	waste,
 	onClick,
 	source,
 	selected,
 }: {
 	factory: Factory;
-	first?: boolean;
-	waste?: boolean;
 	onClick?: string;
 	source?: string;
 	selected?: Tile | false | null;
 }): ReactElement {
-	if (waste) {
-		return (
-			<div
-				style={{ minWidth: FACTORY_SIZE, background: SS, border: `2px solid ${B}`, borderRadius: 12, padding: 6, textAlign: 'center' }}
-			>
-				<TileCountList
-					pile={factory}
-					size={28}
-					{...(first ? { first: true } : {})}
-					{...(onClick && source !== undefined ? { onClick, source } : {})}
-					{...(selected !== undefined && selected !== null ? { selected } : {})}
-				/>
-			</div>
-		);
-	}
-
-	const chips: (Tile | null)[] = [];
-	TILES.forEach(tile => {
-		const n = factory[tile] ?? 0;
-		for (let i = 0; i < n; i++) chips.push(tile);
-	});
+	const chips: (Tile | null)[] = [...factory];
 	while (chips.length < 4) chips.push(null);
 
 	const cell = (tile: Tile | null): ReactElement => {
@@ -633,18 +609,29 @@ function FactoriesBoard({
 			</table>
 			<div style={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: 12, textAlign: 'center' }}>
 				<div style={{ fontSize: 12, opacity: 0.7, marginBottom: 4 }}>{$T('GAME.AZUL.LABELS.WASTE')}</div>
-				<FactoryDisplay
-					factory={center}
-					first={center.first}
-					waste
-					{...(active
-						? {
-								onClick,
-								source: 'center',
-								selected: selected ? (selected.source === 'center' ? selected.color : false) : null,
-							}
-						: {})}
-				/>
+				<div
+					style={{
+						minWidth: FACTORY_SIZE,
+						background: SS,
+						border: `2px solid ${B}`,
+						borderRadius: 12,
+						padding: 6,
+						textAlign: 'center',
+					}}
+				>
+					<TileCountList
+						pile={center}
+						size={28}
+						first={center.first}
+						{...(active
+							? {
+									onClick,
+									source: 'center',
+									selected: selected ? (selected.source === 'center' ? selected.color : false) : null,
+								}
+							: {})}
+					/>
+				</div>
 				<div style={{ marginTop: 8, fontSize: 12, opacity: 0.7 }}>{$T('GAME.AZUL.LABELS.BAG', { count: bagCount })}</div>
 			</div>
 		</div>

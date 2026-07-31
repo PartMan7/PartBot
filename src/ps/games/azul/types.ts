@@ -3,7 +3,11 @@ import type { POST_TURN_ACTIONS, Tile, VIEW_ACTION_TYPE } from '@/ps/games/azul/
 
 export type Turn = string;
 
-export type Factory = Partial<Record<Tile, number>>;
+/** Color counts (center / waste). */
+export type TilePile = Partial<Record<Tile, number>>;
+
+/** Factory tiles in draw order. */
+export type Factory = Tile[];
 
 export type FloorTile = Tile | 'first';
 
@@ -19,7 +23,7 @@ export type PlayerBoard = {
 	out?: boolean;
 };
 
-export type Center = Factory & { first: boolean };
+export type Center = TilePile & { first: boolean };
 
 export type Board = {
 	factories: Factory[];

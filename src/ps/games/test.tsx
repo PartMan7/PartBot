@@ -80,13 +80,13 @@ export const test: () => Promise<string> = async () => {
 			],
 			board: {
 				factories: [
-					{ [Tile.Water]: 2, [Tile.Fire]: 1, [Tile.Electric]: 1 },
-					{ [Tile.Dark]: 2, [Tile.Grass]: 2 },
-					{ [Tile.Fire]: 3, [Tile.Water]: 1 },
-					{ [Tile.Electric]: 1, [Tile.Dark]: 1, [Tile.Fire]: 1, [Tile.Grass]: 1 },
-					{ [Tile.Water]: 4 },
-					{ [Tile.Electric]: 2, [Tile.Fire]: 2 },
-					{ [Tile.Grass]: 1, [Tile.Dark]: 3 },
+					[Tile.Water, Tile.Fire, Tile.Water, Tile.Electric],
+					[Tile.Dark, Tile.Grass, Tile.Dark, Tile.Grass],
+					[Tile.Fire, Tile.Fire, Tile.Water, Tile.Fire],
+					[Tile.Electric, Tile.Dark, Tile.Fire, Tile.Grass],
+					[Tile.Water, Tile.Water, Tile.Water, Tile.Water],
+					[Tile.Electric, Tile.Fire, Tile.Electric, Tile.Fire],
+					[Tile.Grass, Tile.Dark, Tile.Dark, Tile.Dark],
 				],
 				center: {
 					first: true,

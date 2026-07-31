@@ -26,7 +26,7 @@ import { toId } from '@/utils/toId';
 
 import type { TranslatedText } from '@/i18n/types';
 import type { Log } from '@/ps/games/azul/logs';
-import type { Factory, FloorTile, PendingWall, PlayerBoard, RenderCtx, State, Turn, ViewType, WinCtx } from '@/ps/games/azul/types';
+import type { FloorTile, PendingWall, PlayerBoard, RenderCtx, State, Turn, ViewType, WinCtx } from '@/ps/games/azul/types';
 import type { BaseContext } from '@/ps/games/game';
 import type { ActionResponse, BaseState, EndType, Player } from '@/ps/games/types';
 import type { User } from 'ps-client';
@@ -40,10 +40,6 @@ const TILE_I18N = {
 	[Tile.Grass]: 'GAME.AZUL.TILE.GRASS',
 	[Tile.Dark]: 'GAME.AZUL.TILE.DARK',
 } as const;
-
-function factoryHasTiles(factory: Factory): boolean {
-	return TILES.some(tile => (factory[tile] ?? 0) > 0);
-}
 
 export class Azul extends BaseGame<State> {
 	log: Log[] = [];
@@ -105,7 +101,7 @@ export class Azul extends BaseGame<State> {
 		this.state.bag = TILES.flatMap(tile => Array.from({ length: TILES_PER_COLOR }, () => tile)).shuffle(this.prng);
 		this.state.lid = [];
 		this.state.board = {
-			factories: Array.from({ length: factoryCount }, () => ({})),
+			factories: Array.from({ length: factoryCount }, () => []),
 			center: { first: true },
 		};
 		this.state.playerData = Object.fromEntries(
@@ -154,18 +150,14 @@ export class Azul extends BaseGame<State> {
 	}
 
 	refillFactories(): void {
-		this.state.board.factories = this.state.board.factories.map(() => {
-			const factory: Factory = {};
-			this.drawFromBag(TILES_PER_FACTORY).forEach(tile => {
-				factory[tile] = (factory[tile] ?? 0) + 1;
-			});
-			return factory;
-		});
+		this.state.board.factories = this.state.board.factories.map(() => this.drawFromBag(TILES_PER_FACTORY));
 		this.state.board.center = { first: true };
 	}
 
 	roundHasTiles(): boolean {
-		return this.state.board.factories.some(factoryHasTiles) || factoryHasTiles(this.state.board.center);
+		return (
+			this.state.board.factories.some(factory => factory.length > 0) || TILES.some(tile => (this.state.board.center[tile] ?? 0) > 0)
+		);
 	}
 
 	action(user: User, ctx: string): void {
@@ -222,7 +214,7 @@ export class Azul extends BaseGame<State> {
 				throw new ChatError(this.$T('GAME.AZUL.INVALID_FACTORY'));
 			}
 			const factory = this.state.board.factories[factoryIndex];
-			count = factory[color] ?? 0;
+			count = factory.filter(tile => tile === color).length;
 			if (count <= 0) throw new ChatError(this.$T('GAME.AZUL.NO_TILES_IN_FACTORY', { tile: this.tileName(color) }));
 		}
 
@@ -247,16 +239,13 @@ export class Azul extends BaseGame<State> {
 			return;
 		}
 		const factory = this.state.board.factories[source];
-		if ((factory[color] ?? 0) <= 0) {
+		if (!factory.includes(color)) {
 			throw new ChatError(this.$T('GAME.AZUL.NO_TILES_IN_FACTORY', { tile: this.tileName(color) }));
 		}
-		delete factory[color];
-		TILES.forEach(tile => {
-			const leftover = factory[tile] ?? 0;
-			if (leftover > 0) {
-				this.state.board.center[tile] = (this.state.board.center[tile] ?? 0) + leftover;
-				delete factory[tile];
-			}
+		const leftovers = factory.filter(tile => tile !== color);
+		this.state.board.factories[source] = [];
+		leftovers.forEach(tile => {
+			this.state.board.center[tile] = (this.state.board.center[tile] ?? 0) + 1;
 		});
 	}
 
