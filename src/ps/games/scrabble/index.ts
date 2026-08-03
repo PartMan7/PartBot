@@ -39,6 +39,7 @@ export class Scrabble extends BaseGame<State> {
 	selected: Point | null = null;
 	declare winCtx?: WinCtx | { type: EndType };
 	mod: ScrabbleMods | null = null;
+	__sticky?: string;
 
 	constructor(ctx: BaseContext) {
 		super(ctx);
@@ -76,9 +77,18 @@ export class Scrabble extends BaseGame<State> {
 		this.state.bag =
 			!this.mod && isAprilFoolsActive()
 				? 'NEVERGONNAGIVEYOUUP_NEVERGONNALETYOUDOWN_NEVERGONNARUNAROUNDAND_DESERTYOU'.split('')
-				: Object.entries((this.mod ? ScrabbleModData[this.mod].counts : null) ?? LETTER_COUNTS)
-						.flatMap(([letter, count]) => letter.repeat(count).split(''))
-						.shuffle(this.prng);
+				: Object.entries((this.mod ? ScrabbleModData[this.mod].counts : null) ?? LETTER_COUNTS).flatMap(([letter, count]) =>
+						letter.repeat(count).split('')
+					);
+		if (
+			!this.__sticky &&
+			this.mod === ScrabbleMods.CRAZYMONS &&
+			Object.values(this.players).some(p => p.id === 'yoshman8') &&
+			this.prng() < 0.01
+		) {
+			this.__sticky = this.state.bag.random(this.prng)!;
+		}
+		this.shuffleBag();
 		this.state.score = {};
 		this.state.best = {};
 		this.state.racks = {};
@@ -303,7 +313,7 @@ export class Scrabble extends BaseGame<State> {
 		letters.forEach(letter => rack.remove(letter));
 
 		const newTiles = this.state.bag.splice(0, letters.length, ...letters);
-		this.state.bag.shuffle(this.prng);
+		this.shuffleBag();
 		rack.push(...newTiles);
 		if (newTiles.includes('_')) this.room.privateSend(turn, this.$T('GAME.SCRABBLE.HOW_TO_BLANK'));
 
@@ -484,6 +494,14 @@ export class Scrabble extends BaseGame<State> {
 			},
 			weight: bonus ? (additive ? 1 : 2) : 0,
 		};
+	}
+
+	shuffleBag(): void {
+		this.state.bag.shuffle(this.prng);
+		if (this.__sticky && this.state.bag.includes(this.__sticky)) {
+			this.state.bag.remove(this.__sticky);
+			this.state.bag.push(this.__sticky);
+		}
 	}
 
 	checkWord(word: string): WordScore | null {
