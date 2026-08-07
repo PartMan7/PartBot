@@ -8,13 +8,19 @@ import { fromHumanTime, toHumanTime } from '@/utils/humanTime';
 import { Timer } from '@/utils/timer';
 import { toId } from '@/utils/toId';
 
-import type { NoTranslate, TranslationFn } from '@/i18n/types';
+import type { NoTranslate, TranslationFn, ToTranslate } from '@/i18n/types';
 import type { CommonGame } from '@/ps/games/game';
 import type { BaseModEntry } from '@/ps/games/mods';
 import type { HTPDropdown, GameHTPData } from '@/ps/games/types';
 import type { PSCommand, PSCommandChild } from '@/types/chat';
 import type { Room } from 'ps-client';
 import type { HTMLopts } from 'ps-client/classes/common';
+
+
+import { Button, Username } from '@/utils/components/ps';
+import { prefix } from '@/config/ps';
+import type { ReactElement } from 'react';
+import { groupSub } from '@/utils/groupSub';
 
 const HTPSection = ({ section }: { section: HTPDropdown }) => {
 	return (
@@ -192,8 +198,26 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 		},
 		help: `Game module for ${Game.meta.name}. See subcommands.`,
 		syntax: 'CMD',
-		async run({ run, command }) {
-			return run(`help ${command.join(' ')}`);
+		async run({ run, command, calledFrom, broadcastHTML, $T, message }) {
+			const sendHTML = (HTML: ReactElement) => {
+				if (calledFrom && calledFrom.at(-1) !== 'help') return message.replyHTML(HTML);
+				else return broadcastHTML(HTML);
+			};
+			const Bot = message.parent;
+			return sendHTML(
+				<div className="infobox" style={{ maxWidth: 400 }}>
+					<p>
+						{`Hi, to make a game of ${gameId}, you ${Game.meta.players === 'single' ? `can use ,${gameId} create! ` : 'need to ask a staff member!'}`}
+					</p>
+					<p>
+						If you want to learn how to play, check{' '}
+						<Button name="send" value={`/msg ${Bot.status.userid},${prefix}${gameId} help`}>
+							this
+						</Button>{' '}
+						out!
+					</p>
+				</div>
+			);
 		},
 		categories: ['game'],
 		children: {
@@ -267,11 +291,12 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				name: 'help',
 				aliases: ['htp', 'howtoplay'],
 				help: 'Shows the how-to-play for this game.',
+				flags: { allowPMs: true },
 				syntax: 'CMD',
-				run: ({ message, $T }) => {
+				async run({ message, arg }) {
 					const htpData = Game.meta.htp;
-					if (!htpData) throw new ChatError($T('GAME.NO_HTP'));
-					return message.reply(<HowToPlayBox gameName={Game.meta.name} data={htpData} />);
+					if (!htpData) throw new ChatError('GAME.NO_DATA' as ToTranslate);
+					return message.replyHTML(<HowToPlayBox gameName={Game.meta.name} data={htpData} />);
 				},
 			},
 			...conditionalCommand(

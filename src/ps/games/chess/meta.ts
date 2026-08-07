@@ -23,6 +23,10 @@ export const meta: Meta = {
 	themes: CHESS_THEMES,
 	defaultTheme,
 
+	htp: {
+		goal: 'Checkmate the opponent\'s king!',
+		sections: [{ title: 'Check this guide out for basics!', lines: ['https://www.chess.com/learn-how-to-play-chess'] }]
+	},
 	// UGO-CODE
 	ugo: {
 		cap: 12,

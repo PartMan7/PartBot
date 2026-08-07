@@ -11,7 +11,6 @@
 		"secrets-check": "sh scripts/secrets_check.sh",
 		"prettify": "prettier -w",
 		"prepare": "sh ./scripts/setup.sh",
-		"prestart": "bash ./scripts/prestart.sh",
 		"start": "ts-node --swc src/index.ts",
 		"tailwind": "npx @tailwindcss/cli -i ./src/web/styles/tailwind.css -o ./src/web/react/compiled/styles.css",
 		"test": "npm run lint && npm run tsc",
