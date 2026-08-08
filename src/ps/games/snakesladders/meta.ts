@@ -23,10 +23,10 @@ export const meta: Meta = {
 			{
 				title: 'Gameplay',
 				lines: [
-					'- Each player takes turns rolling a six-sided die to move their token along the board',
-					'- Players move their token forward by the number of spaces indicated by the die roll',
-					'- If a player lands on a snake, they move their token backward by the number of spaces indicated by the snake',
-					'- If a player lands on a ladder, they move their token forward by the number of spaces indicated by the ladder',
+					'- Each player takes turns rolling a six-sided die to move their token along the board.',
+					'- Players move their token forward by the number of spaces indicated by the die roll.',
+					'- If a player lands on a snake, they move their token to the tail of the snake.',
+					'- If a player lands on a ladder, they move their token to the top of the ladder.',
 				],
 			},
 		],

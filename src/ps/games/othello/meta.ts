@@ -22,18 +22,11 @@ export const meta: Meta = {
 		goal: "Place discs on the board to surround and flip your opponent's discs.",
 		sections: [
 			{
-				title: 'Setup',
-				lines: [
-					'Game begins with 4 discs placed in the center of the board with the same colored disks on opposite corners of the 2x2 central area.',
-				],
-			},
-			{
 				title: 'Gameplay',
 				lines: [
 					'- Players take turns placing discs on the board.',
-					"- A valid move must outflank at least one of your opponent's discs vertically, horizontally, or diagonally.",
-					"- Outflank means to place a disc so your opponent's row (or rows) of disc(s) is bordered at each end by your colour.",
-					"- When a disc is placed, it flips all of the opponent's discs that are in a straight line with the new disc.",
+					"- A valid move must outflank (or 'sandwich') at least one of your opponent's discs vertically, horizontally, or diagonally.",
+					"- When a disc is placed, it flips all of the opponent's discs that are newly outflanked.",
 					'- If a player does not have a valid move, then the turn passes to the other player.',
 				],
 			},

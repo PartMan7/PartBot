@@ -28,17 +28,17 @@ export const meta: Meta = {
 					'- 5 ships each to be placed on a 10x10 grid.',
 					'- They are: (C)arrier (5), (B)attleship (4), (D)estroyer (3), (S)ubmarine (3), and (P)atrol (2).',
 					'- Ships can be placed horizontally or vertically, but not diagonally.',
-					'- Ships cannot overlap, touch each other, or go out of bounds.',
-				]
+					'- Ships cannot overlap or go out of bounds.',
+				],
 			},
 			{
 				title: 'Gameplay',
 				lines: [
-					'- Players take turns shooting at coordinates on their opponent\'s board.',
+					"- Players take turns shooting at coordinates on their opponent's board.",
 					'- If a ship is hit, it is marked as hit.',
 					'- If all ships on one side are sunk, that player loses, and the game ends.',
-				]
-			}
+				],
+			},
 		],
 	},
 

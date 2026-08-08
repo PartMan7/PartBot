@@ -32,7 +32,7 @@ export const meta: Meta = {
 				lines: [
 					'- The game is played over several rounds, each consisting of two phases: drafting tiles and then scoring walls.',
 					'- Game begins with 4 tiles placed in each factory.',
-				]
+				],
 			},
 			{
 				title: 'Drafting Phase',
@@ -43,7 +43,7 @@ export const meta: Meta = {
 						lines: [
 							'- Choose a tile from a factory to take all tiles of the same type from it.',
 							'- The remaining tiles from that factory are moved to the waste.',
-							'- The first to pick from the waste must also take the start marker, giving them the first turn in the next round.'
+							'- The first to pick from the waste must also take the waste marker, giving them a penalty but also the first turn in the next round.',
 						],
 					},
 					{
@@ -52,19 +52,19 @@ export const meta: Meta = {
 							'- You can only place the tiles in one of the rows on your player board.',
 							'- You must place all tiles of the same color in a row.',
 							'- Any overflow of tiles will be moved to the penalty line.',
-						]
-					}
+						],
+					},
 				],
 			},
 			{
 				title: 'Scoring',
 				lines: [
-					'- Happens when there are no tiles left in factories.',
+					'- Happens when there are no tiles left in factories/waste.',
 					'- For each filled row, place one tile on the wall in the corresponding row and type.',
 					'- Every row/column of tiles gives you points equal to the number of tiles in the row/column.',
-					'- Every filled row gives 2 points, every column 7, every type 10.',
-					'- The game ends when a row is filled.'
-				]
+					'- After the game, each filled row gives 2 points, every column 7, every type 10.',
+					'- The game ends when a row is filled.',
+				],
 			},
 		],
 	},
