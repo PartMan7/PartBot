@@ -76,6 +76,7 @@ export default {
 		IN_PROGRESS: 'Cette partie est déjà en cours. Otaku.',
 		IS_FULL: "Il n'y a plus de place pour de nouveaux joueurs.",
 		NOT_FOUND: 'Impossible de trouver la partie en question...',
+		NO_DATA: "Ce jeu n'a pas de guide de jeu.",
 		NOT_PLAYING: [
 			"Vous n'êtes pas un joueur !",
 			'Vous ne jouez pas, otaku.',

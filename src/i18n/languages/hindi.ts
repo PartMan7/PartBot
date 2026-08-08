@@ -72,6 +72,7 @@ export default {
 		IN_PROGRESS: 'Yeh game pehle hi chal raha hai. Weeb.',
 		IS_FULL: 'Game mein ab aur khiladi nahi liye ja sakte.',
 		NOT_FOUND: 'Aap jo game chahte the, woh nahi mila...',
+		NO_DATA: 'Is game ka how-to-play guide nahi hai.',
 		NOT_PLAYING: 'Aap nahi khel rahe ho, weeb.',
 		NOT_STARTED: 'Game abhi tak shuru nahi hua hai.',
 		CANNOT_START: 'Game shuru nahi kiya ja sakta! Kripya khiladiyon ko dekhein.',

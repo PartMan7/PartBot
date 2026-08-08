@@ -1,3 +1,4 @@
+import { swadloonExample } from '@/ps/games/splendor/htpContent';
 import { GamesList } from '@/ps/games/types';
 import { fromHumanTime } from '@/utils/humanTime';
 
@@ -23,9 +24,10 @@ export const meta: Meta = {
 				lines: [
 					'Each Card consists of 3 components:',
 					'- Cost (bottom-left): The amount of Gems needed to buy it.',
-					'- Type (top-right): Each Card acts as a permanent gem of the Type indicated.',
+					'- Type (top-right): Each Card acts as a permanent token of that type.',
 					'- Point (top-left): The value each Card is worth.',
 				],
+				content: swadloonExample,
 			},
 			{
 				title: 'Gameplay',
@@ -34,7 +36,7 @@ export const meta: Meta = {
 					{
 						title: 'Pick up Gems',
 						lines: [
-							'- Take 3 different OR 2 of the same color (only if >=4 of that color available).',
+							'- Take 3 different OR 2 of the same type (only if >=4 of that type available).',
 							'- Max 10 Gems can be held at a time.',
 							'- If >10, choose which to return.',
 						],

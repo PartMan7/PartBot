@@ -10,25 +10,43 @@ import { fromHumanTime, toHumanTime } from '@/utils/humanTime';
 import { Timer } from '@/utils/timer';
 import { toId } from '@/utils/toId';
 
-import type { NoTranslate, ToTranslate, TranslationFn } from '@/i18n/types';
+import type { NoTranslate, TranslationFn } from '@/i18n/types';
 import type { CommonGame } from '@/ps/games/game';
 import type { BaseModEntry } from '@/ps/games/mods';
 import type { GameHTPData, HTPDropdown, HTPImage } from '@/ps/games/types';
 import type { PSCommand, PSCommandChild } from '@/types/chat';
 import type { Room } from 'ps-client';
 import type { HTMLopts } from 'ps-client/classes/common';
-import type { ReactElement } from 'react';
 
-const guideImageUrl = (path: HTPImage['path']) => `${process.env.WEB_URL}/static/guides/${path}`;
+const guideImageUrl = (path: HTPImage['path']) => (/^https?:\/\//.test(path) ? path : `${process.env.WEB_URL}/static/guides/${path}`);
+
+const HTPLine = ({ line }: { line: string }) => {
+	const parts = line.split(/(https?:\/\/[^\s]+)/g);
+	if (parts.length === 1) return <>{line}</>;
+
+	return (
+		<>
+			{parts.map((part, idx) =>
+				/^https?:\/\//.test(part) ? (
+					<a key={idx} href={part} target="_blank" rel="noopener noreferrer">
+						{part}
+					</a>
+				) : (
+					part
+				)
+			)}
+		</>
+	);
+};
 
 const HTPSection = ({ section }: { section: HTPDropdown }) => {
 	return (
 		<details style={{ margin: '4px 0 4px 8px', cursor: 'pointer' }}>
-			<summary style={{ fontWeight: 'bold', color: '#e4e4e4' }}>{section.title}</summary>
-			<div style={{ padding: '2px 0 2px 8px', color: '#ddd', fontSize: '13px' }}>
+			<summary style={{ fontWeight: 'bold' }}>{section.title}</summary>
+			<div style={{ padding: '2px 0 2px 8px', fontSize: '0.95em' }}>
 				{section.lines?.map((line, idx) => (
 					<div key={idx} style={{ margin: '2px 0' }}>
-						{line}
+						<HTPLine line={line} />
 					</div>
 				))}
 				{section.images?.map((image, idx) => (
@@ -36,9 +54,12 @@ const HTPSection = ({ section }: { section: HTPDropdown }) => {
 						key={idx}
 						src={guideImageUrl(image.path)}
 						alt={image.alt ?? ''}
-						style={{ display: 'block', width: image.width ?? 170, marginTop: 4 }}
+						width={image.width ?? 170}
+						height={image.height ?? 178}
+						style={{ display: 'block', marginTop: 4 }}
 					/>
 				))}
+				{section.content}
 				{section.subsections?.map((sub, idx) => <HTPSection key={idx} section={sub} />)}
 			</div>
 		</details>
@@ -50,17 +71,16 @@ const HowToPlayBox = ({ data }: { data: GameHTPData }) => {
 		<div
 			className="infobox"
 			style={{
-				// TODO: Need to check this on (ew) light mode
 				padding: '10px',
 				borderRadius: '5px',
-				backgroundColor: '#1b1c1d',
-				border: '1px solid #444',
-				color: '#fff',
-				fontFamily: 'sans-serif',
+				border: '1px solid',
 			}}
 		>
 			<div style={{ fontWeight: 'bold', marginBottom: '8px', borderBottom: '1px solid #444', paddingBottom: '4px' }}>
-				Goal: <span style={{ fontWeight: 'normal' }}>{data.goal}</span>
+				Goal:{' '}
+				<span style={{ fontWeight: 'normal' }}>
+					<HTPLine line={data.goal} />
+				</span>
 			</div>
 
 			{data.sections.map((sec, idx) => (
@@ -207,21 +227,16 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 		},
 		help: `Game module for ${Game.meta.name}. See subcommands.`,
 		syntax: 'CMD',
-		async run({ calledFrom, broadcastHTML, message }) {
-			const sendHTML = (HTML: ReactElement) => {
-				if (calledFrom && calledFrom.at(-1) !== 'help') return message.replyHTML(HTML);
-				else return broadcastHTML(HTML);
-			};
-			const Bot = message.parent;
-			return sendHTML(
-				<div className="infobox" style={{ maxWidth: 400 }}>
+		async run({ broadcastHTML, message }) {
+			return broadcastHTML(
+				<div className="infobox" style={{ padding: '0 16px 0' }}>
 					<p>
 						Hi, to make a game of {gameId}, you&nbsp;
 						{Game.meta.players === 'single' ? `can use ,${gameId} create!` : 'need to ask a staff member!'}
 					</p>
 					<p>
 						If you want to learn how to play, check{' '}
-						<Button name="send" value={`/msg ${Bot.status.userid},${prefix}${gameId} help`}>
+						<Button name="send" value={`/botmsg ${message.parent.status.userid},${prefix}${gameId} help`}>
 							this
 						</Button>{' '}
 						out!
@@ -231,6 +246,16 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 		},
 		categories: ['game'],
 		children: {
+			help: {
+				name: 'help',
+				aliases: ['h'],
+				help: 'Shows this help message.',
+				syntax: 'CMD',
+				flags: { allowPMs: true, noDisplay: true },
+				async run({ command, run }) {
+					return run(`help ${command[0]}`);
+				},
+			},
 			create: {
 				name: 'create',
 				aliases: ['new', 'n'],
@@ -297,15 +322,15 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 					}
 				},
 			},
-			help: {
-				name: 'help',
-				aliases: ['htp', 'howtoplay'],
+			htp: {
+				name: 'htp',
+				aliases: ['howtoplay'],
 				help: 'Shows the how-to-play for this game.',
 				flags: { allowPMs: true },
 				syntax: 'CMD',
-				async run({ message }) {
+				async run({ message, $T }) {
 					const htpData = Game.meta.htp;
-					if (!htpData) throw new ChatError('GAME.NO_DATA' as ToTranslate);
+					if (!htpData) throw new ChatError($T('GAME.NO_DATA'));
 					return message.replyHTML(<HowToPlayBox data={htpData} />);
 				},
 			},

@@ -75,6 +75,7 @@ export default {
 		IN_PROGRESS: 'Este jogo já está em andamento. Weeb.',
 		IS_FULL: 'Não há mais espaço para jogadores.',
 		NOT_FOUND: 'Não foi possível encontrar o jogo que você quis dizer...',
+		NO_DATA: 'Este jogo não tem um guia de como jogar.',
 		NOT_PLAYING: [
 			'Você não é um jogador!',
 			'Você não está jogando, weeb.',

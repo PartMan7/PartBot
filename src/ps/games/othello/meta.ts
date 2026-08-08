@@ -24,7 +24,7 @@ export const meta: Meta = {
 			{
 				title: 'Initial board setup',
 				lines: ['- 2 white and 2 black discs start in the center.'],
-				images: [{ path: 'othello/setup.png', alt: 'Initial Othello board setup', width: 170 }],
+				images: [{ path: 'othello/setup.png', alt: 'Initial Othello board setup', width: 170, height: 178 }],
 			},
 			{
 				title: 'Gameplay',
