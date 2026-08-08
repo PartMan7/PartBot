@@ -20,13 +20,13 @@ export const meta: Meta = {
 	timer: fromHumanTime('1 min'),
 
 	htp: {
-		goal: 'Get four of their colored discs in a row—horizontally, vertically, or diagonally.',
+		goal: 'Get four of your colored discs in a row—horizontally, vertically, or diagonally.',
 		sections: [
 			{
 				title: 'Gameplay',
 				lines: [
 					'- Players take turns dropping one disc into one of the seven columns.',
-					'- Discs stack on top of each other in the selected column.'
+					'- Discs stack on top of each other in the selected column.',
 				],
 			},
 		],

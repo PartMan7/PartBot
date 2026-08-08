@@ -16,7 +16,7 @@ export const meta: Meta = {
 	timer: fromHumanTime('2 min'),
 
 	htp: {
-		goal: 'Be the first to get 15 points',
+		goal: 'Be the first to get 15 points.',
 		sections: [
 			{
 				title: 'Cards',
@@ -49,7 +49,6 @@ export const meta: Meta = {
 							'- Take a card so only you can buy it.',
 							'- Also gain a Dragon gem (if possible).',
 							'- Can reserve up to 3 cards only.',
-							'- Cannot win if you have an unbought reserved card.',
 						],
 					},
 				],
@@ -68,7 +67,7 @@ export const meta: Meta = {
 				lines: [
 					'- Once a player reaches 15 points, everyone after them in turn order gets one last turn.',
 					'- If points are tied, the one with fewer Cards wins.',
-					'- If still tied, everyone wins!!!!',
+					'- If still tied, Audiino comes and bullies all winners.',
 				],
 			},
 		],

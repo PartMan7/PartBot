@@ -1,55 +1,64 @@
 import { PSGames } from '@/cache';
 import { gameCache } from '@/cache/games';
+import { prefix } from '@/config/ps';
 import { Games } from '@/ps/games';
 import { renderBackups, renderMenu } from '@/ps/games/menus';
 import { generateId } from '@/ps/games/utils';
 import { ChatError } from '@/utils/chatError';
+import { Button } from '@/utils/components/ps';
 import { fromHumanTime, toHumanTime } from '@/utils/humanTime';
 import { Timer } from '@/utils/timer';
 import { toId } from '@/utils/toId';
 
-import type { NoTranslate, TranslationFn, ToTranslate } from '@/i18n/types';
+import type { NoTranslate, ToTranslate, TranslationFn } from '@/i18n/types';
 import type { CommonGame } from '@/ps/games/game';
 import type { BaseModEntry } from '@/ps/games/mods';
-import type { HTPDropdown, GameHTPData } from '@/ps/games/types';
+import type { GameHTPData, HTPDropdown, HTPImage } from '@/ps/games/types';
 import type { PSCommand, PSCommandChild } from '@/types/chat';
 import type { Room } from 'ps-client';
 import type { HTMLopts } from 'ps-client/classes/common';
-
-
-import { Button, Username } from '@/utils/components/ps';
-import { prefix } from '@/config/ps';
 import type { ReactElement } from 'react';
-import { groupSub } from '@/utils/groupSub';
+
+const guideImageUrl = (path: HTPImage['path']) => `${process.env.WEB_URL}/static/guides/${path}`;
 
 const HTPSection = ({ section }: { section: HTPDropdown }) => {
 	return (
 		<details style={{ margin: '4px 0 4px 8px', cursor: 'pointer' }}>
-			<summary style={{ fontWeight: 'bold', color: '#e4e4e4' }}>
-				{section.title}
-			</summary>
+			<summary style={{ fontWeight: 'bold', color: '#e4e4e4' }}>{section.title}</summary>
 			<div style={{ padding: '2px 0 2px 8px', color: '#ddd', fontSize: '13px' }}>
-				{section.lines.map((line, idx) => (
-					<div key={idx} style={{ margin: '2px 0' }}>{line}</div>
+				{section.lines?.map((line, idx) => (
+					<div key={idx} style={{ margin: '2px 0' }}>
+						{line}
+					</div>
 				))}
-				{section.subsections?.map((sub, idx) => (
-					<HTPSection key={idx} section={sub} />
+				{section.images?.map((image, idx) => (
+					<img
+						key={idx}
+						src={guideImageUrl(image.path)}
+						alt={image.alt ?? ''}
+						style={{ display: 'block', width: image.width ?? 170, marginTop: 4 }}
+					/>
 				))}
+				{section.subsections?.map((sub, idx) => <HTPSection key={idx} section={sub} />)}
 			</div>
 		</details>
 	);
 };
 
-const HowToPlayBox = ({ gameName, data }: { gameName: string; data: GameHTPData }) => {
+const HowToPlayBox = ({ data }: { data: GameHTPData }) => {
 	return (
-		<div className="infobox" style={{
-			padding: '10px',
-			borderRadius: '5px',
-			backgroundColor: '#1b1c1d',
-			border: '1px solid #444',
-			color: '#fff',
-			fontFamily: 'sans-serif'
-		}}>
+		<div
+			className="infobox"
+			style={{
+				// TODO: Need to check this on (ew) light mode
+				padding: '10px',
+				borderRadius: '5px',
+				backgroundColor: '#1b1c1d',
+				border: '1px solid #444',
+				color: '#fff',
+				fontFamily: 'sans-serif',
+			}}
+		>
 			<div style={{ fontWeight: 'bold', marginBottom: '8px', borderBottom: '1px solid #444', paddingBottom: '4px' }}>
 				Goal: <span style={{ fontWeight: 'normal' }}>{data.goal}</span>
 			</div>
@@ -198,7 +207,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 		},
 		help: `Game module for ${Game.meta.name}. See subcommands.`,
 		syntax: 'CMD',
-		async run({ run, command, calledFrom, broadcastHTML, $T, message }) {
+		async run({ calledFrom, broadcastHTML, message }) {
 			const sendHTML = (HTML: ReactElement) => {
 				if (calledFrom && calledFrom.at(-1) !== 'help') return message.replyHTML(HTML);
 				else return broadcastHTML(HTML);
@@ -207,7 +216,8 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 			return sendHTML(
 				<div className="infobox" style={{ maxWidth: 400 }}>
 					<p>
-						{`Hi, to make a game of ${gameId}, you ${Game.meta.players === 'single' ? `can use ,${gameId} create! ` : 'need to ask a staff member!'}`}
+						Hi, to make a game of {gameId}, you&nbsp;
+						{Game.meta.players === 'single' ? `can use ,${gameId} create!` : 'need to ask a staff member!'}
 					</p>
 					<p>
 						If you want to learn how to play, check{' '}
@@ -293,10 +303,10 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				help: 'Shows the how-to-play for this game.',
 				flags: { allowPMs: true },
 				syntax: 'CMD',
-				async run({ message, arg }) {
+				async run({ message }) {
 					const htpData = Game.meta.htp;
 					if (!htpData) throw new ChatError('GAME.NO_DATA' as ToTranslate);
-					return message.replyHTML(<HowToPlayBox gameName={Game.meta.name} data={htpData} />);
+					return message.replyHTML(<HowToPlayBox data={htpData} />);
 				},
 			},
 			...conditionalCommand(

@@ -19,20 +19,31 @@ export const meta: Meta = {
 	timer: fromHumanTime('1 min'),
 
 	htp: {
-		goal: "Place discs on the board to surround and flip your opponent's discs.",
+		goal: 'Have more discs of your color than your opponent when the game ends.',
 		sections: [
+			{
+				title: 'Initial board setup',
+				lines: ['- 2 white and 2 black discs start in the center.'],
+				images: [{ path: 'othello/setup.png', alt: 'Initial Othello board setup', width: 170 }],
+			},
 			{
 				title: 'Gameplay',
 				lines: [
-					'- Players take turns placing discs on the board.',
-					"- A valid move must outflank (or 'sandwich') at least one of your opponent's discs vertically, horizontally, or diagonally.",
-					"- When a disc is placed, it flips all of the opponent's discs that are newly outflanked.",
-					'- If a player does not have a valid move, then the turn passes to the other player.',
+					'- Black moves first, then white.',
+					'- A valid move must outflank at least one opponent disc vertically, horizontally, or diagonally.',
+					'- Outflank: your disc borders opponent row(s) at both ends.',
+					'- If you have no valid move, your turn is skipped.',
+					'- Game ends when neither player can move or the board is full.',
 				],
 			},
 			{
+				title: 'Valid move example',
+				lines: ['- Black outflanks White vertically, horizontally, and diagonally (not all three required).'],
+				images: [{ path: 'othello/valid-move.gif', alt: 'Valid Othello move example', width: 170 }],
+			},
+			{
 				title: 'Win conditions',
-				lines: ['- The game ends when no more valid moves can be made.', '- The player with the most discs at the end wins.'],
+				lines: ['- Most discs wins.'],
 			},
 		],
 	},

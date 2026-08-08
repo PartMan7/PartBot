@@ -2,9 +2,17 @@ import type { TranslatedText } from '@/i18n/types';
 import type { ModData, ModEnum } from '@/ps/games/mods';
 import type { Satisfies } from '@/types/common';
 
+export interface HTPImage {
+	/** Path under `/static/guides/`, e.g. `othello/setup.png`. */
+	path: string;
+	alt?: string;
+	width?: number;
+}
+
 export interface HTPDropdown {
 	title: string;
-	lines: string[];
+	lines?: string[];
+	images?: HTPImage[];
 	subsections?: HTPDropdown[];
 }
 

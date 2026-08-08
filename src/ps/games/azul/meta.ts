@@ -25,7 +25,7 @@ export const meta: Meta = {
 	timer: fromHumanTime('45 sec'),
 
 	htp: {
-		goal: 'Be the first to get 7 points.',
+		goal: 'Have the highest score when any player completes a wall row.',
 		sections: [
 			{
 				title: 'Setup',
@@ -61,7 +61,7 @@ export const meta: Meta = {
 				lines: [
 					'- Happens when there are no tiles left in factories/waste.',
 					'- For each filled row, place one tile on the wall in the corresponding row and type.',
-					'- Every row/column of tiles gives you points equal to the number of tiles in the row/column.',
+					'- Each wall tile scores contiguous horizontal and vertical lines through it.',
 					'- After the game, each filled row gives 2 points, every column 7, every type 10.',
 					'- The game ends when a row is filled.',
 				],
