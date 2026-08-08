@@ -1,6 +1,28 @@
 import type { TranslatedText } from '@/i18n/types';
 import type { ModData, ModEnum } from '@/ps/games/mods';
 import type { Satisfies } from '@/types/common';
+import type { ReactElement } from 'react';
+
+export interface HTPImage {
+	/** Path under `/static/guides/`, e.g. `othello/setup.png`. */
+	path: string;
+	alt?: string;
+	width?: number;
+	height?: number;
+}
+
+export interface HTPDropdown {
+	title: string;
+	lines?: string[];
+	images?: HTPImage[];
+	content?: ReactElement;
+	subsections?: HTPDropdown[];
+}
+
+export interface GameHTPData {
+	goal: string;
+	sections: HTPDropdown[];
+}
 
 export type Theme<Colors extends Partial<Record<string, string | null>> = Partial<Record<string, string | null>>> = {
 	id: string;
@@ -32,6 +54,9 @@ export type Meta = Readonly<
 
 		/** Enables `offerdraw`: pending offer expires after 1 minute or when any player makes a move. */
 		canOfferDraws?: boolean;
+
+		/** How to play instructions. */
+		htp: GameHTPData;
 
 		// UGO-CODE
 		/**

@@ -1,3 +1,4 @@
+import { swadloonExample } from '@/ps/games/splendor/htpContent';
 import { GamesList } from '@/ps/games/types';
 import { fromHumanTime } from '@/utils/humanTime';
 
@@ -15,6 +16,64 @@ export const meta: Meta = {
 	pokeTimer: fromHumanTime('1 min'),
 	timer: fromHumanTime('2 min'),
 
+	htp: {
+		goal: 'Be the first to get 15 points.',
+		sections: [
+			{
+				title: 'Cards',
+				lines: [
+					'Each Card consists of 3 components:',
+					'- Cost (bottom-left): The amount of Gems needed to buy it.',
+					'- Type (top-right): Each Card acts as a permanent token of that type.',
+					'- Point (top-left): The value each Card is worth.',
+				],
+				content: swadloonExample,
+			},
+			{
+				title: 'Gameplay',
+				lines: ['On your turn choose 1 action:'],
+				subsections: [
+					{
+						title: 'Pick up Gems',
+						lines: [
+							'- Take 3 different OR 2 of the same type (only if >=4 of that type available).',
+							'- Max 10 Gems can be held at a time.',
+							'- If >10, choose which to return.',
+						],
+					},
+					{
+						title: 'Buy a Card',
+						lines: ['- Pay Gems equal to the cost to make it yours.', '- No game limit on number of Cards buyable.'],
+					},
+					{
+						title: 'Reserve a Card',
+						lines: [
+							'- Take a card so only you can buy it.',
+							'- Also gain a Dragon gem (if possible).',
+							'- Can reserve up to 3 cards only.',
+						],
+					},
+				],
+			},
+			{
+				title: 'Trainers',
+				lines: [
+					'Each Trainer card consists of 2 components:',
+					'- Point (top-right): The value each Trainer is worth',
+					'- Requirement (bottom-left): Requires having Cards (not Gems) of that specific type.',
+					'- No payment needed: Trainers are gained automatically when requirements are fulfilled.',
+				],
+			},
+			{
+				title: 'Win conditions',
+				lines: [
+					'- Once a player reaches 15 points, everyone after them in turn order gets one last turn.',
+					'- If points are tied, the one with fewer Cards wins.',
+					'- If still tied, Audiino comes and bullies all winners.',
+				],
+			},
+		],
+	},
 	// UGO-CODE
 	ugo: {
 		cap: 8,

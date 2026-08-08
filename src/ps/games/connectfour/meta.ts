@@ -19,6 +19,18 @@ export const meta: Meta = {
 	pokeTimer: fromHumanTime('30 sec'),
 	timer: fromHumanTime('1 min'),
 
+	htp: {
+		goal: 'Get four of your colored discs in a row—horizontally, vertically, or diagonally.',
+		sections: [
+			{
+				title: 'Gameplay',
+				lines: [
+					'- Players take turns dropping one disc into one of the seven columns.',
+					'- Discs stack on top of each other in the selected column.',
+				],
+			},
+		],
+	},
 	// UGO-CODE
 	ugo: {
 		cap: 12,
