@@ -328,9 +328,9 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				help: 'Shows the how-to-play for this game.',
 				flags: { allowPMs: true },
 				syntax: 'CMD',
-				async run({ message }) {
+				async run({ broadcastHTML }) {
 					const htpData = Game.meta.htp;
-					return message.replyHTML(<HowToPlayBox data={htpData} />);
+					return broadcastHTML(<HowToPlayBox data={htpData} />);
 				},
 			},
 			...conditionalCommand(
