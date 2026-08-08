@@ -12,7 +12,12 @@ export const command: PSCommand = {
 	syntax: 'CMD [menu]',
 	perms: Symbol.for('games.create'),
 	categories: ['game'],
-	extendedAliases: { backups: ['games', 'backups'], bu: ['games', 'backups'] },
+	extendedAliases: {
+		backups: ['games', 'backups'],
+		bu: ['games', 'backups'],
+		howtoplay: ['games', 'howtoplay'],
+		htp: ['games', 'howtoplay'],
+	},
 	async run({ run }) {
 		return run('games menu');
 	},
@@ -45,6 +50,15 @@ export const command: PSCommand = {
 				const opts: HTMLopts = { name: 'games-menu' };
 				broadcastHTML(<Menu />, opts);
 				message.target.sendHTML(<Menu staff />, { ...opts, rank: '%' });
+			},
+		},
+		howtoplay: {
+			name: 'howtoplay',
+			aliases: ['htp'],
+			help: 'Shows the how-to-play for a game.',
+			syntax: 'CMD [game]',
+			async run({ arg, run }) {
+				return run(`${arg} htp`);
 			},
 		},
 		backups: {
