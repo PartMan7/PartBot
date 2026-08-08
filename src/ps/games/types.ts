@@ -56,7 +56,7 @@ export type Meta = Readonly<
 		canOfferDraws?: boolean;
 
 		/** How to play instructions. */
-		htp?: GameHTPData;
+		htp: GameHTPData;
 
 		// UGO-CODE
 		/**

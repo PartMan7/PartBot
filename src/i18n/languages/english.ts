@@ -73,7 +73,6 @@ export default {
 		IN_PROGRESS: 'This game is already in progress. Weeb.',
 		IS_FULL: 'The game has no more space for players.',
 		NOT_FOUND: "Couldn't find the game you meant...",
-		NO_DATA: 'This game has no how-to-play guide.',
 		NOT_PLAYING: [
 			"You're not a player!",
 			"You're not playing, weeb.",

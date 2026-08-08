@@ -328,9 +328,8 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				help: 'Shows the how-to-play for this game.',
 				flags: { allowPMs: true },
 				syntax: 'CMD',
-				async run({ message, $T }) {
+				async run({ message }) {
 					const htpData = Game.meta.htp;
-					if (!htpData) throw new ChatError($T('GAME.NO_DATA'));
 					return message.replyHTML(<HowToPlayBox data={htpData} />);
 				},
 			},
