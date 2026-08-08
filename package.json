@@ -5,8 +5,8 @@
 	"main": "src/index.js",
 	"scripts": {
 		"debug": "./scripts/debug-games/start.sh",
-		"lint": "eslint src --ext .ts",
-		"lint:fix": "eslint src --ext .ts --fix",
+		"lint": "eslint src --ext .ts --ext .tsx",
+		"lint:fix": "eslint src --ext .ts --ext .tsx --fix",
 		"notify-unpushed": "sh scripts/notify_unpushed.sh",
 		"secrets-check": "sh scripts/secrets_check.sh",
 		"prettify": "prettier -w",
