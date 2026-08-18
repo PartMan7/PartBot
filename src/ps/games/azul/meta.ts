@@ -22,7 +22,7 @@ export const meta: Meta = {
 
 	autostart: false,
 	pokeTimer: fromHumanTime('30 sec'),
-	timer: fromHumanTime('45 sec'),
+	timer: fromHumanTime('60 sec'),
 
 	htp: {
 		goal: 'Have the highest score when any player completes a wall row.',
