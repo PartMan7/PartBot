@@ -227,12 +227,14 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 		},
 		help: `Game module for ${Game.meta.name}. See subcommands.`,
 		syntax: 'CMD',
-		async run({ broadcastHTML, message }) {
+		async run({ broadcastHTML, message, checkPermissions }) {
 			return broadcastHTML(
 				<div className="infobox" style={{ padding: '0 16px 0' }}>
 					<p>
 						Hi, to make a game of {gameId}, you&nbsp;
-						{Game.meta.players === 'single' ? `can use ,${gameId} create!` : 'need to ask a staff member!'}
+						{Game.meta.players === 'single' || checkPermissions(Symbol.for('games.create'))
+							? `can use ,${gameId} create!`
+							: 'need to ask a staff member!'}
 					</p>
 					<p>
 						If you want to learn how to play, check{' '}
