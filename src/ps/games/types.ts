@@ -76,7 +76,7 @@ export enum GamesList {
 	Chess = 'chess',
 	ConnectFour = 'connectfour',
 	LightsOut = 'lightsout',
-	LinesOfAction = 'lineofaction',
+	LinesOfAction = 'linesofaction',
 	Mastermind = 'mastermind',
 	Othello = 'othello',
 	Scrabble = 'scrabble',

@@ -3,7 +3,7 @@ import { Battleship, meta as BattleshipMeta } from '@/ps/games/battleship';
 import { Chess, meta as ChessMeta } from '@/ps/games/chess';
 import { ConnectFour, meta as ConnectFourMeta } from '@/ps/games/connectfour';
 import { LightsOut, meta as LightsOutMeta } from '@/ps/games/lightsout';
-import { LinesOfAction, meta as LinesOfActionMeta } from '@/ps/games/lineofaction';
+import { LinesOfAction, meta as LinesOfActionMeta } from '@/ps/games/linesofaction';
 import { Mastermind, meta as MastermindMeta } from '@/ps/games/mastermind';
 import { Othello, meta as OthelloMeta } from '@/ps/games/othello';
 import { Scrabble, meta as ScrabbleMeta } from '@/ps/games/scrabble';

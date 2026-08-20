@@ -2,17 +2,17 @@ import { EmbedBuilder } from 'discord.js';
 
 import { WINNER_ICON } from '@/discord/constants/emotes';
 import { BaseGame } from '@/ps/games/game';
-import { render } from '@/ps/games/lineofaction/render';
+import { render } from '@/ps/games/linesofaction/render';
 import { createGrid } from '@/ps/games/utils';
 
 import type { TranslatedText } from '@/i18n/types';
 import type { BaseContext } from '@/ps/games/game';
-import type { Log } from '@/ps/games/lineofaction/logs';
-import type { Board, Move, RenderCtx, State, Turn, WinCtx } from '@/ps/games/lineofaction/types';
+import type { Log } from '@/ps/games/linesofaction/logs';
+import type { Board, Move, RenderCtx, State, Turn, WinCtx } from '@/ps/games/linesofaction/types';
 import type { EndType } from '@/ps/games/types';
 import type { User } from 'ps-client';
 
-export { meta } from '@/ps/games/lineofaction/meta';
+export { meta } from '@/ps/games/linesofaction/meta';
 
 const DIRECTIONS: [number, number][] = [
 	[-1, -1],

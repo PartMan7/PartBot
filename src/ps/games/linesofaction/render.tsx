@@ -1,7 +1,7 @@
 import { Table } from '@/ps/games/render';
 import { Button } from '@/utils/components/ps';
 
-import type { RenderCtx, Turn } from '@/ps/games/lineofaction/types';
+import type { RenderCtx, Turn } from '@/ps/games/linesofaction/types';
 import type { CellRenderer } from '@/ps/games/render';
 import type { ReactElement } from 'react';
 

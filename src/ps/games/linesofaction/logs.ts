@@ -1,4 +1,4 @@
-import type { Turn } from '@/ps/games/lineofaction/types';
+import type { Turn } from '@/ps/games/linesofaction/types';
 import type { BaseLog } from '@/ps/games/types';
 import type { Satisfies, SerializedInstance } from '@/types/common';
 
