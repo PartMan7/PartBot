@@ -20,7 +20,7 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 			<td style={{ height: 30, width: 30, background, borderCollapse: 'collapse', border: '1px solid black' }}>
 				{move ? (
 					<Button
-						value={`${this.msg} move ${move.from[0]}-${move.from[1]}-${move.to[0]}-${move.to[1]}`}
+						value={`${this.msg} ! move ${move.from[0]}-${move.from[1]}-${move.to[0]}-${move.to[1]}`}
 						style={{
 							...pieceStyles,
 							border: '2px dashed #3366cc',
@@ -31,7 +31,7 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 					</Button>
 				) : canSelect ? (
 					<Button
-						value={`${this.msg} select ${i}-${j}`}
+						value={`${this.msg} ! select ${i}-${j}`}
 						style={{ ...pieceStyles, border: selected ? '2px solid #3366cc' : 'none', background: cell === 'W' ? 'white' : '#333' }}
 					>
 						{' '}
