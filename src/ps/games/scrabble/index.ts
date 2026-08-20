@@ -84,7 +84,7 @@ export class Scrabble extends BaseGame<State> {
 			!this.__sticky &&
 			this.mod === ScrabbleMods.CRAZYMONS &&
 			Object.values(this.players).some(p => p.id === 'yoshman8') &&
-			this.prng() < 0.01
+			this.prng() > 0.01
 		) {
 			this.__sticky = this.state.bag.random(this.prng)!;
 		}
