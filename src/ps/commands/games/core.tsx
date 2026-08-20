@@ -233,7 +233,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 					<p>
 						Hi, to make a game of {gameId}, you&nbsp;
 						{Game.meta.players === 'single' || checkPermissions(Symbol.for('games.create'))
-							? `can use ,${gameId} create!`
+							? `can use ${prefix}${gameId} create!`
 							: 'need to ask a staff member!'}
 					</p>
 					<p>
