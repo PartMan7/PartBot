@@ -1,0 +1,122 @@
+---
+description: Add a new Pokémon Showdown room game under src/ps/games (any type: grid, single-player, N-player, forms, hidden info)
+globs:
+  - src/ps/games/**
+  - scripts/debug-games/**
+alwaysApply: false
+---
+
+# Creating a PS room game
+
+Do not invent a command file. `src/ps/commands/games/core.tsx` builds `/<id>` from `Games`. Copy the **closest existing game**, then strip what you don't need.
+
+| Kind | Copy | Why |
+|------|------|-----|
+| 2-player grid, click a cell | `othello` | simplest `play i-j` |
+| Select piece, then destination | `chess` / `linesofaction` | `action()` parses `select` / `move` from ctx |
+| Drop-in-column / one param | `connectfour` | ctx is a single index |
+| Dice / "just go" | `snakesladders` | `${this.msg} !` with empty ctx |
+| N-player, no named sides | `azul` / `splendor` | `minSize`/`maxSize`, `autostart: false` |
+| Single-player puzzle | `lightsout` | `players: 'single'`, `abbr` required |
+| Guess / typed input | `mastermind` | `Form` + `{field}` placeholders |
+| Hidden boards / setup phase | `battleship` | per-player state, `update(player.id)` |
+| Mods or themes | `scrabble` / `chess` | `meta.mods` or `meta.themes` |
+
+## Naming (must all agree)
+
+- Folder name = `GamesList` **string value**.
+- `meta.name` with spaces stripped = exported class (`Lights Out` → `LightsOut`).
+- Id is concatenated lowercase (`linesofaction`, `snakesladders`).
+
+## Files
+
+Required: `meta.ts`, `types.ts`, `index.ts` (`export { meta }`), `render.tsx`.
+Add `logs.ts` if you record moves; `constants.ts` / `mods.ts` only if the template has them.
+
+Register in two places only:
+
+1. `GamesList` in `src/ps/games/types.ts`
+2. import + `Games` map in `src/ps/games/index.ts`
+
+Do **not** add UGO spotlight (`BOARD_GAMES_STRUCHNI_ORDER`) or a custom replay page unless asked. Generic replay is `/api/<id>/<gameId>` + `src/web/react/pages/[game].tsx`.
+
+## Meta knobs
+
+- `players: 'many'` (default table games) or `'single'` (needs `abbr`; id is `#<abbr>-<userid>`).
+- `turns`: named sides (`B`/`W`). Omit for free-for-all — turns become player ids.
+- `minSize` / `maxSize` when not exactly 2.
+- `autostart: true` starts when full; `false` needs staff `,start`.
+- `timer` / `pokeTimer`: `fromHumanTime(...)`. Single-player often has none.
+- `htp`: `{ goal, sections }` — required.
+- `ugo`: copy a similar game or `null`. Don't invent new point tables.
+
+## Button / form routing (easy to get wrong)
+
+`this.msg` (`@#GAMEID`) targets **this instance**. `this.simpleMsg` (`@ROOM <gameType>`) is for watch / create / audience (typical single-player chrome).
+
+Spoof: `@#ID <subcommand> <rest>` → `<gameType> <subcommand> <id>, <rest>`.
+
+Only **`play`** (aliases `p`, `!`) calls `game.action(user, ctx, false)`. Everything after `play`/`!` is `ctx`. Other subcommands (`join`, `watch`, `audience`, `create`) are core commands — do not reuse those words as ctx verbs by putting them next to `this.msg` without `play`/`!`.
+
+```tsx
+// ✅ reaches action(); ctx is whatever follows play/!
+value={`${this.msg} play ${i}-${j}`}
+value={`${this.msg} ! select ${i}-${j}`}
+value={`${this.msg} !`}                    // empty ctx (roll)
+<Form value={`${this.msg} ! x {tiles}`}>  // ctx = "x QZ"
+
+// ❌ parsed as a game subcommand; never hits action()
+value={`${this.msg} select ${i}-${j}`}
+value={`${this.msg} move ${from}-${to}`}
+```
+
+`select` / `move` / `set` are **ctx verbs** parsed inside `action()`, not command names. Use `Button` / `Form` from `@/utils/components/ps`. Grid helper: `Table` from `@/ps/games/render` — skip it if the UI isn't a grid.
+
+## UI (`render.tsx`)
+
+PS room HTML sits in a dark `#page` shell (`color: white`, `background: #000a`). Match existing grid games — copy Othello/Chess patterns, don't invent a palette.
+
+**Chrome defaults** — headers, trays, legend, pickers:
+- `Button`: `background: none`, `color: inherit`. Dim headers: `color: gray`.
+- Borders only where they carry meaning. No `opacity` on text.
+- Do not copy another game's color constant block (`S`/`SS`/`B` from Azul, etc.) into every `render.tsx`.
+
+**Grid boards** — `Table` from `@/ps/games/render`; override default `margin: 20` when the board is the focal element. `labels={null}` when row/col headers don't help (large boards).
+
+**One board, one square** — the cell grid is the board. No nested wrapper with its own border, padding, or rounded frame around the table. Scroll container: `overflow: auto` only.
+
+**Locked board theme** — sparingly, on the central board only when fixed colors improve readability:
+- Theme values local inside the board renderer (not file-level aliases).
+- Empty cells + subtle grid lines = low contrast (visual guides).
+- Interactive elements on the board (valid-move targets, clickable affordances) = higher contrast than the grid.
+- Trays, orientation pickers, and legend stay on inherited `#page` theme — not the locked board palette.
+
+**Valid-move hints** — dashed circles / outlines on target cells (Othello pattern), not filled ghost tiles over the board.
+
+**Option lists** (piece trays, orientation rows) — no bordered box around every item. Unselected: `border: none`. Selected: `outline` or similar, not a padded gray frame.
+
+**Multi-cell previews** — layout from actual cell coordinates (offset by min row/col so shapes don't clip). Markers (stars, labels) render inside the cell they refer to, not absolutely positioned outside the shape.
+
+## Class
+
+- `constructor`: `super(ctx); super.persist(ctx);` then init unless `ctx.backup`. Single-player often `super.after(ctx)` as well (see Lights Out).
+- `action(user, ctx)` is the only click/form entry. Parse `ctx`; `this.throw()` on junk.
+- Persistable data goes in `this.state`. UI-only (`selected`, highlight lists) stays on the instance (not in `backupKeys`); pass into `RenderCtx` only for the viewer who needs it.
+- `createGrid(rows, cols, fill)` when you need a 2D board — first size is rows.
+- `trySkipPlayer(turn)` → true to skip that side (no legal moves). Omit if every turn can always act.
+- Hidden info: `render(side)` gets that player's view; spectators get `side === null`.
+- `WinCtx`: use `Player` from `@/ps/games/types`. `exactOptionalPropertyTypes`: omit optional log fields instead of assigning `undefined`.
+- `render(side)` → `render.bind(this.renderCtx)(ctx)`. Reuse `GAME.YOUR_TURN` / `WAITING_FOR_*` / `GAME_ENDED` when they fit; single-player copy from Lights Out / Mastermind.
+
+## Debug the UI
+
+`src/ps/games/test.tsx` is the mock. `debug.ts` watches `src/ps/games` and writes HTML into `scripts/debug-games/live/`.
+
+1. Point `test.tsx` at the new `render` (Azul in that file is the N-player example).
+2. Build whatever that `render` expects (`RenderCtx`, or `(state, extras)` like Lights Out) and `jsxToHTML(render.bind({ msg: 'test', simpleMsg: 'test' })(...))`.
+3. `npm run debug` — `http://localhost:8081`, live-reload 8082, Desktop/Mobile/Ruka widths.
+4. Clicks do not play; layout only.
+
+**Stale HTML is common.** The watcher may not refresh `scripts/debug-games/live/page.html` after render changes — hard refresh is not enough if the file itself is old. Regenerate manually (run `test()` + replace `{HTML}` in the template), then open `localhost:8081/page.html` in a browser. Do not assume layout is correct until you have seen the live page.
+
+Do not commit leftover `test.tsx` pointed at a WIP game unless asked.

@@ -1,5 +1,6 @@
 import { Azul, meta as AzulMeta } from '@/ps/games/azul';
 import { Battleship, meta as BattleshipMeta } from '@/ps/games/battleship';
+import { Blokus, meta as BlokusMeta } from '@/ps/games/blokus';
 import { Chess, meta as ChessMeta } from '@/ps/games/chess';
 import { ConnectFour, meta as ConnectFourMeta } from '@/ps/games/connectfour';
 import { LightsOut, meta as LightsOutMeta } from '@/ps/games/lightsout';
@@ -19,6 +20,10 @@ export const Games = {
 	[GamesList.Battleship]: {
 		meta: BattleshipMeta,
 		instance: Battleship,
+	},
+	[GamesList.Blokus]: {
+		meta: BlokusMeta,
+		instance: Blokus,
 	},
 	[GamesList.Chess]: {
 		meta: ChessMeta,
