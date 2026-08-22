@@ -1,118 +1,69 @@
 import '@/globals';
 
-import { i18n } from '@/i18n';
-import { Tile, VIEW_ACTION_TYPE } from '@/ps/games/azul/constants';
+import { ALL_PIECE_IDS, PIECES } from '@/ps/games/blokus/constants';
 import { ansiToHtml } from '@/utils/ansiToHtml';
 import { cachebustDir } from '@/utils/cachebust';
 import { fsPath } from '@/utils/fsPath';
 import { jsxToHTML } from '@/utils/jsxToHTML';
 
-import type { PlayerBoard, RenderCtx } from '@/ps/games/azul/types';
-
-function mockPlayer(id: string, name: string, partial: Partial<PlayerBoard> = {}): PlayerBoard {
-	return {
-		id,
-		name,
-		score: 0,
-		pattern: [[null], [null, null], [null, null, null], [null, null, null, null], [null, null, null, null, null]],
-		wall: Array.from({ length: 5 }, () => Array.from({ length: 5 }, () => null)),
-		floor: [],
-		...partial,
-	};
-}
+import type { RenderCtx } from '@/ps/games/blokus/types';
 
 export const test: () => Promise<string> = async () => {
 	try {
 		cachebustDir(fsPath('ps', 'games'));
-		const { render } = await import('@/ps/games/azul/render');
+		const { render } = await import('@/ps/games/blokus/render');
 
-		const partman = mockPlayer('partman', 'PartMan', {
-			score: 12,
-			pattern: [
-				[Tile.Water],
-				[Tile.Fire, Tile.Fire],
-				[Tile.Electric, null, null],
-				[null, null, null, null],
-				[Tile.Dark, Tile.Dark, Tile.Dark, null, null],
-			],
-			wall: [
-				[Tile.Water, null, null, null, null],
-				[null, Tile.Water, null, null, null],
-				[null, null, null, null, null],
-				[null, null, null, Tile.Water, null],
-				[null, null, null, null, null],
-			],
-			floor: [Tile.Fire, 'first'],
-		});
+		const partman = 'partman';
+		const partbot = 'partbot';
+		const size = 20;
+		const board = Array.from({ length: size }, () => Array.from({ length: size }, () => null as string | null));
 
-		const partbot = mockPlayer('partbot', 'PartBot', {
-			score: 8,
-			wall: [
-				[null, Tile.Electric, null, null, null],
-				[null, null, null, null, null],
-				[Tile.Dark, null, Tile.Water, null, null],
-				[null, null, null, null, null],
-				[null, null, null, null, Tile.Fire],
-			],
-			pattern: [
-				[null],
-				[Tile.Grass, null],
-				[null, null, null],
-				[Tile.Electric, Tile.Electric, Tile.Electric, null],
-				[null, null, null, null, null],
-			],
-		});
+		board[0][0] = partman;
+		board[0][1] = partman;
+		board[1][0] = partman;
+		board[1][1] = partman;
 
-		const spectator = mockPlayer('partspec', 'PartSpec', { score: 3 });
+		board[size - 1][0] = partbot;
+		board[size - 2][0] = partbot;
+		board[size - 1][1] = partbot;
+		board[size - 2][1] = partbot;
+
+		board[2][2] = partman;
+		board[3][3] = partman;
+		board[4][4] = partman;
+		board[3][2] = partbot;
+		board[4][3] = partbot;
+
+		const remaining = ALL_PIECE_IDS.slice(4);
+		const piece = PIECES['8'];
 
 		const MOCK_RENDER_CTX: RenderCtx = {
 			id: '#TEMP',
 			header: 'Your turn!',
-			$T: i18n(),
-			freeGrid: false,
-			round: 2,
-			bag: [
-				...Array.from({ length: 8 }, () => Tile.Water),
-				...Array.from({ length: 6 }, () => Tile.Electric),
-				...Array.from({ length: 5 }, () => Tile.Fire),
-				...Array.from({ length: 7 }, () => Tile.Grass),
-				...Array.from({ length: 4 }, () => Tile.Dark),
-			],
-			board: {
-				factories: [
-					[Tile.Water, Tile.Fire, Tile.Water, Tile.Electric],
-					[Tile.Dark, Tile.Grass, Tile.Dark, Tile.Grass],
-					[Tile.Fire, Tile.Fire, Tile.Water, Tile.Fire],
-					[Tile.Electric, Tile.Dark, Tile.Fire, Tile.Grass],
-					[Tile.Water, Tile.Water, Tile.Water, Tile.Water],
-					[Tile.Electric, Tile.Fire, Tile.Electric, Tile.Fire],
-					[Tile.Grass, Tile.Dark, Tile.Dark, Tile.Dark],
-				],
-				center: {
-					first: true,
-					[Tile.Water]: 3,
-					[Tile.Electric]: 2,
-					[Tile.Fire]: 2,
-					[Tile.Dark]: 2,
-					[Tile.Grass]: 1,
-				},
+			board,
+			size,
+			turn: partman,
+			side: partman,
+			isActive: true,
+			playerIndex: { [partman]: 0, [partbot]: 3 },
+			pieces: {
+				[partman]: remaining,
+				[partbot]: ALL_PIECE_IDS.slice(5),
 			},
-			view: {
-				type: 'player',
-				active: true,
-				self: 'partman',
-				action: VIEW_ACTION_TYPE.PLACE,
-				source: 0,
-				color: Tile.Water,
-				count: 2,
-				tookFirst: false,
-			},
-			turns: ['partman', 'partbot', 'partspec'],
 			players: {
-				partman,
-				partbot,
-				partspec: spectator,
+				[partman]: { id: 'partman', name: 'PartMan' },
+				[partbot]: { id: 'partbot', name: 'PartBot' },
 			},
+			selectedPiece: '8',
+			selectedOrient: 1,
+			orientations: piece.orientations,
+			validAnchors: [
+				[2, 4],
+				[3, 4],
+				[4, 2],
+				[5, 3],
+			],
+			colors: ['#1e88e5', '#fdd835', '#e53935', '#43a047'],
 		};
 
 		return jsxToHTML(render.bind({ msg: 'test' })(MOCK_RENDER_CTX));
