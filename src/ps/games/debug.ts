@@ -24,7 +24,10 @@ async function baseRenderTemplates(): Promise<void> {
 			Promise.all(
 				templates.map(async templateName => {
 					const template = await fs.readFile(path.join(debugDir, 'templates', templateName), 'utf8');
-					const out = template.replace('{HTML}', html).replaceAll('{HTML_LENGTH}', String(html.length)).replaceAll('{HTML_LIMIT}', String(MAX_PAGE_HTML_LENGTH));
+					const out = template
+						.replace('{HTML}', html)
+						.replaceAll('{HTML_LENGTH}', String(html.length))
+						.replaceAll('{HTML_LIMIT}', String(MAX_PAGE_HTML_LENGTH));
 					await fs.writeFile(path.join(debugDir, 'live', templateName), out);
 				})
 			)
