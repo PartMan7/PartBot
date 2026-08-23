@@ -97,6 +97,35 @@ PS room HTML sits in a dark `#page` shell (`color: white`, `background: #000a`).
 
 **Multi-cell previews** — layout from actual cell coordinates (offset by min row/col so shapes don't clip). Markers (stars, labels) render inside the cell they refer to, not absolutely positioned outside the shape.
 
+## HTML page size (hard cap + target)
+
+Game `render()` output becomes a PS **page** via `user.pageHTML` (`src/ps/games/game.ts`). PS truncates or breaks pages above the cap.
+
+| | Value | Source |
+|---|---|---|
+| Hard cap | **99,500** chars | `MAX_PAGE_HTML_LENGTH` in `src/ps/constants.ts` |
+| **Target (must stay under)** | **~80% → ~79,600** | headroom for worst-case UI states |
+| Serialization | `jsxToHTML` → `renderToStaticMarkup`, no minification yet | `src/utils/jsxToHTML.ts` |
+
+**Why 80%?** Inline styles repeat per element. A typical mid-game view (board + tray + valid-move buttons + orientation picker) is much heavier than an empty board. Blokus 20×20 hit **114k** before trim — board + full piece tray alone was **111k**.
+
+**Measure before you ship UI:**
+
+1. Point `src/ps/games/test.tsx` at your `render` with a **stress mock** — not an empty board. Include max realistic tray size, selected piece, orientation row, and a generous `validAnchors` / valid-move list.
+2. `npm run debug` — watcher logs `HTML N / 99500 (pct%)` (`src/ps/games/debug.ts`). Debug page shows `HTML {HTML_LENGTH} / {HTML_LIMIT}` (`scripts/debug-games/templates/page.html`).
+3. If over **80%**, shrink HTML before polishing pixels. Re-measure after every structural change.
+
+**Shrink HTML without ugly UI** (prefer these over shrinking the board or removing affordances):
+
+- **One element per grid cell** — content directly in `<td>`; no inner wrapper `div` for layout/flex when `margin: auto` or `text-align` on the cell suffices.
+- **Short color tokens** — `#2e3848` beats `rgba(232, 236, 237, 0.18)`; every cell repeats border/background strings.
+- **Local style objects** inside the board renderer (`td`, `dot`, …) — shared keys, not duplicated long literals in JSX.
+- **Skip decorative CSS** on cells — no `box-sizing`, `display:flex`, `overflow:hidden` unless the cell actually needs it.
+- **Option lists multiply cost** — each tray/orientation `Button` + mini-preview is hundreds of chars; keep preview markup lean (see trimmed `PieceMini` in `src/ps/games/blokus/render.tsx`).
+- **Valid-move buttons are expensive** — each anchor is a `<button>` with coordinates in `value`; unavoidable, so budget for them in the stress mock.
+
+Do **not** rely on CSS classes or external stylesheets — game HTML is inline-only. Do **not** assume `jsxToHTML` minifies (TODO in source).
+
 ## Class
 
 - `constructor`: `super(ctx); super.persist(ctx);` then init unless `ctx.backup`. Single-player often `super.after(ctx)` as well (see Lights Out).
@@ -113,9 +142,10 @@ PS room HTML sits in a dark `#page` shell (`color: white`, `background: #000a`).
 `src/ps/games/test.tsx` is the mock. `debug.ts` watches `src/ps/games` and writes HTML into `scripts/debug-games/live/`.
 
 1. Point `test.tsx` at the new `render` (Azul in that file is the N-player example).
-2. Build whatever that `render` expects (`RenderCtx`, or `(state, extras)` like Lights Out) and `jsxToHTML(render.bind({ msg: 'test', simpleMsg: 'test' })(...))`.
-3. `npm run debug` — `http://localhost:8081`, live-reload 8082, Desktop/Mobile/Ruka widths.
-4. Clicks do not play; layout only.
+2. Build a **stress mock** — worst realistic `RenderCtx` (full tray, selection UI, many valid moves). Check HTML length (see **HTML page size** above); must be **under ~80%** of `MAX_PAGE_HTML_LENGTH`.
+3. `jsxToHTML(render.bind({ msg: 'test', simpleMsg: 'test' })(...))` — same path production uses.
+4. `npm run debug` — `http://localhost:8081`, live-reload 8082, Desktop/Mobile/Ruka widths. Console + page header show `HTML N / 99500`.
+5. Clicks do not play; layout only.
 
 **Stale HTML is common.** The watcher may not refresh `scripts/debug-games/live/page.html` after render changes — hard refresh is not enough if the file itself is old. Regenerate manually (run `test()` + replace `{HTML}` in the template), then open `localhost:8081/page.html` in a browser. Do not assume layout is correct until you have seen the live page.
 
