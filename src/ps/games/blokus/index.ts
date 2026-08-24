@@ -108,14 +108,17 @@ export class Blokus extends BaseGame<State> {
 		this.update(this.players[this.turn!].id);
 	}
 
-	place(coords: string) {
-		if (!this.selectedPiece || this.selectedOrient === null) this.throw();
+	place(ctx: string) {
+		if (!this.selectedPiece) this.throw();
+		const [orientPart, coords] = ctx.lazySplit(' ', 1);
+		const orientIndex = parseInt(orientPart);
 		const [i, j] = coords.split('-').map(n => parseInt(n));
-		if (isNaN(i) || isNaN(j)) this.throw();
+		if (isNaN(orientIndex) || isNaN(i) || isNaN(j)) this.throw();
 
 		const turn = this.turn!;
 		const orientations = PIECES[this.selectedPiece].orientations;
-		const cells = orientations[this.selectedOrient];
+		if (orientIndex < 0 || orientIndex >= orientations.length) this.throw();
+		const cells = orientations[orientIndex];
 		if (!this.isValidPlacement(turn, cells, [i, j])) this.throw();
 
 		for (const [dx, dy] of cells) {

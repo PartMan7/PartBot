@@ -1,16 +1,20 @@
 import { CORNERS, PIECES, PLAYER_COLORS } from '@/ps/games/blokus/constants';
 import { Table } from '@/ps/games/render';
+import { HexToOklab, StringToHex } from '@/utils/color';
 import { Button } from '@/utils/components/ps';
 
 import type { RenderCtx, Turn } from '@/ps/games/blokus/types';
 import type { CellRenderer } from '@/ps/games/render';
-import type { ReactElement } from 'react';
+import type { CSSProperties, ReactElement } from 'react';
 
 type This = { msg: string };
 
 const BLOCK = 16;
 const GAP = 1;
 const DOT = 10;
+const BTN: CSSProperties = { background: 'none', color: 'inherit', cursor: 'pointer' };
+const TRAY: CSSProperties = { overflowX: 'auto', maxWidth: '90%', marginTop: 6 };
+const TRAY_ITEM: CSSProperties = { display: 'inline-block', verticalAlign: 'bottom', marginRight: 6 };
 
 function playerColor(ctx: RenderCtx, turn: string): string {
 	return ctx.colors[ctx.playerIndex[turn] ?? 0];
@@ -34,25 +38,27 @@ function PieceMini({
 	refCell?: readonly [number, number];
 	showStar?: boolean;
 }): ReactElement {
-	const minX = Math.min(...cells.map(([x]) => x));
-	const minY = Math.min(...cells.map(([, y]) => y));
-	const maxX = Math.max(...cells.map(([x]) => x));
-	const maxY = Math.max(...cells.map(([, y]) => y));
-	const [rx, ry] = refCell ?? [0, 0];
+	const minRow = Math.min(...cells.map(([row]) => row));
+	const minCol = Math.min(...cells.map(([, col]) => col));
+	const maxRow = Math.max(...cells.map(([row]) => row));
+	const maxCol = Math.max(...cells.map(([, col]) => col));
+	const [refRow, refCol] = refCell ?? [0, 0];
 
-	const w = (maxX - minX + 1) * (size + GAP) + GAP;
-	const h = (maxY - minY + 1) * (size + GAP) + GAP;
+	const w = (maxCol - minCol + 1) * (size + GAP) + GAP;
+	const h = (maxRow - minRow + 1) * (size + GAP) + GAP;
 	const star = showStar ? '★' : '';
+	const hex = StringToHex(color);
+	const onColor = hex && HexToOklab(hex).L > 0.55 ? '#000' : '#fff';
 
 	return (
-		<div style={{ position: 'relative', width: w, height: h }}>
-			{cells.map(([x, y]) => (
+		<div style={{ position: 'relative', width: w, height: h, pointerEvents: 'none' }}>
+			{cells.map(([row, col]) => (
 				<div
-					key={`${x},${y}`}
+					key={`${row},${col}`}
 					style={{
 						position: 'absolute',
-						left: GAP + (x - minX) * (size + GAP),
-						top: GAP + (y - minY) * (size + GAP),
+						left: GAP + (col - minCol) * (size + GAP),
+						top: GAP + (row - minRow) * (size + GAP),
 						width: size,
 						height: size,
 						background: color,
@@ -60,9 +66,10 @@ function PieceMini({
 						fontSize: size > 10 ? size - 4 : 8,
 						lineHeight: `${size}px`,
 						textAlign: 'center',
+						color: star && row === refRow && col === refCol ? onColor : undefined,
 					}}
 				>
-					{star && x === rx && y === ry ? star : null}
+					{star && row === refRow && col === refCol ? star : null}
 				</div>
 			))}
 		</div>
@@ -89,12 +96,12 @@ function renderBoard(this: This, ctx: RenderCtx): ReactElement {
 
 		return (
 			<td style={{ ...td, background: cell ? playerColor(ctx, cell) : slate }}>
-				{cell ? null : isAnchor ? (
+				{cell ? null : isAnchor && ctx.isActive && ctx.selectedOrient !== null ? (
 					<Button
-						value={`${this.msg} ! place ${i}-${j}`}
-						style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: line, display: 'block' }}
+						value={`${this.msg} ! place ${ctx.selectedOrient} ${i}-${j}`}
+						style={{ ...BTN, ...dot, borderColor: line, display: 'block', padding: 0 }}
 					>
-						<div style={{ ...dot, borderColor: line }} />
+						{' '}
 					</Button>
 				) : cornerIdx !== undefined ? (
 					<div style={{ ...dot, borderRadius: 2, borderColor: PLAYER_COLORS[cornerIdx] }} />
@@ -111,28 +118,32 @@ function renderBoard(this: This, ctx: RenderCtx): ReactElement {
 }
 
 function PieceTray(this: This, ctx: RenderCtx): ReactElement | null {
-	if (!ctx.isActive || !ctx.side || !ctx.pieces[ctx.side].length) return null;
+	if (!ctx.side || !ctx.pieces[ctx.side].length) return null;
 	const pieces = [...ctx.pieces[ctx.side]].sort((a, b) => PIECES[b].size - PIECES[a].size || a.localeCompare(b));
+	const color = playerColor(ctx, ctx.side);
+	const selected = ctx.isActive ? ctx.selectedPiece : null;
+	const outline = (pieceId: string) => (selected === pieceId ? '2px solid currentColor' : 'none');
 
 	return (
-		<div style={{ margin: '12px 0' }}>
+		<div style={{ margin: '12px 0', maxWidth: '100%' }}>
 			<b>Your pieces</b>
-			<div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'flex-end', justifyContent: 'center', marginTop: 6 }}>
-				{pieces.map(pieceId => (
-					<Button
-						key={pieceId}
-						value={`${this.msg} ! select ${pieceId}`}
-						style={{
-							background: 'none',
-							border: 'none',
-							padding: 2,
-							cursor: 'pointer',
-							outline: ctx.selectedPiece === pieceId ? '2px solid currentColor' : 'none',
-						}}
-					>
-						<PieceMini cells={PIECES[pieceId].cells} color={playerColor(ctx, ctx.side!)} refCell={PIECES[pieceId].ref} size={11} showStar />
-					</Button>
-				))}
+			<div style={TRAY}>
+				{pieces.map(pieceId => {
+					const mini = <PieceMini cells={PIECES[pieceId].cells} color={color} refCell={PIECES[pieceId].ref} size={11} showStar />;
+					return ctx.isActive ? (
+						<Button
+							key={pieceId}
+							value={`${this.msg} ! select ${pieceId}`}
+							style={{ ...BTN, ...TRAY_ITEM, border: 'none', padding: 2, outline: outline(pieceId) }}
+						>
+							{mini}
+						</Button>
+					) : (
+						<div key={pieceId} style={{ ...TRAY_ITEM, padding: 2 }}>
+							{mini}
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);
@@ -142,18 +153,18 @@ function OrientationPicker(this: This, ctx: RenderCtx): ReactElement | null {
 	if (!ctx.isActive || !ctx.selectedPiece || !ctx.orientations) return null;
 
 	return (
-		<div style={{ margin: '12px 0' }}>
+		<div style={{ margin: '12px 0', maxWidth: '100%' }}>
 			<b>Pick orientation</b> (★ = anchor)
-			<div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'flex-end', justifyContent: 'center', marginTop: 6 }}>
+			<div style={TRAY}>
 				{ctx.orientations.map((orient, i) => (
 					<Button
 						key={i}
 						value={`${this.msg} ! orient ${i}`}
 						style={{
-							background: 'none',
+							...BTN,
+							...TRAY_ITEM,
 							border: 'none',
 							padding: 2,
-							cursor: 'pointer',
 							outline: ctx.selectedOrient === i ? '2px solid currentColor' : 'none',
 						}}
 					>
@@ -169,9 +180,9 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 	return (
 		<center>
 			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
-			<div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center', margin: '8px 0', fontSize: 13 }}>
+			<div style={{ margin: '8px 0', fontSize: 13 }}>
 				{Object.entries(ctx.players).map(([turn, player]) => (
-					<span key={turn} style={{ fontWeight: turn === ctx.turn ? 'bold' : 'normal' }}>
+					<span key={turn} style={{ fontWeight: turn === ctx.turn ? 'bold' : 'normal', marginRight: 12 }}>
 						<span
 							style={{
 								display: 'inline-block',
