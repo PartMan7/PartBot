@@ -91,6 +91,8 @@ PS room HTML sits in a dark `#page` shell (`color: white`, `background: #000a`).
 - Interactive elements on the board (valid-move targets, clickable affordances) = higher contrast than the grid.
 - Trays, orientation pickers, and legend stay on inherited `#page` theme — not the locked board palette.
 
+**STYLES LIKE FLEX AND GRID DO NOT WORK ON PS. DO NOT TRY TO USE FLEXBOXES IN ANY WAY OR FORM.**
+
 **Valid-move hints** — dashed circles / outlines on target cells (Othello pattern), not filled ghost tiles over the board.
 
 **Option lists** (piece trays, orientation rows) — no bordered box around every item. Unselected: `border: none`. Selected: `outline` or similar, not a padded gray frame.
