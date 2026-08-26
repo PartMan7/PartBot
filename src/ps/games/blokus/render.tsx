@@ -16,7 +16,7 @@ const TRAY: CSSProperties = { overflowX: 'auto', maxWidth: '90%', marginTop: 6 }
 const TRAY_ITEM: CSSProperties = { display: 'inline-block', verticalAlign: 'bottom', marginRight: 6 };
 
 function playerColor(ctx: RenderCtx, turn: string): string {
-	return ctx.colors[Object.keys(ctx.players).indexOf(turn)];
+	return ctx.colors[ctx.playerIndex[turn]];
 }
 
 function PieceMini({
@@ -104,7 +104,7 @@ function PieceTray(this: This, ctx: RenderCtx): ReactElement | null {
 	if (!ctx.side || !ctx.pieces[ctx.side].length) return null;
 	const pieces = [...ctx.pieces[ctx.side]].sort((a, b) => PIECES[b].size - PIECES[a].size || a.localeCompare(b));
 	const color = playerColor(ctx, ctx.side);
-	const energy = ['water', 'electric', 'fire', 'grass'][Object.keys(ctx.players).indexOf(ctx.side)];
+	const energy = ['water', 'electric', 'fire', 'grass'][ctx.playerIndex[ctx.side]];
 	const selected = ctx.isActive ? ctx.selectedPiece : null;
 	const outline = (pieceId: string) => (selected === pieceId ? '2px solid currentColor' : 'none');
 
@@ -138,7 +138,7 @@ function PieceTray(this: This, ctx: RenderCtx): ReactElement | null {
 function OrientationPicker(this: This, ctx: RenderCtx): ReactElement | null {
 	if (!ctx.isActive || !ctx.selectedPiece || !ctx.orientations) return null;
 	if (ctx.orientations.length === 1) return null;
-	const energy = ['water', 'electric', 'fire', 'grass'][Object.keys(ctx.players).indexOf(ctx.side!)];
+	const energy = ['water', 'electric', 'fire', 'grass'][ctx.playerIndex[ctx.side!]];
 
 	return (
 		<div style={{ margin: '12px 0', maxWidth: '100%' }}>
@@ -169,25 +169,27 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 		<center>
 			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
 			<div style={{ margin: '8px 0', fontSize: 13 }}>
-				{Object.entries(ctx.players).map(([turn, player]) => (
-					<span key={turn} style={{ fontWeight: turn === ctx.turn ? 'bold' : 'normal', marginRight: 12 }}>
-						<span
-							style={{
-								display: 'inline-block',
-								width: 14,
-								height: 14,
-								background: playerColor(ctx, turn),
-								border: '1px solid gray',
-								borderRadius: 2,
-								marginRight: 5,
-								verticalAlign: 'middle',
-							}}
-						/>
-						{player.name}
-						{ctx.pieces[turn]?.length ? ` (${ctx.pieces[turn].length})` : ' ✓'}
-						{turn === ctx.turn ? ' ◀' : ''}
-					</span>
-				))}
+				{Object.entries(ctx.players)
+					.sort(([turnA], [turnB]) => ctx.playerIndex[turnA] - ctx.playerIndex[turnB])
+					.map(([turn, player]) => (
+						<span key={turn} style={{ fontWeight: turn === ctx.turn ? 'bold' : 'normal', marginRight: 12 }}>
+							<span
+								style={{
+									display: 'inline-block',
+									width: 14,
+									height: 14,
+									background: playerColor(ctx, turn),
+									border: '1px solid gray',
+									borderRadius: 2,
+									marginRight: 5,
+									verticalAlign: 'middle',
+								}}
+							/>
+							{player.name}
+							{ctx.pieces[turn]?.length ? ` (${ctx.pieces[turn].length})` : ' ✓'}
+							{turn === ctx.turn ? ' ◀' : ''}
+						</span>
+					))}
 			</div>
 			{renderBoard.bind(this)(ctx)}
 			{PieceTray.bind(this)(ctx)}
