@@ -284,8 +284,14 @@ function buildOrientations(cells: [number, number][], ref: [number, number]): [n
 	for (let flip = 0; flip < 2; flip++) {
 		for (let rot = 0; rot < 4; rot++) {
 			const [rx, ry] = currentRef;
+			const minX = Math.min(...currentCells.map(([x]) => x));
+			const minY = Math.min(...currentCells.map(([, y]) => y));
 			const relative = currentCells.map(([x, y]) => [x - rx, y - ry] as [number, number]).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
-			const key = relative.map(c => c.join(',')).join('|');
+			const key = currentCells
+				.map(([x, y]) => [x - minX, y - minY])
+				.sort((a, b) => a[0] - b[0] || a[1] - b[1])
+				.map(c => c.join(','))
+				.join('|');
 			if (!seen.has(key)) {
 				seen.add(key);
 				results.push(relative);

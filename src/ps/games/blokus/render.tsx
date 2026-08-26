@@ -1,6 +1,6 @@
 import { PIECES } from '@/ps/games/blokus/constants';
 import { Table } from '@/ps/games/render';
-import { Button } from '@/utils/components/ps';
+import { Button, Username } from '@/utils/components/ps';
 
 import type { RenderCtx, Turn } from '@/ps/games/blokus/types';
 import type { CellRenderer } from '@/ps/games/render';
@@ -102,7 +102,7 @@ function renderBoard(this: This, ctx: RenderCtx): ReactElement {
 
 function PieceTray(this: This, ctx: RenderCtx): ReactElement | null {
 	if (!ctx.side || !ctx.pieces[ctx.side].length) return null;
-	const pieces = [...ctx.pieces[ctx.side]].sort((a, b) => PIECES[b].size - PIECES[a].size || a.localeCompare(b));
+	const pieces = ctx.pieces[ctx.side];
 	const color = playerColor(ctx, ctx.side);
 	const energy = ['water', 'electric', 'fire', 'grass'][ctx.playerIndex[ctx.side]];
 	const selected = ctx.isActive ? ctx.selectedPiece : null;
@@ -131,6 +131,39 @@ function PieceTray(this: This, ctx: RenderCtx): ReactElement | null {
 					);
 				})}
 			</div>
+		</div>
+	);
+}
+
+function OpponentPieces(ctx: RenderCtx): ReactElement | null {
+	const opponents = Object.entries(ctx.players).filter(([turn]) => !ctx.side || turn !== ctx.side);
+	if (!opponents.length) return null;
+
+	return (
+		<div style={{ margin: '12px 0' }}>
+			{opponents.map(([turn, player]) => {
+				const pieces = ctx.pieces[turn];
+				const blocks = pieces.reduce((sum, pieceId) => sum + PIECES[pieceId].size, 0);
+				const energy = ['water', 'electric', 'fire', 'grass'][ctx.playerIndex[turn]];
+				return (
+					<div key={turn} style={{ margin: '8px 0' }}>
+						<Username name={player.name} /> ({blocks} {ctx.$T('GAME.BLOKUS.BLOCKS')})
+						<div style={TRAY}>
+							{pieces.map(pieceId => (
+								<span key={pieceId} style={{ ...TRAY_ITEM, padding: 2 }}>
+									<PieceMini
+										cells={PIECES[pieceId].cells}
+										color={playerColor(ctx, turn)}
+										refCell={PIECES[pieceId].ref}
+										size={11}
+										energy={energy}
+									/>
+								</span>
+							))}
+						</div>
+					</div>
+				);
+			})}
 		</div>
 	);
 }
@@ -193,6 +226,7 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 			</div>
 			{renderBoard.bind(this)(ctx)}
 			{PieceTray.bind(this)(ctx)}
+			{OpponentPieces(ctx)}
 			{OrientationPicker.bind(this)(ctx)}
 			{ctx.isActive && ctx.selectedOrient !== null ? <small>{ctx.$T('GAME.BLOKUS.PLACE_HINT')}</small> : null}
 		</center>
