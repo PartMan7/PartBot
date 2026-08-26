@@ -53,7 +53,7 @@ export class Blokus extends BaseGame<State> {
 		const size = turns.length === 2 ? BOARD_SIZE.two : BOARD_SIZE.many;
 		this.state.size = size;
 		this.state.board = createGrid<Turn | null>(size, size, () => null);
-		this.state.playerIndex = Object.fromEntries(turns.map(turn => [turn, -1]));
+		this.state.playerIndex = Object.fromEntries(turns.map((turn, i) => [turn, i]));
 		this.state.pieces = Object.fromEntries(turns.map(turn => [turn, [...ALL_PIECE_IDS]]));
 		this.state.placed = Object.fromEntries(turns.map(turn => [turn, false]));
 		return { success: true, data: null };
@@ -71,7 +71,7 @@ export class Blokus extends BaseGame<State> {
 		);
 		delete this.state.pieces[turn];
 		delete this.state.placed[turn];
-		delete this.state.playerIndex[newTurn];
+		delete this.state.playerIndex[turn];
 		return { success: true, data: null };
 	}
 
