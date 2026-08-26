@@ -1,5 +1,6 @@
 import '@/globals';
 
+import { i18n } from '@/i18n';
 import { ALL_PIECE_IDS, PIECES } from '@/ps/games/blokus/constants';
 import { ansiToHtml } from '@/utils/ansiToHtml';
 import { cachebustDir } from '@/utils/cachebust';
@@ -39,6 +40,7 @@ export const test: () => Promise<string> = async () => {
 
 		const MOCK_RENDER_CTX: RenderCtx = {
 			id: '#TEMP',
+			$T: i18n(),
 			header: 'Your turn!',
 			board,
 			size,

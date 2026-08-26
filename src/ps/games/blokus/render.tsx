@@ -1,6 +1,5 @@
-import { CORNERS, PIECES, PLAYER_COLORS } from '@/ps/games/blokus/constants';
+import { PIECES } from '@/ps/games/blokus/constants';
 import { Table } from '@/ps/games/render';
-import { HexToOklab, StringToHex } from '@/utils/color';
 import { Button } from '@/utils/components/ps';
 
 import type { RenderCtx, Turn } from '@/ps/games/blokus/types';
@@ -17,12 +16,7 @@ const TRAY: CSSProperties = { overflowX: 'auto', maxWidth: '90%', marginTop: 6 }
 const TRAY_ITEM: CSSProperties = { display: 'inline-block', verticalAlign: 'bottom', marginRight: 6 };
 
 function playerColor(ctx: RenderCtx, turn: string): string {
-	return ctx.colors[ctx.playerIndex[turn] ?? 0];
-}
-
-function cornerFor(size: number, playerIndex: number): [number, number] {
-	const [ci, cj] = CORNERS[playerIndex];
-	return [ci < 0 ? size - 1 : 0, cj < 0 ? size - 1 : 0];
+	return ctx.colors[Object.keys(ctx.players).indexOf(turn)];
 }
 
 function PieceMini({
@@ -30,13 +24,13 @@ function PieceMini({
 	color,
 	size = BLOCK,
 	refCell,
-	showStar = false,
+	energy,
 }: {
 	cells: readonly (readonly [number, number])[];
 	color: string;
 	size?: number;
 	refCell?: readonly [number, number];
-	showStar?: boolean;
+	energy: string;
 }): ReactElement {
 	const minRow = Math.min(...cells.map(([row]) => row));
 	const minCol = Math.min(...cells.map(([, col]) => col));
@@ -46,9 +40,7 @@ function PieceMini({
 
 	const w = (maxCol - minCol + 1) * (size + GAP) + GAP;
 	const h = (maxRow - minRow + 1) * (size + GAP) + GAP;
-	const star = showStar ? '★' : '';
-	const hex = StringToHex(color);
-	const onColor = hex && HexToOklab(hex).L > 0.55 ? '#000' : '#fff';
+	const marker = <img src={`${process.env.WEB_URL}/static/splendor/type/${energy}.png`} width={size - 2} height={size - 2} />;
 
 	return (
 		<div style={{ position: 'relative', width: w, height: h, pointerEvents: 'none' }}>
@@ -66,10 +58,9 @@ function PieceMini({
 						fontSize: size > 10 ? size - 4 : 8,
 						lineHeight: `${size}px`,
 						textAlign: 'center',
-						color: star && row === refRow && col === refCol ? onColor : undefined,
 					}}
 				>
-					{star && row === refRow && col === refCol ? star : null}
+					{marker && row === refRow && col === refCol ? marker : null}
 				</div>
 			))}
 		</div>
@@ -83,16 +74,10 @@ function renderBoard(this: This, ctx: RenderCtx): ReactElement {
 	const td = { padding: 0, width: BLOCK, height: BLOCK, border: `1px solid ${grid}` };
 	const dot = { width: DOT, height: DOT, margin: '3px auto', border: '2px dashed', borderRadius: 99 };
 	const anchors = new Set(ctx.validAnchors.map(([i, j]) => `${i},${j}`));
-	const corners = new Map<string, number>();
-	Object.entries(ctx.playerIndex).forEach(([, idx]) => {
-		const [ci, cj] = cornerFor(ctx.size, idx);
-		corners.set(`${ci},${cj}`, idx);
-	});
 
 	const Cell: CellRenderer<Turn | null> = ({ cell, i, j }) => {
 		const key = `${i},${j}`;
 		const isAnchor = anchors.has(key);
-		const cornerIdx = corners.get(key);
 
 		return (
 			<td style={{ ...td, background: cell ? playerColor(ctx, cell) : slate }}>
@@ -103,8 +88,6 @@ function renderBoard(this: This, ctx: RenderCtx): ReactElement {
 					>
 						{' '}
 					</Button>
-				) : cornerIdx !== undefined ? (
-					<div style={{ ...dot, borderRadius: 2, borderColor: PLAYER_COLORS[cornerIdx] }} />
 				) : null}
 			</td>
 		);
@@ -121,6 +104,7 @@ function PieceTray(this: This, ctx: RenderCtx): ReactElement | null {
 	if (!ctx.side || !ctx.pieces[ctx.side].length) return null;
 	const pieces = [...ctx.pieces[ctx.side]].sort((a, b) => PIECES[b].size - PIECES[a].size || a.localeCompare(b));
 	const color = playerColor(ctx, ctx.side);
+	const energy = ['water', 'electric', 'fire', 'grass'][Object.keys(ctx.players).indexOf(ctx.side)];
 	const selected = ctx.isActive ? ctx.selectedPiece : null;
 	const outline = (pieceId: string) => (selected === pieceId ? '2px solid currentColor' : 'none');
 
@@ -129,7 +113,9 @@ function PieceTray(this: This, ctx: RenderCtx): ReactElement | null {
 			<b>Your pieces</b>
 			<div style={TRAY}>
 				{pieces.map(pieceId => {
-					const mini = <PieceMini cells={PIECES[pieceId].cells} color={color} refCell={PIECES[pieceId].ref} size={11} showStar />;
+					const mini = (
+						<PieceMini cells={PIECES[pieceId].cells} color={color} refCell={PIECES[pieceId].ref} size={11} energy={energy} />
+					);
 					return ctx.isActive ? (
 						<Button
 							key={pieceId}
@@ -151,10 +137,12 @@ function PieceTray(this: This, ctx: RenderCtx): ReactElement | null {
 
 function OrientationPicker(this: This, ctx: RenderCtx): ReactElement | null {
 	if (!ctx.isActive || !ctx.selectedPiece || !ctx.orientations) return null;
+	if (ctx.orientations.length === 1) return null;
+	const energy = ['water', 'electric', 'fire', 'grass'][Object.keys(ctx.players).indexOf(ctx.side!)];
 
 	return (
 		<div style={{ margin: '12px 0', maxWidth: '100%' }}>
-			<b>Pick orientation</b> (★ = anchor)
+			<b>{ctx.$T('GAME.BLOKUS.PICK_ORIENTATION')}</b> ({ctx.$T('GAME.BLOKUS.ENERGY_ANCHOR')})
 			<div style={TRAY}>
 				{ctx.orientations.map((orient, i) => (
 					<Button
@@ -168,7 +156,7 @@ function OrientationPicker(this: This, ctx: RenderCtx): ReactElement | null {
 							outline: ctx.selectedOrient === i ? '2px solid currentColor' : 'none',
 						}}
 					>
-						<PieceMini cells={orient} color={playerColor(ctx, ctx.side!)} refCell={[0, 0]} size={14} showStar />
+						<PieceMini cells={orient} color={playerColor(ctx, ctx.side!)} refCell={[0, 0]} size={14} energy={energy} />
 					</Button>
 				))}
 			</div>
@@ -204,7 +192,7 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 			{renderBoard.bind(this)(ctx)}
 			{PieceTray.bind(this)(ctx)}
 			{OrientationPicker.bind(this)(ctx)}
-			{ctx.isActive && ctx.selectedOrient !== null ? <small>Click a dotted circle to place your piece</small> : null}
+			{ctx.isActive && ctx.selectedOrient !== null ? <small>{ctx.$T('GAME.BLOKUS.PLACE_HINT')}</small> : null}
 		</center>
 	);
 }

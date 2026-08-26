@@ -123,6 +123,18 @@ export default {
 		FORCEWIN_SPECIFY_ID: 'You must specify the game ID for forcewin!',
 		SCRABBLEDEX_NO_ENTRIES: 'No entries yet!',
 		UGO_NOT_ACTIVE: "UGO isn't active!",
+		BLOKUS: {
+			PICK_ORIENTATION: 'Pick orientation',
+			ENERGY_ANCHOR: 'energy symbol = anchor',
+			CHOOSE_CORNER: 'Choose your starting corner',
+			CORNER_0: 'Top Left',
+			CORNER_1: 'Top Right',
+			CORNER_2: 'Bottom Right',
+			CORNER_3: 'Bottom Left',
+			PLACE_HINT: 'Click a dotted circle to place your piece',
+			NO_VALID_ORIENTATION: 'This orientation has no placeable spots.',
+			CORNER_TAKEN: 'That corner is already taken.',
+		},
 
 		BATTLESHIP: {
 			ALREADY_SET: "You've already set your ships!",

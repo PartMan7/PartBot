@@ -257,6 +257,18 @@ export default {
 		FORCEWIN_SPECIFY_ID: "Vous devez spécifier l'ID du jeu pour forcewin !",
 		SCRABBLEDEX_NO_ENTRIES: 'Aucune entrée pour le moment !',
 		UGO_NOT_ACTIVE: "UGO n'est pas actif !",
+		BLOKUS: {
+			PICK_ORIENTATION: "Choisissez l'orientation",
+			ENERGY_ANCHOR: "symbole d'énergie = ancre",
+			CHOOSE_CORNER: 'Choisissez votre coin de départ',
+			CORNER_0: 'En haut à gauche',
+			CORNER_1: 'En haut à droite',
+			CORNER_2: 'En bas à droite',
+			CORNER_3: 'En bas à gauche',
+			PLACE_HINT: 'Cliquez sur un cercle en pointillés pour placer votre pièce',
+			NO_VALID_ORIENTATION: "Cette orientation n'a aucun emplacement possible.",
+			CORNER_TAKEN: 'Ce coin est déjà pris.',
+		},
 	},
 
 	COMMANDS: {
