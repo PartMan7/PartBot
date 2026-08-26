@@ -1,7 +1,8 @@
-import { ALL_PIECE_IDS, BOARD_SIZE, CORNERS, PIECES } from '@/ps/games/blokus/constants';
+import { ALL_PIECE_IDS, BOARD_SIZE, PIECES } from '@/ps/games/blokus/constants';
 import { render } from '@/ps/games/blokus/render';
 import { BaseGame } from '@/ps/games/game';
 import { createGrid } from '@/ps/games/utils';
+import { ChatError } from '@/utils/chatError';
 import { deepClone } from '@/utils/deepClone';
 
 import type { TranslatedText } from '@/i18n/types';
@@ -13,11 +14,6 @@ import type { EndType } from '@/ps/games/types';
 import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/blokus/meta';
-
-function cornerFor(size: number, playerIndex: number): [number, number] {
-	const [ci, cj] = CORNERS[playerIndex];
-	return [ci < 0 ? size - 1 : 0, cj < 0 ? size - 1 : 0];
-}
 
 const CARDINAL: [number, number][] = [
 	[-1, 0],
@@ -57,7 +53,7 @@ export class Blokus extends BaseGame<State> {
 		const size = turns.length === 2 ? BOARD_SIZE.two : BOARD_SIZE.many;
 		this.state.size = size;
 		this.state.board = createGrid<Turn | null>(size, size, () => null);
-		this.state.playerIndex = Object.fromEntries(turns.map((turn, i) => [turn, i]));
+		this.state.playerIndex = Object.fromEntries(turns.map(turn => [turn, -1]));
 		this.state.pieces = Object.fromEntries(turns.map(turn => [turn, [...ALL_PIECE_IDS]]));
 		this.state.placed = Object.fromEntries(turns.map(turn => [turn, false]));
 		return { success: true, data: null };
@@ -95,7 +91,7 @@ export class Blokus extends BaseGame<State> {
 			this.clearSelection();
 		} else {
 			this.selectedPiece = pieceId as PieceId;
-			this.selectedOrient = null;
+			this.selectedOrient = PIECES[this.selectedPiece].orientations.length === 1 ? 0 : null;
 		}
 		this.update(this.players[turn].id);
 	}
@@ -104,6 +100,8 @@ export class Blokus extends BaseGame<State> {
 		if (!this.selectedPiece || isNaN(index)) this.throw();
 		const orientations = PIECES[this.selectedPiece].orientations;
 		if (index < 0 || index >= orientations.length) this.throw();
+		if (!this.getValidAnchors(this.turn!, this.selectedPiece, index).length)
+			throw new ChatError(this.$T('GAME.BLOKUS.NO_VALID_ORIENTATION'));
 		this.selectedOrient = index;
 		this.update(this.players[this.turn!].id);
 	}
@@ -153,8 +151,6 @@ export class Blokus extends BaseGame<State> {
 	isValidPlacement(turn: Turn, orient: [number, number][], anchor: [number, number], board = this.state.board): boolean {
 		const size = this.state.size;
 		const cells = this.getCells(orient, anchor);
-		const playerIndex = this.state.playerIndex[turn];
-		const corner = cornerFor(size, playerIndex);
 		const isFirst = !this.state.placed[turn];
 
 		for (const [x, y] of cells) {
@@ -163,8 +159,7 @@ export class Blokus extends BaseGame<State> {
 		}
 
 		if (isFirst) {
-			if (!cells.some(([x, y]) => x === corner[0] && y === corner[1])) return false;
-			return true;
+			return cells.some(([x, y]) => (x === 0 || x === size - 1) && (y === 0 || y === size - 1));
 		}
 
 		let touchesCorner = false;
@@ -212,6 +207,7 @@ export class Blokus extends BaseGame<State> {
 	}
 
 	trySkipPlayer(turn: Turn) {
+		if (!this.state.placed[turn] && this.state.playerIndex[turn] < 0) return false;
 		return !this.hasMoves(turn);
 	}
 
@@ -264,6 +260,7 @@ export class Blokus extends BaseGame<State> {
 
 		const ctx: RenderCtx = {
 			id: this.id,
+			$T: this.$T,
 			board: this.state.board,
 			size: this.state.size,
 			turn,

@@ -246,6 +246,18 @@ export default {
 		FORCEWIN_SPECIFY_ID: 'Forcewin ke liye game ID specify karna zaruri hai!',
 		SCRABBLEDEX_NO_ENTRIES: 'Abhi tak koi entries nahi hain!',
 		UGO_NOT_ACTIVE: 'UGO active nahi hai!',
+		BLOKUS: {
+			PICK_ORIENTATION: 'Orientation chunein',
+			ENERGY_ANCHOR: 'energy symbol = anchor',
+			CHOOSE_CORNER: 'Apna shuruati kona chunein',
+			CORNER_0: 'Upar baaya',
+			CORNER_1: 'Upar daaya',
+			CORNER_2: 'Neeche daaya',
+			CORNER_3: 'Neeche baaya',
+			PLACE_HINT: 'Apni piece rakhne ke liye dotted circle par click karein',
+			NO_VALID_ORIENTATION: 'Is orientation mein koi placeable spot nahi hai.',
+			CORNER_TAKEN: 'Yeh kona pehle hi liya ja chuka hai.',
+		},
 	},
 
 	COMMANDS: {

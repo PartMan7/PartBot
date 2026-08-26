@@ -1,3 +1,4 @@
+import type { TranslationFn } from '@/i18n/types';
 import type { PieceId } from '@/ps/games/blokus/constants';
 
 export type Turn = string;
@@ -13,6 +14,7 @@ export type State = {
 
 export type RenderCtx = {
 	id: string;
+	$T: TranslationFn;
 	header?: string;
 	dimHeader?: boolean;
 	board: (Turn | null)[][];

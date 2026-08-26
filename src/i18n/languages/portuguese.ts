@@ -255,6 +255,18 @@ export default {
 		FORCEWIN_SPECIFY_ID: 'Você deve especificar o ID do jogo para forcewin!',
 		SCRABBLEDEX_NO_ENTRIES: 'Nenhuma entrada ainda!',
 		UGO_NOT_ACTIVE: 'UGO não está ativo!',
+		BLOKUS: {
+			PICK_ORIENTATION: 'Escolha a orientação',
+			ENERGY_ANCHOR: 'símbolo de energia = âncora',
+			CHOOSE_CORNER: 'Escolha seu canto inicial',
+			CORNER_0: 'Superior esquerdo',
+			CORNER_1: 'Superior direito',
+			CORNER_2: 'Inferior direito',
+			CORNER_3: 'Inferior esquerdo',
+			PLACE_HINT: 'Clique em um círculo pontilhado para colocar sua peça',
+			NO_VALID_ORIENTATION: 'Esta orientação não tem posições possíveis.',
+			CORNER_TAKEN: 'Este canto já foi escolhido.',
+		},
 	},
 
 	COMMANDS: {

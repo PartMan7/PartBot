@@ -18,31 +18,28 @@ export const meta: Meta = {
 	timer: fromHumanTime('3 min'),
 
 	htp: {
-		goal: 'Place all your pieces on the board, or have the fewest blocks left when no one can play.',
+		goal: 'Place all pieces on board, or have fewest blocks left when no one can play.',
 		sections: [
 			{
 				title: 'Placement',
 				lines: [
-					'- Each player starts from their corner with their first piece.',
+					'- Each player chooses a corner for their first piece.',
 					'- Later pieces must touch your own pieces only at corners (diagonally), never along edges.',
-					'- You may be edge-adjacent to opponents\' pieces.',
+					"- You may be edge-adjacent to opponents' pieces.",
 					'- Pieces cannot overlap or leave the board.',
 				],
 			},
 			{
 				title: 'Turns',
 				lines: [
-					'- Select a piece, pick an orientation, then click the board to place it.',
-					'- The starred cell is the anchor — click where that cell should go.',
+					'- Select a piece and orientation, then click board to place it.',
+					'- The energy symbol marks the block that would be placed on the circled cell.',
 					'- If you cannot play, your turn is skipped.',
 				],
 			},
 			{
 				title: 'Winning',
-				lines: [
-					'- Place every piece to win immediately.',
-					'- If no one can play, whoever has the fewest blocks left in hand wins.',
-				],
+				lines: ['- Place every piece to win immediately.', '- If no one can play, whoever has the fewest blocks left in hand wins.'],
 			},
 		],
 	},
