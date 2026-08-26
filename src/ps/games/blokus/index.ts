@@ -10,7 +10,7 @@ import type { PieceId } from '@/ps/games/blokus/constants';
 import type { Log } from '@/ps/games/blokus/logs';
 import type { RenderCtx, State, Turn, WinCtx } from '@/ps/games/blokus/types';
 import type { BaseContext } from '@/ps/games/game';
-import type { EndType } from '@/ps/games/types';
+import type { ActionResponse, EndType } from '@/ps/games/types';
 import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/blokus/meta';
@@ -56,6 +56,22 @@ export class Blokus extends BaseGame<State> {
 		this.state.playerIndex = Object.fromEntries(turns.map(turn => [turn, -1]));
 		this.state.pieces = Object.fromEntries(turns.map(turn => [turn, [...ALL_PIECE_IDS]]));
 		this.state.placed = Object.fromEntries(turns.map(turn => [turn, false]));
+		return { success: true, data: null };
+	}
+
+	onReplacePlayer(turn: Turn, withPlayer: User): ActionResponse<null> {
+		const newTurn = withPlayer.id;
+		this.state.pieces[newTurn] = this.state.pieces[turn];
+		this.state.placed[newTurn] = this.state.placed[turn];
+		this.state.playerIndex[newTurn] = this.state.playerIndex[turn];
+		this.state.board.forEach(row =>
+			row.forEach((cell, index) => {
+				if (cell === turn) row[index] = newTurn;
+			})
+		);
+		delete this.state.pieces[turn];
+		delete this.state.placed[turn];
+		delete this.state.playerIndex[newTurn];
 		return { success: true, data: null };
 	}
 
@@ -281,7 +297,7 @@ export class Blokus extends BaseGame<State> {
 		} else if (side === turn) {
 			ctx.header = this.$T('GAME.YOUR_TURN');
 		} else if (side) {
-			ctx.header = this.$T('GAME.WAITING_FOR_OPPONENT');
+			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: this.players[this.turn!]?.name });
 			ctx.dimHeader = true;
 		} else if (this.turn) {
 			const current = this.players[this.turn];
