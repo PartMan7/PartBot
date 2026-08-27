@@ -151,8 +151,10 @@ function PieceTray(this: This, ctx: RenderCtx): ReactElement | null {
 	);
 }
 
-function OpponentPieces(ctx: RenderCtx): ReactElement | null {
-	const opponents = Object.entries(ctx.players).filter(([turn]) => !ctx.side || turn !== ctx.side);
+function OpponentPieces({ ctx }: { ctx: RenderCtx }): ReactElement | null {
+	const opponents = Object.entries(ctx.players)
+		.filter(([turn]) => !ctx.side || turn !== ctx.side)
+		.sortBy(([turn]) => ctx.playerIndex[turn]);
 	if (!opponents.length) return null;
 
 	return (
@@ -237,7 +239,7 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 			{renderBoard.bind(this)(ctx)}
 			{OrientationPicker.bind(this)(ctx)}
 			{PieceTray.bind(this)(ctx)}
-			{OpponentPieces(ctx)}
+			<OpponentPieces ctx={ctx} />
 			{ctx.isActive && ctx.selectedOrient !== null ? <small>{ctx.$T('GAME.BLOKUS.PLACE_HINT')}</small> : null}
 		</center>
 	);
