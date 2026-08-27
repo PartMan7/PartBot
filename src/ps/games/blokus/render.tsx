@@ -126,7 +126,7 @@ function PieceTray(this: This, ctx: RenderCtx): ReactElement | null {
 
 	return (
 		<div style={{ margin: '12px 0', maxWidth: '100%' }}>
-			<b>Your pieces</b>
+			<b>Your pieces ({pieces.map(pieceId => PIECES[pieceId].size).sum()} blocks)</b>
 			<div style={TRAY}>
 				{pieces.map(pieceId => {
 					const mini = (
