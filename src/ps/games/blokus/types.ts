@@ -19,6 +19,7 @@ export type RenderCtx = {
 	dimHeader?: boolean;
 	board: (Turn | null)[][];
 	size: number;
+	turns: Turn[];
 	turn: Turn;
 	side: Turn | null;
 	isActive: boolean;

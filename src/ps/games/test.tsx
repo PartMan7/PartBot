@@ -45,6 +45,7 @@ export const test: () => Promise<string> = async () => {
 			board,
 			size,
 			turn: partman,
+			turns: [partman, partbot],
 			side: partman,
 			isActive: true,
 			playerIndex: { [partman]: 0, [partbot]: 3 },

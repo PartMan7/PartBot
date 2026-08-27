@@ -154,7 +154,7 @@ function PieceTray(this: This, ctx: RenderCtx): ReactElement | null {
 function OpponentPieces({ ctx }: { ctx: RenderCtx }): ReactElement | null {
 	const opponents = Object.entries(ctx.players)
 		.filter(([turn]) => !ctx.side || turn !== ctx.side)
-		.sortBy(([turn]) => ctx.playerIndex[turn]);
+		.sortBy(([turn]) => ctx.turns.indexOf(turn));
 	if (!opponents.length) return null;
 
 	return (
@@ -215,7 +215,7 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
 			<div style={{ margin: '8px 0', fontSize: 13 }}>
 				{Object.entries(ctx.players)
-					.sort(([turnA], [turnB]) => ctx.playerIndex[turnA] - ctx.playerIndex[turnB])
+					.sortBy(([turn]) => ctx.turns.indexOf(turn))
 					.map(([turn, player]) => (
 						<span key={turn} style={{ fontWeight: turn === ctx.turn ? 'bold' : 'normal', marginRight: 12 }}>
 							<span

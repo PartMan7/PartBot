@@ -279,6 +279,7 @@ export class Blokus extends BaseGame<State> {
 			$T: this.$T,
 			board: this.state.board,
 			size: this.state.size,
+			turns: this.turns,
 			turn,
 			side,
 			isActive,
