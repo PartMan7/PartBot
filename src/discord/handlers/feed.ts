@@ -24,7 +24,7 @@ async function pollXkcdFeed(): Promise<void> {
 	const { items } = await rssParser.parseURL('https://xkcd.com/rss.xml');
 	if (!items.length) throw new Error('XKCD RSS: empty');
 
-	const headLink = items[0].link;
+	const headLink = items.find(item => item.link?.match(COMIC_IN_LINK))?.link;
 	const match = headLink?.match(COMIC_IN_LINK);
 	if (!match) throw new Error(`XKCD RSS: bad headline link (${headLink})`);
 
