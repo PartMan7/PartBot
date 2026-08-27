@@ -24,7 +24,7 @@ import type { BaseLookup, NoTranslate, PSRoomTranslated, TranslatedText, Transla
 import type { ActionResponse, BaseLog, BaseState, EndType, Meta, Player } from '@/ps/games/types';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
-/** The subset of a ps-client User actually required by game logic. */ // this is wrong; DONOTPUSH fix this!
+/** The subset of a ps-client User actually required by game logic. */
 export type GameUser = Pick<User, 'id' | 'name' | 'userid'>;
 import type { ReactElement } from 'react';
 

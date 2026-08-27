@@ -17,7 +17,6 @@ export { meta } from '@/ps/games/lightsout/meta';
 export class LightsOut extends BaseGame<State> {
 	ended = false;
 	size: [number, number];
-	setBy: GameUser | null = null;
 
 	constructor(ctx: BaseContext) {
 		super(ctx);
