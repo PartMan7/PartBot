@@ -1,5 +1,5 @@
-import { LogEntry } from '@/ps/games/render';
 import { getMsg } from '@/ps/games/game';
+import { GameHeader, LogEntry } from '@/ps/games/render';
 import {
 	ACTIONS,
 	AllTokenTypes,
@@ -20,8 +20,6 @@ import type { Splendor } from '@/ps/games/splendor';
 import type { Log } from '@/ps/games/splendor/logs';
 import type { Board, Card, PlayerData, RenderCtx, TokenCount, Trainer, ViewType } from '@/ps/games/splendor/types';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
-
-type This = { msg: string };
 
 function getArtUrl(
 	type: 'pokemon' | 'pokemon-afd' | 'trainers' | 'type' | 'other',

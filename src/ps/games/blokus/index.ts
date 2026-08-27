@@ -305,6 +305,6 @@ export class Blokus extends BaseGame<State> {
 			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: current.name });
 		}
 
-		return render.bind(this.renderCtx)(ctx);
+		return this.runRender(() => render.bind({ msg: this.msg })(ctx));
 	}
 }

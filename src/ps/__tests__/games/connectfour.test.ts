@@ -8,7 +8,7 @@ import { runGamePlayCommand } from '@/ps/__tests__/helpers/commands';
 import { createGame, getButtonActions } from '@/ps/__tests__/helpers/games';
 import { client } from '@/ps/__tests__/mocks/client';
 import { mockRoom } from '@/ps/__tests__/mocks/room';
-import { mockUser } from '@/ps/__tests__/mocks/user';
+import { asPsUser, mockUser } from '@/ps/__tests__/mocks/user';
 import { ConnectFour } from '@/ps/games/connectfour';
 import { meta } from '@/ps/games/connectfour/meta';
 
@@ -68,5 +68,19 @@ describe('ConnectFour playthrough', () => {
 		expect(() => game.render('Y')).not.toThrow();
 		expect(() => game.render('R')).not.toThrow();
 		expect(() => game.render(null)).not.toThrow();
+	});
+
+	it('allows both players to sub after moves have been played', async () => {
+		const { game, room, userY, userR } = setupGame();
+		const replacementY = mockUser('Replacement Yellow');
+		const replacementR = mockUser('Replacement Red');
+
+		await runGamePlayCommand(game, userY, room, '0');
+		await runGamePlayCommand(game, userR, room, '1');
+
+		expect(game.replacePlayer('Y', asPsUser(replacementY)).success).toBe(true);
+		expect(game.replacePlayer('R', asPsUser(replacementR)).success).toBe(true);
+		expect(game.players.Y.id).toBe(replacementY.id);
+		expect(game.players.R.id).toBe(replacementR.id);
 	});
 });
