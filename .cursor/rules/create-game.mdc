@@ -10,17 +10,17 @@ alwaysApply: false
 
 Do not invent a command file. `src/ps/commands/games/core.tsx` builds `/<id>` from `Games`. Copy the **closest existing game**, then strip what you don't need.
 
-| Kind | Copy | Why |
-|------|------|-----|
-| 2-player grid, click a cell | `othello` | simplest `play i-j` |
+| Kind                           | Copy                      | Why                                          |
+| ------------------------------ | ------------------------- | -------------------------------------------- |
+| 2-player grid, click a cell    | `othello`                 | simplest `play i-j`                          |
 | Select piece, then destination | `chess` / `linesofaction` | `action()` parses `select` / `move` from ctx |
-| Drop-in-column / one param | `connectfour` | ctx is a single index |
-| Dice / "just go" | `snakesladders` | `${this.msg} !` with empty ctx |
-| N-player, no named sides | `azul` / `splendor` | `minSize`/`maxSize`, `autostart: false` |
-| Single-player puzzle | `lightsout` | `players: 'single'`, `abbr` required |
-| Guess / typed input | `mastermind` | `Form` + `{field}` placeholders |
-| Hidden boards / setup phase | `battleship` | per-player state, `update(player.id)` |
-| Mods or themes | `scrabble` / `chess` | `meta.mods` or `meta.themes` |
+| Drop-in-column / one param     | `connectfour`             | ctx is a single index                        |
+| Dice / "just go"               | `snakesladders`           | `${this.msg} !` with empty ctx               |
+| N-player, no named sides       | `azul` / `splendor`       | `minSize`/`maxSize`, `autostart: false`      |
+| Single-player puzzle           | `lightsout`               | `players: 'single'`, `abbr` required         |
+| Guess / typed input            | `mastermind`              | `Form` + `{field}` placeholders              |
+| Hidden boards / setup phase    | `battleship`              | per-player state, `update(player.id)`        |
+| Mods or themes                 | `scrabble` / `chess`      | `meta.mods` or `meta.themes`                 |
 
 ## Naming (must all agree)
 
@@ -77,6 +77,7 @@ value={`${this.msg} move ${from}-${to}`}
 PS room HTML sits in a dark `#page` shell (`color: white`, `background: #000a`). Match existing grid games — copy Othello/Chess patterns, don't invent a palette.
 
 **Chrome defaults** — headers, trays, legend, pickers:
+
 - `Button`: `background: none`, `color: inherit`. Dim headers: `color: gray`.
 - Borders only where they carry meaning. No `opacity` on text.
 - Do not copy another game's color constant block (`S`/`SS`/`B` from Azul, etc.) into every `render.tsx`.
@@ -86,6 +87,7 @@ PS room HTML sits in a dark `#page` shell (`color: white`, `background: #000a`).
 **One board, one square** — the cell grid is the board. No nested wrapper with its own border, padding, or rounded frame around the table. Scroll container: `overflow: auto` only.
 
 **Locked board theme** — sparingly, on the central board only when fixed colors improve readability:
+
 - Theme values local inside the board renderer (not file-level aliases).
 - Empty cells + subtle grid lines = low contrast (visual guides).
 - Interactive elements on the board (valid-move targets, clickable affordances) = higher contrast than the grid.
@@ -103,11 +105,11 @@ PS room HTML sits in a dark `#page` shell (`color: white`, `background: #000a`).
 
 Game `render()` output becomes a PS **page** via `user.pageHTML` (`src/ps/games/game.ts`). PS truncates or breaks pages above the cap.
 
-| | Value | Source |
-|---|---|---|
-| Hard cap | **99,500** chars | `MAX_PAGE_HTML_LENGTH` in `src/ps/constants.ts` |
-| **Target (must stay under)** | **~80% → ~79,600** | headroom for worst-case UI states |
-| Serialization | `jsxToHTML` → `renderToStaticMarkup`, no minification yet | `src/utils/jsxToHTML.ts` |
+|                              | Value                                                     | Source                                          |
+| ---------------------------- | --------------------------------------------------------- | ----------------------------------------------- |
+| Hard cap                     | **99,500** chars                                          | `MAX_PAGE_HTML_LENGTH` in `src/ps/constants.ts` |
+| **Target (must stay under)** | **~80% → ~79,600**                                        | headroom for worst-case UI states               |
+| Serialization                | `jsxToHTML` → `renderToStaticMarkup`, no minification yet | `src/utils/jsxToHTML.ts`                        |
 
 **Why 80%?** Inline styles repeat per element. A typical mid-game view (board + tray + valid-move buttons + orientation picker) is much heavier than an empty board. Blokus 20×20 hit **114k** before trim — board + full piece tray alone was **111k**.
 
@@ -133,11 +135,32 @@ Do **not** rely on CSS classes or external stylesheets — game HTML is inline-o
 - `constructor`: `super(ctx); super.persist(ctx);` then init unless `ctx.backup`. Single-player often `super.after(ctx)` as well (see Lights Out).
 - `action(user, ctx)` is the only click/form entry. Parse `ctx`; `this.throw()` on junk.
 - Persistable data goes in `this.state`. UI-only (`selected`, highlight lists) stays on the instance (not in `backupKeys`); pass into `RenderCtx` only for the viewer who needs it.
+- If player state is keyed by turn or user ID, implement `onReplacePlayer()` and migrate every keyed state entry when a player is substituted, including ownership IDs stored in boards, queues, or other nested state. The only state that should not be updated on a sub is 'logs'.
+- Keep stable turn-order data separate from mutable player IDs. Use it for rendering order, colors, resources, and other player identity mappings after substitutions.
 - `createGrid(rows, cols, fill)` when you need a 2D board — first size is rows.
 - `trySkipPlayer(turn)` → true to skip that side (no legal moves). Omit if every turn can always act.
 - Hidden info: `render(side)` gets that player's view; spectators get `side === null`.
 - `WinCtx`: use `Player` from `@/ps/games/types`. `exactOptionalPropertyTypes`: omit optional log fields instead of assigning `undefined`.
 - `render(side)` → `render.bind(this.renderCtx)(ctx)`. Reuse `GAME.YOUR_TURN` / `WAITING_FOR_*` / `GAME_ENDED` when they fit; single-player copy from Lights Out / Mastermind.
+
+## Translations
+
+- New user-visible text belongs in the translation source of truth, not string literals in `render.tsx` or game logic.
+- Pass the game translation function through `RenderCtx` when renderer helpers need it; do not assume the renderer's `this` contains `$T`.
+- Add matching entries to every language file, preserving placeholders and the existing partial-translation fallback behavior.
+
+## Selection and option UI
+
+- Deduplicate options by the underlying value or geometry, not by display-only markers, labels, or reference points.
+- If an option has only one valid value, skip its picker and proceed directly to the next action. Ensure that the user doesn't need to go through redundant steps.
+- When an option has no valid result, report that through a translated game error instead of silently accepting it.
+- Use meaningful visual markers for reference cells or resources; do not expose implementation markers such as `★` when the game has a domain-specific symbol.
+- Preserve canonical piece/resource order in every player view. Do not sort one player's options differently from another's without a game rule requiring it.
+
+## Player information UI
+
+- Show information permitted by the game rules for opponents and spectators using the same shared renderer as the player's own information if it has relevance to the game (eg: enemy pieces in Blokus or enemy boards in Azul).
+- Use stable turn order for legends and player sections rather than object insertion order, which can change after substitutions.
 
 ## Debug the UI
 
