@@ -494,7 +494,7 @@ export class Splendor extends BaseGame<State> {
 		return { success: true, data: null };
 	}
 
-	handlePostTurn(action: POST_TURN_ACTIONS | ACTIONS, playerData: PlayerData, user: User, player: Player, logEntry: Log): void {
+	handlePostTurn(action: POST_TURN_ACTIONS | ACTIONS, playerData: PlayerData, user: GameUser, player: Player, logEntry: Log): void {
 		if (Object.values(playerData.tokens).sum() > MAX_TOKEN_COUNT) {
 			const count = Object.values(playerData.tokens).sum();
 			this.state.actionState = { action: POST_TURN_ACTIONS.TOO_MANY_TOKENS, discard: count - MAX_TOKEN_COUNT };
