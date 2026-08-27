@@ -144,7 +144,7 @@ export class Blokus extends BaseGame<State> {
 			action: 'play',
 			time: new Date(),
 			turn,
-			ctx: { piece: this.selectedPiece, anchor: [i, j] },
+			ctx: { piece: this.selectedPiece, orientation: orientIndex, anchor: [i, j], cells: this.getCells(cells, [i, j]) },
 		});
 
 		this.clearSelection();

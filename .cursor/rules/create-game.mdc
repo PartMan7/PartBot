@@ -143,6 +143,13 @@ Do **not** rely on CSS classes or external stylesheets — game HTML is inline-o
 - `WinCtx`: use `Player` from `@/ps/games/types`. `exactOptionalPropertyTypes`: omit optional log fields instead of assigning `undefined`.
 - `render(side)` → `render.bind(this.renderCtx)(ctx)`. Reuse `GAME.YOUR_TURN` / `WAITING_FOR_*` / `GAME_ENDED` when they fit; single-player copy from Lights Out / Mastermind.
 
+## Replay logs
+
+- Treat every gameplay log as replay input AS WELL AS an activity summary.
+- Store every value needed to reconstruct the action: actor/turn, action parameters, selections, orientation or direction, coordinates, and affected cells or pieces where applicable.
+- Prefer stable, explicit data over display-only text or values that require inferring state from a later snapshot.
+- Update log types and log entries together when gameplay data changes; verify serialized logs remain complete.
+
 ## Translations
 
 - New user-visible text belongs in the translation source of truth, not string literals in `render.tsx` or game logic.
