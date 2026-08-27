@@ -8,7 +8,7 @@ import { runGamePlayCommand } from '@/ps/__tests__/helpers/commands';
 import { createGame, getButtonActions } from '@/ps/__tests__/helpers/games';
 import { client } from '@/ps/__tests__/mocks/client';
 import { mockRoom } from '@/ps/__tests__/mocks/room';
-import { mockUser } from '@/ps/__tests__/mocks/user';
+import { asPsUser, mockUser } from '@/ps/__tests__/mocks/user';
 import { Chess } from '@/ps/games/chess';
 import { meta } from '@/ps/games/chess/meta';
 
@@ -84,5 +84,23 @@ describe("Chess playthrough — Scholar's Mate", () => {
 		expect(() => game.render('W')).not.toThrow();
 		expect(() => game.render('B')).not.toThrow();
 		expect(() => game.render(null)).not.toThrow();
+	});
+
+	it('allows both players to sub after moves have been played', async () => {
+		const { game, room, userW, userB } = setupGame();
+		const replacementW = mockUser('Replacement White');
+		const replacementB = mockUser('Replacement Black');
+
+		await selectAndMove(game, room, userW, 'W', 'e2', 'e4');
+		await selectAndMove(game, room, userB, 'B', 'e7', 'e5');
+		await selectAndMove(game, room, userW, 'W', 'd2', 'd4');
+		await selectAndMove(game, room, userB, 'B', 'd7', 'd5');
+
+		expect(game.replacePlayer('W', asPsUser(replacementW)).success).toBe(true);
+		expect(game.replacePlayer('B', asPsUser(replacementB)).success).toBe(true);
+		expect(game.players.W.id).toBe(replacementW.id);
+		expect(game.players.B.id).toBe(replacementB.id);
+		expect(() => game.render('W')).not.toThrow();
+		expect(() => game.render('B')).not.toThrow();
 	});
 });

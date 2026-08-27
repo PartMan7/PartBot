@@ -8,7 +8,7 @@ import { runGamePlayCommand } from '@/ps/__tests__/helpers/commands';
 import { createGame, getButtonActions } from '@/ps/__tests__/helpers/games';
 import { client } from '@/ps/__tests__/mocks/client';
 import { mockRoom } from '@/ps/__tests__/mocks/room';
-import { mockUser } from '@/ps/__tests__/mocks/user';
+import { asPsUser, mockUser } from '@/ps/__tests__/mocks/user';
 import { SnakesLadders } from '@/ps/games/snakesladders';
 import { meta } from '@/ps/games/snakesladders/meta';
 import { useRNG } from '@/utils/random';
@@ -77,5 +77,20 @@ describe('SnakesLadders playthrough', () => {
 
 		expect(() => game.render(game.turn)).not.toThrow();
 		expect(() => game.render(null)).not.toThrow();
+	});
+
+	it('allows both players to sub after moves have been played', async () => {
+		const { game, room, users } = setupGame(42);
+		const userA = users.get(game.turn!)!;
+		await runGamePlayCommand(game, userA, room, '');
+		const userB = users.get(game.turn!)!;
+		await runGamePlayCommand(game, userB, room, '');
+
+		const replacementA = mockUser('Replacement A');
+		const replacementB = mockUser('Replacement B');
+		const turns = [...game.turns] as string[];
+		expect(game.replacePlayer(turns[0], asPsUser(replacementA)).success).toBe(true);
+		expect(game.replacePlayer(turns[1], asPsUser(replacementB)).success).toBe(true);
+		expect(Object.values(game.players).map(player => player.id)).toEqual(expect.arrayContaining([replacementA.id, replacementB.id]));
 	});
 });

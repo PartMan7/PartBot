@@ -8,7 +8,7 @@ import { runGamePlayCommand } from '@/ps/__tests__/helpers/commands';
 import { createGame, getButtonActions } from '@/ps/__tests__/helpers/games';
 import { client } from '@/ps/__tests__/mocks/client';
 import { mockRoom } from '@/ps/__tests__/mocks/room';
-import { mockUser } from '@/ps/__tests__/mocks/user';
+import { asPsUser, mockUser } from '@/ps/__tests__/mocks/user';
 import { Othello } from '@/ps/games/othello';
 import { meta } from '@/ps/games/othello/meta';
 
@@ -59,5 +59,21 @@ describe('Othello playthrough', () => {
 		expect(() => game.render('W')).not.toThrow();
 		expect(() => game.render('B')).not.toThrow();
 		expect(() => game.render(null)).not.toThrow();
+	});
+
+	it('allows both players to sub after moves have been played', async () => {
+		const { game, room, users } = setupGame();
+		const replacementW = mockUser('Replacement White');
+		const replacementB = mockUser('Replacement Black');
+
+		for (let move = 0; move < 2; move++) {
+			const turn = game.turn as 'W' | 'B';
+			await runGamePlayCommand(game, users[turn], room, getButtonActions(game.render(turn), game)[0]);
+		}
+
+		expect(game.replacePlayer('W', asPsUser(replacementW)).success).toBe(true);
+		expect(game.replacePlayer('B', asPsUser(replacementB)).success).toBe(true);
+		expect(game.players.W.id).toBe(replacementW.id);
+		expect(game.players.B.id).toBe(replacementB.id);
 	});
 });

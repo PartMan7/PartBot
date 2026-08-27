@@ -1,5 +1,5 @@
 import { getMsg } from '@/ps/games/game';
-import { Table } from '@/ps/games/render';
+import { GameHeader, Table } from '@/ps/games/render';
 import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { Button, Form } from '@/utils/components/ps';
 
