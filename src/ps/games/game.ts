@@ -460,6 +460,7 @@ export class BaseGame<State extends BaseState> {
 		if (this.turn === turn) this.turn = newTurn;
 		this.spectators.remove(oldPlayer.id, withPlayer.id);
 		this.onAfterReplacePlayer?.(this.players[newTurn]);
+		this.clearTimer();
 		if (checkUGO(this)) {
 			setUGOPlayed(this.meta.id, withPlayer.id, prev => prev + 1);
 			setUGOPlayed(this.meta.id, oldPlayer.id, prev => prev - 1);
