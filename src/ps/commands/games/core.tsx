@@ -461,9 +461,16 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				async run({ message, arg, $T }) {
 					const { game } = getGame(arg, { action: 'leave', user: message.author.id }, { room: message.target, $T });
 					if (game.started) {
-						message.privateReply($T('CONFIRM'));
+						message.target.privateHTML(
+							message.author,
+							<>
+								{$T('CONFIRM')}
+								<br />
+								<Button value="confirm">confirm</Button>
+							</>
+						);
 						await message.target
-							.waitFor(msg => msg.content.toLowerCase() === 'confirm', 10_000)
+							.waitFor(msg => toId(msg.content) === 'confirm', 10_000)
 							.catch(() => {
 								throw new ChatError($T('CANCELLED'));
 							});
