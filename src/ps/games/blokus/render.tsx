@@ -45,18 +45,19 @@ function PieceMini({
 		.slice(1)
 		.map(([row, col]) => `${(col - baseCol) * (size + GAP)}px ${(row - baseRow) * (size + GAP)}px 0 ${color}`)
 		.join(',');
-	const marker = energy && refCell ? (
-		<img
-			src={`${process.env.WEB_URL}/static/splendor/type/${energy}.png`}
-			width={size - 2}
-			height={size - 2}
-			style={{
-				position: 'absolute',
-				left: GAP + (refCol - minCol) * (size + GAP) + 1,
-				top: GAP + (refRow - minRow) * (size + GAP) + 1,
-			}}
-		/>
-	) : null;
+	const marker =
+		energy && refCell ? (
+			<img
+				src={`${process.env.WEB_URL}/static/splendor/type/${energy}.png`}
+				width={size - 2}
+				height={size - 2}
+				style={{
+					position: 'absolute',
+					left: GAP + (refCol - minCol) * (size + GAP) + 1,
+					top: GAP + (refRow - minRow) * (size + GAP) + 1,
+				}}
+			/>
+		) : null;
 
 	return (
 		<div style={{ position: 'relative', width: w, height: h, pointerEvents: 'none' }}>
@@ -166,12 +167,7 @@ function OpponentPieces(ctx: RenderCtx): ReactElement | null {
 						<div style={TRAY}>
 							{pieces.map(pieceId => (
 								<span key={pieceId} style={{ ...TRAY_ITEM, padding: 2 }}>
-									<PieceMini
-										cells={PIECES[pieceId].cells}
-										color={playerColor(ctx, turn)}
-										size={11}
-										energy={energy}
-									/>
+									<PieceMini cells={PIECES[pieceId].cells} color={playerColor(ctx, turn)} size={11} energy={energy} />
 								</span>
 							))}
 						</div>
@@ -239,9 +235,9 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 					))}
 			</div>
 			{renderBoard.bind(this)(ctx)}
+			{OrientationPicker.bind(this)(ctx)}
 			{PieceTray.bind(this)(ctx)}
 			{OpponentPieces(ctx)}
-			{OrientationPicker.bind(this)(ctx)}
 			{ctx.isActive && ctx.selectedOrient !== null ? <small>{ctx.$T('GAME.BLOKUS.PLACE_HINT')}</small> : null}
 		</center>
 	);
