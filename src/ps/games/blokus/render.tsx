@@ -37,32 +37,42 @@ function PieceMini({
 	const maxRow = Math.max(...cells.map(([row]) => row));
 	const maxCol = Math.max(...cells.map(([, col]) => col));
 	const [refRow, refCol] = refCell ?? [0, 0];
+	const [baseRow, baseCol] = cells[0];
 
 	const w = (maxCol - minCol + 1) * (size + GAP) + GAP;
 	const h = (maxRow - minRow + 1) * (size + GAP) + GAP;
-	const marker = <img src={`${process.env.WEB_URL}/static/splendor/type/${energy}.png`} width={size - 2} height={size - 2} />;
+	const shadows = cells
+		.slice(1)
+		.map(([row, col]) => `${(col - baseCol) * (size + GAP)}px ${(row - baseRow) * (size + GAP)}px 0 ${color}`)
+		.join(',');
+	const marker = energy && refCell ? (
+		<img
+			src={`${process.env.WEB_URL}/static/splendor/type/${energy}.png`}
+			width={size - 2}
+			height={size - 2}
+			style={{
+				position: 'absolute',
+				left: GAP + (refCol - minCol) * (size + GAP) + 1,
+				top: GAP + (refRow - minRow) * (size + GAP) + 1,
+			}}
+		/>
+	) : null;
 
 	return (
 		<div style={{ position: 'relative', width: w, height: h, pointerEvents: 'none' }}>
-			{cells.map(([row, col]) => (
-				<div
-					key={`${row},${col}`}
-					style={{
-						position: 'absolute',
-						left: GAP + (col - minCol) * (size + GAP),
-						top: GAP + (row - minRow) * (size + GAP),
-						width: size,
-						height: size,
-						background: color,
-						borderRadius: 2,
-						fontSize: size > 10 ? size - 4 : 8,
-						lineHeight: `${size}px`,
-						textAlign: 'center',
-					}}
-				>
-					{marker && row === refRow && col === refCol ? marker : null}
-				</div>
-			))}
+			<div
+				style={{
+					position: 'absolute',
+					left: GAP + (baseCol - minCol) * (size + GAP),
+					top: GAP + (baseRow - minRow) * (size + GAP),
+					width: size,
+					height: size,
+					background: color,
+					borderRadius: 2,
+					boxShadow: shadows || undefined,
+				}}
+			/>
+			{marker}
 		</div>
 	);
 }
@@ -71,7 +81,6 @@ function renderBoard(this: This, ctx: RenderCtx): ReactElement {
 	const slate = '#1a2332';
 	const line = '#e8eaed';
 	const grid = '#2e3848';
-	const td = { padding: 0, width: BLOCK, height: BLOCK, border: `1px solid ${grid}` };
 	const dot = { width: DOT, height: DOT, margin: '3px auto', border: '2px dashed', borderRadius: 99 };
 	const anchors = new Set(ctx.validAnchors.map(([i, j]) => `${i},${j}`));
 
@@ -80,11 +89,11 @@ function renderBoard(this: This, ctx: RenderCtx): ReactElement {
 		const isAnchor = anchors.has(key);
 
 		return (
-			<td style={{ ...td, background: cell ? playerColor(ctx, cell) : slate }}>
+			<td width={BLOCK} height={BLOCK} {...{ bgcolor: cell ? playerColor(ctx, cell) : slate }}>
 				{cell ? null : isAnchor && ctx.isActive && ctx.selectedOrient !== null ? (
 					<Button
 						value={`${this.msg} ! place ${ctx.selectedOrient} ${i}-${j}`}
-						style={{ ...BTN, ...dot, borderColor: line, display: 'block', padding: 0 }}
+						style={{ ...dot, background: 'none', display: 'block', padding: 0 }}
 					>
 						{' '}
 					</Button>
@@ -95,7 +104,13 @@ function renderBoard(this: This, ctx: RenderCtx): ReactElement {
 
 	return (
 		<div style={{ overflow: 'auto', maxWidth: '100%', margin: '8px auto' }}>
-			<Table<Turn | null> board={ctx.board} labels={null} Cell={Cell} style={{ borderCollapse: 'collapse', margin: 0, color: line }} />
+			<Table<Turn | null>
+				board={ctx.board}
+				labels={null}
+				Cell={Cell}
+				{...{ border: 1, cellPadding: 0, cellSpacing: 0 }}
+				style={{ borderCollapse: 'collapse', borderColor: grid, margin: 0, color: line }}
+			/>
 		</div>
 	);
 }
@@ -154,7 +169,6 @@ function OpponentPieces(ctx: RenderCtx): ReactElement | null {
 									<PieceMini
 										cells={PIECES[pieceId].cells}
 										color={playerColor(ctx, turn)}
-										refCell={PIECES[pieceId].ref}
 										size={11}
 										energy={energy}
 									/>
