@@ -126,17 +126,9 @@ export default {
 		BLOKUS: {
 			PICK_ORIENTATION: 'Pick orientation',
 			ENERGY_ANCHOR: 'energy symbol = anchor',
-			CHOOSE_CORNER: 'Choose your starting corner',
-			CORNER_0: 'Top Left',
-			CORNER_1: 'Top Right',
-			CORNER_2: 'Bottom Right',
-			CORNER_3: 'Bottom Left',
 			PLACE_HINT: 'Click a dotted circle to place your piece',
-			OPPONENT_PIECES: 'Opponent pieces',
-			PLAYER_PIECES: 'Player pieces',
 			BLOCKS: 'blocks',
 			NO_VALID_ORIENTATION: 'This orientation has no placeable spots.',
-			CORNER_TAKEN: 'That corner is already taken.',
 		},
 
 		BATTLESHIP: {

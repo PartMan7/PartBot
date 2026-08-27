@@ -249,17 +249,9 @@ export default {
 		BLOKUS: {
 			PICK_ORIENTATION: 'Orientation chunein',
 			ENERGY_ANCHOR: 'energy symbol = anchor',
-			CHOOSE_CORNER: 'Apna shuruati kona chunein',
-			CORNER_0: 'Upar baaya',
-			CORNER_1: 'Upar daaya',
-			CORNER_2: 'Neeche daaya',
-			CORNER_3: 'Neeche baaya',
 			PLACE_HINT: 'Apni piece rakhne ke liye dotted circle par click karein',
-			OPPONENT_PIECES: 'Opponent ki pieces',
-			PLAYER_PIECES: 'Players ki pieces',
 			BLOCKS: 'blocks',
 			NO_VALID_ORIENTATION: 'Is orientation mein koi placeable spot nahi hai.',
-			CORNER_TAKEN: 'Yeh kona pehle hi liya ja chuka hai.',
 		},
 	},
 

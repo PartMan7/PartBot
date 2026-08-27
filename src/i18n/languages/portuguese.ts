@@ -258,17 +258,9 @@ export default {
 		BLOKUS: {
 			PICK_ORIENTATION: 'Escolha a orientação',
 			ENERGY_ANCHOR: 'símbolo de energia = âncora',
-			CHOOSE_CORNER: 'Escolha seu canto inicial',
-			CORNER_0: 'Superior esquerdo',
-			CORNER_1: 'Superior direito',
-			CORNER_2: 'Inferior direito',
-			CORNER_3: 'Inferior esquerdo',
 			PLACE_HINT: 'Clique em um círculo pontilhado para colocar sua peça',
-			OPPONENT_PIECES: 'Peças dos oponentes',
-			PLAYER_PIECES: 'Peças dos jogadores',
 			BLOCKS: 'blocos',
 			NO_VALID_ORIENTATION: 'Esta orientação não tem posições possíveis.',
-			CORNER_TAKEN: 'Este canto já foi escolhido.',
 		},
 	},
 
