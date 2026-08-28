@@ -16,7 +16,7 @@
 	"parserOptions": {
 		"ecmaVersion": "latest"
 	},
-	"ignorePatterns": ["node_modules", "package.json", "package-lock.json"],
+	"ignorePatterns": ["node_modules"],
 	"rules": {
 		"@typescript-eslint/no-unused-vars": [
 			"error",
