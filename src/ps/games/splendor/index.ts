@@ -70,11 +70,11 @@ export class Splendor extends BaseGame<State> {
 		};
 	}
 
-	gameCanEnd(): boolean {
+	gameCanEnd(turn: Turn | null = this.turn): boolean {
 		const lastPlayerInRound = this.turns.findLast(turn => !this.players[turn].out);
 
 		return (
-			this.turn === lastPlayerInRound &&
+			turn === lastPlayerInRound &&
 			Object.values(this.players)
 				.filter(player => !player.out)
 				.some(player => this.state.playerData[player.turn].points >= this.state.pointsToWin)
@@ -381,8 +381,11 @@ export class Splendor extends BaseGame<State> {
 
 		this.state.actionState = { action: VIEW_ACTION_TYPE.NONE };
 
-		if (this.gameCanEnd()) return this.end();
-		else this.handlePostTurn(action, playerData, user, player, logEntry);
+		const currentPlayer = this.turn;
+
+		const turnEnded: boolean = this.handlePostTurn(action, playerData, user, player, logEntry);
+
+		if (turnEnded && this.gameCanEnd(currentPlayer)) return this.end();
 	}
 
 	canAfford(
@@ -495,32 +498,32 @@ export class Splendor extends BaseGame<State> {
 		return { success: true, data: null };
 	}
 
-	handlePostTurn(action: POST_TURN_ACTIONS | ACTIONS, playerData: PlayerData, user: User, player: Player, logEntry: Log): void {
+	handlePostTurn(action: POST_TURN_ACTIONS | ACTIONS, playerData: PlayerData, user: User, player: Player, logEntry: Log): boolean {
 		if (Object.values(playerData.tokens).sum() > MAX_TOKEN_COUNT) {
 			const count = Object.values(playerData.tokens).sum();
 			this.state.actionState = { action: POST_TURN_ACTIONS.TOO_MANY_TOKENS, discard: count - MAX_TOKEN_COUNT };
 			this.update(user.id);
 			this.backup();
-			return;
+			return false;
 		}
 
 		if (action === POST_TURN_ACTIONS.CLAIM_TRAINER) {
 			this.endTurn();
-			return;
+			return true;
 		}
 
 		const affordableTrainers = this.state.board.trainers.filter(trainer => this.canAfford(trainer.types, {}, playerData.cards));
 
 		if (affordableTrainers.length === 0) {
 			this.endTurn();
-			return;
+			return true;
 		}
 
 		if (affordableTrainers.length > 1) {
 			this.state.actionState = { action: POST_TURN_ACTIONS.CLAIM_TRAINER, canAfford: affordableTrainers };
 			this.update(user.id);
 			this.backup();
-			return;
+			return false;
 		}
 
 		this.state.board.trainers.remove(affordableTrainers[0]);
@@ -537,6 +540,7 @@ export class Splendor extends BaseGame<State> {
 		this.update(user.id);
 		this.chatLog(logEntry);
 		this.endTurn();
+		return true;
 	}
 
 	onEnd(type?: EndType): TranslatedText {
