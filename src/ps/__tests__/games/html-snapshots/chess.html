@@ -1,0 +1,1025 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Chess</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 16px;
+				background: #546bac;
+			}
+			#page {
+				max-width: 900px;
+				padding: 12px;
+				background: #000a;
+				color: white;
+			}
+			.view {
+				margin: 16px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<main id="page">
+			<section class="view">
+				<h2>Player view</h2>
+				<center>
+					<h1>Your turn!</h1>
+					<table style="border-collapse: collapse; margin: 20px">
+						<tbody>
+							<tr>
+								<th></th>
+								<th style="color: gray; height: 20px">A</th>
+								<th style="color: gray; height: 20px">B</th>
+								<th style="color: gray; height: 20px">C</th>
+								<th style="color: gray; height: 20px">D</th>
+								<th style="color: gray; height: 20px">E</th>
+								<th style="color: gray; height: 20px">F</th>
+								<th style="color: gray; height: 20px">G</th>
+								<th style="color: gray; height: 20px">H</th>
+								<th></th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">8</th>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BR.png"
+											height="45"
+											width="45"
+											alt="br"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BN.png"
+											height="45"
+											width="45"
+											alt="bn"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BB.png"
+											height="45"
+											width="45"
+											alt="bb"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BQ.png"
+											height="45"
+											width="45"
+											alt="bq"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BK.png"
+											height="45"
+											width="45"
+											alt="bk"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BB.png"
+											height="45"
+											width="45"
+											alt="bb"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BN.png"
+											height="45"
+											width="45"
+											alt="bn"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BR.png"
+											height="45"
+											width="45"
+											alt="br"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<th style="color: gray; width: 20px">8</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">7</th>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<th style="color: gray; width: 20px">7</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">6</th>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<th style="color: gray; width: 20px">6</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">5</th>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<th style="color: gray; width: 20px">5</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">4</th>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<th style="color: gray; width: 20px">4</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">3</th>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<th style="color: gray; width: 20px">3</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">2</th>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select a2"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WP.png" height="45" width="45" alt="wp" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select b2"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WP.png" height="45" width="45" alt="wp" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select c2"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WP.png" height="45" width="45" alt="wp" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select d2"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WP.png" height="45" width="45" alt="wp" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select e2"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WP.png" height="45" width="45" alt="wp" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select f2"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WP.png" height="45" width="45" alt="wp" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select g2"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WP.png" height="45" width="45" alt="wp" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select h2"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WP.png" height="45" width="45" alt="wp" />
+									</button>
+								</td>
+								<th style="color: gray; width: 20px">2</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">1</th>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select a1"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WR.png" height="45" width="45" alt="wr" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select b1"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WN.png" height="45" width="45" alt="wn" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select c1"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WB.png" height="45" width="45" alt="wb" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select d1"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WQ.png" height="45" width="45" alt="wq" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select e1"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WK.png" height="45" width="45" alt="wk" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select f1"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WB.png" height="45" width="45" alt="wb" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select g1"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WN.png" height="45" width="45" alt="wn" />
+									</button>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CHESS ! select h1"
+										style="background: none; border: none; height: 45px; width: 45px; padding: 0; display: block"
+									>
+										<img src="https://partbot.partman.dev/static/chess/WR.png" height="45" width="45" alt="wr" />
+									</button>
+								</td>
+								<th style="color: gray; width: 20px">1</th>
+							</tr>
+							<tr>
+								<th></th>
+								<th style="color: gray; height: 20px">A</th>
+								<th style="color: gray; height: 20px">B</th>
+								<th style="color: gray; height: 20px">C</th>
+								<th style="color: gray; height: 20px">D</th>
+								<th style="color: gray; height: 20px">E</th>
+								<th style="color: gray; height: 20px">F</th>
+								<th style="color: gray; height: 20px">G</th>
+								<th style="color: gray; height: 20px">H</th>
+								<th></th>
+							</tr>
+						</tbody>
+					</table>
+				</center>
+			</section>
+			<hr />
+			<section class="view">
+				<h2>Spectator view</h2>
+				<center>
+					<h1>Waiting for Chess W (W)...</h1>
+					<table style="border-collapse: collapse; margin: 20px">
+						<tbody>
+							<tr>
+								<th></th>
+								<th style="color: gray; height: 20px">A</th>
+								<th style="color: gray; height: 20px">B</th>
+								<th style="color: gray; height: 20px">C</th>
+								<th style="color: gray; height: 20px">D</th>
+								<th style="color: gray; height: 20px">E</th>
+								<th style="color: gray; height: 20px">F</th>
+								<th style="color: gray; height: 20px">G</th>
+								<th style="color: gray; height: 20px">H</th>
+								<th></th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">8</th>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BR.png"
+											height="45"
+											width="45"
+											alt="br"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BN.png"
+											height="45"
+											width="45"
+											alt="bn"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BB.png"
+											height="45"
+											width="45"
+											alt="bb"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BQ.png"
+											height="45"
+											width="45"
+											alt="bq"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BK.png"
+											height="45"
+											width="45"
+											alt="bk"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BB.png"
+											height="45"
+											width="45"
+											alt="bb"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BN.png"
+											height="45"
+											width="45"
+											alt="bn"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BR.png"
+											height="45"
+											width="45"
+											alt="br"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<th style="color: gray; width: 20px">8</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">7</th>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/BP.png"
+											height="45"
+											width="45"
+											alt="bp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<th style="color: gray; width: 20px">7</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">6</th>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<th style="color: gray; width: 20px">6</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">5</th>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<th style="color: gray; width: 20px">5</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">4</th>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<th style="color: gray; width: 20px">4</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">3</th>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0"></div>
+								</td>
+								<th style="color: gray; width: 20px">3</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">2</th>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WP.png"
+											height="45"
+											width="45"
+											alt="wp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WP.png"
+											height="45"
+											width="45"
+											alt="wp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WP.png"
+											height="45"
+											width="45"
+											alt="wp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WP.png"
+											height="45"
+											width="45"
+											alt="wp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WP.png"
+											height="45"
+											width="45"
+											alt="wp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WP.png"
+											height="45"
+											width="45"
+											alt="wp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WP.png"
+											height="45"
+											width="45"
+											alt="wp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WP.png"
+											height="45"
+											width="45"
+											alt="wp"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<th style="color: gray; width: 20px">2</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">1</th>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WR.png"
+											height="45"
+											width="45"
+											alt="wr"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WN.png"
+											height="45"
+											width="45"
+											alt="wn"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WB.png"
+											height="45"
+											width="45"
+											alt="wb"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WQ.png"
+											height="45"
+											width="45"
+											alt="wq"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WK.png"
+											height="45"
+											width="45"
+											alt="wk"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WB.png"
+											height="45"
+											width="45"
+											alt="wb"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #9c5624; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WN.png"
+											height="45"
+											width="45"
+											alt="wn"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<td style="height: 45px; width: 45px; background: #fff; border-collapse: collapse; padding: 0">
+									<div style="background: none; height: 45px; width: 45px; padding: 0">
+										<img
+											src="https://partbot.partman.dev/static/chess/WR.png"
+											height="45"
+											width="45"
+											alt="wr"
+											style="display: block"
+										/>
+									</div>
+								</td>
+								<th style="color: gray; width: 20px">1</th>
+							</tr>
+							<tr>
+								<th></th>
+								<th style="color: gray; height: 20px">A</th>
+								<th style="color: gray; height: 20px">B</th>
+								<th style="color: gray; height: 20px">C</th>
+								<th style="color: gray; height: 20px">D</th>
+								<th style="color: gray; height: 20px">E</th>
+								<th style="color: gray; height: 20px">F</th>
+								<th style="color: gray; height: 20px">G</th>
+								<th style="color: gray; height: 20px">H</th>
+								<th></th>
+							</tr>
+						</tbody>
+					</table>
+				</center>
+			</section>
+		</main>
+	</body>
+</html>

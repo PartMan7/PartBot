@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Lights Out</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 16px;
+				background: #546bac;
+			}
+			#page {
+				max-width: 900px;
+				padding: 12px;
+				background: #000a;
+				color: white;
+			}
+			.view {
+				margin: 16px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<main id="page">
+			<section class="view">
+				<h2>Player view</h2>
+				<small style="float: right; padding: 4px 12px">My solution: <b>16 moves</b></small
+				><br />
+				<center>
+					<table style="border-collapse: collapse; margin: 20px; border: none; background: #111">
+						<tbody>
+							<tr>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 0 0"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 0 1"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#fff9ba 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 0 2"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#fff9ba 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 0 3"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#fff9ba 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 0 4"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 1 0"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 1 1"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 1 2"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 1 3"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 1 4"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 2 0"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#fff9ba 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 2 1"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 2 2"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 2 3"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 2 4"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 3 0"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#fff9ba 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 3 1"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#fff9ba 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 3 2"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 3 3"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#fff9ba 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 3 4"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#fff9ba 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 4 0"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#fff9ba 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 4 1"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#fff9ba 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 4 2"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#fff9ba 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 4 3"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#6e6d62 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+								<td>
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@boardgames lightsout play 4 4"
+										style="background: none; border: none; padding: 0"
+									>
+										<div
+											style="
+												height: 35px;
+												width: 35px;
+												background-image: radial-gradient(#fff9ba 60%, #333333);
+												border-radius: 10px;
+												margin: 3px;
+											"
+										></div>
+									</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</center>
+			</section>
+			<hr />
+			<section class="view">
+				<h2>Spectator view</h2>
+				<small style="float: right; padding: 4px 12px">My solution: <b>16 moves</b></small
+				><br />
+				<center>
+					<table style="border-collapse: collapse; margin: 20px; border: none; background: #111">
+						<tbody>
+							<tr>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#fff9ba 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#fff9ba 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#fff9ba 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#fff9ba 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#fff9ba 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#fff9ba 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#fff9ba 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#fff9ba 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#fff9ba 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#fff9ba 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#fff9ba 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#6e6d62 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+								<td>
+									<div
+										style="
+											height: 35px;
+											width: 35px;
+											background-image: radial-gradient(#fff9ba 60%, #333333);
+											border-radius: 10px;
+											margin: 3px;
+										"
+									></div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</center>
+			</section>
+		</main>
+	</body>
+</html>

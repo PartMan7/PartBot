@@ -105,9 +105,9 @@ describe('Chess lifecycle', () => {
 		game.addPlayer(mockUser('Bob'), 'B'); // auto-starts
 		expect(game.started).toBe(true);
 		expect(game.turn).toBe('W');
-		expect(() => game.runRender(() => jsxToHTML(game.render('W')))).not.toThrow();
-		expect(() => game.runRender(() => jsxToHTML(game.render('B')))).not.toThrow();
-		expect(() => game.runRender(() => jsxToHTML(game.render(null)))).not.toThrow();
+		expect(() => jsxToHTML(game.render('W'))).not.toThrow();
+		expect(() => jsxToHTML(game.render('B'))).not.toThrow();
+		expect(() => jsxToHTML(game.render(null))).not.toThrow();
 	});
 });
 
@@ -119,9 +119,9 @@ describe('ConnectFour lifecycle', () => {
 		game.addPlayer(mockUser('Bob'), 'R'); // auto-starts
 		expect(game.started).toBe(true);
 		expect(game.turn).toBe('Y');
-		expect(() => game.runRender(() => jsxToHTML(game.render('Y')))).not.toThrow();
-		expect(() => game.runRender(() => jsxToHTML(game.render('R')))).not.toThrow();
-		expect(() => game.runRender(() => jsxToHTML(game.render(null)))).not.toThrow();
+		expect(() => jsxToHTML(game.render('Y'))).not.toThrow();
+		expect(() => jsxToHTML(game.render('R'))).not.toThrow();
+		expect(() => jsxToHTML(game.render(null))).not.toThrow();
 	});
 
 	it('allows random side assignment', () => {
@@ -140,9 +140,9 @@ describe('Othello lifecycle', () => {
 		game.addPlayer(mockUser('Alice'), 'W');
 		game.addPlayer(mockUser('Bob'), 'B'); // auto-starts
 		expect(game.started).toBe(true);
-		expect(() => game.runRender(() => jsxToHTML(game.render('W')))).not.toThrow();
-		expect(() => game.runRender(() => jsxToHTML(game.render('B')))).not.toThrow();
-		expect(() => game.runRender(() => jsxToHTML(game.render(null)))).not.toThrow();
+		expect(() => jsxToHTML(game.render('W'))).not.toThrow();
+		expect(() => jsxToHTML(game.render('B'))).not.toThrow();
+		expect(() => jsxToHTML(game.render(null))).not.toThrow();
 	});
 });
 
@@ -153,9 +153,9 @@ describe('Battleship lifecycle', () => {
 		game.addPlayer(mockUser('Alice'), 'A');
 		game.addPlayer(mockUser('Bob'), 'B'); // auto-starts
 		expect(game.started).toBe(true);
-		expect(() => game.runRender(() => jsxToHTML(game.render('A')))).not.toThrow();
-		expect(() => game.runRender(() => jsxToHTML(game.render('B')))).not.toThrow();
-		expect(() => game.runRender(() => jsxToHTML(game.render(null)))).not.toThrow();
+		expect(() => jsxToHTML(game.render('A'))).not.toThrow();
+		expect(() => jsxToHTML(game.render('B'))).not.toThrow();
+		expect(() => jsxToHTML(game.render(null))).not.toThrow();
 	});
 });
 
@@ -177,8 +177,8 @@ describe('SnakesLadders lifecycle', () => {
 		game.start();
 		expect(game.started).toBe(true);
 		expect(game.turn).toBeTruthy();
-		expect(() => game.runRender(() => jsxToHTML(game.render(game.turn)))).not.toThrow();
-		expect(() => game.runRender(() => jsxToHTML(game.render(null)))).not.toThrow();
+		expect(() => jsxToHTML(game.render(game.turn))).not.toThrow();
+		expect(() => jsxToHTML(game.render(null))).not.toThrow();
 	});
 });
 
@@ -193,8 +193,8 @@ describe('Scrabble lifecycle', () => {
 		expect(game.started).toBe(false);
 		game.start();
 		expect(game.started).toBe(true);
-		expect(() => game.runRender(() => jsxToHTML(game.render(game.turn)))).not.toThrow();
-		expect(() => game.runRender(() => jsxToHTML(game.render(null)))).not.toThrow();
+		expect(() => jsxToHTML(game.render(game.turn))).not.toThrow();
+		expect(() => jsxToHTML(game.render(null))).not.toThrow();
 	});
 });
 
@@ -208,8 +208,8 @@ describe('Splendor lifecycle', () => {
 		expect(game.started).toBe(false);
 		game.start();
 		expect(game.started).toBe(true);
-		expect(() => game.runRender(() => jsxToHTML(game.render(game.turn)))).not.toThrow();
-		expect(() => game.runRender(() => jsxToHTML(game.render(null)))).not.toThrow();
+		expect(() => jsxToHTML(game.render(game.turn))).not.toThrow();
+		expect(() => jsxToHTML(game.render(null))).not.toThrow();
 	});
 });
 
@@ -220,7 +220,7 @@ describe('LightsOut lifecycle', () => {
 		const game = createGame(LightsOut, lightsoutMeta, room, creator);
 		game.after({ id: game.id, meta: lightsoutMeta, room: room, $T: mockT, args: [], by: alice });
 		expect(game.started).toBe(true);
-		expect(() => game.runRender(() => jsxToHTML(game.render(alice.id)))).not.toThrow();
+		expect(() => jsxToHTML(game.render(alice.id))).not.toThrow();
 	});
 });
 
@@ -231,6 +231,6 @@ describe('Mastermind lifecycle', () => {
 		const game = createGame(Mastermind, mastermindMeta, room, creator);
 		game.after({ id: game.id, meta: mastermindMeta, room: room, $T: mockT, args: [], by: alice });
 		expect(game.started).toBe(true);
-		expect(() => game.runRender(() => jsxToHTML(game.render(alice.id)))).not.toThrow();
+		expect(() => jsxToHTML(game.render(alice.id))).not.toThrow();
 	});
 });

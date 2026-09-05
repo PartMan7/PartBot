@@ -1,4 +1,5 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
+import { isValidElement } from 'react';
 
 import { PSGames } from '@/cache';
 import { gameCache } from '@/cache/games';
@@ -24,9 +25,9 @@ import type { BaseLookup, NoTranslate, PSRoomTranslated, TranslatedText, Transla
 import type { ActionResponse, BaseLog, BaseState, EndType, Meta, Player } from '@/ps/games/types';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
+import type { ReactElement } from 'react';
 /** The subset of a ps-client User actually required by game logic. */
 export type GameUser = Pick<User, 'id' | 'name' | 'userid'>;
-import type { ReactElement } from 'react';
 
 const backupKeys = [
 	'state',
@@ -105,7 +106,7 @@ export class BaseGame<State extends BaseState> {
 	}
 	/** HTML broadcast to the room when the game ends. Defaults to a zoomed-out board. */
 	renderFinish(): ReactElement {
-		return Small({ children: this.render(null) });
+		return this.runRender(() => Small({ children: this.render(null) }));
 	}
 	renderEmbed?(): Promise<EmbedBuilder | null>;
 
@@ -140,7 +141,10 @@ export class BaseGame<State extends BaseState> {
 	}
 
 	runRender<T>(callback: () => T): T {
-		return gameStorage.run(this as unknown as CommonGame, callback);
+		const game = this as unknown as CommonGame;
+		const result = gameStorage.run(game, callback);
+		if (isValidElement(result as object)) renderGames.set(result as ReactElement, game);
+		return result;
 	}
 
 	getHeader(side: State['turn'] | null): { header: string; dimHeader?: true } {
@@ -763,10 +767,16 @@ export type BaseContext = {
 export type CommonGame = BaseGame<BaseState>;
 
 const gameStorage = new AsyncLocalStorage<CommonGame>();
+const renderGames = new WeakMap<ReactElement, CommonGame>();
 
 /** Returns the game currently being rendered. Must be called within a render() context. */
 export function getGame<G extends CommonGame = CommonGame>(): G {
 	return gameStorage.getStore() as G;
+}
+
+/** Returns the game that produced a React element, if it was rendered by a game. */
+export function getRenderGame(element: ReactElement): CommonGame | undefined {
+	return renderGames.get(element);
 }
 
 /** Returns the full game-scoped command prefix for the game currently being rendered. */

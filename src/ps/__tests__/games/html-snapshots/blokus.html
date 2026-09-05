@@ -1,0 +1,2474 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Blokus</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 16px;
+				background: #546bac;
+			}
+			#page {
+				max-width: 900px;
+				padding: 12px;
+				background: #000a;
+				color: white;
+			}
+			.view {
+				margin: 16px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<main id="page">
+			<section class="view">
+				<h2>Player view</h2>
+				<center>
+					<h1>Your turn!</h1>
+					<div style="margin: 8px 0; font-size: 13px">
+						<span style="font-weight: bold; margin-right: 12px"
+							><span
+								style="
+									display: inline-block;
+									width: 14px;
+									height: 14px;
+									background: #fdd835;
+									border: 1px solid gray;
+									border-radius: 2px;
+									margin-right: 5px;
+									vertical-align: middle;
+								"
+							></span
+							>Blokus Player 2 (21) ◀</span
+						><span style="font-weight: normal; margin-right: 12px"
+							><span
+								style="
+									display: inline-block;
+									width: 14px;
+									height: 14px;
+									background: #1e88e5;
+									border: 1px solid gray;
+									border-radius: 2px;
+									margin-right: 5px;
+									vertical-align: middle;
+								"
+							></span
+							>Blokus Player 1 (21)</span
+						>
+					</div>
+					<div style="overflow: auto; max-width: 100%; margin: 8px auto">
+						<table
+							style="border-collapse: collapse; margin: 0; border-color: #2e3848; color: #e8eaed"
+							border="1"
+							cellpadding="0"
+							cellspacing="0"
+						>
+							<tbody>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div style="margin: 12px 0; max-width: 100%">
+						<b>Your pieces (89 blocks)</b>
+						<div style="overflow-x: auto; max-width: 90%; margin-top: 6px">
+							<button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 1"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 13px; height: 13px; pointer-events: none">
+									<div
+										style="position: absolute; left: 1px; top: 1px; width: 11px; height: 11px; background: #fdd835; border-radius: 2px"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 2px; top: 2px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 2"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 13px; height: 25px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow: 0px 12px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 2px; top: 2px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 3"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 13px; height: 37px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												0px 12px 0 #fdd835,
+												0px 24px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 2px; top: 14px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 4"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 25px; height: 25px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												12px 0px 0 #fdd835,
+												0px 12px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 2px; top: 14px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 5"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 13px; height: 49px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												0px 12px 0 #fdd835,
+												0px 24px 0 #fdd835,
+												0px 36px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 2px; top: 14px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 6"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 25px; height: 25px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												0px 12px 0 #fdd835,
+												12px 0px 0 #fdd835,
+												12px 12px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 2px; top: 2px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 7"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 37px; height: 25px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												12px 0px 0 #fdd835,
+												24px 0px 0 #fdd835,
+												24px 12px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 14px; top: 2px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 8"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 25px; height: 37px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												0px 12px 0 #fdd835,
+												0px 24px 0 #fdd835,
+												12px 12px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 2px; top: 14px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 9"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 25px; height: 37px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												0px 12px 0 #fdd835,
+												12px 12px 0 #fdd835,
+												12px 24px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 14px; top: 14px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 10"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 13px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												12px -12px 0 #fdd835,
+												12px 0px 0 #fdd835,
+												12px 12px 0 #fdd835,
+												24px 0px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 14px; top: 14px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 11"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 13px; height: 61px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												0px 12px 0 #fdd835,
+												0px 24px 0 #fdd835,
+												0px 36px 0 #fdd835,
+												0px 48px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 2px; top: 26px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 12"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 49px; height: 25px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												12px 0px 0 #fdd835,
+												24px 0px 0 #fdd835,
+												36px 0px 0 #fdd835,
+												36px 12px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 26px; top: 2px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 13"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												12px 12px 0 #fdd835,
+												0px 12px 0 #fdd835,
+												24px 12px 0 #fdd835,
+												24px 24px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 14px; top: 14px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 14"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 37px; height: 25px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												0px 12px 0 #fdd835,
+												12px 0px 0 #fdd835,
+												12px 12px 0 #fdd835,
+												24px 0px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 14px; top: 2px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 15"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												0px 12px 0 #fdd835,
+												0px 24px 0 #fdd835,
+												12px 12px 0 #fdd835,
+												24px 12px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 14px; top: 14px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 16"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 25px; height: 37px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												0px 24px 0 #fdd835,
+												12px 0px 0 #fdd835,
+												12px 12px 0 #fdd835,
+												12px 24px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 14px; top: 14px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 17"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												12px 0px 0 #fdd835,
+												24px 0px 0 #fdd835,
+												24px 12px 0 #fdd835,
+												24px 24px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 26px; top: 2px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 18"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												0px 12px 0 #fdd835,
+												12px 12px 0 #fdd835,
+												12px 24px 0 #fdd835,
+												24px 24px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 14px; top: 14px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 19"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 25px; height: 49px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												0px 12px 0 #fdd835,
+												0px 24px 0 #fdd835,
+												0px 36px 0 #fdd835,
+												12px 12px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 2px; top: 14px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 20"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 25px; height: 49px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 1px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												0px 12px 0 #fdd835,
+												0px 24px 0 #fdd835,
+												12px 24px 0 #fdd835,
+												12px 36px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 2px; top: 14px"
+									/>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BLOKUS ! select 21"
+								style="
+									background: none;
+									color: inherit;
+									cursor: pointer;
+									display: inline-block;
+									vertical-align: bottom;
+									margin-right: 6px;
+									border: none;
+									padding: 2px;
+									outline: none;
+								"
+							>
+								<div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+									<div
+										style="
+											position: absolute;
+											left: 1px;
+											top: 13px;
+											width: 11px;
+											height: 11px;
+											background: #fdd835;
+											border-radius: 2px;
+											box-shadow:
+												12px 0px 0 #fdd835,
+												12px 12px 0 #fdd835,
+												24px -12px 0 #fdd835,
+												24px 0px 0 #fdd835;
+										"
+									></div>
+									<img
+										src="https://partbot.partman.dev/static/splendor/type/electric.png"
+										width="9"
+										height="9"
+										style="position: absolute; left: 14px; top: 14px"
+									/>
+								</div>
+							</button>
+						</div>
+					</div>
+					<div style="margin: 12px 0">
+						<div style="margin: 8px 0">
+							<username class=" ">Blokus Player 1</username> (89 blocks)
+							<div style="overflow-x: auto; max-width: 90%; margin-top: 6px">
+								<span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 13px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow: 0px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #1e88e5,
+													0px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 49px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5,
+													0px 36px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													12px 0px 0 #1e88e5,
+													12px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #1e88e5,
+													24px 0px 0 #1e88e5,
+													24px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5,
+													12px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													12px 24px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 13px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px -12px 0 #1e88e5,
+													12px 0px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													24px 0px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 61px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5,
+													0px 36px 0 #1e88e5,
+													0px 48px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 49px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #1e88e5,
+													24px 0px 0 #1e88e5,
+													36px 0px 0 #1e88e5,
+													36px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px 12px 0 #1e88e5,
+													0px 12px 0 #1e88e5,
+													24px 12px 0 #1e88e5,
+													24px 24px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													12px 0px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													24px 0px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													24px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 24px 0 #1e88e5,
+													12px 0px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													12px 24px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #1e88e5,
+													24px 0px 0 #1e88e5,
+													24px 12px 0 #1e88e5,
+													24px 24px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													12px 24px 0 #1e88e5,
+													24px 24px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 49px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5,
+													0px 36px 0 #1e88e5,
+													12px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 49px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5,
+													12px 24px 0 #1e88e5,
+													12px 36px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 13px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													24px -12px 0 #1e88e5,
+													24px 0px 0 #1e88e5;
+											"
+										></div></div
+								></span>
+							</div>
+						</div>
+					</div>
+				</center>
+			</section>
+			<hr />
+			<section class="view">
+				<h2>Spectator view</h2>
+				<center>
+					<h1>Waiting for Blokus Player 2...</h1>
+					<div style="margin: 8px 0; font-size: 13px">
+						<span style="font-weight: bold; margin-right: 12px"
+							><span
+								style="
+									display: inline-block;
+									width: 14px;
+									height: 14px;
+									background: #fdd835;
+									border: 1px solid gray;
+									border-radius: 2px;
+									margin-right: 5px;
+									vertical-align: middle;
+								"
+							></span
+							>Blokus Player 2 (21) ◀</span
+						><span style="font-weight: normal; margin-right: 12px"
+							><span
+								style="
+									display: inline-block;
+									width: 14px;
+									height: 14px;
+									background: #1e88e5;
+									border: 1px solid gray;
+									border-radius: 2px;
+									margin-right: 5px;
+									vertical-align: middle;
+								"
+							></span
+							>Blokus Player 1 (21)</span
+						>
+					</div>
+					<div style="overflow: auto; max-width: 100%; margin: 8px auto">
+						<table
+							style="border-collapse: collapse; margin: 0; border-color: #2e3848; color: #e8eaed"
+							border="1"
+							cellpadding="0"
+							cellspacing="0"
+						>
+							<tbody>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+								<tr>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+									<td width="16" height="16" bgcolor="#1a2332"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div style="margin: 12px 0">
+						<div style="margin: 8px 0">
+							<username class=" ">Blokus Player 2</username> (89 blocks)
+							<div style="overflow-x: auto; max-width: 90%; margin-top: 6px">
+								<span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 13px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow: 0px 12px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #fdd835,
+													0px 24px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #fdd835,
+													0px 12px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 49px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #fdd835,
+													0px 24px 0 #fdd835,
+													0px 36px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #fdd835,
+													12px 0px 0 #fdd835,
+													12px 12px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #fdd835,
+													24px 0px 0 #fdd835,
+													24px 12px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #fdd835,
+													0px 24px 0 #fdd835,
+													12px 12px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #fdd835,
+													12px 12px 0 #fdd835,
+													12px 24px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 13px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													12px -12px 0 #fdd835,
+													12px 0px 0 #fdd835,
+													12px 12px 0 #fdd835,
+													24px 0px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 61px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #fdd835,
+													0px 24px 0 #fdd835,
+													0px 36px 0 #fdd835,
+													0px 48px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 49px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #fdd835,
+													24px 0px 0 #fdd835,
+													36px 0px 0 #fdd835,
+													36px 12px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													12px 12px 0 #fdd835,
+													0px 12px 0 #fdd835,
+													24px 12px 0 #fdd835,
+													24px 24px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #fdd835,
+													12px 0px 0 #fdd835,
+													12px 12px 0 #fdd835,
+													24px 0px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #fdd835,
+													0px 24px 0 #fdd835,
+													12px 12px 0 #fdd835,
+													24px 12px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													0px 24px 0 #fdd835,
+													12px 0px 0 #fdd835,
+													12px 12px 0 #fdd835,
+													12px 24px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #fdd835,
+													24px 0px 0 #fdd835,
+													24px 12px 0 #fdd835,
+													24px 24px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #fdd835,
+													12px 12px 0 #fdd835,
+													12px 24px 0 #fdd835,
+													24px 24px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 49px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #fdd835,
+													0px 24px 0 #fdd835,
+													0px 36px 0 #fdd835,
+													12px 12px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 49px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #fdd835,
+													0px 24px 0 #fdd835,
+													12px 24px 0 #fdd835,
+													12px 36px 0 #fdd835;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 13px;
+												width: 11px;
+												height: 11px;
+												background: #fdd835;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #fdd835,
+													12px 12px 0 #fdd835,
+													24px -12px 0 #fdd835,
+													24px 0px 0 #fdd835;
+											"
+										></div></div
+								></span>
+							</div>
+						</div>
+						<div style="margin: 8px 0">
+							<username class=" ">Blokus Player 1</username> (89 blocks)
+							<div style="overflow-x: auto; max-width: 90%; margin-top: 6px">
+								<span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 13px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow: 0px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #1e88e5,
+													0px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 49px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5,
+													0px 36px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													12px 0px 0 #1e88e5,
+													12px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #1e88e5,
+													24px 0px 0 #1e88e5,
+													24px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5,
+													12px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													12px 24px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 13px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px -12px 0 #1e88e5,
+													12px 0px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													24px 0px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 13px; height: 61px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5,
+													0px 36px 0 #1e88e5,
+													0px 48px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 49px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #1e88e5,
+													24px 0px 0 #1e88e5,
+													36px 0px 0 #1e88e5,
+													36px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px 12px 0 #1e88e5,
+													0px 12px 0 #1e88e5,
+													24px 12px 0 #1e88e5,
+													24px 24px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 25px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													12px 0px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													24px 0px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													24px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 24px 0 #1e88e5,
+													12px 0px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													12px 24px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #1e88e5,
+													24px 0px 0 #1e88e5,
+													24px 12px 0 #1e88e5,
+													24px 24px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													12px 24px 0 #1e88e5,
+													24px 24px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 49px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5,
+													0px 36px 0 #1e88e5,
+													12px 12px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 25px; height: 49px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 1px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													0px 12px 0 #1e88e5,
+													0px 24px 0 #1e88e5,
+													12px 24px 0 #1e88e5,
+													12px 36px 0 #1e88e5;
+											"
+										></div></div></span
+								><span style="display: inline-block; vertical-align: bottom; margin-right: 6px; padding: 2px"
+									><div style="position: relative; width: 37px; height: 37px; pointer-events: none">
+										<div
+											style="
+												position: absolute;
+												left: 1px;
+												top: 13px;
+												width: 11px;
+												height: 11px;
+												background: #1e88e5;
+												border-radius: 2px;
+												box-shadow:
+													12px 0px 0 #1e88e5,
+													12px 12px 0 #1e88e5,
+													24px -12px 0 #1e88e5,
+													24px 0px 0 #1e88e5;
+											"
+										></div></div
+								></span>
+							</div>
+						</div>
+					</div>
+				</center>
+			</section>
+		</main>
+	</body>
+</html>

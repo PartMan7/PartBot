@@ -1,0 +1,3598 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Battleship</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 16px;
+				background: #546bac;
+			}
+			#page {
+				max-width: 900px;
+				padding: 12px;
+				background: #000a;
+				color: white;
+			}
+			.view {
+				margin: 16px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<main id="page">
+			<section class="view">
+				<h2>Player view</h2>
+				<center>
+					<div>
+						<h1>Set your ships!</h1>
+						<table style="border-collapse: collapse; margin: 20px; font-size: 0.8em; color: white">
+							<tbody>
+								<tr>
+									<th></th>
+									<th style="color: gray; height: 20px">1</th>
+									<th style="color: gray; height: 20px">2</th>
+									<th style="color: gray; height: 20px">3</th>
+									<th style="color: gray; height: 20px">4</th>
+									<th style="color: gray; height: 20px">5</th>
+									<th style="color: gray; height: 20px">6</th>
+									<th style="color: gray; height: 20px">7</th>
+									<th style="color: gray; height: 20px">8</th>
+									<th style="color: gray; height: 20px">9</th>
+									<th style="color: gray; height: 20px">10</th>
+									<th></th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">A</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">A</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">B</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">B</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">C</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">C</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">D</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">D</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">E</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">E</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">F</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">F</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">G</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">G</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">H</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">H</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">I</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">I</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">J</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">J</th>
+								</tr>
+								<tr>
+									<th></th>
+									<th style="color: gray; height: 20px">1</th>
+									<th style="color: gray; height: 20px">2</th>
+									<th style="color: gray; height: 20px">3</th>
+									<th style="color: gray; height: 20px">4</th>
+									<th style="color: gray; height: 20px">5</th>
+									<th style="color: gray; height: 20px">6</th>
+									<th style="color: gray; height: 20px">7</th>
+									<th style="color: gray; height: 20px">8</th>
+									<th style="color: gray; height: 20px">9</th>
+									<th style="color: gray; height: 20px">10</th>
+									<th></th>
+								</tr>
+							</tbody>
+						</table>
+						<form
+							data-submitsend="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-BATTLESHIP ! set {P1}-{P2}|{S1}-{S2}|{D1}-{D2}|{B1}-{B2}|{C1}-{C2}"
+						>
+							<div>
+								<b style="width: 100px; display: inline-block; text-align: right">Patrol</b>:
+								<input name="P1" style="width: 40px" placeholder="A1" value="" /> -
+								<input name="P2" style="width: 40px" placeholder="A2" value="" />
+							</div>
+							<div>
+								<b style="width: 100px; display: inline-block; text-align: right">Submarine</b>:
+								<input name="S1" style="width: 40px" placeholder="B1" value="" /> -
+								<input name="S2" style="width: 40px" placeholder="B3" value="" />
+							</div>
+							<div>
+								<b style="width: 100px; display: inline-block; text-align: right">Destroyer</b>:
+								<input name="D1" style="width: 40px" placeholder="C1" value="" /> -
+								<input name="D2" style="width: 40px" placeholder="C3" value="" />
+							</div>
+							<div>
+								<b style="width: 100px; display: inline-block; text-align: right">Battleship</b>:
+								<input name="B1" style="width: 40px" placeholder="D1" value="" /> -
+								<input name="B2" style="width: 40px" placeholder="D4" value="" />
+							</div>
+							<div>
+								<b style="width: 100px; display: inline-block; text-align: right">Carrier</b>:
+								<input name="C1" style="width: 40px" placeholder="E1" value="" /> -
+								<input name="C2" style="width: 40px" placeholder="E5" value="" />
+							</div>
+							<br />
+							<center><button type="submit">Go!</button></center>
+						</form>
+					</div>
+				</center>
+			</section>
+			<hr />
+			<section class="view">
+				<h2>Spectator view</h2>
+				<center>
+					<h1>Waiting for Battleship B (B)...</h1>
+					<div>
+						<span class="username"><strong style="color: hsl(14, 86%, 42.161179100503944%)">Battleship A</strong></span
+						>&#x27;s ships
+						<table style="border-collapse: collapse; margin: 20px; font-size: 0.8em; color: white">
+							<tbody>
+								<tr>
+									<th></th>
+									<th style="color: gray; height: 20px">1</th>
+									<th style="color: gray; height: 20px">2</th>
+									<th style="color: gray; height: 20px">3</th>
+									<th style="color: gray; height: 20px">4</th>
+									<th style="color: gray; height: 20px">5</th>
+									<th style="color: gray; height: 20px">6</th>
+									<th style="color: gray; height: 20px">7</th>
+									<th style="color: gray; height: 20px">8</th>
+									<th style="color: gray; height: 20px">9</th>
+									<th style="color: gray; height: 20px">10</th>
+									<th></th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">A</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">A</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">B</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">B</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">C</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">C</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">D</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">D</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">E</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">E</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">F</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">F</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">G</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">G</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">H</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">H</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">I</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">I</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">J</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">J</th>
+								</tr>
+								<tr>
+									<th></th>
+									<th style="color: gray; height: 20px">1</th>
+									<th style="color: gray; height: 20px">2</th>
+									<th style="color: gray; height: 20px">3</th>
+									<th style="color: gray; height: 20px">4</th>
+									<th style="color: gray; height: 20px">5</th>
+									<th style="color: gray; height: 20px">6</th>
+									<th style="color: gray; height: 20px">7</th>
+									<th style="color: gray; height: 20px">8</th>
+									<th style="color: gray; height: 20px">9</th>
+									<th style="color: gray; height: 20px">10</th>
+									<th></th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div>
+						<span class="username"><strong style="color: hsl(38, 69%, 40%)">Battleship B</strong></span
+						>&#x27;s ships
+						<table style="border-collapse: collapse; margin: 20px; font-size: 0.8em; color: white">
+							<tbody>
+								<tr>
+									<th></th>
+									<th style="color: gray; height: 20px">1</th>
+									<th style="color: gray; height: 20px">2</th>
+									<th style="color: gray; height: 20px">3</th>
+									<th style="color: gray; height: 20px">4</th>
+									<th style="color: gray; height: 20px">5</th>
+									<th style="color: gray; height: 20px">6</th>
+									<th style="color: gray; height: 20px">7</th>
+									<th style="color: gray; height: 20px">8</th>
+									<th style="color: gray; height: 20px">9</th>
+									<th style="color: gray; height: 20px">10</th>
+									<th></th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">A</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">A</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">B</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">B</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">C</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">C</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">D</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">D</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">E</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">E</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">F</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">F</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">G</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">G</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">H</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">H</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">I</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">I</th>
+								</tr>
+								<tr>
+									<th style="color: gray; width: 20px">J</th>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<td
+										style="
+											line-height: 0;
+											text-align: center;
+											font-weight: bold;
+											height: 20px;
+											width: 20px;
+											background: #01aad6;
+											border: 1px solid white;
+										"
+									></td>
+									<th style="color: gray; width: 20px">J</th>
+								</tr>
+								<tr>
+									<th></th>
+									<th style="color: gray; height: 20px">1</th>
+									<th style="color: gray; height: 20px">2</th>
+									<th style="color: gray; height: 20px">3</th>
+									<th style="color: gray; height: 20px">4</th>
+									<th style="color: gray; height: 20px">5</th>
+									<th style="color: gray; height: 20px">6</th>
+									<th style="color: gray; height: 20px">7</th>
+									<th style="color: gray; height: 20px">8</th>
+									<th style="color: gray; height: 20px">9</th>
+									<th style="color: gray; height: 20px">10</th>
+									<th></th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</center>
+			</section>
+		</main>
+	</body>
+</html>

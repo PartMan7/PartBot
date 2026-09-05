@@ -1,0 +1,3342 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Azul</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 16px;
+				background: #546bac;
+			}
+			#page {
+				max-width: 900px;
+				padding: 12px;
+				background: #000a;
+				color: white;
+			}
+			.view {
+				margin: 16px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<main id="page">
+			<section class="view">
+				<h2>Player view</h2>
+				<center>
+					<div style="margin: 4px 0; font-size: 14px; opacity: 0.85">Round 1</div>
+					<h1 style="margin: 8px 0; opacity: 1; font-size: 20px">Your turn!</h1>
+					<div>
+						<div style="display: inline-block; vertical-align: top; margin: 8px">
+							<table style="border-collapse: separate; border-spacing: 6px; display: inline-block">
+								<tbody>
+									<tr>
+										<td style="width: 96px; height: 96px"></td>
+										<td>
+											<div
+												style="
+													width: 96px;
+													height: 96px;
+													background: #8885;
+													border: 2px solid #8888;
+													border-radius: 12px;
+													padding: 6px;
+												"
+											>
+												<table style="width: 100%; height: 100%; border-collapse: collapse">
+													<tbody>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 0 water"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Water"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/water.png) center/95% no-repeat
+																				#1e88e5;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 0 grass"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Grass"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/grass.png) center/95% no-repeat
+																				#00a900;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+														</tr>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 0 water"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Water"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/water.png) center/95% no-repeat
+																				#1e88e5;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 0 water"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Water"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/water.png) center/95% no-repeat
+																				#1e88e5;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</td>
+										<td style="width: 96px; height: 96px"></td>
+									</tr>
+									<tr>
+										<td>
+											<div
+												style="
+													width: 96px;
+													height: 96px;
+													background: #8885;
+													border: 2px solid #8888;
+													border-radius: 12px;
+													padding: 6px;
+												"
+											>
+												<table style="width: 100%; height: 100%; border-collapse: collapse">
+													<tbody>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 1 dark"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Dark"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/dark.png) center/95% no-repeat
+																				#37474f;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 1 water"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Water"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/water.png) center/95% no-repeat
+																				#1e88e5;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+														</tr>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 1 fire"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Fire"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/fire.png) center/95% no-repeat
+																				#e53935;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 1 water"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Water"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/water.png) center/95% no-repeat
+																				#1e88e5;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</td>
+										<td>
+											<div
+												style="
+													width: 96px;
+													height: 96px;
+													background: #8885;
+													border: 2px solid #8888;
+													border-radius: 12px;
+													padding: 6px;
+												"
+											>
+												<table style="width: 100%; height: 100%; border-collapse: collapse">
+													<tbody>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 2 grass"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Grass"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/grass.png) center/95% no-repeat
+																				#00a900;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 2 dark"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Dark"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/dark.png) center/95% no-repeat
+																				#37474f;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+														</tr>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 2 electric"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Electric"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/electric.png) center/95%
+																				no-repeat #fdd835;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 2 dark"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Dark"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/dark.png) center/95% no-repeat
+																				#37474f;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</td>
+										<td>
+											<div
+												style="
+													width: 96px;
+													height: 96px;
+													background: #8885;
+													border: 2px solid #8888;
+													border-radius: 12px;
+													padding: 6px;
+												"
+											>
+												<table style="width: 100%; height: 100%; border-collapse: collapse">
+													<tbody>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 3 electric"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Electric"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/electric.png) center/95%
+																				no-repeat #fdd835;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 3 dark"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Dark"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/dark.png) center/95% no-repeat
+																				#37474f;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+														</tr>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 3 dark"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Dark"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/dark.png) center/95% no-repeat
+																				#37474f;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 3 fire"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Fire"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/fire.png) center/95% no-repeat
+																				#e53935;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 96px; height: 96px"></td>
+										<td>
+											<div
+												style="
+													width: 96px;
+													height: 96px;
+													background: #8885;
+													border: 2px solid #8888;
+													border-radius: 12px;
+													padding: 6px;
+												"
+											>
+												<table style="width: 100%; height: 100%; border-collapse: collapse">
+													<tbody>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 4 fire"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Fire"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/fire.png) center/95% no-repeat
+																				#e53935;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 4 water"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Water"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/water.png) center/95% no-repeat
+																				#1e88e5;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+														</tr>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 4 grass"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Grass"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/grass.png) center/95% no-repeat
+																				#00a900;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<button
+																	name="send"
+																	value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-AZUL ! take 4 electric"
+																	style="cursor: pointer; border: 0; padding: 0; background: none; color: inherit"
+																	title="Electric"
+																>
+																	<div
+																		style="
+																			display: inline-block;
+																			width: 28px;
+																			height: 28px;
+																			background: url(https://partbot.partman.dev/static/splendor/type/electric.png) center/95%
+																				no-repeat #fdd835;
+																			border: 1px solid #fff9;
+																			border-radius: 6px;
+																			vertical-align: middle;
+																			opacity: 1;
+																		"
+																	></div>
+																</button>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</td>
+										<td style="width: 96px; height: 96px"></td>
+									</tr>
+								</tbody>
+							</table>
+							<div style="display: inline-block; vertical-align: middle; margin-left: 12px; text-align: center">
+								<div style="font-size: 12px; opacity: 0.7; margin-bottom: 4px">Waste</div>
+								<div
+									style="
+										min-width: 96px;
+										background: #8885;
+										border: 2px solid #8888;
+										border-radius: 12px;
+										padding: 6px;
+										text-align: center;
+									"
+								>
+									<table style="border-collapse: collapse; margin: 0 auto">
+										<tbody>
+											<tr>
+												<td style="padding: 1px 2px">
+													<div
+														style="
+															display: inline-block;
+															width: 28px;
+															height: 28px;
+															background: #fff;
+															border: 1px solid #0007;
+															border-radius: 6px;
+															color: #04a;
+															font-weight: bold;
+															font-size: 19px;
+															line-height: 26px;
+															text-align: center;
+															vertical-align: middle;
+															opacity: 1;
+														"
+													>
+														-1
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div style="margin-top: 8px; font-size: 12px; opacity: 0.7">Bag: 80</div>
+							</div>
+						</div>
+					</div>
+					<div>
+						<div
+							style="
+								display: inline-block;
+								vertical-align: top;
+								margin: 8px;
+								padding: 8px 20px;
+								background: #8883;
+								border: 1px solid #8888;
+								border-radius: 8px;
+							"
+						>
+							<div style="margin-bottom: 6px">
+								<span class="username"><strong style="color: hsl(119, 58%, 41%)">Azul Player 2</strong></span> - <b>0</b>
+							</div>
+							<div style="display: inline-block">
+								<table style="border-collapse: collapse">
+									<tbody>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div style="margin-top: 8px">
+								<span style="font-size: 12px; opacity: 0.65; margin-right: 6px">Penalties</span>
+								<table style="border-collapse: collapse; display: inline-table">
+									<tbody>
+										<tr>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+										</tr>
+										<tr>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-1</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-1</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-2</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-2</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-2</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-3</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-3</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<hr />
+					<div>
+						<div
+							style="
+								display: inline-block;
+								vertical-align: top;
+								margin: 8px;
+								padding: 8px;
+								background: #8883;
+								border: 1px solid #8888;
+								border-radius: 8px;
+								zoom: 70%;
+							"
+						>
+							<div style="margin-bottom: 6px">
+								<span class="username"><strong style="color: hsl(352, 62%, 47.76020025262168%)">Azul Player 1</strong></span> -
+								<b>0</b>
+							</div>
+							<div style="display: inline-block">
+								<table style="border-collapse: collapse">
+									<tbody>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div style="margin-top: 8px">
+								<span style="font-size: 12px; opacity: 0.65; margin-right: 6px">Penalties</span>
+								<table style="border-collapse: collapse; display: inline-table">
+									<tbody>
+										<tr>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+										</tr>
+										<tr>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-1</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-1</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-2</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-2</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-2</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-3</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-3</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</center>
+			</section>
+			<hr />
+			<section class="view">
+				<h2>Spectator view</h2>
+				<center>
+					<div style="margin: 4px 0; font-size: 14px; opacity: 0.85">Round 1</div>
+					<h1 style="margin: 8px 0; opacity: 1; font-size: 20px">Waiting for Azul Player 2...</h1>
+					<div>
+						<div style="display: inline-block; vertical-align: top; margin: 8px">
+							<table style="border-collapse: separate; border-spacing: 6px; display: inline-block">
+								<tbody>
+									<tr>
+										<td style="width: 96px; height: 96px"></td>
+										<td>
+											<div
+												style="
+													width: 96px;
+													height: 96px;
+													background: #8885;
+													border: 2px solid #8888;
+													border-radius: 12px;
+													padding: 6px;
+												"
+											>
+												<table style="width: 100%; height: 100%; border-collapse: collapse">
+													<tbody>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/water.png) center/95% no-repeat
+																			#1e88e5;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/grass.png) center/95% no-repeat
+																			#00a900;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+														</tr>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/water.png) center/95% no-repeat
+																			#1e88e5;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/water.png) center/95% no-repeat
+																			#1e88e5;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</td>
+										<td style="width: 96px; height: 96px"></td>
+									</tr>
+									<tr>
+										<td>
+											<div
+												style="
+													width: 96px;
+													height: 96px;
+													background: #8885;
+													border: 2px solid #8888;
+													border-radius: 12px;
+													padding: 6px;
+												"
+											>
+												<table style="width: 100%; height: 100%; border-collapse: collapse">
+													<tbody>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/dark.png) center/95% no-repeat
+																			#37474f;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/water.png) center/95% no-repeat
+																			#1e88e5;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+														</tr>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/fire.png) center/95% no-repeat
+																			#e53935;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/water.png) center/95% no-repeat
+																			#1e88e5;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</td>
+										<td>
+											<div
+												style="
+													width: 96px;
+													height: 96px;
+													background: #8885;
+													border: 2px solid #8888;
+													border-radius: 12px;
+													padding: 6px;
+												"
+											>
+												<table style="width: 100%; height: 100%; border-collapse: collapse">
+													<tbody>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/grass.png) center/95% no-repeat
+																			#00a900;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/dark.png) center/95% no-repeat
+																			#37474f;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+														</tr>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/electric.png) center/95% no-repeat
+																			#fdd835;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/dark.png) center/95% no-repeat
+																			#37474f;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</td>
+										<td>
+											<div
+												style="
+													width: 96px;
+													height: 96px;
+													background: #8885;
+													border: 2px solid #8888;
+													border-radius: 12px;
+													padding: 6px;
+												"
+											>
+												<table style="width: 100%; height: 100%; border-collapse: collapse">
+													<tbody>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/electric.png) center/95% no-repeat
+																			#fdd835;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/dark.png) center/95% no-repeat
+																			#37474f;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+														</tr>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/dark.png) center/95% no-repeat
+																			#37474f;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/fire.png) center/95% no-repeat
+																			#e53935;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="width: 96px; height: 96px"></td>
+										<td>
+											<div
+												style="
+													width: 96px;
+													height: 96px;
+													background: #8885;
+													border: 2px solid #8888;
+													border-radius: 12px;
+													padding: 6px;
+												"
+											>
+												<table style="width: 100%; height: 100%; border-collapse: collapse">
+													<tbody>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/fire.png) center/95% no-repeat
+																			#e53935;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/water.png) center/95% no-repeat
+																			#1e88e5;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+														</tr>
+														<tr>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/grass.png) center/95% no-repeat
+																			#00a900;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+															<td style="width: 50%; height: 50%; text-align: center">
+																<div
+																	style="
+																		display: inline-block;
+																		width: 28px;
+																		height: 28px;
+																		background: url(https://partbot.partman.dev/static/splendor/type/electric.png) center/95% no-repeat
+																			#fdd835;
+																		border: 1px solid #fff9;
+																		border-radius: 6px;
+																		vertical-align: middle;
+																		opacity: 1;
+																	"
+																></div>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</td>
+										<td style="width: 96px; height: 96px"></td>
+									</tr>
+								</tbody>
+							</table>
+							<div style="display: inline-block; vertical-align: middle; margin-left: 12px; text-align: center">
+								<div style="font-size: 12px; opacity: 0.7; margin-bottom: 4px">Waste</div>
+								<div
+									style="
+										min-width: 96px;
+										background: #8885;
+										border: 2px solid #8888;
+										border-radius: 12px;
+										padding: 6px;
+										text-align: center;
+									"
+								>
+									<table style="border-collapse: collapse; margin: 0 auto">
+										<tbody>
+											<tr>
+												<td style="padding: 1px 2px">
+													<div
+														style="
+															display: inline-block;
+															width: 28px;
+															height: 28px;
+															background: #fff;
+															border: 1px solid #0007;
+															border-radius: 6px;
+															color: #04a;
+															font-weight: bold;
+															font-size: 19px;
+															line-height: 26px;
+															text-align: center;
+															vertical-align: middle;
+															opacity: 1;
+														"
+													>
+														-1
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div style="margin-top: 8px; font-size: 12px; opacity: 0.7">Bag: 80</div>
+							</div>
+						</div>
+					</div>
+					<hr />
+					<div>
+						<div
+							style="
+								display: inline-block;
+								vertical-align: top;
+								margin: 8px;
+								padding: 8px;
+								background: #8883;
+								border: 1px solid #8888;
+								border-radius: 8px;
+								zoom: 70%;
+							"
+						>
+							<div style="margin-bottom: 6px">
+								<span class="username"><strong style="color: hsl(119, 58%, 41%)">Azul Player 2</strong></span> - <b>0</b>
+							</div>
+							<div style="display: inline-block">
+								<table style="border-collapse: collapse">
+									<tbody>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div style="margin-top: 8px">
+								<span style="font-size: 12px; opacity: 0.65; margin-right: 6px">Penalties</span>
+								<table style="border-collapse: collapse; display: inline-table">
+									<tbody>
+										<tr>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+										</tr>
+										<tr>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-1</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-1</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-2</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-2</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-2</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-3</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-3</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div
+							style="
+								display: inline-block;
+								vertical-align: top;
+								margin: 8px;
+								padding: 8px;
+								background: #8883;
+								border: 1px solid #8888;
+								border-radius: 8px;
+								zoom: 70%;
+							"
+						>
+							<div style="margin-bottom: 6px">
+								<span class="username"><strong style="color: hsl(352, 62%, 47.76020025262168%)">Azul Player 1</strong></span> -
+								<b>0</b>
+							</div>
+							<div style="display: inline-block">
+								<table style="border-collapse: collapse">
+									<tbody>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle"></td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+										</tr>
+										<tr>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 26px; height: 26px; padding: 0; text-align: center; vertical-align: middle">
+												<div
+													style="
+														display: inline-block;
+														width: 22px;
+														height: 22px;
+														border: 1px solid #8888;
+														border-radius: 4px;
+														vertical-align: middle;
+													"
+												></div>
+											</td>
+											<td style="width: 10px; height: 26px; padding: 0"></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #fdd83528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #e5393528;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #37474f28;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #00a90028;
+												"
+											></td>
+											<td
+												style="
+													width: 26px;
+													height: 26px;
+													padding: 0;
+													text-align: center;
+													vertical-align: middle;
+													border: 1px solid #8888;
+													background: #1e88e528;
+												"
+											></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div style="margin-top: 8px">
+								<span style="font-size: 12px; opacity: 0.65; margin-right: 6px">Penalties</span>
+								<table style="border-collapse: collapse; display: inline-table">
+									<tbody>
+										<tr>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+											<td style="width: 22px; height: 22px; padding: 0; text-align: center">
+												<div
+													style="display: inline-block; width: 18px; height: 18px; border: 1px solid #8888; border-radius: 4px"
+												></div>
+											</td>
+										</tr>
+										<tr>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-1</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-1</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-2</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-2</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-2</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-3</td>
+											<td style="padding: 1px 0 0; text-align: center; font-size: 10px; font-weight: bold; opacity: 0.35">-3</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</center>
+			</section>
+		</main>
+	</body>
+</html>
