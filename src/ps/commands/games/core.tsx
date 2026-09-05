@@ -458,15 +458,19 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				aliases: ['f', 'ff', 'leave', 'l', 'resign', 'flipboard'],
 				help: 'Forfeits a game, or leaves one in signups.',
 				syntax: 'CMD [#id]',
-				async run({ message, arg, $T }) {
+				async run({ message, arg, $T, canFullHTML }) {
 					const { game } = getGame(arg, { action: 'leave', user: message.author.id }, { room: message.target, $T });
 					if (game.started) {
 						message.target.privateHTML(
 							message.author,
 							<>
 								{$T('CONFIRM')}
-								<br />
-								<Button value="confirm">confirm</Button>
+								{canFullHTML() ? (
+									<>
+										<br />
+										<Button value="confirm">confirm</Button>
+									</>
+								) : null}
 							</>
 						);
 						await message.target

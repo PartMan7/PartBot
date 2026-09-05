@@ -1,5 +1,5 @@
 import { PSRoomConfigs } from '@/cache';
-import { prefix } from '@/config/ps';
+import { isGlobalBot, prefix } from '@/config/ps';
 import { LanguageMap, i18n } from '@/i18n';
 import { getLanguage } from '@/i18n/language';
 import { LivePSStuff } from '@/sentinel/live';
@@ -126,6 +126,13 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 			if (message.type === 'pm') return null;
 			const roomConfig = PSRoomConfigs[room ?? message.target.id];
 			return roomConfig?.features?.includes(feature) ?? false;
+		};
+
+		context.canFullHTML = function () {
+			if (message.type === 'pm') return isGlobalBot;
+			if (message.target.visibility === 'public') return true;
+			if (message.target.visibility === 'hidden' && isGlobalBot) return true;
+			return false;
 		};
 
 		context.checkPermissions = function (perm) {

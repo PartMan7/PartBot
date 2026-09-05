@@ -81,6 +81,10 @@ export type PSCommandContext = {
 	 */
 	broadcastHTML(html: string | ReactElement, opts?: HTMLopts & { perm?: Perms }): void;
 	/**
+	 * Whether advanced HTML (eg: action buttons) can be used in the current context.
+	 */
+	canFullHTML: () => boolean;
+	/**
 	 * Checks whether the room has a given feature enabled.
 	 * @param feature The feature to check for
 	 * @returns true if the feature is enabled, false if it is not, or null for PMs.
