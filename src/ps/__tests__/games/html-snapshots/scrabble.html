@@ -1,0 +1,2079 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Scrabble</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 16px;
+				background: #546bac;
+			}
+			#page {
+				max-width: 900px;
+				padding: 12px;
+				background: #000a;
+				color: white;
+			}
+			.view {
+				margin: 16px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<main id="page">
+			<section class="view">
+				<h2>Player view</h2>
+				<center>
+					<h1>Your turn!</h1>
+					<table style="margin: 20px; background: #220">
+						<tbody>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s00"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s01"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s02"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s03"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s04"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s05"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s06"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s07"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s08"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s09"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s0A"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s0B"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s0C"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s0D"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s0E"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s10"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s11"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s12"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s13"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s14"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s15"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s16"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s17"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s18"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s19"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s1A"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s1B"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s1C"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s1D"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s1E"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s20"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s21"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s22"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s23"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s24"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s25"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s26"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s27"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s28"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s29"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s2A"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s2B"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s2C"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s2D"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s2E"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s30"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s31"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s32"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s33"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s34"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s35"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s36"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s37"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s38"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s39"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s3A"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s3B"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s3C"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s3D"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s3E"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s40"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s41"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s42"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s43"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s44"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s45"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s46"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s47"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s48"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s49"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s4A"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s4B"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s4C"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s4D"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s4E"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s50"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s51"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s52"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s53"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s54"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s55"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s56"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s57"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s58"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s59"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s5A"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s5B"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s5C"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s5D"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s5E"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s60"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s61"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s62"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s63"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s64"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s65"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s66"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s67"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s68"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s69"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s6A"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s6B"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s6C"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s6D"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s6E"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s70"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s71"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s72"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s73"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s74"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s75"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s76"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s77"
+										style="
+											border: none;
+											background: none;
+											height: 20px;
+											width: 20px;
+											padding: 0;
+											color: #000;
+											font-size: 18px;
+											text-align: center;
+											line-height: 18px;
+										"
+									>
+										⭑
+									</button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s78"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s79"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s7A"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s7B"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s7C"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s7D"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s7E"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s80"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s81"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s82"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s83"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s84"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s85"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s86"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s87"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s88"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s89"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s8A"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s8B"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s8C"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s8D"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s8E"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s90"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s91"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s92"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s93"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s94"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s95"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s96"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s97"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s98"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s99"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s9A"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s9B"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s9C"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s9D"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! s9E"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sA0"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sA1"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sA2"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sA3"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sA4"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sA5"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sA6"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sA7"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sA8"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sA9"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sAA"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sAB"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sAC"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sAD"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sAE"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sB0"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sB1"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sB2"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sB3"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sB4"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sB5"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sB6"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sB7"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sB8"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sB9"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sBA"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sBB"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sBC"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sBD"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sBE"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sC0"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sC1"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sC2"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sC3"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sC4"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sC5"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sC6"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sC7"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sC8"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sC9"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sCA"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sCB"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sCC"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sCD"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sCE"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sD0"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sD1"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sD2"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sD3"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sD4"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sD5"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sD6"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sD7"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sD8"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sD9"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sDA"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sDB"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sDC"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sDD"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sDE"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sE0"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sE1"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sE2"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sE3"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sE4"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sE5"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sE6"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sE7"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sE8"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sE9"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sEA"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sEB"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sEC"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sED"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! sEE"
+										style="border: none; background: none; height: 20px; width: 20px; padding: 0"
+									></button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div style="width: 320px; background-color: #5552; border: 1px solid; border-radius: 4px; padding: 12px 16px; margin: 8px">
+						<div style="color: #000; display: inline-block">
+							<div
+								style="
+									background: #da5;
+									color: black;
+									text-align: center;
+									padding: 0;
+									display: inline-block;
+									margin: 4px;
+									height: 20px;
+									min-width: 20px;
+									max-width: 20px;
+									overflow: hidden;
+								"
+							>
+								<b style="font-size: 14px; white-space: nowrap">T<sub style="font-size: 0.5em">1</sub></b>
+							</div>
+							<div
+								style="
+									background: #da5;
+									color: black;
+									text-align: center;
+									padding: 0;
+									display: inline-block;
+									margin: 4px;
+									height: 20px;
+									min-width: 20px;
+									max-width: 20px;
+									overflow: hidden;
+								"
+							>
+								<b style="font-size: 14px; white-space: nowrap">  <sub style="font-size: 0.5em">0</sub></b>
+							</div>
+							<div
+								style="
+									background: #da5;
+									color: black;
+									text-align: center;
+									padding: 0;
+									display: inline-block;
+									margin: 4px;
+									height: 20px;
+									min-width: 20px;
+									max-width: 20px;
+									overflow: hidden;
+								"
+							>
+								<b style="font-size: 14px; white-space: nowrap">N<sub style="font-size: 0.5em">1</sub></b>
+							</div>
+							<div
+								style="
+									background: #da5;
+									color: black;
+									text-align: center;
+									padding: 0;
+									display: inline-block;
+									margin: 4px;
+									height: 20px;
+									min-width: 20px;
+									max-width: 20px;
+									overflow: hidden;
+								"
+							>
+								<b style="font-size: 14px; white-space: nowrap">I<sub style="font-size: 0.5em">1</sub></b>
+							</div>
+							<div
+								style="
+									background: #da5;
+									color: black;
+									text-align: center;
+									padding: 0;
+									display: inline-block;
+									margin: 4px;
+									height: 20px;
+									min-width: 20px;
+									max-width: 20px;
+									overflow: hidden;
+								"
+							>
+								<b style="font-size: 14px; white-space: nowrap">K<sub style="font-size: 0.5em">5</sub></b>
+							</div>
+							<div
+								style="
+									background: #da5;
+									color: black;
+									text-align: center;
+									padding: 0;
+									display: inline-block;
+									margin: 4px;
+									height: 20px;
+									min-width: 20px;
+									max-width: 20px;
+									overflow: hidden;
+								"
+							>
+								<b style="font-size: 14px; white-space: nowrap">F<sub style="font-size: 0.5em">4</sub></b>
+							</div>
+							<div
+								style="
+									background: #da5;
+									color: black;
+									text-align: center;
+									padding: 0;
+									display: inline-block;
+									margin: 4px;
+									height: 20px;
+									min-width: 20px;
+									max-width: 20px;
+									overflow: hidden;
+								"
+							>
+								<b style="font-size: 14px; white-space: nowrap">A<sub style="font-size: 0.5em">1</sub></b>
+							</div>
+						</div>
+						<button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! -"
+							style="border: 2px solid darkred; border-radius: 4px; margin-left: 24px"
+						>
+							Pass
+						</button>
+					</div>
+					<div style="width: 320px; background-color: #5552; border: 1px solid; border-radius: 4px; padding: 12px 16px; margin: 8px">
+						<h3>Select a tile to play from!</h3>
+						<hr />
+						<form data-submitsend="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SCRABBLE ! x {tiles}" style="margin: 4px 0">
+							<input name="tiles" placeholder="Exchange tiles" width="100" style="margin-right: 4px" /><button type="submit">
+								Exchange
+							</button>
+						</form>
+					</div>
+					<div style="width: 320px; background-color: #5552; border: 1px solid; border-radius: 4px; padding: 12px 16px; margin: 8px">
+						<div><username class=" ">Scrabble Player 2</username>: 0</div>
+						<div><username class=" ">Scrabble Player 1</username>: 0</div>
+						<hr />
+						Bag: 86 tiles
+					</div>
+				</center>
+			</section>
+			<hr />
+			<section class="view">
+				<h2>Spectator view</h2>
+				<center>
+					<h1>Waiting for Scrabble Player 2...</h1>
+					<table style="margin: 20px; background: #220">
+						<tbody>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc">
+									<div
+										style="
+											color: #000;
+											height: 20px;
+											width: 20px;
+											line-height: 20px;
+											text-align: center;
+											font-size: 18px;
+											margin-top: -2px;
+										"
+									>
+										⭑
+									</div>
+								</td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #49a"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #ecc"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+							</tr>
+							<tr>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #bdd"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #cca"></td>
+								<td style="height: 20px; width: 20px; line-height: 0; background: #e65"></td>
+							</tr>
+						</tbody>
+					</table>
+					<div style="width: 320px; background-color: #5552; border: 1px solid; border-radius: 4px; padding: 12px 16px; margin: 8px">
+						<div><username class=" ">Scrabble Player 2</username>: 0</div>
+						<div><username class=" ">Scrabble Player 1</username>: 0</div>
+						<hr />
+						Bag: 86 tiles
+					</div>
+				</center>
+			</section>
+		</main>
+	</body>
+</html>
