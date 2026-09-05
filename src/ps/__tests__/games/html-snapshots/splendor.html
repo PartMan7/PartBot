@@ -1,0 +1,3424 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Splendor</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 16px;
+				background: #546bac;
+			}
+			#page {
+				max-width: 900px;
+				padding: 12px;
+				background: #000a;
+				color: white;
+			}
+			.view {
+				margin: 16px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<main id="page">
+			<section class="view">
+				<h2>Player view</h2>
+				<center>
+					<h1>Your turn!</h1>
+					<div style="zoom: 50%">
+						<div>
+							<div
+								style="
+									background: no-repeat right -50% bottom/80% url(https://partbot.partman.dev/static/splendor/trainers/flint.png) #eee8;
+									border-radius: 16px;
+									border: 1px solid black;
+									height: 144px;
+									width: 144px;
+									position: relative;
+									overflow: hidden;
+									color: white;
+									display: inline-block;
+									margin: 8px;
+								"
+							>
+								<div style="background: #1119; border-bottom: 1px solid black; text-align: right">
+									<strong style="font-size: 32px; margin-right: 12px; position: relative; top: 4px">3</strong>
+									<div
+										style="
+											position: absolute;
+											bottom: 0;
+											left: 0;
+											padding: 8px 36px 0 18px;
+											background: #0009;
+											border-top-right-radius: 24px;
+											zoom: 25%;
+										"
+									>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+															#fe3e4e;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+											</div>
+										</div>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+															#444444;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background: no-repeat right bottom/80% url(https://partbot.partman.dev/static/splendor/trainers/glacia.png) #eee8;
+									border-radius: 16px;
+									border: 1px solid black;
+									height: 144px;
+									width: 144px;
+									position: relative;
+									overflow: hidden;
+									color: white;
+									display: inline-block;
+									margin: 8px;
+								"
+							>
+								<div style="background: #1119; border-bottom: 1px solid black; text-align: right">
+									<strong style="font-size: 32px; margin-right: 12px; position: relative; top: 4px">3</strong>
+									<div
+										style="
+											position: absolute;
+											bottom: 0;
+											left: 0;
+											padding: 8px 36px 0 18px;
+											background: #0009;
+											border-top-right-radius: 24px;
+											zoom: 25%;
+										"
+									>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/water.png),
+															#1996e2;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+											</div>
+										</div>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+															#dddddd;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+											</div>
+										</div>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+															#444444;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background: no-repeat right -50% bottom/80% url(https://partbot.partman.dev/static/splendor/trainers/grimsley.png) #eee8;
+									border-radius: 16px;
+									border: 1px solid black;
+									height: 144px;
+									width: 144px;
+									position: relative;
+									overflow: hidden;
+									color: white;
+									display: inline-block;
+									margin: 8px;
+								"
+							>
+								<div style="background: #1119; border-bottom: 1px solid black; text-align: right">
+									<strong style="font-size: 32px; margin-right: 12px; position: relative; top: 4px">3</strong>
+									<div
+										style="
+											position: absolute;
+											bottom: 0;
+											left: 0;
+											padding: 8px 36px 0 18px;
+											background: #0009;
+											border-top-right-radius: 24px;
+											zoom: 25%;
+										"
+									>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+															#444444;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+											</div>
+										</div>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+															#dddddd;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+											</div>
+										</div>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+															#fe3e4e;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div style="zoom: 60%">
+							<div style="display: inline-block; margin: 0 12px 0 0">
+								<div
+									style="
+										height: 108px;
+										width: 108px;
+										margin: 8px;
+										margin-bottom: -12px;
+										border-radius: 99px;
+										display: inline-block;
+										background:
+											no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+											#dddddd;
+									"
+								></div>
+								<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+							</div>
+							<div style="display: inline-block; margin: 0 12px 0 0">
+								<div
+									style="
+										height: 108px;
+										width: 108px;
+										margin: 8px;
+										margin-bottom: -12px;
+										border-radius: 99px;
+										display: inline-block;
+										background:
+											no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+											#444444;
+									"
+								></div>
+								<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+							</div>
+							<div style="display: inline-block; margin: 0 12px 0 0">
+								<div
+									style="
+										height: 108px;
+										width: 108px;
+										margin: 8px;
+										margin-bottom: -12px;
+										border-radius: 99px;
+										display: inline-block;
+										background:
+											no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+											#fe3e4e;
+									"
+								></div>
+								<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+							</div>
+							<div style="display: inline-block; margin: 0 12px 0 0">
+								<div
+									style="
+										height: 108px;
+										width: 108px;
+										margin: 8px;
+										margin-bottom: -12px;
+										border-radius: 99px;
+										display: inline-block;
+										background:
+											no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+											#00a900;
+									"
+								></div>
+								<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+							</div>
+							<div style="display: inline-block; margin: 0 12px 0 0">
+								<div
+									style="
+										height: 108px;
+										width: 108px;
+										margin: 8px;
+										margin-bottom: -12px;
+										border-radius: 99px;
+										display: inline-block;
+										background:
+											no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+											#1996e2;
+									"
+								></div>
+								<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+							</div>
+							<div style="display: inline-block; margin: 0 12px 0 0">
+								<div
+									style="
+										height: 108px;
+										width: 108px;
+										margin: 8px;
+										margin-bottom: -12px;
+										border-radius: 99px;
+										display: inline-block;
+										background:
+											no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/dragon.png),
+											#eebe4e;
+									"
+								></div>
+								<span style="position: relative; bottom: 18px; font-size: 72px">×<b>5</b></span>
+							</div>
+							<button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! tokens"
+								style="zoom: 360%; position: relative; bottom: 6px"
+							>
+								Draw Tokens
+							</button>
+						</div>
+						<div style="height: 48px"></div>
+						<div style="white-space: nowrap; overflow: auto">
+							<button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! wild celebi"
+								style="
+									cursor: pointer;
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/celebi.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">5</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/grass.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Grass"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>7</b></span>
+										</div>
+									</div>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! wild porygonz"
+								style="
+									cursor: pointer;
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/porygonz.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">3</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/colorless.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Colorless"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+														#444444;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>5</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! wild chandelure"
+								style="
+									cursor: pointer;
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/chandelure.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">4</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/dark.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Dark"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+														#444444;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>6</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! wild decidueye"
+								style="
+									cursor: pointer;
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/decidueye.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">3</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/dark.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Dark"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+														#dddddd;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>5</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+								</div>
+							</button>
+							<div style="display: inline-block; box-sizing: border-box">
+								<div style="position: relative; display: inline-block">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! deck 3"
+										style="
+											cursor: pointer;
+											background-image: url(https://partbot.partman.dev/static/splendor/other/back-3.png);
+											background-size: cover;
+											box-sizing: border-box;
+											height: 280px;
+											width: 200px;
+											overflow: hidden;
+											display: inline-block;
+											vertical-align: top;
+											border: 1px solid black;
+											border-radius: 12px;
+											padding: 0;
+											margin: 12px;
+										"
+									>
+										<div
+											style="
+												background: #1119;
+												border-radius: 12px;
+												color: white;
+												text-shadow: 0 0 2px #000;
+												display: inline-block;
+												padding: 0 8px 8px;
+												font-size: 72px;
+											"
+										>
+											×<b>16</b>
+										</div>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div style="white-space: nowrap; overflow: auto">
+							<button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! wild eldegoss"
+								style="
+									cursor: pointer;
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/eldegoss.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">3</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/grass.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Grass"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>6</b></span>
+										</div>
+									</div>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! wild onix"
+								style="
+									cursor: pointer;
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/onix.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">1</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/dark.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Dark"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+														#dddddd;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>2</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>2</b></span>
+										</div>
+									</div>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! wild audino"
+								style="
+									cursor: pointer;
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/audino.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">2</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/colorless.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Colorless"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>5</b></span>
+										</div>
+									</div>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! wild grovyle"
+								style="
+									cursor: pointer;
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/grovyle.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">2</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/grass.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Grass"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>5</b></span>
+										</div>
+									</div>
+								</div>
+							</button>
+							<div style="display: inline-block; box-sizing: border-box">
+								<div style="position: relative; display: inline-block">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! deck 2"
+										style="
+											cursor: pointer;
+											background-image: url(https://partbot.partman.dev/static/splendor/other/back-2.png);
+											background-size: cover;
+											box-sizing: border-box;
+											height: 280px;
+											width: 200px;
+											overflow: hidden;
+											display: inline-block;
+											vertical-align: top;
+											border: 1px solid black;
+											border-radius: 12px;
+											padding: 0;
+											margin: 12px;
+										"
+									>
+										<div
+											style="
+												background: #1119;
+												border-radius: 12px;
+												color: white;
+												text-shadow: 0 0 2px #000;
+												display: inline-block;
+												padding: 0 8px 8px;
+												font-size: 72px;
+											"
+										>
+											×<b>26</b>
+										</div>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div style="white-space: nowrap; overflow: auto">
+							<button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! wild marill"
+								style="
+									cursor: pointer;
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/marill.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">​</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/water.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Water"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>1</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>1</b></span>
+										</div>
+									</div>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! wild litten"
+								style="
+									cursor: pointer;
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/litten.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">​</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/fire.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Fire"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+														#dddddd;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>1</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+														#444444;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>1</b></span>
+										</div>
+									</div>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! wild snover"
+								style="
+									cursor: pointer;
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/snover.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">​</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/water.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Water"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+														#dddddd;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>1</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>2</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>2</b></span>
+										</div>
+									</div>
+								</div></button
+							><button
+								name="send"
+								value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! wild foongus"
+								style="
+									cursor: pointer;
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/foongus.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">​</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/grass.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Grass"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+														#444444;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>2</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>2</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>1</b></span>
+										</div>
+									</div>
+								</div>
+							</button>
+							<div style="display: inline-block; box-sizing: border-box">
+								<div style="position: relative; display: inline-block">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SPLENDOR ! deck 1"
+										style="
+											cursor: pointer;
+											background-image: url(https://partbot.partman.dev/static/splendor/other/back-1.png);
+											background-size: cover;
+											box-sizing: border-box;
+											height: 280px;
+											width: 200px;
+											overflow: hidden;
+											display: inline-block;
+											vertical-align: top;
+											border: 1px solid black;
+											border-radius: 12px;
+											padding: 0;
+											margin: 12px;
+										"
+									>
+										<div
+											style="
+												background: #1119;
+												border-radius: 12px;
+												color: white;
+												text-shadow: 0 0 2px #000;
+												display: inline-block;
+												padding: 0 8px 8px;
+												font-size: 72px;
+											"
+										>
+											×<b>36</b>
+										</div>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div style="height: 48px"></div>
+						<div style="font-size: 36px">
+							<div style="display: inline-block; vertical-align: top">
+								<div class="header" style="height: auto; position: initial; border-radius: 12px; padding: 8px 12px; margin: 12px">
+									<span class="username"><strong style="color: hsl(260, 58%, 59.645571189492635%)">Splendor Player 2</strong></span
+									>(<b style="font-size: 48px">0</b><small>/15</small>)
+								</div>
+								<div style="zoom: 75%"></div>
+							</div>
+							<div style="display: inline-block; vertical-align: top; color: white">
+								<div
+									style="
+										zoom: 40%;
+										overflow-x: auto;
+										font-size: 24px;
+										background: #1119;
+										border-radius: 8px;
+										padding: 8px 12px;
+										margin: 12px;
+										width: 960px;
+									"
+								>
+									<div style="text-align: start; font-size: 48px">Tokens: -</div>
+								</div>
+							</div>
+						</div>
+						<hr />
+						<div style="border: 1px solid; display: inline-block; border-radius: 8px">
+							<div style="display: inline-block; vertical-align: top">
+								<div style="margin: 12px">
+									<span
+										class="header"
+										style="
+											height: auto;
+											position: initial;
+											font-weight: bold;
+											font-size: 36px;
+											border-radius: 8px;
+											padding: 8px 12px;
+											display: inline-block;
+											width: 600px;
+										"
+										><span class="username"><strong style="color: hsl(260, 58%, 59.645571189492635%)">Splendor Player 2</strong></span>
+										(0)</span
+									>
+								</div>
+								<div style="zoom: 60%"></div>
+							</div>
+							<div style="display: inline-block; color: white">
+								<div
+									style="
+										zoom: 40%;
+										overflow-x: auto;
+										font-size: 24px;
+										background: #1119;
+										border-radius: 8px;
+										padding: 8px 12px;
+										margin: 12px;
+										width: 960px;
+									"
+								>
+									<div style="text-align: start; font-size: 48px">Cards: -</div>
+								</div>
+								<div
+									style="
+										zoom: 40%;
+										overflow-x: auto;
+										font-size: 24px;
+										background: #1119;
+										border-radius: 8px;
+										padding: 8px 12px;
+										margin: 12px;
+										width: 960px;
+									"
+								>
+									<div style="text-align: start; font-size: 48px">Tokens: -</div>
+								</div>
+							</div>
+						</div>
+						<div style="height: 12px"></div>
+						<div style="border: 1px solid; display: inline-block; border-radius: 8px">
+							<div style="display: inline-block; vertical-align: top">
+								<div style="margin: 12px">
+									<span
+										class="header"
+										style="
+											height: auto;
+											position: initial;
+											font-weight: bold;
+											font-size: 36px;
+											border-radius: 8px;
+											padding: 8px 12px;
+											display: inline-block;
+											width: 600px;
+										"
+										><span class="username"><strong style="color: hsl(140, 55%, 40%)">Splendor Player 1</strong></span> (0)</span
+									>
+								</div>
+								<div style="zoom: 60%"></div>
+							</div>
+							<div style="display: inline-block; color: white">
+								<div
+									style="
+										zoom: 40%;
+										overflow-x: auto;
+										font-size: 24px;
+										background: #1119;
+										border-radius: 8px;
+										padding: 8px 12px;
+										margin: 12px;
+										width: 960px;
+									"
+								>
+									<div style="text-align: start; font-size: 48px">Cards: -</div>
+								</div>
+								<div
+									style="
+										zoom: 40%;
+										overflow-x: auto;
+										font-size: 24px;
+										background: #1119;
+										border-radius: 8px;
+										padding: 8px 12px;
+										margin: 12px;
+										width: 960px;
+									"
+								>
+									<div style="text-align: start; font-size: 48px">Tokens: -</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</center>
+			</section>
+			<hr />
+			<section class="view">
+				<h2>Spectator view</h2>
+				<center>
+					<h1>Waiting for Splendor Player 2...</h1>
+					<div style="zoom: 50%">
+						<div>
+							<div
+								style="
+									background: no-repeat right -50% bottom/80% url(https://partbot.partman.dev/static/splendor/trainers/flint.png) #eee8;
+									border-radius: 16px;
+									border: 1px solid black;
+									height: 144px;
+									width: 144px;
+									position: relative;
+									overflow: hidden;
+									color: white;
+									display: inline-block;
+									margin: 8px;
+								"
+							>
+								<div style="background: #1119; border-bottom: 1px solid black; text-align: right">
+									<strong style="font-size: 32px; margin-right: 12px; position: relative; top: 4px">3</strong>
+									<div
+										style="
+											position: absolute;
+											bottom: 0;
+											left: 0;
+											padding: 8px 36px 0 18px;
+											background: #0009;
+											border-top-right-radius: 24px;
+											zoom: 25%;
+										"
+									>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+															#fe3e4e;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+											</div>
+										</div>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+															#444444;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background: no-repeat right bottom/80% url(https://partbot.partman.dev/static/splendor/trainers/glacia.png) #eee8;
+									border-radius: 16px;
+									border: 1px solid black;
+									height: 144px;
+									width: 144px;
+									position: relative;
+									overflow: hidden;
+									color: white;
+									display: inline-block;
+									margin: 8px;
+								"
+							>
+								<div style="background: #1119; border-bottom: 1px solid black; text-align: right">
+									<strong style="font-size: 32px; margin-right: 12px; position: relative; top: 4px">3</strong>
+									<div
+										style="
+											position: absolute;
+											bottom: 0;
+											left: 0;
+											padding: 8px 36px 0 18px;
+											background: #0009;
+											border-top-right-radius: 24px;
+											zoom: 25%;
+										"
+									>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/water.png),
+															#1996e2;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+											</div>
+										</div>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+															#dddddd;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+											</div>
+										</div>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+															#444444;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background: no-repeat right -50% bottom/80% url(https://partbot.partman.dev/static/splendor/trainers/grimsley.png) #eee8;
+									border-radius: 16px;
+									border: 1px solid black;
+									height: 144px;
+									width: 144px;
+									position: relative;
+									overflow: hidden;
+									color: white;
+									display: inline-block;
+									margin: 8px;
+								"
+							>
+								<div style="background: #1119; border-bottom: 1px solid black; text-align: right">
+									<strong style="font-size: 32px; margin-right: 12px; position: relative; top: 4px">3</strong>
+									<div
+										style="
+											position: absolute;
+											bottom: 0;
+											left: 0;
+											padding: 8px 36px 0 18px;
+											background: #0009;
+											border-top-right-radius: 24px;
+											zoom: 25%;
+										"
+									>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+															#444444;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+											</div>
+										</div>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+															#dddddd;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+											</div>
+										</div>
+										<div>
+											<div style="display: inline-block; margin: 0 12px 0 0">
+												<div
+													style="
+														height: 120px;
+														width: 96px;
+														margin: 8px;
+														margin-bottom: -12px;
+														border-radius: 12px;
+														display: inline-block;
+														background:
+															no-repeat center/94% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+															#fe3e4e;
+													"
+												></div>
+												<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div style="zoom: 60%">
+							<div style="display: inline-block; margin: 0 12px 0 0">
+								<div
+									style="
+										height: 108px;
+										width: 108px;
+										margin: 8px;
+										margin-bottom: -12px;
+										border-radius: 99px;
+										display: inline-block;
+										background:
+											no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+											#dddddd;
+									"
+								></div>
+								<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+							</div>
+							<div style="display: inline-block; margin: 0 12px 0 0">
+								<div
+									style="
+										height: 108px;
+										width: 108px;
+										margin: 8px;
+										margin-bottom: -12px;
+										border-radius: 99px;
+										display: inline-block;
+										background:
+											no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+											#444444;
+									"
+								></div>
+								<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+							</div>
+							<div style="display: inline-block; margin: 0 12px 0 0">
+								<div
+									style="
+										height: 108px;
+										width: 108px;
+										margin: 8px;
+										margin-bottom: -12px;
+										border-radius: 99px;
+										display: inline-block;
+										background:
+											no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+											#fe3e4e;
+									"
+								></div>
+								<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+							</div>
+							<div style="display: inline-block; margin: 0 12px 0 0">
+								<div
+									style="
+										height: 108px;
+										width: 108px;
+										margin: 8px;
+										margin-bottom: -12px;
+										border-radius: 99px;
+										display: inline-block;
+										background:
+											no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+											#00a900;
+									"
+								></div>
+								<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+							</div>
+							<div style="display: inline-block; margin: 0 12px 0 0">
+								<div
+									style="
+										height: 108px;
+										width: 108px;
+										margin: 8px;
+										margin-bottom: -12px;
+										border-radius: 99px;
+										display: inline-block;
+										background:
+											no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+											#1996e2;
+									"
+								></div>
+								<span style="position: relative; bottom: 18px; font-size: 72px">×<b>4</b></span>
+							</div>
+							<div style="display: inline-block; margin: 0 12px 0 0">
+								<div
+									style="
+										height: 108px;
+										width: 108px;
+										margin: 8px;
+										margin-bottom: -12px;
+										border-radius: 99px;
+										display: inline-block;
+										background:
+											no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/dragon.png),
+											#eebe4e;
+									"
+								></div>
+								<span style="position: relative; bottom: 18px; font-size: 72px">×<b>5</b></span>
+							</div>
+						</div>
+						<div style="height: 48px"></div>
+						<div style="white-space: nowrap; overflow: auto">
+							<div
+								style="
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/celebi.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">5</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/grass.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Grass"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>7</b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/porygonz.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">3</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/colorless.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Colorless"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+														#444444;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>5</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/chandelure.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">4</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/dark.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Dark"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+														#444444;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>6</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/decidueye.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">3</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/dark.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Dark"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+														#dddddd;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>5</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div style="display: inline-block; box-sizing: border-box">
+								<div style="position: relative; display: inline-block">
+									<div
+										style="
+											background-image: url(https://partbot.partman.dev/static/splendor/other/back-3.png);
+											background-size: cover;
+											box-sizing: border-box;
+											height: 280px;
+											width: 200px;
+											overflow: hidden;
+											display: inline-block;
+											vertical-align: top;
+											border: 1px solid black;
+											border-radius: 12px;
+											padding: 0;
+											margin: 12px;
+										"
+									>
+										<div
+											style="
+												background: #1119;
+												border-radius: 12px;
+												color: white;
+												text-shadow: 0 0 2px #000;
+												display: inline-block;
+												padding: 0 8px 8px;
+												font-size: 72px;
+												position: relative;
+												top: 96px;
+											"
+										>
+											×<b>16</b>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div style="white-space: nowrap; overflow: auto">
+							<div
+								style="
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/eldegoss.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">3</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/grass.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Grass"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>6</b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/onix.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">1</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/dark.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Dark"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+														#dddddd;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>2</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>2</b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/audino.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">2</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/colorless.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Colorless"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>5</b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/grovyle.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">2</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/grass.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Grass"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>5</b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div style="display: inline-block; box-sizing: border-box">
+								<div style="position: relative; display: inline-block">
+									<div
+										style="
+											background-image: url(https://partbot.partman.dev/static/splendor/other/back-2.png);
+											background-size: cover;
+											box-sizing: border-box;
+											height: 280px;
+											width: 200px;
+											overflow: hidden;
+											display: inline-block;
+											vertical-align: top;
+											border: 1px solid black;
+											border-radius: 12px;
+											padding: 0;
+											margin: 12px;
+										"
+									>
+										<div
+											style="
+												background: #1119;
+												border-radius: 12px;
+												color: white;
+												text-shadow: 0 0 2px #000;
+												display: inline-block;
+												padding: 0 8px 8px;
+												font-size: 72px;
+												position: relative;
+												top: 96px;
+											"
+										>
+											×<b>26</b>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div style="white-space: nowrap; overflow: auto">
+							<div
+								style="
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/marill.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">​</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/water.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Water"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>1</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>1</b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/litten.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">​</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/fire.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Fire"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+														#dddddd;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>1</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+														#444444;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>3</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>1</b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/snover.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">​</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/water.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Water"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/colorless.png),
+														#dddddd;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>1</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>2</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/grass.png),
+														#00a900;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>2</b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								style="
+									background-image: url(https://partbot.partman.dev/static/splendor/pokemon/foongus.png);
+									background-size: cover;
+									box-sizing: border-box;
+									height: 280px;
+									width: 200px;
+									overflow: hidden;
+									display: inline-block;
+									vertical-align: top;
+									border: 1px solid black;
+									border-radius: 12px;
+									padding: 0;
+									margin: 12px;
+									color: white;
+									text-shadow: 0 0 2px #000;
+									position: relative;
+								"
+							>
+								<div
+									style="background: #1119; border-bottom: 1px solid black; text-align: left; position: absolute; top: 0; width: 100%"
+								>
+									<strong style="font-size: 54px; margin-left: 12px; position: relative; top: 4px">​</strong
+									><img
+										src="https://partbot.partman.dev/static/splendor/type/grass.png"
+										height="48"
+										width="48"
+										style="float: right; margin: 4px; border-radius: 99px; outline: 0.5px solid #eeee; outline-offset: -2px"
+										alt="Grass"
+									/>
+								</div>
+								<div
+									style="
+										position: absolute;
+										bottom: 0;
+										left: 0;
+										padding: 8px 8px 0;
+										background: #0009;
+										border-top-right-radius: 12px;
+										zoom: 40%;
+									"
+								>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/dark.png),
+														#444444;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>2</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/fire.png),
+														#fe3e4e;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>2</b></span>
+										</div>
+									</div>
+									<div>
+										<div style="display: inline-block; margin: 0 12px 0 0">
+											<div
+												style="
+													height: 108px;
+													width: 108px;
+													margin: 8px;
+													margin-bottom: -12px;
+													border-radius: 99px;
+													display: inline-block;
+													background:
+														no-repeat center/77% url(https://partbot.partman.dev/static/splendor/type/water.png),
+														#1996e2;
+												"
+											></div>
+											<span style="position: relative; bottom: 18px; font-size: 72px">×<b>1</b></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div style="display: inline-block; box-sizing: border-box">
+								<div style="position: relative; display: inline-block">
+									<div
+										style="
+											background-image: url(https://partbot.partman.dev/static/splendor/other/back-1.png);
+											background-size: cover;
+											box-sizing: border-box;
+											height: 280px;
+											width: 200px;
+											overflow: hidden;
+											display: inline-block;
+											vertical-align: top;
+											border: 1px solid black;
+											border-radius: 12px;
+											padding: 0;
+											margin: 12px;
+										"
+									>
+										<div
+											style="
+												background: #1119;
+												border-radius: 12px;
+												color: white;
+												text-shadow: 0 0 2px #000;
+												display: inline-block;
+												padding: 0 8px 8px;
+												font-size: 72px;
+												position: relative;
+												top: 96px;
+											"
+										>
+											×<b>36</b>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div style="height: 48px"></div>
+						<div style="border: 1px solid; display: inline-block; border-radius: 8px">
+							<div style="display: inline-block; vertical-align: top">
+								<div style="margin: 12px">
+									<span
+										class="header"
+										style="
+											height: auto;
+											position: initial;
+											font-weight: bold;
+											font-size: 36px;
+											border-radius: 8px;
+											padding: 8px 12px;
+											display: inline-block;
+											width: 600px;
+										"
+										><span class="username"><strong style="color: hsl(260, 58%, 59.645571189492635%)">Splendor Player 2</strong></span>
+										(0)</span
+									>
+								</div>
+								<div style="zoom: 60%"></div>
+							</div>
+							<div style="display: inline-block; color: white">
+								<div
+									style="
+										zoom: 40%;
+										overflow-x: auto;
+										font-size: 24px;
+										background: #1119;
+										border-radius: 8px;
+										padding: 8px 12px;
+										margin: 12px;
+										width: 960px;
+									"
+								>
+									<div style="text-align: start; font-size: 48px">Cards: -</div>
+								</div>
+								<div
+									style="
+										zoom: 40%;
+										overflow-x: auto;
+										font-size: 24px;
+										background: #1119;
+										border-radius: 8px;
+										padding: 8px 12px;
+										margin: 12px;
+										width: 960px;
+									"
+								>
+									<div style="text-align: start; font-size: 48px">Tokens: -</div>
+								</div>
+							</div>
+						</div>
+						<div style="height: 12px"></div>
+						<div style="border: 1px solid; display: inline-block; border-radius: 8px">
+							<div style="display: inline-block; vertical-align: top">
+								<div style="margin: 12px">
+									<span
+										class="header"
+										style="
+											height: auto;
+											position: initial;
+											font-weight: bold;
+											font-size: 36px;
+											border-radius: 8px;
+											padding: 8px 12px;
+											display: inline-block;
+											width: 600px;
+										"
+										><span class="username"><strong style="color: hsl(140, 55%, 40%)">Splendor Player 1</strong></span> (0)</span
+									>
+								</div>
+								<div style="zoom: 60%"></div>
+							</div>
+							<div style="display: inline-block; color: white">
+								<div
+									style="
+										zoom: 40%;
+										overflow-x: auto;
+										font-size: 24px;
+										background: #1119;
+										border-radius: 8px;
+										padding: 8px 12px;
+										margin: 12px;
+										width: 960px;
+									"
+								>
+									<div style="text-align: start; font-size: 48px">Cards: -</div>
+								</div>
+								<div
+									style="
+										zoom: 40%;
+										overflow-x: auto;
+										font-size: 24px;
+										background: #1119;
+										border-radius: 8px;
+										padding: 8px 12px;
+										margin: 12px;
+										width: 960px;
+									"
+								>
+									<div style="text-align: start; font-size: 48px">Tokens: -</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</center>
+			</section>
+		</main>
+	</body>
+</html>

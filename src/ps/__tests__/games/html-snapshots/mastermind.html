@@ -1,0 +1,1505 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Mastermind</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 16px;
+				background: #546bac;
+			}
+			#page {
+				max-width: 900px;
+				padding: 12px;
+				background: #000a;
+				color: white;
+			}
+			.view {
+				margin: 16px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<main id="page">
+			<section class="view">
+				<h2>Player view</h2>
+				<div style="margin-left: 50px; margin-top: 20px">
+					<div style="margin: auto; width: 266px; background: #222; border: 2px solid black; margin-top: 5px; display: inline-block">
+						<div
+							style="
+								margin-left: 17.5px;
+								margin-right: 77px;
+								margin-top: 14px;
+								margin-bottom: 14px;
+								background: #111111;
+								border: 1px solid black;
+								font-size: 1.75em;
+								font-weight: bold;
+								color: red;
+								text-align: center;
+								display: table;
+							"
+						>
+							<div style="display: table-cell; width: 35px; height: 35px; margin-left: 7px; margin-right: 7px; vertical-align: middle">
+								?
+							</div>
+							<div style="display: table-cell; width: 35px; height: 35px; margin-left: 7px; margin-right: 7px; vertical-align: middle">
+								?
+							</div>
+							<div style="display: table-cell; width: 35px; height: 35px; margin-left: 7px; margin-right: 7px; vertical-align: middle">
+								?
+							</div>
+							<div style="display: table-cell; width: 35px; height: 35px; margin-left: 7px; margin-right: 7px; vertical-align: middle">
+								?
+							</div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+					</div>
+					<div style="border: 1px solid; padding: 20px; display: inline-block; vertical-align: top">
+						<form data-submitsend="/msgroom boardgames,/botmsg partbot,,@boardgames mastermind play {guess}">
+							<input type="text" name="guess" placeholder="Your guess!" /><br /><br />
+							<center><input type="submit" value="Submit" /></center>
+						</form>
+					</div>
+				</div>
+			</section>
+			<hr />
+			<section class="view">
+				<h2>Spectator view</h2>
+				<div style="margin-left: 50px; margin-top: 20px">
+					<div style="margin: auto; width: 266px; background: #222; border: 2px solid black; margin-top: 5px; display: inline-block">
+						<div
+							style="
+								margin-left: 17.5px;
+								margin-right: 77px;
+								margin-top: 14px;
+								margin-bottom: 14px;
+								background: #111111;
+								border: 1px solid black;
+								font-size: 1.75em;
+								font-weight: bold;
+								color: red;
+								text-align: center;
+								display: table;
+							"
+						>
+							<div style="display: table-cell; width: 35px; height: 35px; margin-left: 7px; margin-right: 7px; vertical-align: middle">
+								?
+							</div>
+							<div style="display: table-cell; width: 35px; height: 35px; margin-left: 7px; margin-right: 7px; vertical-align: middle">
+								?
+							</div>
+							<div style="display: table-cell; width: 35px; height: 35px; margin-left: 7px; margin-right: 7px; vertical-align: middle">
+								?
+							</div>
+							<div style="display: table-cell; width: 35px; height: 35px; margin-left: 7px; margin-right: 7px; vertical-align: middle">
+								?
+							</div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+						<hr style="color: black" />
+						<div
+							style="
+								display: inline-block;
+								margin-top: 7px;
+								margin-bottom: 7px;
+								height: 35px;
+								vertical-align: middle;
+								text-align: left;
+							"
+						>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+							<div
+								style="
+									display: inline-block;
+									margin: 7px;
+									width: 35px;
+									height: 35px;
+									border-radius: 50%;
+									background: none;
+									vertical-align: middle;
+								"
+							>
+								 
+							</div>
+						</div>
+						<div style="display: inline-block; padding-left: 5px; padding-right: 5px">
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+							<div style="width: 49px; display: inlineBlock"></div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+	</body>
+</html>

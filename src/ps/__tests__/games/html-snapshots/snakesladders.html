@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Snakes & Ladders</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 16px;
+				background: #546bac;
+			}
+			#page {
+				max-width: 900px;
+				padding: 12px;
+				background: #000a;
+				color: white;
+			}
+			.view {
+				margin: 16px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<main id="page">
+			<section class="view">
+				<h2>Player view</h2>
+				<center>
+					<h1>Your turn!</h1>
+					<table
+						style="
+							border-collapse: collapse;
+							margin: 20px;
+							background-image: url(&#x27;https://partbot.partman.dev/static/snakesladders/main.png&#x27;);
+							background-size: cover;
+							zoom: 75%;
+						"
+					>
+						<tbody>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+						</tbody>
+						<caption style="text-align: right; color: #555; padding: 4px">
+							Art by
+							<a href="https://cara.app/aurumii">Audiino</a>
+						</caption>
+					</table>
+					<b style="margin: 10px"></b><br /><button
+						name="send"
+						value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-SNAKESLADDERS !"
+					>
+						Roll!</button
+					><br /><br />
+					<div
+						style="
+							border-radius: 100px;
+							background-color: #ff0000;
+							height: 15px;
+							width: 15px;
+							opacity: 0.8;
+							border: 1px solid #222;
+							display: inline-block;
+						"
+					></div>
+					<span class="username"><strong style="color: hsl(19, 69%, 49%)">Snakes &amp; Ladders Player 2</strong></span
+					><br />
+					<div
+						style="
+							border-radius: 100px;
+							background-color: #ff8000;
+							height: 15px;
+							width: 15px;
+							opacity: 0.8;
+							border: 1px solid #222;
+							display: inline-block;
+						"
+					></div>
+					<span class="username"><strong style="color: hsl(21, 57%, 45.78340080993601%)">Snakes &amp; Ladders Player 1</strong></span>
+				</center>
+			</section>
+			<hr />
+			<section class="view">
+				<h2>Spectator view</h2>
+				<center>
+					<h1>Waiting for Snakes &amp; Ladders Player 2...</h1>
+					<table
+						style="
+							border-collapse: collapse;
+							margin: 20px;
+							background-image: url(&#x27;https://partbot.partman.dev/static/snakesladders/main.png&#x27;);
+							background-size: cover;
+							zoom: 75%;
+						"
+					>
+						<tbody>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+							<tr>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+								<td style="height: 45px; width: 45px"></td>
+							</tr>
+						</tbody>
+						<caption style="text-align: right; color: #555; padding: 4px">
+							Art by
+							<a href="https://cara.app/aurumii">Audiino</a>
+						</caption>
+					</table>
+					<b style="margin: 10px"></b><br /><br />
+					<div
+						style="
+							border-radius: 100px;
+							background-color: #ff0000;
+							height: 15px;
+							width: 15px;
+							opacity: 0.8;
+							border: 1px solid #222;
+							display: inline-block;
+						"
+					></div>
+					<span class="username"><strong style="color: hsl(19, 69%, 49%)">Snakes &amp; Ladders Player 2</strong></span
+					><br />
+					<div
+						style="
+							border-radius: 100px;
+							background-color: #ff8000;
+							height: 15px;
+							width: 15px;
+							opacity: 0.8;
+							border: 1px solid #222;
+							display: inline-block;
+						"
+					></div>
+					<span class="username"><strong style="color: hsl(21, 57%, 45.78340080993601%)">Snakes &amp; Ladders Player 1</strong></span>
+				</center>
+			</section>
+		</main>
+	</body>
+</html>
