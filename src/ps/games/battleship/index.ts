@@ -77,7 +77,7 @@ export class Battleship extends BaseGame<State> {
 				this.state.ready[player.turn] = true;
 				const logEntry: Log = { action: 'set', ctx: currentSet.input, time: new Date(), turn: player.turn };
 				this.log.push(logEntry);
-				this.room.sendHTML(...renderMove(logEntry, this));
+				this.sendRoomHTML(...renderMove(logEntry, this));
 				if (this.state.ready.A === true && this.state.ready.B === true) {
 					this.state.allReady = true;
 					this.endTurn();
@@ -117,7 +117,7 @@ export class Battleship extends BaseGame<State> {
 					turn: player.turn,
 				};
 				this.log.push(logEntry);
-				this.room.sendHTML(...renderMove(logEntry, this));
+				this.sendRoomHTML(...renderMove(logEntry, this));
 				if (this.state.board.attacks[player.turn].flat().filter(hit => hit).length >= HITS_TO_WIN) {
 					// Game ends
 					this.winCtx = { type: 'win', winner: player, loser: this.players[opponent] };

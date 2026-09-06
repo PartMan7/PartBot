@@ -116,7 +116,7 @@ export function renderLog(logEntry: Log, game: Azul): ReactElement {
 			const where =
 				logEntry.ctx.row === 'floor' ? $T('GAME.AZUL.LOG.ON_PENALTIES') : $T('GAME.AZUL.LOG.ON_ROW', { row: logEntry.ctx.row + 1 });
 			return (
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> {$T('GAME.AZUL.LOG.PLACED', { count: logEntry.ctx.count })}{' '}
 					<TileChip tile={logEntry.ctx.color} size={16} /> {where}
 					{logEntry.ctx.overflow > 0 && logEntry.ctx.row !== 'floor'
@@ -129,7 +129,7 @@ export function renderLog(logEntry: Log, game: Azul): ReactElement {
 		case POST_TURN_ACTIONS.WALL: {
 			const byPlayer = logEntry.ctx.tiles.groupBy(tile => tile.turn);
 			return (
-				<LogEntry game={game}>
+				<LogEntry>
 					{Object.entries(byPlayer).map(([turn, tiles], i) => (
 						<>
 							{i > 0 ? ' ' : null}
@@ -150,7 +150,7 @@ export function renderLog(logEntry: Log, game: Azul): ReactElement {
 		}
 		default:
 			return (
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> {$T('GAME.AZUL.LOG.SKIPPED')}
 				</LogEntry>
 			);

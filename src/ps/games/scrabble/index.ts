@@ -277,7 +277,7 @@ export class Scrabble extends BaseGame<State> {
 			ctx: { points, tiles, point: pos, dir, rack: rack.slice(), newTiles, words: points.words },
 		};
 		this.log.push(logEntry);
-		this.room.sendHTML(...renderMove(logEntry, this));
+		this.sendRoomHTML(...renderMove(logEntry, this));
 		this.selected = null;
 		this.passCount = 0;
 
@@ -319,7 +319,7 @@ export class Scrabble extends BaseGame<State> {
 		this.passCount = 0;
 		const logEntry: Log = { action: 'exchange', time: new Date(), turn, ctx: { tiles: letters, newTiles, rack: rack.slice() } };
 		this.log.push(logEntry);
-		this.room.sendHTML(...renderMove(logEntry, this));
+		this.sendRoomHTML(...renderMove(logEntry, this));
 
 		this.endTurn();
 	}
@@ -330,7 +330,7 @@ export class Scrabble extends BaseGame<State> {
 		this.passCount++;
 		const logEntry: Log = { action: 'pass', time: new Date(), turn, ctx: { rack: this.state.racks[turn].slice() } };
 		this.log.push(logEntry);
-		this.room.sendHTML(...renderMove(logEntry, this));
+		this.sendRoomHTML(...renderMove(logEntry, this));
 		if (this.passCount > Object.keys(this.players).length) {
 			return this.end('regular');
 		}

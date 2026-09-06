@@ -557,7 +557,7 @@ export class Splendor extends BaseGame<State> {
 
 	chatLog(log: Log): void {
 		this.log.push(log);
-		this.room.sendHTML(...renderLog(log, this));
+		this.sendRoomHTML(...renderLog(log, this));
 	}
 
 	render(side: Turn | null) {
