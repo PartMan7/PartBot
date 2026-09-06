@@ -33,21 +33,21 @@ export function renderMove(logEntry: Log, game: Battleship): [ReactElement, { na
 	switch (logEntry.action) {
 		case 'set':
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> set their ships!
 				</LogEntry>,
 				opts,
 			];
 		case 'hit':
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> hit the enemy {logEntry.ctx.ship}!
 				</LogEntry>,
 				opts,
 			];
 		case 'miss':
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> missed.
 				</LogEntry>,
 				opts,
@@ -55,7 +55,7 @@ export function renderMove(logEntry: Log, game: Battleship): [ReactElement, { na
 		default:
 			Logger.log('Battleship had some weird move', logEntry, game.players);
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					Well <i>something</i> happened, I think! Someone go poke PartMan
 				</LogEntry>,
 				opts,

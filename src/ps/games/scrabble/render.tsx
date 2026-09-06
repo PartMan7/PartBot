@@ -23,7 +23,7 @@ export function renderMove(logEntry: Log, game: Scrabble): [ReactElement, { name
 		case 'play':
 			const words = Object.entries(logEntry.ctx.words);
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> played{' '}
 					{words.length === 1 && !logEntry.ctx.points.bingo
 						? words[0][0]
@@ -34,14 +34,14 @@ export function renderMove(logEntry: Log, game: Scrabble): [ReactElement, { name
 			];
 		case 'exchange':
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> exchanged {pluralize(logEntry.ctx.tiles.length, 'tile', 'tiles')}.
 				</LogEntry>,
 				opts,
 			];
 		case 'pass':
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> passed.
 				</LogEntry>,
 				opts,
@@ -49,7 +49,7 @@ export function renderMove(logEntry: Log, game: Scrabble): [ReactElement, { name
 		default:
 			Logger.log('Scrabble had some weird move', logEntry, game.players);
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					Well <i>something</i> happened, I think! Someone go poke PartMan
 				</LogEntry>,
 				opts,

@@ -70,7 +70,7 @@ export class Azul extends BaseGame<State> {
 
 	chatLog(log: Log): void {
 		this.log.push(log);
-		this.room.sendHTML(renderLog(log, this), { name: `${this.id}-chatlog` });
+		this.sendRoomHTML(renderLog(log, this), { name: `${this.id}-chatlog` });
 	}
 
 	moddable() {

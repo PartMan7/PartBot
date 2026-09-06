@@ -25,6 +25,7 @@ import type { BaseLookup, NoTranslate, PSRoomTranslated, TranslatedText, Transla
 import type { ActionResponse, BaseLog, BaseState, EndType, Meta, Player } from '@/ps/games/types';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
+import type { HTMLopts } from 'ps-client/classes/common';
 import type { ReactElement } from 'react';
 /** The subset of a ps-client User actually required by game logic. */
 export type GameUser = Pick<User, 'id' | 'name' | 'userid'>;
@@ -578,6 +579,10 @@ export class BaseGame<State extends BaseState> {
 	sendHTML(to: string | User, html: ReactElement | string): void {
 		const user = typeof to === 'object' ? to : this.parent.addUser({ userid: toId(to) });
 		this.runRender(() => user.pageHTML(html, { name: this.id, room: this.room }));
+	}
+
+	sendRoomHTML(html: ReactElement, opts?: HTMLopts | string): void {
+		this.runRender(() => this.room.sendHTML(html, opts));
 	}
 
 	update(user?: string): void {
