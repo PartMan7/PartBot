@@ -1,6 +1,6 @@
+import { type BaseGame, getGame } from '@/ps/games/game';
 import { Button } from '@/utils/components/ps';
 
-import type { BaseGame, CommonGame } from '@/ps/games/game';
 import type { BaseState } from '@/ps/games/types';
 import type { CSSProperties, HTMLProps, ReactElement, ReactNode } from 'react';
 
@@ -19,18 +19,13 @@ export function GameHeader({
 	return <h1 style={dimHeader ? { color: 'gray' } : {}}>{header}</h1>;
 }
 
-export function LogEntry({
-	game: {
+export function LogEntry({ children }: { children: ReactNode }): ReactElement {
+	const {
 		id,
 		msg,
 		meta: { name: game },
 		$T,
-	},
-	children,
-}: {
-	game: CommonGame;
-	children: ReactNode;
-}): ReactElement {
+	} = getGame();
 	return (
 		<>
 			<hr />

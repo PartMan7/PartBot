@@ -41,8 +41,6 @@ const TOKEN_COLOURS: Record<TOKEN_TYPE, string> = {
 };
 
 export function renderLog(logEntry: Log, game: Splendor): [ReactElement, { name: string }] {
-	const Wrapper = ({ children }: { children: ReactNode }): ReactElement => <LogEntry game={game}>{children}</LogEntry>;
-
 	const playerName = game.players[logEntry.turn]?.name;
 	const opts = { name: `${game.id}-chatlog` };
 	switch (logEntry.action) {
@@ -50,26 +48,26 @@ export function renderLog(logEntry: Log, game: Splendor): [ReactElement, { name:
 		case ACTIONS.BUY_RESERVE: {
 			const card = metadata.pokemon[logEntry.ctx.id];
 			return [
-				<Wrapper>
+				<LogEntry>
 					<Username name={playerName} clickable /> bought {card.name}!
-				</Wrapper>,
+				</LogEntry>,
 				opts,
 			];
 		}
 		case ACTIONS.RESERVE: {
 			const card = metadata.pokemon[logEntry.ctx.id];
 			return [
-				<Wrapper>
+				<LogEntry>
 					<Username name={playerName} clickable /> reserved {logEntry.ctx.deck ? `a Tier ${logEntry.ctx.deck} card` : card.name}.
-				</Wrapper>,
+				</LogEntry>,
 				opts,
 			];
 		}
 		case POST_TURN_ACTIONS.CLAIM_TRAINER: {
 			return [
-				<Wrapper>
+				<LogEntry>
 					{metadata.trainers[logEntry.ctx.trainerId].name} joined {<Username name={playerName} clickable />}!
-				</Wrapper>,
+				</LogEntry>,
 				opts,
 			];
 		}
@@ -77,7 +75,7 @@ export function renderLog(logEntry: Log, game: Splendor): [ReactElement, { name:
 		case POST_TURN_ACTIONS.TOO_MANY_TOKENS: {
 			const tokens = logEntry.action === ACTIONS.DRAW ? logEntry.ctx.tokens : logEntry.ctx.discard;
 			return [
-				<Wrapper>
+				<LogEntry>
 					<Username name={playerName} clickable /> {logEntry.action === ACTIONS.DRAW ? 'drew' : 'discarded'} tokens{' '}
 					<span style={{ zoom: '16%' }}>
 						{(Object.entries(tokens) as [TOKEN_TYPE, number][])
@@ -96,23 +94,23 @@ export function renderLog(logEntry: Log, game: Splendor): [ReactElement, { name:
 					) : (
 						'.'
 					)}
-				</Wrapper>,
+				</LogEntry>,
 				opts,
 			];
 		}
 		case ACTIONS.PASS:
 			return [
-				<Wrapper>
+				<LogEntry>
 					<Username name={playerName} clickable /> passed.
-				</Wrapper>,
+				</LogEntry>,
 				opts,
 			];
 		default:
 			Logger.log('Splendor had some weird move', logEntry, game.players);
 			return [
-				<Wrapper>
+				<LogEntry>
 					Well <i>something</i> happened, I think! Someone go poke PartMan
-				</Wrapper>,
+				</LogEntry>,
 				opts,
 			];
 	}
