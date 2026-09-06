@@ -9,9 +9,8 @@ import { repeat } from '@/utils/repeat';
 import type { TranslatedText } from '@/i18n/types';
 import type { Log } from '@/ps/games/connectfour/logs';
 import type { Board, RenderCtx, State, Turn, WinCtx } from '@/ps/games/connectfour/types';
-import type { BaseContext } from '@/ps/games/game';
+import type { BaseContext, GameUser } from '@/ps/games/game';
 import type { EndType } from '@/ps/games/types';
-import type { User } from 'ps-client';
 import type { ReactElement } from 'react';
 
 export { meta } from '@/ps/games/connectfour/meta';
@@ -28,7 +27,7 @@ export class ConnectFour extends BaseGame<State> {
 		this.state.board = createGrid<Turn | null>(6, 7, () => null);
 	}
 
-	action(user: User, ctx: string): void {
+	action(user: GameUser, ctx: string): void {
 		if (!this.started) this.throw('GAME.NOT_STARTED');
 		if (user.id !== this.players[this.turn!].id) this.throw('GAME.IMPOSTOR_ALERT');
 		const col = parseInt(ctx);
@@ -109,39 +108,27 @@ export class ConnectFour extends BaseGame<State> {
 		const title = Object.values(this.players)
 			.map(player => `${player.name} (${player.turn})${player.id === winner ? ` ${WINNER_ICON}` : ''}`)
 			.join(' vs ');
-		return (
-			new EmbedBuilder()
-				.setColor('#0080ff')
-				.setAuthor({ name: 'Connect Four - Room Match' })
-				.setTitle(title)
-				.setURL(await this.getURL())
-				.addFields([
-					{
-						name: '\u200b',
-						value: this.state.board
-							.map(row => row.map(cell => (cell ? { R: ':red_circle:', Y: ':yellow_circle:' }[cell] : ':blue_circle:')).join(''))
-							.join('\n'),
-					},
-				])
-		);
+		return new EmbedBuilder()
+			.setColor('#0080ff')
+			.setAuthor({ name: 'Connect Four - Room Match' })
+			.setTitle(title)
+			.setURL(await this.getURL())
+			.addFields([
+				{
+					name: '\u200b',
+					value: this.state.board
+						.map(row => row.map(cell => (cell ? { R: ':red_circle:', Y: ':yellow_circle:' }[cell] : ':blue_circle:')).join(''))
+						.join('\n'),
+				},
+			]);
 	}
 
 	render(side: Turn | null): ReactElement {
 		const ctx: RenderCtx = {
 			board: this.state.board,
 			id: this.id,
+			...this.getHeader(side),
 		};
-		if (this.winCtx) {
-			ctx.header = this.$T('GAME.GAME_ENDED');
-		} else if (side === this.turn) {
-			ctx.header = this.$T('GAME.YOUR_TURN');
-		} else if (side) {
-			ctx.header = this.$T('GAME.WAITING_FOR_OPPONENT');
-			ctx.dimHeader = true;
-		} else if (this.turn) {
-			const current = this.players[this.turn];
-			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` });
-		}
-		return render.bind(this.renderCtx)(ctx);
+		return this.runRender(() => render(ctx));
 	}
 }

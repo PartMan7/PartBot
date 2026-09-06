@@ -1,4 +1,5 @@
-import { LogEntry, Table } from '@/ps/games/render';
+import { getMsg } from '@/ps/games/game';
+import { GameHeader, LogEntry, Table } from '@/ps/games/render';
 import { RACK_SIZE, WIDE_LETTERS } from '@/ps/games/scrabble/constants';
 import { Button, Form, Username } from '@/utils/components/ps';
 import { type Point, coincident } from '@/utils/grid';
@@ -22,7 +23,7 @@ export function renderMove(logEntry: Log, game: Scrabble): [ReactElement, { name
 		case 'play':
 			const words = Object.entries(logEntry.ctx.words);
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> played{' '}
 					{words.length === 1 && !logEntry.ctx.points.bingo
 						? words[0][0]
@@ -33,14 +34,14 @@ export function renderMove(logEntry: Log, game: Scrabble): [ReactElement, { name
 			];
 		case 'exchange':
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> exchanged {pluralize(logEntry.ctx.tiles.length, 'tile', 'tiles')}.
 				</LogEntry>,
 				opts,
 			];
 		case 'pass':
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> passed.
 				</LogEntry>,
 				opts,
@@ -48,15 +49,13 @@ export function renderMove(logEntry: Log, game: Scrabble): [ReactElement, { name
 		default:
 			Logger.log('Scrabble had some weird move', logEntry, game.players);
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					Well <i>something</i> happened, I think! Someone go poke PartMan
 				</LogEntry>,
 				opts,
 			];
 	}
 }
-
-type This = { msg: string };
 
 const LETTER_HEX = '#da5';
 
@@ -83,7 +82,8 @@ function getBackgroundHex(bonus: Bonus | null): string {
 	}
 }
 
-function renderBoard(this: This, ctx: RenderCtx) {
+function renderBoard(ctx: RenderCtx) {
+	const msg = getMsg();
 	const clickable = !!ctx.side && ctx.side === ctx.turn;
 	const Cell: CellRenderer<BoardTile | null> = ({ cell, i, j }): ReactElement => {
 		const baseCell = ctx.baseBoard[i][j];
@@ -108,7 +108,7 @@ function renderBoard(this: This, ctx: RenderCtx) {
 			>
 				{cell ? (
 					<ButtonIfNeeded
-						value={`${this.msg} ! s${encodePos([i, j])}`}
+						value={`${msg} ! s${encodePos([i, j])}`}
 						style={{
 							...buttonStyles,
 							fontFamily: clickable ? 'inherit' : undefined,
@@ -125,7 +125,7 @@ function renderBoard(this: This, ctx: RenderCtx) {
 				) : null}
 				{!cell && clickable ? (
 					<Button
-						value={`${this.msg} ! s${encodePos([i, j])}`}
+						value={`${msg} ! s${encodePos([i, j])}`}
 						style={{
 							...buttonStyles,
 							...(baseCell === '2*'
@@ -199,11 +199,12 @@ function UserPanel({ children }: { children: ReactNode }): ReactElement {
 	);
 }
 
-export function render(this: This, ctx: RenderCtx): ReactElement {
+export function render(ctx: RenderCtx): ReactElement {
+	const msg = getMsg();
 	return (
 		<center>
-			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
-			{renderBoard.bind(this)(ctx)}
+			<GameHeader header={ctx.header} dimHeader={ctx.dimHeader} />
+			{renderBoard(ctx)}
 			{ctx.side ? (
 				<>
 					<UserPanel>
@@ -211,7 +212,7 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 							{ctx.rack?.map(letter => <Letter letter={letter} points={ctx.getPoints(letter)} />)}
 						</div>
 						{ctx.isActive ? (
-							<Button value={`${this.msg} ! -`} style={{ border: '2px solid darkred', borderRadius: 4, marginLeft: 24 }}>
+							<Button value={`${msg} ! -`} style={{ border: '2px solid darkred', borderRadius: 4, marginLeft: 24 }}>
 								Pass
 							</Button>
 						) : null}
@@ -221,7 +222,7 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 							<UserPanel>
 								{ctx.selected ? (
 									<Form
-										value={`${this.msg} ! p${encodePos(ctx.selected)}{dir} {word}`}
+										value={`${msg} ! p${encodePos(ctx.selected)}{dir} {word}`}
 										style={{ display: 'inline-block', margin: '0 8px' }}
 									>
 										<center style={{ display: 'inline-block' }}>
@@ -249,7 +250,7 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 									<h3>Select a tile to play from!</h3>
 								)}
 								<hr />
-								<Form value={`${this.msg} ! x {tiles}`} style={{ margin: '4px 0' }}>
+								<Form value={`${msg} ! x {tiles}`} style={{ margin: '4px 0' }}>
 									<input name="tiles" placeholder="Exchange tiles" width="100" style={{ marginRight: 4 }} />
 									<button type="submit">Exchange</button>
 								</Form>

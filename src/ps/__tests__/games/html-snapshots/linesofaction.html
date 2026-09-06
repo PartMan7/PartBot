@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Lines of Action</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 16px;
+				background: #546bac;
+			}
+			#page {
+				max-width: 900px;
+				padding: 12px;
+				background: #000a;
+				color: white;
+			}
+			.view {
+				margin: 16px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<main id="page">
+			<section class="view">
+				<h2>Player view</h2>
+				<center>
+					<h1>Your turn!</h1>
+					<table style="border-collapse: collapse; margin: 20px">
+						<tbody>
+							<tr>
+								<th></th>
+								<th style="color: gray; height: 20px">A</th>
+								<th style="color: gray; height: 20px">B</th>
+								<th style="color: gray; height: 20px">C</th>
+								<th style="color: gray; height: 20px">D</th>
+								<th style="color: gray; height: 20px">E</th>
+								<th style="color: gray; height: 20px">F</th>
+								<th style="color: gray; height: 20px">G</th>
+								<th style="color: gray; height: 20px">H</th>
+								<th></th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">1</th>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-LINESOFACTION ! select 0-1"
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											border: none;
+											background: #333;
+										"
+									></button>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-LINESOFACTION ! select 0-2"
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											border: none;
+											background: #333;
+										"
+									></button>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-LINESOFACTION ! select 0-3"
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											border: none;
+											background: #333;
+										"
+									></button>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-LINESOFACTION ! select 0-4"
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											border: none;
+											background: #333;
+										"
+									></button>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-LINESOFACTION ! select 0-5"
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											border: none;
+											background: #333;
+										"
+									></button>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-LINESOFACTION ! select 0-6"
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											border: none;
+											background: #333;
+										"
+									></button>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<th style="color: gray; width: 20px">1</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">2</th>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<th style="color: gray; width: 20px">2</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">3</th>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<th style="color: gray; width: 20px">3</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">4</th>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<th style="color: gray; width: 20px">4</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">5</th>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<th style="color: gray; width: 20px">5</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">6</th>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<th style="color: gray; width: 20px">6</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">7</th>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<th style="color: gray; width: 20px">7</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">8</th>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-LINESOFACTION ! select 7-1"
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											border: none;
+											background: #333;
+										"
+									></button>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-LINESOFACTION ! select 7-2"
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											border: none;
+											background: #333;
+										"
+									></button>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-LINESOFACTION ! select 7-3"
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											border: none;
+											background: #333;
+										"
+									></button>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-LINESOFACTION ! select 7-4"
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											border: none;
+											background: #333;
+										"
+									></button>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-LINESOFACTION ! select 7-5"
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											border: none;
+											background: #333;
+										"
+									></button>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<button
+										name="send"
+										value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-LINESOFACTION ! select 7-6"
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											border: none;
+											background: #333;
+										"
+									></button>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<th style="color: gray; width: 20px">8</th>
+							</tr>
+							<tr>
+								<th></th>
+								<th style="color: gray; height: 20px">A</th>
+								<th style="color: gray; height: 20px">B</th>
+								<th style="color: gray; height: 20px">C</th>
+								<th style="color: gray; height: 20px">D</th>
+								<th style="color: gray; height: 20px">E</th>
+								<th style="color: gray; height: 20px">F</th>
+								<th style="color: gray; height: 20px">G</th>
+								<th style="color: gray; height: 20px">H</th>
+								<th></th>
+							</tr>
+						</tbody>
+					</table>
+				</center>
+			</section>
+			<hr />
+			<section class="view">
+				<h2>Spectator view</h2>
+				<center>
+					<h1>Waiting for Lines of Action B (B)...</h1>
+					<table style="border-collapse: collapse; margin: 20px">
+						<tbody>
+							<tr>
+								<th></th>
+								<th style="color: gray; height: 20px">A</th>
+								<th style="color: gray; height: 20px">B</th>
+								<th style="color: gray; height: 20px">C</th>
+								<th style="color: gray; height: 20px">D</th>
+								<th style="color: gray; height: 20px">E</th>
+								<th style="color: gray; height: 20px">F</th>
+								<th style="color: gray; height: 20px">G</th>
+								<th style="color: gray; height: 20px">H</th>
+								<th></th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">1</th>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: #333;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: #333;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: #333;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: #333;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: #333;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: #333;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<th style="color: gray; width: 20px">1</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">2</th>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<th style="color: gray; width: 20px">2</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">3</th>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<th style="color: gray; width: 20px">3</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">4</th>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<th style="color: gray; width: 20px">4</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">5</th>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<th style="color: gray; width: 20px">5</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">6</th>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<th style="color: gray; width: 20px">6</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">7</th>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: white;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<th style="color: gray; width: 20px">7</th>
+							</tr>
+							<tr>
+								<th style="color: gray; width: 20px">8</th>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black"></td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: #333;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: #333;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: #333;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: #333;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: #333;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #d8b896; border-collapse: collapse; border: 1px solid black">
+									<span
+										style="
+											height: 24px;
+											width: 24px;
+											display: inline-block;
+											border-radius: 100px;
+											margin-left: 3px;
+											margin-top: 3px;
+											background: #333;
+											border: 1px solid black;
+										"
+									></span>
+								</td>
+								<td style="height: 30px; width: 30px; background: #f0d9b5; border-collapse: collapse; border: 1px solid black"></td>
+								<th style="color: gray; width: 20px">8</th>
+							</tr>
+							<tr>
+								<th></th>
+								<th style="color: gray; height: 20px">A</th>
+								<th style="color: gray; height: 20px">B</th>
+								<th style="color: gray; height: 20px">C</th>
+								<th style="color: gray; height: 20px">D</th>
+								<th style="color: gray; height: 20px">E</th>
+								<th style="color: gray; height: 20px">F</th>
+								<th style="color: gray; height: 20px">G</th>
+								<th style="color: gray; height: 20px">H</th>
+								<th></th>
+							</tr>
+						</tbody>
+					</table>
+				</center>
+			</section>
+		</main>
+	</body>
+</html>

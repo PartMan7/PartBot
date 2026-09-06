@@ -19,7 +19,7 @@ export function renderMenu(room: PSRoomTranslated, meta: Meta, isStaff: boolean)
 	return (
 		<>
 			{games.map(game => {
-				const cmd = game.renderCtx.msg;
+				const cmd = game.msg;
 				return (
 					<div key={game.id}>
 						{game.started ? (

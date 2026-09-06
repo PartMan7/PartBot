@@ -1,6 +1,6 @@
+import { type BaseGame, getGame } from '@/ps/games/game';
 import { Button } from '@/utils/components/ps';
 
-import type { BaseGame, CommonGame } from '@/ps/games/game';
 import type { BaseState } from '@/ps/games/types';
 import type { CSSProperties, HTMLProps, ReactElement, ReactNode } from 'react';
 
@@ -8,18 +8,24 @@ export function Small({ children }: { children: ReactNode }): ReactElement {
 	return <div style={{ zoom: '60%' }}>{children}</div>;
 }
 
-export function LogEntry({
-	game: {
-		id,
-		meta: { name: game },
-		renderCtx: { msg },
-		$T,
-	},
-	children,
+export function GameHeader({
+	header,
+	dimHeader,
 }: {
-	game: CommonGame;
-	children: ReactNode;
-}): ReactElement {
+	header: string | undefined;
+	dimHeader: boolean | undefined;
+}): ReactElement | null {
+	if (!header) return null;
+	return <h1 style={dimHeader ? { color: 'gray' } : {}}>{header}</h1>;
+}
+
+export function LogEntry({ children }: { children: ReactNode }): ReactElement {
+	const {
+		id,
+		msg,
+		meta: { name: game },
+		$T,
+	} = getGame();
 	return (
 		<>
 			<hr />
@@ -47,19 +53,19 @@ export function renderSignups<State extends BaseState>(this: BaseGame<State>, st
 				? Object.entries(this.meta.turns!)
 						.filter(([turn]) => !this.players[turn])
 						.map(([side, sideName]) => (
-							<Button key={side} value={`${this.renderCtx.msg} join ${side}`} style={{ margin: 5 }}>
+							<Button key={side} value={`${this.msg} join ${side}`} style={{ margin: 5 }}>
 								{sideName}
 							</Button>
 						))
 				: null}
 			{this.sides && this.turns.length - Object.keys(this.players).length > 1 ? (
-				<Button value={`${this.renderCtx.msg} join -`} style={{ margin: 5 }}>
+				<Button value={`${this.msg} join -`} style={{ margin: 5 }}>
 					{this.$T('GAME.LABELS.RANDOM')}
 				</Button>
 			) : null}
-			{!this.sides ? <Button value={`${this.renderCtx.msg} join`}>{this.$T('GAME.LABELS.JOIN')}</Button> : null}
+			{!this.sides ? <Button value={`${this.msg} join`}>{this.$T('GAME.LABELS.JOIN')}</Button> : null}
 			{staff && startable ? (
-				<Button value={`${this.renderCtx.msg} start`} style={{ marginLeft: 8 }}>
+				<Button value={`${this.msg} start`} style={{ marginLeft: 8 }}>
 					{this.$T('GAME.LABELS.START')}
 				</Button>
 			) : null}
@@ -73,7 +79,7 @@ export function renderCloseSignups<State extends BaseState>(this: BaseGame<State
 		<>
 			<hr />
 			<h1>{this.$T('GAME.SIGNUPS_CLOSED', { game: this.meta.name })}</h1>
-			<Button value={`${this.renderCtx.msg} watch`}>{this.$T('GAME.LABELS.WATCH')}</Button>
+			<Button value={`${this.msg} watch`}>{this.$T('GAME.LABELS.WATCH')}</Button>
 			<hr />
 		</>
 	);

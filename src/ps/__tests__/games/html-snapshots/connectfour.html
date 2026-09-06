@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Connect Four</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 16px;
+				background: #546bac;
+			}
+			#page {
+				max-width: 900px;
+				padding: 12px;
+				background: #000a;
+				color: white;
+			}
+			.view {
+				margin: 16px 0;
+			}
+		</style>
+	</head>
+	<body>
+		<main id="page">
+			<section class="view">
+				<h2>Player view</h2>
+				<center>
+					<h1>Your turn!</h1>
+					<div style="background-color: #0080ff; border-radius: 16px; display: inline-block; padding: 2px">
+						<button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 0"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div></button
+						><button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 1"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div></button
+						><button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 2"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div></button
+						><button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 3"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div></button
+						><button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 4"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div></button
+						><button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 5"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div></button
+						><button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 6"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+						</button>
+					</div>
+				</center>
+			</section>
+			<hr />
+			<section class="view">
+				<h2>Spectator view</h2>
+				<center>
+					<h1>Waiting for Connect Four Y (Y)...</h1>
+					<div style="background-color: #0080ff; border-radius: 16px; display: inline-block; padding: 2px">
+						<button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 0"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div></button
+						><button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 1"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div></button
+						><button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 2"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div></button
+						><button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 3"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div></button
+						><button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 4"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div></button
+						><button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 5"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div></button
+						><button
+							name="send"
+							value="/msgroom boardgames,/botmsg partbot,,@#SNAPSHOT-CONNECTFOUR ! 6"
+							style="background: none; border: none; padding: 0"
+						>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+							<div
+								style="height: 35px; width: 35px; border-radius: 50%; margin: 3px; background-image: radial-gradient(#111 50%, #333)"
+							></div>
+						</button>
+					</div>
+				</center>
+			</section>
+		</main>
+	</body>
+</html>

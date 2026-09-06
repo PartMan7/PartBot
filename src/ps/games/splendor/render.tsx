@@ -1,4 +1,5 @@
-import { LogEntry } from '@/ps/games/render';
+import { getMsg } from '@/ps/games/game';
+import { GameHeader, LogEntry } from '@/ps/games/render';
 import {
 	ACTIONS,
 	AllTokenTypes,
@@ -20,8 +21,6 @@ import type { Log } from '@/ps/games/splendor/logs';
 import type { Board, Card, PlayerData, RenderCtx, TokenCount, Trainer, ViewType } from '@/ps/games/splendor/types';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
-type This = { msg: string };
-
 function getArtUrl(
 	type: 'pokemon' | 'pokemon-afd' | 'trainers' | 'type' | 'other',
 	path: string,
@@ -42,8 +41,6 @@ const TOKEN_COLOURS: Record<TOKEN_TYPE, string> = {
 };
 
 export function renderLog(logEntry: Log, game: Splendor): [ReactElement, { name: string }] {
-	const Wrapper = ({ children }: { children: ReactNode }): ReactElement => <LogEntry game={game}>{children}</LogEntry>;
-
 	const playerName = game.players[logEntry.turn]?.name;
 	const opts = { name: `${game.id}-chatlog` };
 	switch (logEntry.action) {
@@ -51,26 +48,26 @@ export function renderLog(logEntry: Log, game: Splendor): [ReactElement, { name:
 		case ACTIONS.BUY_RESERVE: {
 			const card = metadata.pokemon[logEntry.ctx.id];
 			return [
-				<Wrapper>
+				<LogEntry>
 					<Username name={playerName} clickable /> bought {card.name}!
-				</Wrapper>,
+				</LogEntry>,
 				opts,
 			];
 		}
 		case ACTIONS.RESERVE: {
 			const card = metadata.pokemon[logEntry.ctx.id];
 			return [
-				<Wrapper>
+				<LogEntry>
 					<Username name={playerName} clickable /> reserved {logEntry.ctx.deck ? `a Tier ${logEntry.ctx.deck} card` : card.name}.
-				</Wrapper>,
+				</LogEntry>,
 				opts,
 			];
 		}
 		case POST_TURN_ACTIONS.CLAIM_TRAINER: {
 			return [
-				<Wrapper>
+				<LogEntry>
 					{metadata.trainers[logEntry.ctx.trainerId].name} joined {<Username name={playerName} clickable />}!
-				</Wrapper>,
+				</LogEntry>,
 				opts,
 			];
 		}
@@ -78,7 +75,7 @@ export function renderLog(logEntry: Log, game: Splendor): [ReactElement, { name:
 		case POST_TURN_ACTIONS.TOO_MANY_TOKENS: {
 			const tokens = logEntry.action === ACTIONS.DRAW ? logEntry.ctx.tokens : logEntry.ctx.discard;
 			return [
-				<Wrapper>
+				<LogEntry>
 					<Username name={playerName} clickable /> {logEntry.action === ACTIONS.DRAW ? 'drew' : 'discarded'} tokens{' '}
 					<span style={{ zoom: '16%' }}>
 						{(Object.entries(tokens) as [TOKEN_TYPE, number][])
@@ -97,23 +94,23 @@ export function renderLog(logEntry: Log, game: Splendor): [ReactElement, { name:
 					) : (
 						'.'
 					)}
-				</Wrapper>,
+				</LogEntry>,
 				opts,
 			];
 		}
 		case ACTIONS.PASS:
 			return [
-				<Wrapper>
+				<LogEntry>
 					<Username name={playerName} clickable /> passed.
-				</Wrapper>,
+				</LogEntry>,
 				opts,
 			];
 		default:
 			Logger.log('Splendor had some weird move', logEntry, game.players);
 			return [
-				<Wrapper>
+				<LogEntry>
 					Well <i>something</i> happened, I think! Someone go poke PartMan
-				</Wrapper>,
+				</LogEntry>,
 				opts,
 			];
 	}
@@ -842,16 +839,17 @@ export function PlayerSummary({ data }: { data: PlayerData }): ReactElement {
 	);
 }
 
-export function render(this: This, ctx: RenderCtx): ReactElement {
+export function render(ctx: RenderCtx): ReactElement {
+	const msg = getMsg();
 	return (
 		<center>
-			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
+			<GameHeader header={ctx.header} dimHeader={ctx.dimHeader} />
 			<div style={{ zoom: '50%' }}>
-				<BaseBoard board={ctx.board} onClick={ctx.view.active ? this.msg : undefined} view={ctx.view} $T={ctx.$T} />
+				<BaseBoard board={ctx.board} onClick={ctx.view.active ? msg : undefined} view={ctx.view} $T={ctx.$T} />
 				<div style={{ height: 48 }} />
 				{ctx.view.type === 'player' ? (
 					<>
-						<ActivePlayer data={ctx.players[ctx.view.self]} action={ctx.view} onClick={this.msg} cap={ctx.cap} $T={ctx.$T} />
+						<ActivePlayer data={ctx.players[ctx.view.self]} action={ctx.view} onClick={msg} cap={ctx.cap} $T={ctx.$T} />
 						<hr />
 					</>
 				) : null}

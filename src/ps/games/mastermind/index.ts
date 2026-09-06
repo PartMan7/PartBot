@@ -5,16 +5,15 @@ import { render, renderCloseSignups } from '@/ps/games/mastermind/render';
 import { sample } from '@/utils/random';
 
 import type { TranslatedText } from '@/i18n/types';
-import type { BaseContext } from '@/ps/games/game';
+import type { BaseContext, GameUser } from '@/ps/games/game';
 import type { Guess, GuessResult, State } from '@/ps/games/mastermind/types';
 import type { EndType } from '@/ps/games/types';
-import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/mastermind/meta';
 
 export class Mastermind extends BaseGame<State> {
 	ended = false;
-	setBy: User | null = null;
+	setBy: GameUser | null = null;
 
 	constructor(ctx: BaseContext) {
 		super(ctx);
@@ -31,7 +30,7 @@ export class Mastermind extends BaseGame<State> {
 		super.after(ctx);
 	}
 	renderCloseSignups(): ReactElement {
-		return renderCloseSignups.bind(this)();
+		return renderCloseSignups();
 	}
 
 	parseGuess(guess: string): Guess {
@@ -40,7 +39,7 @@ export class Mastermind extends BaseGame<State> {
 		return guessStr.split('').map(n => +n) as Guess;
 	}
 
-	action(user: User, ctx: string): void {
+	action(user: GameUser, ctx: string): void {
 		if (!this.started) this.throw('GAME.NOT_STARTED');
 		if (!(user.id in this.players)) this.throw('GAME.IMPOSTOR_ALERT');
 
@@ -75,7 +74,7 @@ export class Mastermind extends BaseGame<State> {
 		}
 		return { exact, moved };
 	}
-	external(user: User, ctx: string): void {
+	external(user: GameUser, ctx: string): void {
 		if (this.state.board.length > 0) this.throw('GAME.ALREADY_STARTED');
 		if (this.setBy) this.throw('TOO_LATE');
 		if (user.id in this.players) this.throw('GAME.IMPOSTOR_ALERT');
@@ -100,6 +99,6 @@ export class Mastermind extends BaseGame<State> {
 	}
 
 	render(asPlayer: string | null): ReactElement {
-		return render.bind(this.renderCtx)(this.state, asPlayer ? (this.ended ? 'over' : 'playing') : 'spectator');
+		return this.runRender(() => render(this.state, asPlayer ? (this.ended ? 'over' : 'playing') : 'spectator'));
 	}
 }

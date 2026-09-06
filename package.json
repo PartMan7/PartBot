@@ -14,7 +14,8 @@
 		"prestart": "bash ./scripts/prestart.sh",
 		"start": "ts-node --swc src/index.ts",
 		"tailwind": "npx @tailwindcss/cli -i ./src/web/styles/tailwind.css -o ./src/web/react/compiled/styles.css",
-		"test": "npm run lint && npm run tsc",
+		"test:staged": "npm run lint && npm run tsc",
+		"test": "npm run test:staged && vitest run",
 		"tsc": "tsc",
 		"webpack": "webpack -c src/web/webpack/webpack.config.ts"
 	},
@@ -64,12 +65,17 @@
 		"eslint-plugin-import": "^2.31.0",
 		"husky": "^8.0.3",
 		"livereload": "^0.9.3",
-		"prettier": "^3.3.3"
+		"prettier": "^3.3.3",
+		"vite-tsconfig-paths": "^6.1.1",
+		"vitest": "^4.0.18"
 	},
 	"optionalDependencies": {
 		"@parcel/watcher-linux-x64-glibc": "^2.5.1",
 		"@swc/core-linux-x64-gnu": "^1.2.160",
 		"@tailwindcss/oxide-linux-x64-gnu": "^4.0.1",
 		"lightningcss-linux-x64-gnu": "^1.29.1"
+	},
+	"engines": {
+		"node": ">=24"
 	}
 }

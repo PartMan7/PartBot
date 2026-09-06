@@ -70,7 +70,7 @@ export class Azul extends BaseGame<State> {
 
 	chatLog(log: Log): void {
 		this.log.push(log);
-		this.room.sendHTML(renderLog(log, this), { name: `${this.id}-chatlog` });
+		this.sendRoomHTML(renderLog(log, this), { name: `${this.id}-chatlog` });
 	}
 
 	moddable() {
@@ -552,23 +552,25 @@ export class Azul extends BaseGame<State> {
 			const current = this.players[this.turn];
 			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` });
 		}
-		return render.bind(this.renderCtx)(ctx);
+		return this.runRender(() => render.bind({ msg: this.msg })(ctx));
 	}
 
 	renderFinish() {
-		return render.bind(this.renderCtx)({
-			id: this.id,
-			board: this.state.board,
-			bag: this.state.bag,
-			players: this.state.playerData,
-			turns: this.turns,
-			view: { type: 'spectator', active: false, action: VIEW_ACTION_TYPE.GAME_END },
-			freeGrid: this.mod === AzulMods.FREE_GRID,
-			round: this.state.round,
-			ended: true,
-			wallsOnly: true,
-			header: this.$T('GAME.GAME_ENDED'),
-			$T: this.$T,
-		});
+		return this.runRender(() =>
+			render.bind({ msg: this.msg })({
+				id: this.id,
+				board: this.state.board,
+				bag: this.state.bag,
+				players: this.state.playerData,
+				turns: this.turns,
+				view: { type: 'spectator', active: false, action: VIEW_ACTION_TYPE.GAME_END },
+				freeGrid: this.mod === AzulMods.FREE_GRID,
+				round: this.state.round,
+				ended: true,
+				wallsOnly: true,
+				header: this.$T('GAME.GAME_ENDED'),
+				$T: this.$T,
+			})
+		);
 	}
 }

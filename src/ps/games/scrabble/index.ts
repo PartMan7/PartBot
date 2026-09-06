@@ -20,11 +20,10 @@ import { ChatError } from '@/utils/chatError';
 import { type Point, coincident, flipPoint, multiStepPoint, rangePoints, stepPoint } from '@/utils/grid';
 
 import type { TranslatedText } from '@/i18n/types';
-import type { BaseContext } from '@/ps/games/game';
+import type { BaseContext, GameUser } from '@/ps/games/game';
 import type { Log } from '@/ps/games/scrabble/logs';
 import type { BoardTile, Bonus, BonusReducer, Points, RenderCtx, State, WinCtx, Word, WordScore } from '@/ps/games/scrabble/types';
 import type { ActionResponse, EndType } from '@/ps/games/types';
-import type { User } from 'ps-client';
 
 export { meta } from '@/ps/games/scrabble/meta';
 
@@ -100,7 +99,7 @@ export class Scrabble extends BaseGame<State> {
 		return { success: true, data: null };
 	}
 
-	action(user: User, ctx: string): void {
+	action(user: GameUser, ctx: string): void {
 		if (!this.started) this.throw('GAME.NOT_STARTED');
 		if (user.id !== this.players[this.turn!].id) this.throw('GAME.IMPOSTOR_ALERT');
 		const [action, value] = ctx.lazySplit(' ', 1) as [string | undefined, string | undefined];
@@ -278,7 +277,7 @@ export class Scrabble extends BaseGame<State> {
 			ctx: { points, tiles, point: pos, dir, rack: rack.slice(), newTiles, words: points.words },
 		};
 		this.log.push(logEntry);
-		this.room.sendHTML(...renderMove(logEntry, this));
+		this.sendRoomHTML(...renderMove(logEntry, this));
 		this.selected = null;
 		this.passCount = 0;
 
@@ -320,7 +319,7 @@ export class Scrabble extends BaseGame<State> {
 		this.passCount = 0;
 		const logEntry: Log = { action: 'exchange', time: new Date(), turn, ctx: { tiles: letters, newTiles, rack: rack.slice() } };
 		this.log.push(logEntry);
-		this.room.sendHTML(...renderMove(logEntry, this));
+		this.sendRoomHTML(...renderMove(logEntry, this));
 
 		this.endTurn();
 	}
@@ -331,7 +330,7 @@ export class Scrabble extends BaseGame<State> {
 		this.passCount++;
 		const logEntry: Log = { action: 'pass', time: new Date(), turn, ctx: { rack: this.state.racks[turn].slice() } };
 		this.log.push(logEntry);
-		this.room.sendHTML(...renderMove(logEntry, this));
+		this.sendRoomHTML(...renderMove(logEntry, this));
 		if (this.passCount > Object.keys(this.players).length) {
 			return this.end('regular');
 		}
@@ -366,7 +365,7 @@ export class Scrabble extends BaseGame<State> {
 		return this.$T('GAME.WON', { winner: `${winners.map(winner => winner.name).list(this.$T)}` });
 	}
 
-	onReplacePlayer(oldPlayer: string, withPlayer: User): ActionResponse<null> {
+	onReplacePlayer(oldPlayer: string, withPlayer: GameUser): ActionResponse<null> {
 		if (this.started) {
 			[this.state.score, this.state.racks, this.state.best].forEach(state => {
 				state[withPlayer.id] = state[oldPlayer];
@@ -377,7 +376,6 @@ export class Scrabble extends BaseGame<State> {
 	}
 
 	render(side: string | null) {
-		const isActive = !this.winCtx && !!side && side === this.turn;
 		const ctx: RenderCtx = {
 			id: this.id,
 			baseBoard: this.state.baseBoard,
@@ -390,23 +388,13 @@ export class Scrabble extends BaseGame<State> {
 					.map(turn => this.players[turn])
 					.map(({ id, name, out }) => [id, { id, name, score: this.state.score[id], rack: this.state.racks[id].length, out }])
 			),
-			isActive,
+			isActive: !this.winCtx && !!side && side === this.turn,
 			side,
 			turn: this.turn!,
 			selected: side && side === this.turn ? this.selected : null,
+			...this.getHeader(side),
 		};
-		if (this.winCtx) {
-			ctx.header = this.$T('GAME.GAME_ENDED');
-		} else if (isActive) {
-			ctx.header = this.$T('GAME.YOUR_TURN');
-		} else if (side) {
-			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: this.players[this.turn!]?.name });
-			ctx.dimHeader = true;
-		} else if (this.turn) {
-			const current = this.players[this.turn];
-			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` });
-		}
-		return render.bind(this.renderCtx)(ctx);
+		return this.runRender(() => render(ctx));
 	}
 
 	// TODO: Fix Discord embeds

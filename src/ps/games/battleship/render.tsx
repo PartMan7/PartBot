@@ -1,5 +1,6 @@
 import { SHIP_DATA, Ships } from '@/ps/games/battleship/constants';
-import { type CellRenderer, LogEntry, Table } from '@/ps/games/render';
+import { getMsg } from '@/ps/games/game';
+import { type CellRenderer, GameHeader, LogEntry, Table } from '@/ps/games/render';
 import { createGrid } from '@/ps/games/utils';
 import { Username } from '@/utils/components';
 import { Button, Form } from '@/utils/components/ps';
@@ -32,21 +33,21 @@ export function renderMove(logEntry: Log, game: Battleship): [ReactElement, { na
 	switch (logEntry.action) {
 		case 'set':
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> set their ships!
 				</LogEntry>,
 				opts,
 			];
 		case 'hit':
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> hit the enemy {logEntry.ctx.ship}!
 				</LogEntry>,
 				opts,
 			];
 		case 'miss':
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					<Username name={playerName} clickable /> missed.
 				</LogEntry>,
 				opts,
@@ -54,7 +55,7 @@ export function renderMove(logEntry: Log, game: Battleship): [ReactElement, { na
 		default:
 			Logger.log('Battleship had some weird move', logEntry, game.players);
 			return [
-				<LogEntry game={game}>
+				<LogEntry>
 					Well <i>something</i> happened, I think! Someone go poke PartMan
 				</LogEntry>,
 				opts,
@@ -65,11 +66,9 @@ export function renderMove(logEntry: Log, game: Battleship): [ReactElement, { na
 function ShipGrid({
 	boards,
 	clickable,
-	msg,
 }: {
 	boards: AttackBoard | { defense: AttackBoard; ships: ShipBoard };
 	clickable?: boolean;
-	msg?: string;
 }): ReactElement {
 	const showHitsAsShips = clickable;
 	const missiles = !Array.isArray(boards) ? boards.defense : boards;
@@ -112,7 +111,7 @@ function ShipGrid({
 					SHIP_DATA[shipData].symbol
 				) : clickable ? (
 					<Button
-						value={`${msg} ! hit ${pointToA1([i, j])}`}
+						value={`${getMsg()} ! hit ${pointToA1([i, j])}`}
 						style={{ border: 'none', background: 'none', height: 23, width: 23, margin: 0 }}
 					/>
 				) : null}
@@ -123,7 +122,8 @@ function ShipGrid({
 	return <Table board={ships} labels={{ row: 'A-Z', col: '1-9' }} Cell={Cell} style={{ fontSize: '0.8em', color: 'white' }} />;
 }
 
-function ShipInput({ msg, filled }: { msg: string; filled?: string[] | null }): ReactElement {
+function ShipInput({ filled }: { filled?: string[] | null }): ReactElement {
+	const msg = getMsg();
 	const cloned = filled?.slice();
 	return (
 		<Form
@@ -152,10 +152,10 @@ function ShipInput({ msg, filled }: { msg: string; filled?: string[] | null }): 
 }
 
 export function renderSelection(
-	this: { msg: string },
 	ctx: SelectionInProgressState | SelectionErrorState | NotSetSelectionState,
 	locked?: boolean
 ): ReactElement {
+	const msg = getMsg();
 	const { $T } = ctx;
 	const input = ctx.type !== 'not-set' ? ctx.input : null;
 	const error = ctx.type === 'invalid' ? ctx.message : null;
@@ -172,16 +172,16 @@ export function renderSelection(
 					<>
 						{input ? (
 							<>
-								<Button value={`${this.msg} ! confirm-set`}>Confirm</Button>
+								<Button value={`${msg} ! confirm-set`}>Confirm</Button>
 								<br />
 								<details style={{ textAlign: 'left', width: 300 }}>
 									<summary>Input</summary>
 									<hr />
-									<ShipInput msg={this.msg} filled={input} />
+									<ShipInput filled={input} />
 								</details>
 							</>
 						) : (
-							<ShipInput msg={this.msg} filled={input} />
+							<ShipInput filled={input} />
 						)}
 					</>
 				) : null}
@@ -190,10 +190,11 @@ export function renderSelection(
 	);
 }
 
-export function renderSummary(
-	this: { msg: string },
-	ctx: { boards: State['board']; players: Record<string, Player>; winCtx: WinCtx | { type: EndType } }
-): ReactElement {
+export function renderSummary(ctx: {
+	boards: State['board'];
+	players: Record<string, Player>;
+	winCtx: WinCtx | { type: EndType };
+}): ReactElement {
 	return (
 		<center>
 			<p>
@@ -221,14 +222,14 @@ export function renderSummary(
 	);
 }
 
-export function render(this: { msg: string }, ctx: RenderCtx): ReactElement {
+export function render(ctx: RenderCtx): ReactElement {
 	return (
 		<center>
-			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
+			<GameHeader header={ctx.header} dimHeader={ctx.dimHeader} />
 			{ctx.type === 'player' ? (
 				<div>
-					<ShipGrid boards={ctx.attack} clickable msg={this.msg} />
-					<ShipGrid boards={{ defense: ctx.defense, ships: ctx.actual }} msg={this.msg} />
+					<ShipGrid boards={ctx.attack} clickable />
+					<ShipGrid boards={{ defense: ctx.defense, ships: ctx.actual }} />
 				</div>
 			) : (
 				<>

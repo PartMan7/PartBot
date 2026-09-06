@@ -293,6 +293,6 @@ export class LinesOfAction extends BaseGame<State> {
 			const current = this.players[this.turn];
 			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` });
 		}
-		return render.bind(this.renderCtx)(ctx);
+		return this.runRender(() => render.bind({ msg: this.msg })(ctx));
 	}
 }
