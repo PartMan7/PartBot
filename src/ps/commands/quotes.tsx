@@ -99,7 +99,7 @@ function FormatQuoteLine({ line, style, psUsernameTag }: { line: string; style?:
 		const chatMessage = formatText(' ' + chatMatch[4]);
 		return (
 			<div className="chat chatmessage-a" style={style ?? { padding: '3px 0' }}>
-				<small>
+				<small className="gray">
 					{chatMatch[1]}
 					{chatMatch[2]}
 				</small>
