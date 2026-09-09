@@ -249,10 +249,13 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 									<h3>Select a tile to play from!</h3>
 								)}
 								<hr />
-								<Form value={`${this.msg} ! x {tiles}`} style={{ margin: '4px 0' }}>
-									<input name="tiles" placeholder="Exchange tiles" width="100" style={{ marginRight: 4 }} />
-									<button type="submit">Exchange</button>
-								</Form>
+								<details>
+									<summary>Exchange</summary>
+									<Form value={`${this.msg} ! x {tiles}`} style={{ margin: '4px 0' }}>
+										<input name="tiles" placeholder="Exchange tiles" width="100" style={{ marginRight: 4 }} />
+										<button type="submit">Exchange</button>
+									</Form>
+								</details>
 							</UserPanel>
 						</>
 					) : null}
