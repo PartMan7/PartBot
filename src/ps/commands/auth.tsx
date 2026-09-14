@@ -66,7 +66,14 @@ export const command: PSCommand[] = IS_ENABLED.DB
 									async run({ message, broadcastHTML }) {
 										const roomConfig = PSRoomConfigs[message.target.id];
 										if (!roomConfig?.auth?.[rank]) return broadcastHTML(<>None at that rank!</>);
-										return broadcastHTML(<>{roomConfig.auth[rank].map(user => <Username name={user} />).space(', ')}</>);
+										return broadcastHTML(
+											<>
+												{roomConfig.auth[rank]
+													.sortBy(user => toId(user))
+													.map(user => <Username name={user} />)
+													.space(', ')}
+											</>
+										);
 									},
 								},
 								add: {
