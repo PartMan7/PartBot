@@ -119,10 +119,10 @@ function FormatQuoteLine({ line, style, psUsernameTag }: { line: string; style?:
 	if (meMatch)
 		return (
 			<div className={`chat chatmessage-${toId(meMatch[3])}`} style={style ?? { padding: '3px 0' }}>
-				<small>{meMatch[1]}</small>
+				<small className="gray">{meMatch[1]}</small>
 				<UsernameCustom name={meMatch[3]}>• </UsernameCustom>
 				<em>
-					<small>{meMatch[2]}</small>
+					<small className="gray">{meMatch[2]}</small>
 					<span className="username">{meMatch[3].slice(1, -1)}</span>
 					<i dangerouslySetInnerHTML={{ __html: formatText(' ' + meMatch[4]) }} />
 				</em>
