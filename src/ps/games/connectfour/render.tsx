@@ -51,7 +51,7 @@ function renderBoard(ctx: RenderCtx): ReactElement {
 export function render(ctx: RenderCtx): ReactElement {
 	return (
 		<center>
-			<GameHeader header={ctx.header} dimHeader={ctx.dimHeader} />
+			<GameHeader header={ctx.header} dim={ctx.dimHeader} />
 			{renderBoard(ctx)}
 		</center>
 	);

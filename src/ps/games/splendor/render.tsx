@@ -843,7 +843,7 @@ export function render(ctx: RenderCtx): ReactElement {
 	const msg = getMsg();
 	return (
 		<center>
-			<GameHeader header={ctx.header} dimHeader={ctx.dimHeader} />
+			<GameHeader header={ctx.header} dim={ctx.dimHeader} />
 			<div style={{ zoom: '50%' }}>
 				<BaseBoard board={ctx.board} onClick={ctx.view.active ? msg : undefined} view={ctx.view} $T={ctx.$T} />
 				<div style={{ height: 48 }} />
