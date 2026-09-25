@@ -8,15 +8,9 @@ export function Small({ children }: { children: ReactNode }): ReactElement {
 	return <div style={{ zoom: '60%' }}>{children}</div>;
 }
 
-export function GameHeader({
-	header,
-	dimHeader,
-}: {
-	header: string | undefined;
-	dimHeader: boolean | undefined;
-}): ReactElement | null {
+export function GameHeader({ header, dim }: { header: string | undefined; dim: boolean | undefined }): ReactElement | null {
 	if (!header) return null;
-	return <h1 style={dimHeader ? { color: 'gray' } : {}}>{header}</h1>;
+	return <h1 style={dim ? { color: 'gray' } : {}}>{header}</h1>;
 }
 
 export function LogEntry({ children }: { children: ReactNode }): ReactElement {

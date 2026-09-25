@@ -225,7 +225,7 @@ export function renderSummary(ctx: {
 export function render(ctx: RenderCtx): ReactElement {
 	return (
 		<center>
-			<GameHeader header={ctx.header} dimHeader={ctx.dimHeader} />
+			<GameHeader header={ctx.header} dim={ctx.dimHeader} />
 			{ctx.type === 'player' ? (
 				<div>
 					<ShipGrid boards={ctx.attack} clickable />

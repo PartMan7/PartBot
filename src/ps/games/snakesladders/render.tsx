@@ -78,7 +78,7 @@ export function render(ctx: RenderCtx): ReactElement {
 	const msg = getMsg();
 	return (
 		<center>
-			<GameHeader header={ctx.header} dimHeader={ctx.dimHeader} />
+			<GameHeader header={ctx.header} dim={ctx.dimHeader} />
 			{renderBoard(ctx)}
 			<b style={{ margin: 10 }}>
 				{ctx.lastRoll ? (

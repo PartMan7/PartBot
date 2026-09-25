@@ -31,7 +31,7 @@ function renderBoard(ctx: RenderCtx) {
 export function render(ctx: RenderCtx): ReactElement {
 	return (
 		<center>
-			<GameHeader header={ctx.header} dimHeader={ctx.dimHeader} />
+			<GameHeader header={ctx.header} dim={ctx.dimHeader} />
 			{renderBoard(ctx)}
 			<b style={{ margin: 10 }}>
 				Score: {ctx.score.B}/{ctx.score.W}

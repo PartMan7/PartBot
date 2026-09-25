@@ -148,14 +148,14 @@ export class BaseGame<State extends BaseState> {
 		return result;
 	}
 
-	getHeader(side: State['turn'] | null): { header: string; dimHeader?: true } {
+	getHeader(side: State['turn'] | null): { header: string; dim?: true } {
 		if (this.winCtx) return { header: this.$T('GAME.GAME_ENDED') };
 		if (side === this.turn) return { header: this.$T('GAME.YOUR_TURN') };
 		if (side) {
 			const header = this.sides
 				? this.$T('GAME.WAITING_FOR_OPPONENT')
 				: this.$T('GAME.WAITING_FOR_PLAYER', { player: this.players[this.turn!]?.name });
-			return { header, dimHeader: true };
+			return { header, dim: true };
 		}
 		if (this.turn) {
 			const current = this.players[this.turn];
