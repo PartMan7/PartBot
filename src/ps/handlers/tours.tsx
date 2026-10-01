@@ -60,14 +60,15 @@ function isFinishedMatchNode(
 
 function getSubtreeChampion(node: BracketNode | undefined | null): string | null {
 	if (!node) return null;
-	if (isFinishedMatchNode(node)) return node.team ?? null;
-	if (!node.children?.length) return node.team ?? null;
-	return getSubtreeChampion(node.children[0]) ?? getSubtreeChampion(node.children[1]) ?? node.team ?? null;
+	return node.team ?? node.children?.map(getSubtreeChampion).find(Boolean) ?? null;
 }
 
 function getMatchLoser(node: BracketNode | undefined | null): string | null {
-	if (!isFinishedMatchNode(node) || !node.children || node.children.length !== 2) return null;
-	return getSubtreeChampion(node.children[node.result === 'loss' ? 0 : 1]);
+	const children = node?.children;
+	if (!isFinishedMatchNode(node) || !children || children.length !== 2) return null;
+
+	const winnerId = toId(node.team ?? '');
+	return children.map(getSubtreeChampion).find(player => player && toId(player) !== winnerId) ?? null;
 }
 
 /** Placements for single-elim tree: champion, runner-up, two semifinal losers (order preserved). */
@@ -76,19 +77,10 @@ export function getTopFourFromBracketTree(json: BracketTree): string[] {
 	if (!root) return [];
 
 	const out: string[] = [];
-	const pushUnique = (name: string | null) => {
-		if (!name) return;
-		const id = toId(name);
-		if (!out.some(n => toId(n) === id)) out.push(name);
-	};
-
-	pushUnique(getSubtreeChampion(root));
-	pushUnique(getMatchLoser(root));
-
-	if (root.children) {
-		for (const child of root.children) {
-			pushUnique(getMatchLoser(child));
-		}
+	for (const player of [getSubtreeChampion(root), getMatchLoser(root), ...(root.children ?? []).map(getMatchLoser)]) {
+		if (!player) continue;
+		const playerId = toId(player);
+		if (!out.some(name => toId(name) === playerId)) out.push(player);
 	}
 
 	return out.slice(0, 4);
