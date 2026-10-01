@@ -28,7 +28,7 @@ const DIAGONAL: [number, number][] = [
 	[1, 1],
 ];
 
-export class Blokus extends BaseGame<State> {
+export class Blokus extends BaseGame<State, RenderCtx> {
 	log: Log[] = [];
 	declare winCtx?: WinCtx | { type: EndType };
 
@@ -261,7 +261,9 @@ export class Blokus extends BaseGame<State> {
 		});
 	}
 
-	render(side: Turn | null) {
+	renderFn = (ctx: RenderCtx) => render.bind({ msg: this.msg })(ctx);
+
+	getRenderCtx(side: Turn | null): RenderCtx {
 		const turn = this.turn!;
 		const isActive = side === turn;
 		let orientations: [number, number][][] | null = null;
@@ -293,18 +295,6 @@ export class Blokus extends BaseGame<State> {
 			colors: ['#1e88e5', '#fdd835', '#e53935', '#43a047'],
 		};
 
-		if (this.winCtx) {
-			ctx.header = this.$T('GAME.GAME_ENDED');
-		} else if (side === turn) {
-			ctx.header = this.$T('GAME.YOUR_TURN');
-		} else if (side) {
-			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: this.players[this.turn!]?.name });
-			ctx.dimHeader = true;
-		} else if (this.turn) {
-			const current = this.players[this.turn];
-			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: current.name });
-		}
-
-		return this.runRender(() => render.bind({ msg: this.msg })(ctx));
+		return ctx;
 	}
 }

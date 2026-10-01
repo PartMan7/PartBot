@@ -1,3 +1,4 @@
+import type { BaseRenderCtx } from '@/ps/games/types';
 import type { Chess, Move, Square } from 'chess.js';
 
 export type Turn = 'W' | 'B';
@@ -16,7 +17,7 @@ export type ThemeColours = {
 	last: string | null;
 };
 
-export type RenderCtx = {
+export type RenderCtx = BaseRenderCtx & {
 	id: string;
 	side: Turn | null;
 	turn: Turn;
@@ -25,8 +26,6 @@ export type RenderCtx = {
 	selected?: Square | null;
 	isActive: boolean;
 	showMoves: Move[];
-	header?: string;
-	dimHeader?: boolean;
 	promotion?: boolean;
 	theme: ThemeColours;
 };

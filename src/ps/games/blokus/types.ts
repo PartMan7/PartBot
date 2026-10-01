@@ -1,5 +1,6 @@
 import type { TranslationFn } from '@/i18n/types';
 import type { PieceId } from '@/ps/games/blokus/constants';
+import type { BaseRenderCtx } from '@/ps/games/types';
 
 export type Turn = string;
 
@@ -12,11 +13,9 @@ export type State = {
 	placed: Record<Turn, boolean>;
 };
 
-export type RenderCtx = {
+export type RenderCtx = BaseRenderCtx & {
 	id: string;
 	$T: TranslationFn;
-	header?: string;
-	dimHeader?: boolean;
 	board: (Turn | null)[][];
 	size: number;
 	turns: Turn[];

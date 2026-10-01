@@ -1,5 +1,5 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { isValidElement } from 'react';
+import { createElement } from 'react';
 
 import { PSGames } from '@/cache';
 import { gameCache } from '@/cache/games';
@@ -10,10 +10,11 @@ import { BOT_LOG_CHANNEL } from '@/discord/constants/servers/boardgames';
 import { getChannel } from '@/discord/loaders/channels';
 import { IS_ENABLED } from '@/enabled';
 import { parseMod } from '@/ps/games/mods';
-import { Small, renderCloseSignups, renderSignups } from '@/ps/games/render';
+import { GameHeader, Small, renderCloseSignups, renderSignups } from '@/ps/games/render';
 import { checkUGO } from '@/ps/games/utils';
 import { ChatError } from '@/utils/chatError';
 import { fromHumanTime, toHumanTime } from '@/utils/humanTime';
+import { jsxToHTML } from '@/utils/jsxToHTML';
 import { Logger } from '@/utils/logger';
 import { pick } from '@/utils/pick';
 import { sample, useRNG } from '@/utils/random';
@@ -22,7 +23,7 @@ import { toId } from '@/utils/toId';
 
 import type { GameModel } from '@/database/games';
 import type { BaseLookup, NoTranslate, PSRoomTranslated, TranslatedText, TranslationFn, VariablesFromLookup } from '@/i18n/types';
-import type { ActionResponse, BaseLog, BaseState, EndType, Meta, Player } from '@/ps/games/types';
+import type { ActionResponse, BaseLog, BaseRenderCtx, BaseState, EndType, Meta, Player } from '@/ps/games/types';
 import type { EmbedBuilder } from 'discord.js';
 import type { Client, User } from 'ps-client';
 import type { HTMLopts } from 'ps-client/classes/common';
@@ -49,7 +50,7 @@ const backupKeys = [
  * This is the shared code for all games. To check the game-specific code, refer to the
  * extended constructor in `$game/index.ts` and go through the `action` method.
  */
-export class BaseGame<State extends BaseState> {
+export class BaseGame<State extends BaseState, RenderCtx extends BaseRenderCtx = BaseRenderCtx> {
 	meta: Meta;
 	id: string;
 	$T: TranslationFn;
@@ -100,14 +101,30 @@ export class BaseGame<State extends BaseState> {
 	/** Pending draw offer; cleared on expiry, accept, move, or end. */
 	drawOffer: { from: string; to: string; timer: Timer } | null = null;
 
+	render(side: State['turn'] | null): ReactElement {
+		const pipeline = this as this & StandardRenderPipeline<State, RenderCtx>;
+		if (!pipeline.renderFn || !pipeline.getRenderCtx) throw new Error('Game render pipeline is not configured');
+		return this.runRender(() => this.renderPage(pipeline.getRenderCtx(side), side));
+	}
+
+	renderPage(ctx: RenderCtx, side: State['turn'] | null, headerOverride = this.getHeader(side)): ReactElement {
+		const { header, dim } = headerOverride;
+		const pipeline = this as this & StandardRenderPipeline<State, RenderCtx>;
+		return createElement(
+			'center',
+			null,
+			createElement(GameHeader, { header: ctx.header ?? header, dim: ctx.dimHeader ?? dim }),
+			pipeline.renderFn!(ctx)
+		);
+	}
+
 	// Game-provided methods:
-	render(side: State['turn'] | null): ReactElement;
-	render() {
-		return null as unknown as ReactElement;
+	renderHTML(side: State['turn'] | null): string {
+		return this.runRender(() => jsxToHTML(this.render(side)));
 	}
 	/** HTML broadcast to the room when the game ends. Defaults to a zoomed-out board. */
-	renderFinish(): ReactElement {
-		return this.runRender(() => Small({ children: this.render(null) }));
+	renderFinish(): string {
+		return this.runRender(() => jsxToHTML(Small({ children: this.render(null) })));
 	}
 	renderEmbed?(): Promise<EmbedBuilder | null>;
 
@@ -143,9 +160,7 @@ export class BaseGame<State extends BaseState> {
 
 	runRender<T>(callback: () => T): T {
 		const game = this as unknown as CommonGame;
-		const result = gameStorage.run(game, callback);
-		if (isValidElement(result as object)) renderGames.set(result as ReactElement, game);
-		return result;
+		return gameStorage.run(game, callback);
 	}
 
 	getHeader(side: State['turn'] | null): { header: string; dim?: true } {
@@ -360,11 +375,11 @@ export class BaseGame<State extends BaseState> {
 		this.runRender(() => {
 			const signupRenderer = (this.renderSignups ?? renderSignups).bind(this);
 			const signupsHTML = signupRenderer(false);
-			if (signupsHTML) this.room.sendHTML(signupsHTML, { name: this.id });
+			if (signupsHTML) this.room.sendHTML(jsxToHTML(signupsHTML), { name: this.id });
 			if (this.meta.autostart === false) {
 				const staffHTML = signupRenderer(true);
 				// TODO: Sync this rank with games.create perms
-				if (staffHTML) this.room.sendHTML(staffHTML, { name: this.id, rank: '+', change: true });
+				if (staffHTML) this.room.sendHTML(jsxToHTML(staffHTML), { name: this.id, rank: '+', change: true });
 			}
 		});
 	}
@@ -372,7 +387,7 @@ export class BaseGame<State extends BaseState> {
 	closeSignups(change = true): void {
 		this.runRender(() => {
 			const closeSignupsHTML = (this.renderCloseSignups ?? renderCloseSignups).bind(this)();
-			if (closeSignupsHTML) this.room.sendHTML(closeSignupsHTML, { name: this.id, change });
+			if (closeSignupsHTML) this.room.sendHTML(jsxToHTML(closeSignupsHTML), { name: this.id, change });
 		});
 	}
 
@@ -578,11 +593,11 @@ export class BaseGame<State extends BaseState> {
 
 	sendHTML(to: string | User, html: ReactElement | string): void {
 		const user = typeof to === 'object' ? to : this.parent.addUser({ userid: toId(to) });
-		this.runRender(() => user.pageHTML(html, { name: this.id, room: this.room }));
+		this.runRender(() => user.pageHTML(typeof html === 'string' ? html : jsxToHTML(html), { name: this.id, room: this.room }));
 	}
 
 	sendRoomHTML(html: ReactElement, opts?: HTMLopts | string): void {
-		this.runRender(() => this.room.sendHTML(html, opts));
+		this.runRender(() => this.room.sendHTML(jsxToHTML(html), opts));
 	}
 
 	update(user?: string): void {
@@ -596,23 +611,23 @@ export class BaseGame<State extends BaseState> {
 				...this.spectators,
 			];
 			const frame = this.animationFrames.shift()!;
-			this.runRender(() => this.room.pageHTML(recipients, frame, { name: this.id }));
+			this.runRender(() => this.room.pageHTML(recipients, jsxToHTML(frame), { name: this.id }));
 			setTimeout(() => this.update(), this.animationDelay);
 			return;
 		}
 		if (user) {
 			const asPlayer = this.getPlayer(user);
-			if (asPlayer && !asPlayer.out) return this.sendHTML(asPlayer.id, this.render(asPlayer.turn));
-			if (this.spectators.includes(user)) return this.sendHTML(user, this.render(null));
+			if (asPlayer && !asPlayer.out) return this.sendHTML(asPlayer.id, this.renderHTML(asPlayer.turn));
+			if (this.spectators.includes(user)) return this.sendHTML(user, this.renderHTML(null));
 			this.throw('GAME.NON_PLAYER_OR_SPEC');
 		}
 		// TODO: Add ping to ps-client HTML opts
 		Object.entries(this.players).forEach(([side, player]) => {
-			if (!player.out) this.sendHTML(player.id, this.render(side));
+			if (!player.out) this.sendHTML(player.id, this.renderHTML(side));
 		});
 		if (this.turn) {
 			this.room.send(`/highlighthtmlpage ${this.players[this.turn].id}, ${this.id}, ${this.$T('GAME.YOUR_TURN')}` as TranslatedText);
-			if (this.spectators.length > 0) this.runRender(() => this.room.pageHTML(this.spectators, this.render(null), { name: this.id }));
+			if (this.spectators.length > 0) this.room.pageHTML(this.spectators, this.renderHTML(null), { name: this.id });
 		}
 	}
 
@@ -768,28 +783,18 @@ export type BaseContext = {
 	args: string[];
 };
 
+/** Games that use {@link BaseGame.render} with {@link StandardRenderPipeline}. */
+export type StandardRenderPipeline<State extends BaseState, RenderCtx extends BaseRenderCtx> = {
+	renderFn: (ctx: RenderCtx) => ReactElement;
+	getRenderCtx: (side: State['turn'] | null) => RenderCtx;
+};
+
 /** Non-generic type representing only the things all games have in common */
-export type CommonGame = BaseGame<BaseState>;
+export type CommonGame = Omit<BaseGame<BaseState>, 'renderPage'>;
 
 const gameStorage = new AsyncLocalStorage<CommonGame>();
-const renderGames = new WeakMap<ReactElement, CommonGame>();
 
 /** Returns the game currently being rendered. Must be called within a render() context. */
 export function getGame<G extends CommonGame = CommonGame>(): G {
 	return gameStorage.getStore() as G;
-}
-
-/** Returns the game that produced a React element, if it was rendered by a game. */
-export function getRenderGame(element: ReactElement): CommonGame | undefined {
-	return renderGames.get(element);
-}
-
-/** Returns the full game-scoped command prefix for the game currently being rendered. */
-export function getMsg(): string {
-	return getGame().msg;
-}
-
-/** Returns the room-scoped command prefix for the game currently being rendered. */
-export function getSimpleMsg(): string {
-	return getGame().simpleMsg;
 }

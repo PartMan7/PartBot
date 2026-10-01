@@ -1,3 +1,4 @@
+import type { BaseRenderCtx } from '@/ps/games/types';
 import type { Point } from '@/utils/grid';
 
 export type BoardTile = {
@@ -33,12 +34,10 @@ export type Points = {
 	words: Record<string, number>;
 };
 
-export type RenderCtx = {
+export type RenderCtx = BaseRenderCtx & {
 	id: string;
 	baseBoard: BaseBoard;
 	board: Board;
-	header?: string;
-	dimHeader?: boolean;
 	players: Record<string, { score: number; name: string; rack: number; out?: boolean | undefined }>;
 	getPoints: (tile: string) => number;
 	bag: number;

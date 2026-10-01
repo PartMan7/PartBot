@@ -1,5 +1,5 @@
-import { getMsg } from '@/ps/games/game';
-import { Dice, GameHeader, Table } from '@/ps/games/render';
+import { getGame } from '@/ps/games/game';
+import { Dice, Table } from '@/ps/games/render';
 import { createGrid } from '@/ps/games/utils';
 import { Username } from '@/utils/components';
 import { Button } from '@/utils/components/ps';
@@ -75,10 +75,9 @@ function renderBoard(ctx: RenderCtx) {
 }
 
 export function render(ctx: RenderCtx): ReactElement {
-	const msg = getMsg();
+	const msg = getGame().msg;
 	return (
-		<center>
-			<GameHeader header={ctx.header} dim={ctx.dimHeader} />
+		<>
 			{renderBoard(ctx)}
 			<b style={{ margin: 10 }}>
 				{ctx.lastRoll ? (
@@ -104,6 +103,6 @@ export function render(ctx: RenderCtx): ReactElement {
 					</>
 				))
 				.space(<br />)}
-		</center>
+		</>
 	);
 }

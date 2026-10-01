@@ -18,7 +18,7 @@ import type { Hex } from '@/utils/color';
 
 export { meta } from '@/ps/games/snakesladders/meta';
 
-export class SnakesLadders extends BaseGame<State> {
+export class SnakesLadders extends BaseGame<State, RenderCtx> {
 	log: Log[] = [];
 	declare winCtx?: WinCtx | { type: EndType };
 
@@ -138,8 +138,10 @@ export class SnakesLadders extends BaseGame<State> {
 		return this.$T('GAME.WON', { winner: this.turn! });
 	}
 
-	render(side: string | null, override?: number) {
-		const ctx: RenderCtx = {
+	renderFn = render;
+
+	getRenderCtx(side: string | null, override?: number): RenderCtx {
+		return {
 			board:
 				override && this.turn
 					? { ...this.state.board, [this.turn]: { ...this.state.board[this.turn], pos: override } }
@@ -148,8 +150,16 @@ export class SnakesLadders extends BaseGame<State> {
 			lastRoll: this.state.lastRoll,
 			id: this.id,
 			active: side === this.turn && !!side,
-			...(typeof override === 'number' ? { header: `${this.turn} rolled a ${this.state.lastRoll}...` } : this.getHeader(side)),
 		};
-		return this.runRender(() => render(ctx));
+	}
+
+	render(side: string | null, override?: number) {
+		return this.runRender(() =>
+			this.renderPage(
+				this.getRenderCtx(side, override),
+				side,
+				typeof override === 'number' ? { header: `${this.turn} rolled a ${this.state.lastRoll}...` } : undefined
+			)
+		);
 	}
 }

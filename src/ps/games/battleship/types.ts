@@ -1,6 +1,6 @@
 import type { TranslationFn } from '@/i18n/types';
 import type { ShipType } from '@/ps/games/battleship/constants';
-import type { Player } from '@/ps/games/types';
+import type { BaseRenderCtx, Player } from '@/ps/games/types';
 
 export type Turn = 'A' | 'B';
 
@@ -20,12 +20,10 @@ export type State = {
 	board: Boards;
 };
 
-export type RenderCtx = {
+export type RenderCtx = BaseRenderCtx & {
 	id: string;
-	header?: string;
-	dimHeader?: boolean;
 } & (
-	| { type: 'player'; attack: AttackBoard; defense: AttackBoard; actual: ShipBoard; active: boolean }
-	| { type: 'spectator'; boards: Boards['attacks']; players: Record<Turn, Player>; active?: false }
-);
+		| { type: 'player'; attack: AttackBoard; defense: AttackBoard; actual: ShipBoard; active: boolean }
+		| { type: 'spectator'; boards: Boards['attacks']; players: Record<Turn, Player>; active?: false }
+	);
 export type WinCtx = { type: 'win' } & Record<'winner' | 'loser', Player>;

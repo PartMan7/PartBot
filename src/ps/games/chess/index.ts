@@ -19,7 +19,7 @@ function isValidSquare(input: string): input is Square {
 	return /^[a-h][1-9]$/.test(input);
 }
 
-export class Chess extends BaseGame<State> {
+export class Chess extends BaseGame<State, RenderCtx> {
 	selected: Square | null = null;
 	showMoves: Move[] = [];
 
@@ -172,7 +172,9 @@ export class Chess extends BaseGame<State> {
 			.setURL(await this.getURL());
 	}
 
-	render(side: Turn | null) {
+	renderFn = render;
+
+	getRenderCtx(side: Turn | null): RenderCtx {
 		const ctx: RenderCtx = {
 			board: this.lib.board(),
 			showMoves: side === this.turn ? this.showMoves : [],
@@ -183,13 +185,12 @@ export class Chess extends BaseGame<State> {
 			id: this.id,
 			turn: this.turn!,
 			theme: isAprilFoolsActive() ? this.meta.themes.wario.colors : this.meta.themes[this.theme!].colors,
-			...this.getHeader(side),
 		};
 		if (side === this.turn && this.selected) {
 			const selectedPiece = this.lib.get(this.selected);
 			const seventhRanks = { w: 7, b: 2 };
 			if (selectedPiece?.type === 'p' && seventhRanks[selectedPiece.color] === +this.selected.charAt(1)) ctx.promotion = true;
 		}
-		return this.runRender(() => render(ctx));
+		return ctx;
 	}
 }

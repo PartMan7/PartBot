@@ -1,5 +1,5 @@
-import { getMsg } from '@/ps/games/game';
-import { GameHeader, LogEntry, Table } from '@/ps/games/render';
+import { getGame } from '@/ps/games/game';
+import { LogEntry, Table } from '@/ps/games/render';
 import { RACK_SIZE, WIDE_LETTERS } from '@/ps/games/scrabble/constants';
 import { Button, Form, Username } from '@/utils/components/ps';
 import { type Point, coincident } from '@/utils/grid';
@@ -83,7 +83,7 @@ function getBackgroundHex(bonus: Bonus | null): string {
 }
 
 function renderBoard(ctx: RenderCtx) {
-	const msg = getMsg();
+	const msg = getGame().msg;
 	const clickable = !!ctx.side && ctx.side === ctx.turn;
 	const Cell: CellRenderer<BoardTile | null> = ({ cell, i, j }): ReactElement => {
 		const baseCell = ctx.baseBoard[i][j];
@@ -200,10 +200,9 @@ function UserPanel({ children }: { children: ReactNode }): ReactElement {
 }
 
 export function render(ctx: RenderCtx): ReactElement {
-	const msg = getMsg();
+	const msg = getGame().msg;
 	return (
-		<center>
-			<GameHeader header={ctx.header} dim={ctx.dimHeader} />
+		<>
 			{renderBoard(ctx)}
 			{ctx.side ? (
 				<>
@@ -264,6 +263,6 @@ export function render(ctx: RenderCtx): ReactElement {
 				<hr />
 				Bag: {pluralize(ctx.bag, 'tile', 'tiles')}
 			</UserPanel>
-		</center>
+		</>
 	);
 }

@@ -1,4 +1,4 @@
-import type { Player } from '@/ps/games/types';
+import type { BaseRenderCtx, Player } from '@/ps/games/types';
 
 export type Turn = 'B' | 'W';
 
@@ -11,14 +11,12 @@ export type State = {
 	board: Board;
 };
 
-export type RenderCtx = {
+export type RenderCtx = BaseRenderCtx & {
 	id: string;
 	board: Board;
 	turn: Turn | null;
 	selected: [number, number] | null;
 	validMoves: Move[];
-	header?: string;
-	dimHeader?: boolean;
 };
 
 export type WinCtx = ({ type: 'win' } & Record<'winner' | 'loser', Player>) | { type: 'draw' };

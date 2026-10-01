@@ -1,3 +1,5 @@
+import type { BaseRenderCtx } from '@/ps/games/types';
+
 export type Turn = 'W' | 'B';
 
 export type Board = (null | Turn)[][];
@@ -7,12 +9,10 @@ export type State = {
 	board: Board;
 };
 
-export type RenderCtx = {
+export type RenderCtx = BaseRenderCtx & {
 	id: string;
 	board: Board;
 	validMoves: [number, number][];
-	header?: string;
-	dimHeader?: boolean;
 	score: Record<Turn, number>;
 };
 export type WinCtx =

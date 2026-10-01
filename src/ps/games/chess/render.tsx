@@ -1,5 +1,5 @@
-import { getMsg } from '@/ps/games/game';
-import { GameHeader, Table } from '@/ps/games/render';
+import { getGame } from '@/ps/games/game';
+import { Table } from '@/ps/games/render';
 import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { Button, Form } from '@/utils/components/ps';
 
@@ -29,7 +29,7 @@ function adaptBoard(board: BoardCell[][], flip: boolean): BoardCell[][] {
 }
 
 function renderBoard(ctx: RenderCtx) {
-	const msg = getMsg();
+	const msg = getGame().msg;
 	const size = 45;
 	const flip = ctx.side === 'B';
 
@@ -78,11 +78,10 @@ function renderBoard(ctx: RenderCtx) {
 
 export function render(ctx: RenderCtx): ReactElement {
 	return (
-		<center>
-			<GameHeader header={ctx.header} dim={ctx.dimHeader} />
+		<>
 			{renderBoard(ctx)}
 			{ctx.promotion && ctx.showMoves.length ? (
-				<Form value={`${getMsg()} ! move {move}`}>
+				<Form value={`${getGame().msg} ! move {move}`}>
 					<label>
 						Promotion:
 						<select name="move" style={{ margin: 4 }}>
@@ -98,6 +97,6 @@ export function render(ctx: RenderCtx): ReactElement {
 					</button>
 				</Form>
 			) : null}
-		</center>
+		</>
 	);
 }

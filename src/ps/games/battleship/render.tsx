@@ -1,6 +1,6 @@
 import { SHIP_DATA, Ships } from '@/ps/games/battleship/constants';
-import { getMsg } from '@/ps/games/game';
-import { type CellRenderer, GameHeader, LogEntry, Table } from '@/ps/games/render';
+import { getGame } from '@/ps/games/game';
+import { type CellRenderer, LogEntry, Table } from '@/ps/games/render';
 import { createGrid } from '@/ps/games/utils';
 import { Username } from '@/utils/components';
 import { Button, Form } from '@/utils/components/ps';
@@ -111,7 +111,7 @@ function ShipGrid({
 					SHIP_DATA[shipData].symbol
 				) : clickable ? (
 					<Button
-						value={`${getMsg()} ! hit ${pointToA1([i, j])}`}
+						value={`${getGame().msg} ! hit ${pointToA1([i, j])}`}
 						style={{ border: 'none', background: 'none', height: 23, width: 23, margin: 0 }}
 					/>
 				) : null}
@@ -123,7 +123,7 @@ function ShipGrid({
 }
 
 function ShipInput({ filled }: { filled?: string[] | null }): ReactElement {
-	const msg = getMsg();
+	const msg = getGame().msg;
 	const cloned = filled?.slice();
 	return (
 		<Form
@@ -155,7 +155,7 @@ export function renderSelection(
 	ctx: SelectionInProgressState | SelectionErrorState | NotSetSelectionState,
 	locked?: boolean
 ): ReactElement {
-	const msg = getMsg();
+	const msg = getGame().msg;
 	const { $T } = ctx;
 	const input = ctx.type !== 'not-set' ? ctx.input : null;
 	const error = ctx.type === 'invalid' ? ctx.message : null;
@@ -224,8 +224,7 @@ export function renderSummary(ctx: {
 
 export function render(ctx: RenderCtx): ReactElement {
 	return (
-		<center>
-			<GameHeader header={ctx.header} dim={ctx.dimHeader} />
+		<>
 			{ctx.type === 'player' ? (
 				<div>
 					<ShipGrid boards={ctx.attack} clickable />
@@ -245,6 +244,6 @@ export function render(ctx: RenderCtx): ReactElement {
 					</div>
 				</>
 			)}
-		</center>
+		</>
 	);
 }

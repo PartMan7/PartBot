@@ -1,5 +1,4 @@
-import { getMsg } from '@/ps/games/game';
-import { GameHeader } from '@/ps/games/render';
+import { getGame } from '@/ps/games/game';
 import { Button } from '@/utils/components/ps';
 import { repeat } from '@/utils/repeat';
 
@@ -29,7 +28,7 @@ function Column({ data }: { data: (Turn | null)[] }): ReactElement {
 	);
 }
 function renderBoard(ctx: RenderCtx): ReactElement {
-	const msg = getMsg();
+	const msg = getGame().msg;
 	return (
 		<div style={{ backgroundColor: '#0080ff', borderRadius: 16, display: 'inline-block', padding: 2 }}>
 			{repeat(null, ctx.board[0].length).map((_, col) => {
@@ -49,10 +48,5 @@ function renderBoard(ctx: RenderCtx): ReactElement {
 }
 
 export function render(ctx: RenderCtx): ReactElement {
-	return (
-		<center>
-			<GameHeader header={ctx.header} dim={ctx.dimHeader} />
-			{renderBoard(ctx)}
-		</center>
-	);
+	return renderBoard(ctx);
 }

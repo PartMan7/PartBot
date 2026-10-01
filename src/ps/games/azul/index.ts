@@ -22,6 +22,7 @@ import { render, renderLog } from '@/ps/games/azul/render';
 import { BaseGame } from '@/ps/games/game';
 import { createGrid } from '@/ps/games/utils';
 import { ChatError } from '@/utils/chatError';
+import { jsxToHTML } from '@/utils/jsxToHTML';
 import { toId } from '@/utils/toId';
 
 import type { TranslatedText } from '@/i18n/types';
@@ -555,22 +556,24 @@ export class Azul extends BaseGame<State> {
 		return this.runRender(() => render.bind({ msg: this.msg })(ctx));
 	}
 
-	renderFinish() {
+	renderFinish(): string {
 		return this.runRender(() =>
-			render.bind({ msg: this.msg })({
-				id: this.id,
-				board: this.state.board,
-				bag: this.state.bag,
-				players: this.state.playerData,
-				turns: this.turns,
-				view: { type: 'spectator', active: false, action: VIEW_ACTION_TYPE.GAME_END },
-				freeGrid: this.mod === AzulMods.FREE_GRID,
-				round: this.state.round,
-				ended: true,
-				wallsOnly: true,
-				header: this.$T('GAME.GAME_ENDED'),
-				$T: this.$T,
-			})
+			jsxToHTML(
+				render.bind({ msg: this.msg })({
+					id: this.id,
+					board: this.state.board,
+					bag: this.state.bag,
+					players: this.state.playerData,
+					turns: this.turns,
+					view: { type: 'spectator', active: false, action: VIEW_ACTION_TYPE.GAME_END },
+					freeGrid: this.mod === AzulMods.FREE_GRID,
+					round: this.state.round,
+					ended: true,
+					wallsOnly: true,
+					header: this.$T('GAME.GAME_ENDED'),
+					$T: this.$T,
+				})
+			)
 		);
 	}
 }

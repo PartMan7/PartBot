@@ -118,7 +118,7 @@ function getAllMoves(board: Board, turn: Turn): Move[] {
 	return moves;
 }
 
-export class LinesOfAction extends BaseGame<State> {
+export class LinesOfAction extends BaseGame<State, RenderCtx> {
 	log: Log[] = [];
 	declare winCtx?: WinCtx | { type: EndType };
 	selected: [number, number] | null = null;
@@ -274,25 +274,15 @@ export class LinesOfAction extends BaseGame<State> {
 			]);
 	}
 
-	render(side: Turn | null) {
-		const ctx: RenderCtx = {
+	renderFn = (ctx: RenderCtx) => render.bind({ msg: this.msg })(ctx);
+
+	getRenderCtx(side: Turn | null): RenderCtx {
+		return {
 			board: this.state.board,
 			turn: side === this.turn ? this.turn : null,
 			selected: side === this.turn ? this.selected : null,
 			validMoves: side === this.turn ? this.validMoves : [],
 			id: this.id,
 		};
-		if (this.winCtx) {
-			ctx.header = this.$T('GAME.GAME_ENDED');
-		} else if (side === this.turn) {
-			ctx.header = this.$T('GAME.YOUR_TURN');
-		} else if (side) {
-			ctx.header = this.$T('GAME.WAITING_FOR_OPPONENT');
-			ctx.dimHeader = true;
-		} else if (this.turn) {
-			const current = this.players[this.turn];
-			ctx.header = this.$T('GAME.WAITING_FOR_PLAYER', { player: `${current.name}${this.sides ? ` (${this.turn})` : ''}` });
-		}
-		return this.runRender(() => render.bind({ msg: this.msg })(ctx));
 	}
 }

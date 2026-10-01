@@ -148,6 +148,8 @@ export class Battleship extends BaseGame<State> {
 		throw new Error(`winCtx not defined for BS - ${JSON.stringify(this.winCtx)}`);
 	}
 
+	renderFn = render;
+
 	render(side: Turn | null): ReactElement {
 		return this.runRender(() => {
 			if (side) {
@@ -171,7 +173,6 @@ export class Battleship extends BaseGame<State> {
 					defense: this.state.board.attacks[this.getNext(side)],
 					actual: this.state.board.ships[side],
 					active: side === this.turn,
-					...this.getHeader(side),
 				};
 			} else {
 				ctx = {
@@ -179,11 +180,10 @@ export class Battleship extends BaseGame<State> {
 					id: this.id,
 					boards: this.state.board.attacks,
 					players: this.players,
-					...this.getHeader(side),
 				};
 			}
 
-			return render(ctx as RenderCtx);
+			return this.renderPage(ctx as RenderCtx, side);
 		});
 	}
 

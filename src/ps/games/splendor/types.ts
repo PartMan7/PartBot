@@ -1,5 +1,6 @@
 import type { TranslationFn } from '@/i18n/types';
 import type { POST_TURN_ACTIONS, TOKEN_TYPE, VIEW_ACTION_TYPE } from '@/ps/games/splendor/constants';
+import type { BaseRenderCtx } from '@/ps/games/types';
 
 export type Turn = string;
 
@@ -90,12 +91,10 @@ export type State = {
 	actionState: ActionState;
 };
 
-export type RenderCtx = {
+export type RenderCtx = BaseRenderCtx & {
 	id: string;
 	cap: number;
 	board: Board;
-	header?: string;
-	dimHeader?: boolean;
 	view: ViewType;
 	turns: string[];
 	players: Record<string, PlayerData>;
