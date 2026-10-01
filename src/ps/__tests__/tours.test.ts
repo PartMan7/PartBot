@@ -102,4 +102,63 @@ describe('tour points placements', () => {
 
 		expect(getTopFourFromBracketTree(bracket)).toEqual(['mrfootgod', 'doom2121', 'Yeet masters', 'Shade PieD']);
 	});
+
+	it('handles a bracket where the root has an extra nested round', () => {
+		const bracket: BracketTree = {
+			format: 'ChatBats (Volt Turn Mayhem mod)',
+			generator: 'Single Elimination',
+			results: [['PileOfTrubbish']],
+			bracketData: {
+				type: 'tree',
+				rootNode: {
+					children: [
+						{
+							children: [
+								{
+									children: [{ team: 'Loki988' }, { team: 'PileOfTrubbish' }],
+									state: 'finished',
+									team: 'PileOfTrubbish',
+									result: 'loss',
+									score: [0, 3],
+								},
+								{
+									children: [{ team: 'zvbcv' }, { team: 'lufylulu' }],
+									state: 'finished',
+									team: 'lufylulu',
+									result: 'loss',
+									score: [4, 5],
+								},
+							],
+							state: 'finished',
+							team: 'PileOfTrubbish',
+							result: 'win',
+							score: [6, 6],
+						},
+						{
+							children: [
+								{
+									children: [{ team: 'Shantanu456' }, { team: 'Neto1003' }],
+									state: 'finished',
+									team: 'Neto1003',
+									result: 'loss',
+									score: [0, 5],
+								},
+								{ team: 'mrfootgod' },
+							],
+							state: 'finished',
+							team: 'mrfootgod',
+							result: 'loss',
+							score: [0, 1],
+						},
+					],
+					state: 'finished',
+					team: 'PileOfTrubbish',
+					result: 'win',
+					score: [1, 0],
+				},
+			},
+		};
+
+		expect(getTopFourFromBracketTree(bracket)).toEqual(['PileOfTrubbish', 'mrfootgod', 'lufylulu', 'Neto1003']);
+	});
 });
