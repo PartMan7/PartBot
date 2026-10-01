@@ -211,8 +211,7 @@ function OrientationPicker(this: This, ctx: RenderCtx): ReactElement | null {
 
 export function render(this: This, ctx: RenderCtx): ReactElement {
 	return (
-		<center>
-			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
+		<>
 			<div style={{ margin: '8px 0', fontSize: 13 }}>
 				{Object.entries(ctx.players)
 					.sortBy(([turn]) => ctx.turns.indexOf(turn))
@@ -241,6 +240,6 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 			{PieceTray.bind(this)(ctx)}
 			<OpponentPieces ctx={ctx} />
 			{ctx.isActive && ctx.selectedOrient !== null ? <small>{ctx.$T('GAME.BLOKUS.PLACE_HINT')}</small> : null}
-		</center>
+		</>
 	);
 }

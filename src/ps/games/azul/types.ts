@@ -1,5 +1,6 @@
 import type { TranslationFn } from '@/i18n/types';
 import type { POST_TURN_ACTIONS, Tile, VIEW_ACTION_TYPE } from '@/ps/games/azul/constants';
+import type { BaseRenderCtx } from '@/ps/games/types';
 
 export type Turn = string;
 
@@ -82,7 +83,7 @@ export type State = {
 	round: number;
 };
 
-export type RenderCtx = {
+export type RenderCtx = BaseRenderCtx & {
 	id: string;
 	board: Board;
 	bag: Tile[];
@@ -94,8 +95,6 @@ export type RenderCtx = {
 	ended?: boolean;
 	/** Chat finish broadcast: only 5x5 walls */
 	wallsOnly?: boolean;
-	header?: string;
-	dimHeader?: boolean;
 	$T: TranslationFn;
 };
 

@@ -1,4 +1,4 @@
-import { getGame, getSimpleMsg } from '@/ps/games/game';
+import { getGame } from '@/ps/games/game';
 import { type CellRenderer, Table } from '@/ps/games/render';
 import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { Button } from '@/utils/components/ps';
@@ -15,7 +15,7 @@ export function renderCloseSignups(): ReactElement {
 		<>
 			<hr />
 			{player} is playing a round of {game.meta.name}!
-			<Button value={`${getSimpleMsg()} watch`} style={{ marginLeft: 16 }}>
+			<Button value={`${game.simpleMsg} watch`} style={{ marginLeft: 16 }}>
 				{game.$T('GAME.LABELS.WATCH')}
 			</Button>
 			<hr />
@@ -52,7 +52,7 @@ export function render(
 	data: State,
 	{ size, player, ended, genClicks }: { size: [number, number]; ended: boolean; player: boolean; genClicks: number }
 ): ReactElement {
-	const simpleMsg = getSimpleMsg();
+	const simpleMsg = getGame().simpleMsg;
 
 	const Cell: CellRenderer<boolean> = ({ cell, i, j }) => (
 		<td>

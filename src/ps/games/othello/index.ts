@@ -15,7 +15,7 @@ import type { EndType } from '@/ps/games/types';
 
 export { meta } from '@/ps/games/othello/meta';
 
-export class Othello extends BaseGame<State> {
+export class Othello extends BaseGame<State, RenderCtx> {
 	log: Log[] = [];
 	declare winCtx?: WinCtx | { type: EndType };
 	cache: Record<string, Record<Turn, number>> = {};
@@ -166,14 +166,13 @@ export class Othello extends BaseGame<State> {
 			]);
 	}
 
-	render(side: Turn | null) {
-		const ctx: RenderCtx = {
+	renderFn = render;
+	getRenderCtx(side: Turn | null): RenderCtx {
+		return {
 			board: this.state.board,
 			validMoves: side === this.turn ? this.validMoves() : [],
 			score: this.count(),
 			id: this.id,
-			...this.getHeader(side),
 		};
-		return this.runRender(() => render(ctx));
 	}
 }

@@ -1,5 +1,5 @@
-import { getMsg } from '@/ps/games/game';
-import { GameHeader, Table } from '@/ps/games/render';
+import { getGame } from '@/ps/games/game';
+import { Table } from '@/ps/games/render';
 import { Button } from '@/utils/components/ps';
 
 import type { RenderCtx, Turn } from '@/ps/games/othello/types';
@@ -9,7 +9,7 @@ import type { ReactElement } from 'react';
 const roundStyles = { height: 24, width: 24, display: 'inline-block', borderRadius: 100, marginLeft: 3, marginTop: 3 };
 
 function renderBoard(ctx: RenderCtx) {
-	const msg = getMsg();
+	const msg = getGame().msg;
 	const Cell: CellRenderer<Turn | null> = ({ cell, i, j }) => {
 		const action = ctx.validMoves.some(([x, y]) => x === i && y === j);
 		return (
@@ -30,12 +30,11 @@ function renderBoard(ctx: RenderCtx) {
 
 export function render(ctx: RenderCtx): ReactElement {
 	return (
-		<center>
-			<GameHeader header={ctx.header} dim={ctx.dimHeader} />
+		<>
 			{renderBoard(ctx)}
 			<b style={{ margin: 10 }}>
 				Score: {ctx.score.B}/{ctx.score.W}
 			</b>
-		</center>
+		</>
 	);
 }

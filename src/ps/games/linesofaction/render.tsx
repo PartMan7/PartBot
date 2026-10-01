@@ -47,10 +47,5 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 }
 
 export function render(this: This, ctx: RenderCtx): ReactElement {
-	return (
-		<center>
-			<h1 style={ctx.dimHeader ? { color: 'gray' } : {}}>{ctx.header}</h1>
-			{renderBoard.bind(this)(ctx)}
-		</center>
-	);
+	return renderBoard.bind(this)(ctx);
 }

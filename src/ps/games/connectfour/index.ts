@@ -11,11 +11,9 @@ import type { Log } from '@/ps/games/connectfour/logs';
 import type { Board, RenderCtx, State, Turn, WinCtx } from '@/ps/games/connectfour/types';
 import type { BaseContext, GameUser } from '@/ps/games/game';
 import type { EndType } from '@/ps/games/types';
-import type { ReactElement } from 'react';
-
 export { meta } from '@/ps/games/connectfour/meta';
 
-export class ConnectFour extends BaseGame<State> {
+export class ConnectFour extends BaseGame<State, RenderCtx> {
 	log: Log[] = [];
 	declare winCtx?: WinCtx | { type: EndType };
 	cache: Record<string, Record<Turn, number>> = {};
@@ -123,12 +121,12 @@ export class ConnectFour extends BaseGame<State> {
 			]);
 	}
 
-	render(side: Turn | null): ReactElement {
-		const ctx: RenderCtx = {
+	renderFn = render;
+
+	getRenderCtx(_side: Turn | null): RenderCtx {
+		return {
 			board: this.state.board,
 			id: this.id,
-			...this.getHeader(side),
 		};
-		return this.runRender(() => render(ctx));
 	}
 }

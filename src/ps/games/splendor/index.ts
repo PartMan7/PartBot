@@ -25,7 +25,7 @@ import type { ActionResponse, BaseState, EndType, Player } from '@/ps/games/type
 
 export { meta } from '@/ps/games/splendor/meta';
 
-export class Splendor extends BaseGame<State> {
+export class Splendor extends BaseGame<State, RenderCtx> {
 	log: Log[] = [];
 	declare winCtx?: WinCtx | { type: EndType };
 
@@ -560,14 +560,16 @@ export class Splendor extends BaseGame<State> {
 		this.sendRoomHTML(...renderLog(log, this));
 	}
 
-	render(side: Turn | null) {
+	renderFn = render;
+
+	getRenderCtx(side: Turn | null): RenderCtx {
 		let view: ViewType;
 		if (side) {
 			if (side === this.turn) view = { type: 'player', active: true, self: side, ...this.state.actionState };
 			else view = { type: 'player', active: false, self: side };
 		} else view = { type: 'spectator', active: false, action: this.winCtx ? VIEW_ACTION_TYPE.GAME_END : null };
 
-		const ctx: RenderCtx = {
+		return {
 			id: this.id,
 			board: this.state.board,
 			players: this.state.playerData,
@@ -575,8 +577,6 @@ export class Splendor extends BaseGame<State> {
 			view,
 			cap: this.state.pointsToWin,
 			$T: this.$T,
-			...this.getHeader(side),
 		};
-		return this.runRender(() => render(ctx));
 	}
 }

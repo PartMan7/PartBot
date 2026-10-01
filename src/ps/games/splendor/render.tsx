@@ -1,5 +1,5 @@
-import { getMsg } from '@/ps/games/game';
-import { GameHeader, LogEntry } from '@/ps/games/render';
+import { getGame } from '@/ps/games/game';
+import { LogEntry } from '@/ps/games/render';
 import {
 	ACTIONS,
 	AllTokenTypes,
@@ -840,21 +840,18 @@ export function PlayerSummary({ data }: { data: PlayerData }): ReactElement {
 }
 
 export function render(ctx: RenderCtx): ReactElement {
-	const msg = getMsg();
+	const msg = getGame().msg;
 	return (
-		<center>
-			<GameHeader header={ctx.header} dim={ctx.dimHeader} />
-			<div style={{ zoom: '50%' }}>
-				<BaseBoard board={ctx.board} onClick={ctx.view.active ? msg : undefined} view={ctx.view} $T={ctx.$T} />
-				<div style={{ height: 48 }} />
-				{ctx.view.type === 'player' ? (
-					<>
-						<ActivePlayer data={ctx.players[ctx.view.self]} action={ctx.view} onClick={msg} cap={ctx.cap} $T={ctx.$T} />
-						<hr />
-					</>
-				) : null}
-				{ctx.turns.map(turn => <PlayerSummary data={ctx.players[turn]} />).space(<div style={{ height: 12 }} />)}
-			</div>
-		</center>
+		<div style={{ zoom: '50%' }}>
+			<BaseBoard board={ctx.board} onClick={ctx.view.active ? msg : undefined} view={ctx.view} $T={ctx.$T} />
+			<div style={{ height: 48 }} />
+			{ctx.view.type === 'player' ? (
+				<>
+					<ActivePlayer data={ctx.players[ctx.view.self]} action={ctx.view} onClick={msg} cap={ctx.cap} $T={ctx.$T} />
+					<hr />
+				</>
+			) : null}
+			{ctx.turns.map(turn => <PlayerSummary data={ctx.players[turn]} />).space(<div style={{ height: 12 }} />)}
+		</div>
 	);
 }

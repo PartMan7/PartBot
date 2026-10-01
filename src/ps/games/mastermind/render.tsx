@@ -1,4 +1,4 @@
-import { getGame, getSimpleMsg } from '@/ps/games/game';
+import { getGame } from '@/ps/games/game';
 import { Button, Form } from '@/utils/components/ps';
 import { repeat } from '@/utils/repeat';
 
@@ -14,7 +14,7 @@ export function renderCloseSignups(): ReactElement {
 		<>
 			<hr />
 			{player} is playing a round of {game.meta.name}!
-			<Button value={`${getSimpleMsg()} watch ${game.id}`} style={{ marginLeft: 16 }}>
+			<Button value={`${game.simpleMsg} watch ${game.id}`} style={{ marginLeft: 16 }}>
 				{game.$T('GAME.LABELS.WATCH')}
 			</Button>
 			{game.setBy || !hasGuessed ? (
@@ -26,7 +26,7 @@ export function renderCloseSignups(): ReactElement {
 			{game.setBy ? (
 				`${game.setBy.name} has set a code for ${player}.`
 			) : !hasGuessed ? (
-				<Form value={`${getSimpleMsg()} audience ${game.id}, {code}`}>
+				<Form value={`${game.simpleMsg} audience ${game.id}, {code}`}>
 					<label htmlFor="choosecode">Set Code: </label>
 					<input type="text" id="choosecode" name="code" style={{ width: 30 }} /> &nbsp;&nbsp;
 					<input type="submit" value="Set" />
@@ -145,7 +145,7 @@ function Entry({ data }: { data: { guess: Guess; result: GuessResult } | null })
 	);
 }
 export function render(data: State, mode: 'playing' | 'over' | 'spectator'): ReactElement {
-	const simpleMsg = getSimpleMsg();
+	const simpleMsg = getGame().simpleMsg;
 	return (
 		<div style={{ marginLeft: 50, marginTop: 20 }}>
 			<div

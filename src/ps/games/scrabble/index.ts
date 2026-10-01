@@ -31,7 +31,7 @@ function isLetter(char: string): boolean {
 	return /[A-Z]/.test(char);
 }
 
-export class Scrabble extends BaseGame<State> {
+export class Scrabble extends BaseGame<State, RenderCtx> {
 	points: Record<string, number> = LETTER_POINTS;
 	log: Log[] = [];
 	passCount: number | null = null;
@@ -375,8 +375,10 @@ export class Scrabble extends BaseGame<State> {
 		return { success: true, data: null };
 	}
 
-	render(side: string | null) {
-		const ctx: RenderCtx = {
+	renderFn = render;
+
+	getRenderCtx(side: string | null): RenderCtx {
+		return {
 			id: this.id,
 			baseBoard: this.state.baseBoard,
 			board: this.state.board,
@@ -392,9 +394,7 @@ export class Scrabble extends BaseGame<State> {
 			side,
 			turn: this.turn!,
 			selected: side && side === this.turn ? this.selected : null,
-			...this.getHeader(side),
 		};
-		return this.runRender(() => render(ctx));
 	}
 
 	// TODO: Fix Discord embeds

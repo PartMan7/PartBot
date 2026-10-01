@@ -1,4 +1,4 @@
-import type { Player } from '@/ps/games/types';
+import type { BaseRenderCtx, Player } from '@/ps/games/types';
 
 export type Turn = 'Y' | 'R';
 
@@ -9,10 +9,8 @@ export type State = {
 	board: Board;
 };
 
-export type RenderCtx = {
+export type RenderCtx = BaseRenderCtx & {
 	id: string;
 	board: Board;
-	header?: string;
-	dimHeader?: boolean;
 };
 export type WinCtx = ({ type: 'win' } & Record<'winner' | 'loser', Player>) | { type: 'draw' };

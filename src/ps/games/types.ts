@@ -92,6 +92,11 @@ export interface Player {
 	out?: boolean;
 }
 
+export type BaseRenderCtx = {
+	header?: string;
+	dimHeader?: boolean;
+};
+
 export type BaseState = { board: unknown; turn: string };
 
 export type ActionResponse<T = null> = { success: true; data: T } | { success: false; error: TranslatedText };
