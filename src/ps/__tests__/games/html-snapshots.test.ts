@@ -1,15 +1,14 @@
 import path from 'node:path';
 import { format } from 'prettier';
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { i18n } from '@/i18n';
 import { client } from '@/ps/__tests__/mocks/client';
 import { mockRoom } from '@/ps/__tests__/mocks/room';
 import { mockUser } from '@/ps/__tests__/mocks/user';
+import { Games } from '@/ps/games';
 import { GamesList } from '@/ps/games/types';
-import { jsxToHTML } from '@/utils/jsxToHTML';
 
-import type { Games } from '@/ps/games';
 import type { BaseContext, CommonGame } from '@/ps/games/game';
 
 type GameConstructor = new (ctx: BaseContext) => CommonGame;
@@ -83,17 +82,11 @@ function createSnapshot(name: GamesList, games: Games): { game: CommonGame; side
 }
 
 describe('Game HTML snapshots', () => {
-	let games: Games;
-
-	beforeAll(async () => {
-		({ Games: games } = await import('@/ps/games'));
-	});
-
 	for (const name of Object.values(GamesList)) {
 		it(`renders ${name} as openable HTML`, async () => {
 			const html = await withFixedRandom(() => {
-				const { game, side } = createSnapshot(name, games);
-				return format(htmlDocument(game.meta.name, jsxToHTML(game.render(side)), jsxToHTML(game.render(null))), {
+				const { game, side } = createSnapshot(name, Games);
+				return format(htmlDocument(game.meta.name, game.renderHTML(side), game.renderHTML(null)), {
 					parser: 'html',
 					printWidth: 135,
 					useTabs: true,

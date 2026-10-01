@@ -153,9 +153,9 @@ describe('Battleship lifecycle', () => {
 		game.addPlayer(mockUser('Alice'), 'A');
 		game.addPlayer(mockUser('Bob'), 'B'); // auto-starts
 		expect(game.started).toBe(true);
-		expect(() => jsxToHTML(game.render('A'))).not.toThrow();
-		expect(() => jsxToHTML(game.render('B'))).not.toThrow();
-		expect(() => jsxToHTML(game.render(null))).not.toThrow();
+		expect(() => game.renderHTML('A')).not.toThrow();
+		expect(() => game.renderHTML('B')).not.toThrow();
+		expect(() => game.renderHTML(null)).not.toThrow();
 	});
 });
 
