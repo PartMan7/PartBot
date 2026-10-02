@@ -24,10 +24,23 @@ function getConfigRank(message: PSMessage): AuthKey | null {
 	return null;
 }
 
+function isPublicStaff([room, { isPrivate }]: [string, { isPrivate?: boolean }]): boolean {
+	if (isPrivate) return false;
+	return /^[%@*#]/.test(room);
+}
+
 function baseCheckPermissions(perm: Exclude<Perms, symbol>, command: string[] | null, message: PSMessage): boolean {
 	// Admin overrides
 	const isAdmin = admins.includes(message.author.userid);
 	if (isAdmin) return true;
+	if (perm === 'trusted') {
+		if (
+			baseCheckPermissions(['global', 'voice'], command, message) ||
+			(!!message.author.rooms && Object.entries(message.author.rooms).some(isPublicStaff))
+		) {
+			return true;
+		}
+	}
 	// Other overrides are applied only on rank and [scope, rank], not functions
 	switch (typeof perm) {
 		case 'string': {
