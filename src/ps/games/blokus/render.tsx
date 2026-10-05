@@ -216,7 +216,14 @@ export function render(this: This, ctx: RenderCtx): ReactElement {
 				{Object.entries(ctx.players)
 					.sortBy(([turn]) => ctx.turns.indexOf(turn))
 					.map(([turn, player]) => (
-						<span key={turn} style={{ fontWeight: turn === ctx.turn ? 'bold' : 'normal', marginRight: 12 }}>
+						<span
+							key={turn}
+							style={{
+								fontWeight: turn === ctx.turn ? 'bold' : 'normal',
+								marginRight: 12,
+								textDecoration: player.out ? 'line-through' : 'none',
+							}}
+						>
 							<span
 								style={{
 									display: 'inline-block',

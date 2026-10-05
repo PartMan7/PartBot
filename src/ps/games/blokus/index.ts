@@ -4,6 +4,7 @@ import { BaseGame } from '@/ps/games/game';
 import { createGrid } from '@/ps/games/utils';
 import { ChatError } from '@/utils/chatError';
 import { deepClone } from '@/utils/deepClone';
+import { pick } from '@/utils/pick';
 
 import type { TranslatedText } from '@/i18n/types';
 import type { PieceId } from '@/ps/games/blokus/constants';
@@ -287,7 +288,7 @@ export class Blokus extends BaseGame<State, RenderCtx> {
 			isActive,
 			playerIndex: this.state.playerIndex,
 			pieces: this.state.pieces,
-			players: Object.fromEntries(Object.entries(this.players).map(([t, p]) => [t, { id: p.id, name: p.name }])),
+			players: Object.fromEntries(Object.entries(this.players).map(([t, p]) => [t, pick(p, 'id', 'name', 'out')])),
 			selectedPiece: isActive ? this.selectedPiece : null,
 			selectedOrient: isActive ? this.selectedOrient : null,
 			orientations,

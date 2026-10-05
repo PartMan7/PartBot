@@ -24,7 +24,7 @@ export type RenderCtx = BaseRenderCtx & {
 	isActive: boolean;
 	playerIndex: Record<Turn, number>;
 	pieces: Record<Turn, PieceId[]>;
-	players: Record<Turn, { id: string; name: string }>;
+	players: Record<Turn, { id: string; name: string; out?: boolean }>;
 	selectedPiece: PieceId | null;
 	selectedOrient: number | null;
 	orientations: [number, number][][] | null;
