@@ -92,6 +92,11 @@ export default {
 		DQ: '{{player}} has been disqualified from the game.',
 		FORCE_WIN: '{{player}} was given the win for game {{id}}!',
 		FORFEIT: 'You have forfeited the game.',
+		FORFEIT_SPECIFY:
+			"You're in more than one game! Use ``{{prefix}}forfeit #ID``, ``{{prefix}}forfeit <game>``, or ``{{prefix}}forfeit all``.",
+		FORFEIT_TYPE_SPECIFY:
+			"You're in more than one {{game}} game! Use ``{{prefix}}forfeit #ID`` or ``{{prefix}}forfeit all {{game}}``.",
+		FORFEIT_UNKNOWN_TYPE: "Couldn't find a game type matching '{{game}}'.",
 		REMOVED: '{{player}} has been removed from the game.',
 		LEFT: 'You have left the game.',
 		WATCHING_NOTHING: "You don't seem to need to rejoin anything...",
