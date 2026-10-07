@@ -95,6 +95,11 @@ export default {
 		DQ: '{{player}} a été disqualifié de la partie.',
 		FORCE_WIN: '{{player}} a reçu la victoire pour la partie {{id}} !', // '{{player}} was given the win for game {{id}}!'
 		FORFEIT: 'Vous avez abandonné la partie.',
+		FORFEIT_SPECIFY:
+			'Vous êtes dans plus d’une partie ! Utilisez ``{{prefix}}forfeit #ID``, ``{{prefix}}forfeit <jeu>`` ou ``{{prefix}}forfeit all``.',
+		FORFEIT_TYPE_SPECIFY:
+			'Vous êtes dans plus d’une partie de {{game}} ! Utilisez ``{{prefix}}forfeit #ID`` ou ``{{prefix}}forfeit all {{game}}``.',
+		FORFEIT_UNKNOWN_TYPE: "Aucun type de jeu correspondant à '{{game}}'.",
 		REMOVED: '{{player}} a été retiré de la partie.',
 		LEFT: 'Vous avez quitté la partie.',
 		WATCHING_NOTHING: 'Vous ne semblez pas avoir besoin de rejoindre quoi que ce soit...',

@@ -86,6 +86,11 @@ export default {
 		DQ: '{{player}} ko game se disqualify kar diya gaya hai.', // '{{player}} has been disqualified from the game.'
 		FORCE_WIN: '{{player}} ko {{id}} game ki jeet di gayi!', // '{{player}} was given the win for game {{id}}!'
 		FORFEIT: 'Aapne game forfeit kar diya hai.', // 'You have forfeited the game.'
+		FORFEIT_SPECIFY:
+			'Aap ek se zyada game mein hain! ``{{prefix}}forfeit #ID``, ``{{prefix}}forfeit <game>``, ya ``{{prefix}}forfeit all`` use karein.',
+		FORFEIT_TYPE_SPECIFY:
+			'Aap {{game}} ke ek se zyada game mein hain! ``{{prefix}}forfeit #ID`` ya ``{{prefix}}forfeit all {{game}}`` use karein.',
+		FORFEIT_UNKNOWN_TYPE: "'{{game}}' se match karta game type nahi mila.",
 		REMOVED: '{{player}} ko game se hata diya gaya hai.', // '{{player}} has been removed from the game.'
 		LEFT: 'Aapne game chhod diya hai.', // 'You have left the game.'
 		WATCHING_NOTHING: 'Aapko kuchh dobara join karne ki avashyakta nahi lagti...',
