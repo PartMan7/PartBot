@@ -1,6 +1,7 @@
 import { PSGames } from '@/cache';
 import { gameCache } from '@/cache/games';
 import { prefix } from '@/config/ps';
+import { forfeitGame } from '@/ps/commands/games/meta';
 import { Games } from '@/ps/games';
 import { renderBackups, renderMenu } from '@/ps/games/menus';
 import { generateId } from '@/ps/games/utils';
@@ -460,32 +461,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				syntax: 'CMD [#id]',
 				async run({ message, arg, $T, canFullHTML }) {
 					const { game } = getGame(arg, { action: 'leave', user: message.author.id }, { room: message.target, $T });
-					if (game.started) {
-						message.target.privateHTML(
-							message.author,
-							<>
-								{$T('CONFIRM')}
-								{canFullHTML() ? (
-									<>
-										<br />
-										<Button value="confirm">confirm</Button>
-									</>
-								) : null}
-							</>
-						);
-						await message.target
-							.waitFor(msg => toId(msg.content) === 'confirm', 10_000)
-							.catch(() => {
-								throw new ChatError($T('CANCELLED'));
-							});
-					}
-					const res = game.removePlayer(message.author);
-					if (!res.success) throw new ChatError(res.error);
-					if (res.data) {
-						message.reply(res.data.message);
-						if (res.data.cb) res.data.cb();
-					}
-					if (!game.started) game.signups();
+					await forfeitGame(message, game, $T, canFullHTML);
 				},
 			},
 			disqualify: {
