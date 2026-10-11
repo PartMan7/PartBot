@@ -99,6 +99,7 @@ export default {
 		FORFEIT_TYPE_SPECIFY:
 			'Você está em mais de um jogo de {{game}}! Use ``{{prefix}}forfeit #ID`` ou ``{{prefix}}forfeit all {{game}}``.',
 		FORFEIT_UNKNOWN_TYPE: "Não foi possível encontrar um tipo de jogo correspondente a '{{game}}'.",
+		FORFEIT_CONFIRM_ALL: "Isso fará você desistir de todos os {{count}} jogos em que está. Digite 'confirm' para confirmar.",
 		REMOVED: '{{player}} foi removido do jogo.',
 		LEFT: 'Você saiu do jogo.',
 		WATCHING_NOTHING: 'Parece que você não precisa entrar em nenhum jogo...',

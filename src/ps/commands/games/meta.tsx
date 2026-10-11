@@ -6,7 +6,7 @@ import { ChatError } from '@/utils/chatError';
 import { Button } from '@/utils/components/ps';
 import { toId } from '@/utils/toId';
 
-import type { PSMessageTranslated, TranslationFn } from '@/i18n/types';
+import type { PSMessageTranslated, TranslatedText, TranslationFn } from '@/i18n/types';
 import type { CommonGame } from '@/ps/games/game';
 import type { GamesList } from '@/ps/games/types';
 import type { PSCommand } from '@/types/chat';
@@ -46,11 +46,16 @@ function findForfeitableGameById(roomId: string, userId: string, specifier: stri
 	);
 }
 
-async function confirmForfeit(message: ForfeitMessage, $T: TranslationFn, canFullHTML: () => boolean): Promise<void> {
+async function confirmForfeit(
+	message: ForfeitMessage,
+	prompt: TranslatedText,
+	canFullHTML: () => boolean,
+	$T: TranslationFn
+): Promise<void> {
 	message.target.privateHTML(
 		message.author,
 		<>
-			{$T('CONFIRM')}
+			{prompt}
 			{canFullHTML() ? (
 				<>
 					<br />
@@ -73,7 +78,7 @@ export async function forfeitGame(
 	canFullHTML: () => boolean,
 	{ confirm = true }: { confirm?: boolean } = {}
 ): Promise<void> {
-	if (confirm && game.started) await confirmForfeit(message, $T, canFullHTML);
+	if (confirm && game.started) await confirmForfeit(message, $T('CONFIRM'), canFullHTML, $T);
 	const res = game.removePlayer(message.author);
 	if (!res.success) throw new ChatError(res.error);
 	if (res.data) {
@@ -90,7 +95,8 @@ async function forfeitGames(
 	canFullHTML: () => boolean
 ): Promise<void> {
 	if (!games.length) throw new ChatError($T('GAME.NOT_PLAYING'));
-	if (games.some(game => game.started)) await confirmForfeit(message, $T, canFullHTML);
+	if (games.some(game => game.started))
+		await confirmForfeit(message, $T('GAME.FORFEIT_CONFIRM_ALL', { count: games.length }), canFullHTML, $T);
 	for (const game of games) await forfeitGame(message, game, $T, canFullHTML, { confirm: false });
 }
 

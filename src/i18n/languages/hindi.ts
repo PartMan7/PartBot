@@ -91,6 +91,7 @@ export default {
 		FORFEIT_TYPE_SPECIFY:
 			'Aap {{game}} ke ek se zyada game mein hain! ``{{prefix}}forfeit #ID`` ya ``{{prefix}}forfeit all {{game}}`` use karein.',
 		FORFEIT_UNKNOWN_TYPE: "'{{game}}' se match karta game type nahi mila.",
+		FORFEIT_CONFIRM_ALL: "Yeh aapke {{count}} games forfeit karega jismein aap hain. Pushti ke liye 'confirm' likhein.",
 		REMOVED: '{{player}} ko game se hata diya gaya hai.', // '{{player}} has been removed from the game.'
 		LEFT: 'Aapne game chhod diya hai.', // 'You have left the game.'
 		WATCHING_NOTHING: 'Aapko kuchh dobara join karne ki avashyakta nahi lagti...',
