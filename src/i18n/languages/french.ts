@@ -100,6 +100,7 @@ export default {
 		FORFEIT_TYPE_SPECIFY:
 			'Vous êtes dans plus d’une partie de {{game}} ! Utilisez ``{{prefix}}forfeit #ID`` ou ``{{prefix}}forfeit all {{game}}``.',
 		FORFEIT_UNKNOWN_TYPE: "Aucun type de jeu correspondant à '{{game}}'.",
+		FORFEIT_CONFIRM_ALL: "Cela abandonnera les {{count}} parties auxquelles vous participez. Tapez 'confirm' pour confirmer.",
 		REMOVED: '{{player}} a été retiré de la partie.',
 		LEFT: 'Vous avez quitté la partie.',
 		WATCHING_NOTHING: 'Vous ne semblez pas avoir besoin de rejoindre quoi que ce soit...',

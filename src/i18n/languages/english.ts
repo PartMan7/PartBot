@@ -97,6 +97,7 @@ export default {
 		FORFEIT_TYPE_SPECIFY:
 			"You're in more than one {{game}} game! Use ``{{prefix}}forfeit #ID`` or ``{{prefix}}forfeit all {{game}}``.",
 		FORFEIT_UNKNOWN_TYPE: "Couldn't find a game type matching '{{game}}'.",
+		FORFEIT_CONFIRM_ALL: "This will forfeit all {{count}} games you're in. Type 'confirm' to confirm.",
 		REMOVED: '{{player}} has been removed from the game.',
 		LEFT: 'You have left the game.',
 		WATCHING_NOTHING: "You don't seem to need to rejoin anything...",
