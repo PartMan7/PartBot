@@ -172,7 +172,7 @@ export const command: PSCommand[] = [
 	},
 	{
 		name: 'forfeit',
-		aliases: ['f', 'ff', 'leave', 'l', 'resign', 'flipboard'],
+		aliases: ['ff', 'leave', 'l', 'resign', 'flipboard'],
 		help: 'Forfeits games you are in (by id, type, or all).',
 		syntax: 'CMD [all?] [game type or #id?]',
 		categories: ['game'],
