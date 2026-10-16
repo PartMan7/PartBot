@@ -24,7 +24,9 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 						style={{
 							...pieceStyles,
 							border: '2px dashed #3366cc',
-							background: cell === 'W' ? 'white' : cell === 'B' ? '#333' : '#99c2ff',
+							background: cell
+								? `url(${process.env.WEB_URL}/static/splendor/type/${cell === 'W' ? 'colorless' : 'dark'}.png) center/contain no-repeat`
+								: '#99c2ff',
 						}}
 					>
 						{' '}
@@ -32,12 +34,22 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 				) : canSelect ? (
 					<Button
 						value={`${this.msg} ! select ${i}-${j}`}
-						style={{ ...pieceStyles, border: selected ? '2px solid #3366cc' : 'none', background: cell === 'W' ? 'white' : '#333' }}
+						style={{
+							...pieceStyles,
+							border: selected ? '2px solid #3366cc' : 'none',
+							background: `url(${process.env.WEB_URL}/static/splendor/type/${cell === 'W' ? 'colorless' : 'dark'}.png) center/contain no-repeat`,
+						}}
 					>
 						{' '}
 					</Button>
 				) : cell ? (
-					<span style={{ ...pieceStyles, background: cell === 'W' ? 'white' : '#333', border: '1px solid black' }} />
+					<span
+						style={{
+							...pieceStyles,
+							background: `url(${process.env.WEB_URL}/static/splendor/type/${cell === 'W' ? 'colorless' : 'dark'}.png) center/contain no-repeat`,
+							border: '1px solid black',
+						}}
+					/>
 				) : null}
 			</td>
 		);

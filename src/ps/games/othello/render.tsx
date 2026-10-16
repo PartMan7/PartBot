@@ -15,7 +15,12 @@ function renderBoard(ctx: RenderCtx) {
 		return (
 			<td style={{ height: 30, width: 30, background: 'green', borderCollapse: 'collapse', border: '1px solid black' }}>
 				{cell ? (
-					<span style={{ ...roundStyles, background: cell === 'W' ? 'white' : 'black' }} />
+					<span
+						style={{
+							...roundStyles,
+							background: `url(${process.env.WEB_URL}/static/splendor/type/${cell === 'W' ? 'colorless' : 'dark'}.png) center/contain no-repeat`,
+						}}
+					/>
 				) : action ? (
 					<Button value={`${msg} play ${i}-${j}`} style={{ ...roundStyles, border: '1px dashed black', background: '#6666' }}>
 						{' '}
