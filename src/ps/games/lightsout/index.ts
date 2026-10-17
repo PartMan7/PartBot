@@ -31,14 +31,16 @@ export class LightsOut extends BaseGame<State> {
 
 		this.state.clicks = 0;
 		this.state.genClicks = 0;
-		this.state.board.forEach((row, i) => {
-			row.forEach((_cell, j) => {
-				if ([true, false].random(this.prng)) {
-					this.click(i, j);
-					this.state.genClicks++;
-				}
+		while (this.state.genClicks === 0) {
+			this.state.board.forEach((row, i) => {
+				row.forEach((_cell, j) => {
+					if ([true, false].random(this.prng)) {
+						this.click(i, j);
+						this.state.genClicks++;
+					}
+				});
 			});
-		});
+		}
 		this.state.original = deepClone(this.state.board);
 
 		super.after(ctx);
