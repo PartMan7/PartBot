@@ -70,6 +70,16 @@ describe('ConnectFour playthrough', () => {
 		expect(() => game.render(null)).not.toThrow();
 	});
 
+	it('does not render clickable columns after a player forfeits', () => {
+		const { game, userY } = setupGame();
+
+		const result = game.removePlayer(userY);
+		if (!result.success) throw new Error(result.error);
+		result.data.cb?.();
+
+		expect(getButtonActions(game.render(null), game)).toHaveLength(0);
+	});
+
 	it('allows both players to sub after moves have been played', async () => {
 		const { game, room, userY, userR } = setupGame();
 		const replacementY = mockUser('Replacement Yellow');

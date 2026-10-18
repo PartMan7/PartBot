@@ -33,17 +33,17 @@ function Column({ data }: { data: (Turn | null)[] }): ReactElement {
 	);
 }
 function renderBoard(ctx: RenderCtx): ReactElement {
-	const msg = getGame().msg;
+	const game = getGame();
 	return (
 		<div style={{ backgroundColor: '#0080ff', borderRadius: 16, display: 'inline-block', padding: 2 }}>
 			{repeat(null, ctx.board[0].length).map((_, col) => {
 				const column = ctx.board.map(row => row[col]);
-				return column[0] ? (
+				return game.winCtx || column[0] ? (
 					<div style={{ display: 'inline-block' }}>
 						<Column data={column} />
 					</div>
 				) : (
-					<Button value={`${msg} ! ${col}`} style={{ background: 'none', border: 'none', padding: 0 }}>
+					<Button value={`${game.msg} ! ${col}`} style={{ background: 'none', border: 'none', padding: 0 }}>
 						<Column data={column} />
 					</Button>
 				);
