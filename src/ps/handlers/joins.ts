@@ -1,4 +1,4 @@
-import { PSAltCache, PSGames, PSJoinphraseCache, PSSeenCache } from '@/cache';
+import { PSGames, PSJoinphraseCache } from '@/cache';
 import { rename } from '@/database/alts';
 import { seeUser } from '@/database/seens';
 import { ChatError } from '@/utils/chatError';
@@ -52,7 +52,6 @@ export function nickHandler(this: Client, room: string, newName: string, oldName
 		call: debounce(() => rename(oldName, newName), fromHumanTime('5 seconds')),
 	};
 	DebounceAltCache[id].at = new Date();
-	PSAltCache[id] = { from, to, at: new Date() };
 	DebounceAltCache[id].call();
 }
 
@@ -68,6 +67,5 @@ export function leaveHandler(this: Client, room: string, name: string, isIntro: 
 	DebounceSeenCache[userId].at = new Date();
 	const userObj = this.getUser(name);
 	const rooms = userObj && userObj.rooms ? Object.keys(userObj.rooms).map(room => room.replace(/^[^a-z0-9]/, '')) : [room];
-	PSSeenCache[userId] = { id: userId, name: name, at: new Date(), seenIn: rooms };
 	DebounceSeenCache[userId].call(rooms);
 }

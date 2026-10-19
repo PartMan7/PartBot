@@ -1,4 +1,3 @@
-import { PSSeenCache } from '@/cache';
 import { lastSeen } from '@/database/seens';
 import { toHumanTime } from '@/utils/humanTime';
 import { toId, toRoomId } from '@/utils/toId';
@@ -33,9 +32,10 @@ export const command: PSCommand = {
 
 		const lookup = toId(arg);
 		const online = message.parent.getUser(lookup);
-		const displayUser = online?.name ?? PSSeenCache[lookup]?.name ?? (await lastSeen(lookup))?.name ?? lookup;
+		const lastSeenUser = await lastSeen(lookup);
+		const displayUser = online?.name ?? lastSeenUser?.name ?? lookup;
 		if (online) return broadcast($T('COMMANDS.SEENS.ONLINE', { user: displayUser }));
-		const seen = PSSeenCache[lookup] ?? (await lastSeen(lookup));
+		const seen = lastSeenUser;
 		if (!seen) return broadcast($T('COMMANDS.SEENS.NEVER', { user: displayUser }));
 
 		const at = seen.at instanceof Date ? seen.at.getTime() : +seen.at;

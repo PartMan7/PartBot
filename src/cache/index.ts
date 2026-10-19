@@ -20,7 +20,6 @@ export const PSCommands: { [key: string]: PSCommand & { path: string } } = {};
  * @example 'voice': 'promote voice'
  */
 export const PSAliases: { [key: string]: string } = {};
-export const PSAltCache: Partial<{ [key: string]: { from: string; to: string; at: Date } }> = {};
 export const PSJoinphraseCache: Partial<{
 	[room: string]: Partial<{
 		[userId: string]: {
@@ -32,7 +31,6 @@ export const PSJoinphraseCache: Partial<{
 		};
 	}>;
 }> = {};
-export const PSSeenCache: Partial<{ [key: string]: { id: string; name: string; at: Date; seenIn: string[] } }> = {};
 export const PSCronJobs: { manager: PSCronJobManager | null } = { manager: null };
 
 export const PSNoPrefixHelp: Partial<{ [key: string]: Date }> = {};
