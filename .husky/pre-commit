@@ -8,7 +8,7 @@ bash <<EOF
     npm run prettify -- \$TO_PRETTIFY
     git add -- \$TO_PRETTIFY
   fi
-  npm test
+  npm run test:staged
   FAIL_ON_PENDING=true npm run notify-unpushed -- src/secrets
   npm run secrets-check
 EOF
