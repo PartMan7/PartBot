@@ -1,5 +1,4 @@
-import { Tools as ClientTools } from 'ps-client';
-
+import { psHSL } from '@/ps/datacenters';
 import { HslToRgb, HslToString, RgbToHex, RgbToString } from '@/utils/color';
 
 import type { PSCommand } from '@/types/chat';
@@ -21,7 +20,7 @@ export const command: PSCommand = {
 	categories: ['utility'],
 	async run({ message, arg, broadcastHTML }) {
 		const target = arg || message.author.name;
-		const data = ClientTools.HSL(target);
+		const data = psHSL(target);
 		const current = convertedColors(data.hsl);
 		const original = data.base ? convertedColors(data.base.hsl) : null;
 

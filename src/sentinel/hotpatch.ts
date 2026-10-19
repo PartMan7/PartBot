@@ -1,9 +1,9 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { update as updatePSData } from 'ps-client/tools';
 
 import { PSRoomConfigs } from '@/cache';
 import { updateShowdownData } from '@/cache/showdown';
+import { ShowdownDataKeys } from '@/cache/showdown/types';
 import { fetchRoomConfigs } from '@/database/psrooms';
 import PS from '@/ps';
 import { registers } from '@/sentinel/registers';
@@ -71,8 +71,7 @@ export async function hotpatch(this: Sentinel, hotpatchType: HotpatchType, by: s
 			}
 
 			case 'data': {
-				await updatePSData();
-				// TODO: cachebust
+				await updateShowdownData([ShowdownDataKeys.PSDatacenters]);
 				break;
 			}
 

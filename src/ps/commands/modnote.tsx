@@ -1,6 +1,7 @@
-import { HSL, formatText } from 'ps-client/tools';
+import { formatText } from 'ps-client/tools';
 
 import { isGlobalBot, prefix } from '@/config/ps';
+import { psHSL } from '@/ps/datacenters';
 import { ChatError } from '@/utils/chatError';
 import { Button, Form } from '@/utils/components/ps';
 import { toId } from '@/utils/toId';
@@ -55,7 +56,7 @@ export const command: PSCommand = {
 				if (!isStaff(userInRoom)) throw new ChatError($T('ACCESS_DENIED'));
 
 				const nonGlobalPrefix = !isGlobalBot ? `/msgroom ${targetRoom.id},` : '';
-				const [h, s, l] = HSL(message.author.id).hsl;
+				const [h, s, l] = psHSL(message.author.id).hsl;
 				targetRoom.sendHTML(
 					<div className="infobox">
 						<div className="chat chatmessage-partbot" style={{ display: 'inline-block' }}>

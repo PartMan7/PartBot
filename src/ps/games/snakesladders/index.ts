@@ -1,5 +1,4 @@
-import { HSL } from 'ps-client/tools';
-
+import { psHSL } from '@/ps/datacenters';
 import { BaseGame } from '@/ps/games/game';
 import { TOKEN_COLORS } from '@/ps/games/snakesladders/constants';
 import { render } from '@/ps/games/snakesladders/render';
@@ -53,7 +52,7 @@ export class SnakesLadders extends BaseGame<State, RenderCtx> {
 
 	onStart(): ActionResponse {
 		const playerColors = Object.values(this.players).map<{ id: string; color: Hex }>(player => {
-			const [H, S, L] = HSL(player.id).hsl;
+			const [H, S, L] = psHSL(player.id).hsl;
 			return { id: player.turn, color: HslToHex({ H, S, L, colorspace: 'hsla' }) };
 		});
 

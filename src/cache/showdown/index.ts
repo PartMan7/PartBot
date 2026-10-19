@@ -1,6 +1,8 @@
 import { FlatCache } from 'flat-cache';
+import { fetch as fetchPSDatacenters } from 'ps-client/tools';
 
 import { ShowdownDataKeys } from '@/cache/showdown/types';
+import { applyPSDatacenters } from '@/ps/datacenters';
 import { fsPath } from '@/utils/fsPath';
 
 import type { ShowdownDataType } from '@/cache/showdown/types';
@@ -10,6 +12,7 @@ const RANDOMS_SETS_URL =
 
 export const ShowdownData: ShowdownDataType = {
 	[ShowdownDataKeys.RandomSetsGen9]: {},
+	[ShowdownDataKeys.PSDatacenters]: {},
 };
 
 const ShowdownMetadata: {
@@ -28,25 +31,35 @@ const ShowdownMetadata: {
 			return (await res.json()) as ShowdownDataType[ShowdownDataKeys.RandomSetsGen9];
 		},
 	},
+	[ShowdownDataKeys.PSDatacenters]: {
+		key: ShowdownDataKeys.PSDatacenters,
+		cacheId: 'ps-datacenters.json',
+		update: () => fetchPSDatacenters(),
+	},
 };
 
-const ShowdownFlatCaches = Object.fromEntries(
-	Object.values(ShowdownMetadata).map(({ key, cacheId }) => {
-		const flatCache = new FlatCache({ cacheId, cacheDir: fsPath('cache', 'flat-cache') });
-		flatCache.load(cacheId);
+function hydrateShowdownData<Key extends ShowdownDataKeys>(key: Key, data: ShowdownDataType[Key]) {
+	ShowdownData[key] = data;
+	if (key === ShowdownDataKeys.PSDatacenters) applyPSDatacenters(data as ShowdownDataType[ShowdownDataKeys.PSDatacenters]);
+}
 
-		const existing = flatCache.get<ShowdownDataType[typeof key]>('value');
-		if (existing) ShowdownData[key] = existing;
-		return [key, flatCache];
-	})
-) as Record<ShowdownDataKeys, FlatCache>;
+const ShowdownFlatCaches = {} as Record<ShowdownDataKeys, FlatCache>;
+for (const key of Object.keys(ShowdownMetadata) as ShowdownDataKeys[]) {
+	const { cacheId } = ShowdownMetadata[key];
+	const flatCache = new FlatCache({ cacheId, cacheDir: fsPath('cache', 'flat-cache') });
+	flatCache.load(cacheId);
+
+	const existing = flatCache.get<ShowdownDataType[typeof key]>('value');
+	if (existing) hydrateShowdownData(key, existing);
+	ShowdownFlatCaches[key] = flatCache;
+}
 
 export async function updateShowdownData(keys?: ShowdownDataKeys[]): Promise<void> {
 	const toUpdate = keys ?? (Object.keys(ShowdownMetadata) as ShowdownDataKeys[]);
 	await Promise.all(
 		toUpdate.map(async key => {
 			const data = await ShowdownMetadata[key].update();
-			ShowdownData[key] = data;
+			hydrateShowdownData(key, data);
 			ShowdownFlatCaches[key].set('value', data);
 			ShowdownFlatCaches[key].save();
 		})

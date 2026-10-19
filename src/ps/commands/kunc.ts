@@ -1,9 +1,8 @@
-import { pokedex } from 'ps-client/data';
-
 import { PSKuncInProgress } from '@/cache';
 import { ShowdownData } from '@/cache/showdown';
 import { ShowdownDataKeys } from '@/cache/showdown/types';
 import { prefix } from '@/config/ps';
+import { pokedex } from '@/ps/datacenters';
 import { ChatError } from '@/utils/chatError';
 import { debounce } from '@/utils/debounce';
 import { DeferredPromise } from '@/utils/deferredPromise';
@@ -73,9 +72,7 @@ export const command: PSCommand = {
 
 				if (solved.length > 0) {
 					const guessers = solved.map(user => user.name).list($T);
-					message.reply(
-						$T('COMMANDS.KUNC.CORRECT_GUESSERS', { guessers, solution: matchingNames.list($T('GRAMMAR.OR')) })
-					);
+					message.reply($T('COMMANDS.KUNC.CORRECT_GUESSERS', { guessers, solution: matchingNames.list($T('GRAMMAR.OR')) }));
 					return solved;
 				} else {
 					message.reply($T('COMMANDS.KUNC.NO_GUESSERS', { solution: matchingNames.list($T('GRAMMAR.OR')) }));

@@ -1,8 +1,8 @@
 import { Temporal } from '@js-temporal/polyfill';
 import mongoose, { type HydratedDocument } from 'mongoose';
-import { pokedex } from 'ps-client/data';
 
 import { IS_ENABLED } from '@/enabled';
+import { pokedex } from '@/ps/datacenters';
 import { ScrabbleMods } from '@/ps/games/scrabble/constants';
 import { GamesList } from '@/ps/games/types';
 import { TimeZone } from '@/ps/handlers/cron/constants';

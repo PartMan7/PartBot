@@ -1,6 +1,4 @@
-import { type Species, pokedex } from 'ps-client/data';
-
-
+import { type Species, pokedex } from '@/ps/datacenters';
 import { toId } from '@/utils/toId';
 
 export function queryMon(input: string): Species | null {

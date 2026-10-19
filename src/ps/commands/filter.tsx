@@ -1,5 +1,4 @@
-import { abilities, items, moves, pokedex } from 'ps-client/data';
-
+import { abilities, items, moves, pokedex } from '@/ps/datacenters';
 import { ChatError } from '@/utils/chatError';
 import { toId } from '@/utils/toId';
 
