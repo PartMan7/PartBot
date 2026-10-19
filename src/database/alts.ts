@@ -48,12 +48,16 @@ export async function rename(from: string, to: string): Promise<Model | undefine
 export async function getAlts(user: string, limit: number = DEFAULT_ALTS_CAP): Promise<string[]> {
 	if (!IS_ENABLED.DB) return [];
 	const userId = toId(user);
-	const altsList = await model.find({ $or: [{ from: userId }, { to: userId }] }, null, limit ? { limit } : {});
-	return altsList
-		.map(doc => {
-			return doc.from === userId ? doc.to : doc.from;
-		})
-		.unique();
+	try {
+		const altsList = await model.find({ $or: [{ from: userId }, { to: userId }] }, null, limit ? { limit } : {});
+		return altsList
+			.map(doc => {
+				return doc.from === userId ? doc.to : doc.from;
+			})
+			.unique();
+	} catch {
+		return [];
+	}
 }
 
 export async function fetchAllAlts(): Promise<Model[]> {

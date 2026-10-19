@@ -272,6 +272,13 @@ export default {
 			ALLOW_PMS: 'PMs mein bhi istemal ho sakti hai.',
 		},
 		ALTS: 'Alts: {{alts}}',
+		SEENS: {
+			SELF: 'Hahaha tum to pakka offline hi ho',
+			ONLINE: '{{user}} abhi online hai!',
+			LAST_IN: 'Maine {{user}} ko last {{room}} mein {{time}} pehle dekha',
+			LAST: 'Maine {{user}} ko last {{time}} pehle dekha',
+			NEVER: 'Maine {{user}} ko kabhi nahi dekha.',
+		},
 		BOOP: 'BOOP',
 		UPTIME: 'Bot {{time}} se chal raha hai.',
 		RANK: 'Aapka rank hai {{rank}}.',

@@ -283,6 +283,13 @@ export default {
 			ALLOW_PMS: 'Peut être utilisé en PM.',
 		},
 		ALTS: 'Alts : {{alts}}',
+		SEENS: {
+			SELF: 'Hahaha t’es clairement offline',
+			ONLINE: '{{user}} est actuellement en ligne !',
+			LAST_IN: 'J’ai vu {{user}} pour la dernière fois dans {{room}} il y a {{time}}',
+			LAST: 'J’ai vu {{user}} pour la dernière fois il y a {{time}}',
+			NEVER: 'Je n’ai jamais vu {{user}}.',
+		},
 		BOOP: 'BOOP',
 		UPTIME: 'Le Bot fonctionne depuis {{time}}.',
 		RANK: 'Votre classement est {{rank}}.',

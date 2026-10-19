@@ -1,3 +1,1 @@
-export function toId(str: string): string {
-	return str.toLowerCase().replace(/[^a-z0-9]/g, '');
-}
+export { toID as toId, toRoomID as toRoomId } from 'ps-client/tools';

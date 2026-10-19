@@ -18,7 +18,6 @@ export const command: PSCommand = {
 			lookup = toId(arg);
 		}
 		const altsList = await getAlts(lookup);
-		// TODO: Handle no-alts case
 		message.privateReply($T('COMMANDS.ALTS', { alts: altsList?.join(', ') ?? 'None' }));
 	},
 };
