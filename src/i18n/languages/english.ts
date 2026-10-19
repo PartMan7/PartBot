@@ -285,10 +285,10 @@ export default {
 		},
 		ALTS: 'Alts: {{alts}}',
 		SEENS: {
-			SELF: "Hahaha you're 100% offline",
+			SELF: "Hahaha you're 100% offline!",
 			ONLINE: '{{user}} is currently online!',
-			LAST_IN: 'I last saw {{user}} in {{room}} {{time}} ago',
-			LAST: 'I last saw {{user}} {{time}} ago',
+			LAST_IN: 'I last saw {{user}} in {{room}} {{time}} ago.',
+			LAST: 'I last saw {{user}} {{time}} ago.',
 			NEVER: "I've never seen {{user}}.",
 		},
 		BOOP: 'BOOP',
