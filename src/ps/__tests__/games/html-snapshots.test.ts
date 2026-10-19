@@ -1,6 +1,7 @@
+import { afterEach, beforeEach, describe, expect, it, mock, spyOn } from 'bun:test';
+import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { format } from 'prettier';
-import { describe, expect, it, vi } from 'vitest';
 
 import { i18n } from '@/i18n';
 import { client } from '@/ps/__tests__/mocks/client';
@@ -13,13 +14,12 @@ import type { BaseContext, CommonGame } from '@/ps/games/game';
 
 type GameConstructor = new (ctx: BaseContext) => CommonGame;
 
-function withFixedRandom<T>(callback: () => T): T {
-	const random = vi.spyOn(Math, 'random').mockReturnValue(0.5);
-	try {
-		return callback();
-	} finally {
-		random.mockRestore();
+async function expectHtmlFileSnapshot(html: string, snapshotPath: string): Promise<void> {
+	if (process.env.UPDATE_SNAPSHOTS === '1') {
+		await writeFile(snapshotPath, html);
 	}
+	const expected = await readFile(snapshotPath, 'utf8');
+	expect(html).toBe(expected);
 }
 
 function htmlDocument(title: string, playerHTML: string, spectatorHTML: string): string {
@@ -82,17 +82,22 @@ function createSnapshot(name: GamesList, games: Games): { game: CommonGame; side
 }
 
 describe('Game HTML snapshots', () => {
+	beforeEach(() => {
+		spyOn(Math, 'random').mockReturnValue(0.5);
+	});
+	afterEach(() => {
+		mock.restore();
+	});
+
 	for (const name of Object.values(GamesList)) {
 		it(`renders ${name} as openable HTML`, async () => {
-			const html = await withFixedRandom(() => {
-				const { game, side } = createSnapshot(name, Games);
-				return format(htmlDocument(game.meta.name, game.renderHTML(side), game.renderHTML(null)), {
-					parser: 'html',
-					printWidth: 135,
-					useTabs: true,
-				});
+			const { game, side } = createSnapshot(name, Games);
+			const html = await format(htmlDocument(game.meta.name, game.renderHTML(side), game.renderHTML(null)), {
+				parser: 'html',
+				printWidth: 135,
+				useTabs: true,
 			});
-			await expect(html).toMatchFileSnapshot(path.join(__dirname, 'html-snapshots', `${name}.html`));
+			await expectHtmlFileSnapshot(html, path.join(import.meta.dir, 'html-snapshots', `${name}.html`));
 		});
 	}
 });

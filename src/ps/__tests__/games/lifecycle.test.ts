@@ -1,9 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
-
-// Prevent FlatCache from writing game backups to disk during tests.
-vi.mock('@/cache/games', () => ({
-	gameCache: { set: vi.fn(), delete: vi.fn(), get: vi.fn(), getByGame: vi.fn(), clearOldBackups: vi.fn() },
-}));
+import { describe, expect, it } from 'bun:test';
 
 import { createGame, mockT } from '@/ps/__tests__/helpers/games';
 import { client } from '@/ps/__tests__/mocks/client';

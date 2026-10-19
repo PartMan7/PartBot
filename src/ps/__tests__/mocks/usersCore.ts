@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { type Mock, mock } from 'bun:test';
 
 import { jsxToHTML } from '@/utils/jsxToHTML';
 import { toId } from '@/utils/toId';
@@ -19,11 +19,11 @@ export type MockUser = GameUser & {
 	rooms: Record<string, { isPrivate?: true }> | false;
 	parent: Client | null;
 	latestPage: string | null;
-	send: ReturnType<typeof vi.fn>;
-	sendHTML: ReturnType<typeof vi.fn>;
+	send: Mock<() => Promise<void>>;
+	sendHTML: Mock<() => string>;
 	pageHTML: (html: ReactElement | string, opts?: unknown) => void;
-	waitFor: ReturnType<typeof vi.fn>;
-	update: ReturnType<typeof vi.fn>;
+	waitFor: Mock<() => void>;
+	update: Mock<() => Promise<User>>;
 };
 
 export type MockUserOptions = {
@@ -55,17 +55,17 @@ export function createMockUser(name: string, options: MockUserOptions = {}): Moc
 		rooms: {} as Record<string, { isPrivate?: true }>,
 		parent: options.parent ?? null,
 		latestPage: null as string | null,
-		send: vi.fn().mockResolvedValue(undefined),
-		sendHTML: vi.fn(() => ''),
-		waitFor: vi.fn(),
-		update: vi.fn(() => Promise.resolve(null as unknown as User)),
+		send: mock(() => Promise.resolve()),
+		sendHTML: mock(() => ''),
+		waitFor: mock(() => undefined),
+		update: mock(() => Promise.resolve(null as unknown as User)),
 	} as MockUser;
 
-	user.pageHTML = vi.fn((html: ReactElement | string, _opts?: unknown) => {
+	user.pageHTML = mock((html: ReactElement | string, _opts?: unknown) => {
 		user.latestPage = typeof html === 'string' ? html : jsxToHTML(html);
 	}) as MockUser['pageHTML'];
 
-	user.update = vi.fn(() => Promise.resolve(user as unknown as User));
+	user.update = mock(() => Promise.resolve(user as unknown as User));
 
 	return user;
 }

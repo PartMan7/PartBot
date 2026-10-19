@@ -9,7 +9,7 @@ import {
 	TokenTypes,
 	VIEW_ACTION_TYPE,
 } from '@/ps/games/splendor/constants';
-import metadata from '@/ps/games/splendor/metadata.json';
+import metadata from '@/ps/games/splendor/metadata';
 import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { Username } from '@/utils/components';
 import { Button, Form } from '@/utils/components/ps';

@@ -8,7 +8,7 @@ then
   git clone https://github.com/PartMan7/PartBot-spoof.git src/secrets
 fi
 
-cd src/secrets && npm install && cd ../..
+cd src/secrets && bun install && cd ../..
 
 if ! [ -f .env ]
 then

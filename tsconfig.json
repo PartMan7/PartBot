@@ -1,24 +1,21 @@
 {
 	"compilerOptions": {
-		"baseUrl": "src",
 		"lib": ["esnext"],
 		"target": "esnext",
 		"noEmit": true,
 		"jsx": "react-jsx",
 		"skipLibCheck": true,
-		"module": "commonjs", // 'require' syntax makes HMR possible; 'import' doesn't
-		"esModuleInterop": true, // Allow default-importing stuff like path
-		"resolveJsonModule": true, // Allow importing JSON files
-		"exactOptionalPropertyTypes": true, // Stricter checks!
+		"module": "preserve",
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"exactOptionalPropertyTypes": true,
 		"strict": true,
+		"types": ["bun", "node"],
 		"paths": {
-			"@/secrets/*": ["./secrets/src/*"],
-			"@/*": ["./*"]
+			"@/secrets/*": ["./src/secrets/src/*"],
+			"@/*": ["./src/*"]
 		}
 	},
 	"include": ["*.d.ts", "src/**/*"],
-	"exclude": ["src/web/react/**/*"],
-	"ts-node": {
-		"require": ["tsconfig-paths/register"] // For path aliases
-	}
+	"exclude": ["src/web/react/**/*"]
 }

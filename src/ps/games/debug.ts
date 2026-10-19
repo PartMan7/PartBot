@@ -37,7 +37,7 @@ async function baseRenderTemplates(): Promise<void> {
 
 const renderTemplates = debounce(baseRenderTemplates, 100);
 
-if (require.main === module) {
+if (import.meta.main) {
 	const watcher = watch([path.join(debugDir, 'templates'), fsPath('ps', 'games')]);
 	watcher.on('all', async () => {
 		renderTemplates();

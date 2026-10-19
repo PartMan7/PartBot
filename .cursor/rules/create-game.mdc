@@ -116,7 +116,7 @@ Game `render()` output becomes a PS **page** via `user.pageHTML` (`src/ps/games/
 **Measure before you ship UI:**
 
 1. Point `src/ps/games/test.tsx` at your `render` with a **stress mock** — not an empty board. Include max realistic tray size, selected piece, orientation row, and a generous `validAnchors` / valid-move list.
-2. `npm run debug` — watcher logs `HTML N / 99500 (pct%)` (`src/ps/games/debug.ts`). Debug page shows `HTML {HTML_LENGTH} / {HTML_LIMIT}` (`scripts/debug-games/templates/page.html`).
+2. `bun run debug` — watcher logs `HTML N / 99500 (pct%)` (`src/ps/games/debug.ts`). Debug page shows `HTML {HTML_LENGTH} / {HTML_LIMIT}` (`scripts/debug-games/templates/page.html`).
 3. If over **80%**, shrink HTML before polishing pixels. Re-measure after every structural change.
 
 **Shrink HTML without ugly UI** (prefer these over shrinking the board or removing affordances):
@@ -176,7 +176,7 @@ Do **not** rely on CSS classes or external stylesheets — game HTML is inline-o
 1. Point `test.tsx` at the new `render` (Azul in that file is the N-player example).
 2. Build a **stress mock** — worst realistic `RenderCtx` (full tray, selection UI, many valid moves). Check HTML length (see **HTML page size** above); must be **under ~80%** of `MAX_PAGE_HTML_LENGTH`.
 3. `jsxToHTML(render.bind({ msg: 'test', simpleMsg: 'test' })(...))` — same path production uses.
-4. `npm run debug` — `http://localhost:8081`, live-reload 8082, Desktop/Mobile/Ruka widths. Console + page header show `HTML N / 99500`.
+4. `bun run debug` — `http://localhost:8081`, live-reload 8082, Desktop/Mobile/Ruka widths. Console + page header show `HTML N / 99500`.
 5. Clicks do not play; layout only.
 
 **Stale HTML is common.** The watcher may not refresh `scripts/debug-games/live/page.html` after render changes — hard refresh is not enough if the file itself is old. Regenerate manually (run `test()` + replace `{HTML}` in the template), then open `localhost:8081/page.html` in a browser. Do not assume layout is correct until you have seen the live page.

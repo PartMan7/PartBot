@@ -76,7 +76,7 @@ The Web module provides HTTP server functionality using Express.js. It serves st
 The `loaders` directory contains various loader modules that set up different aspects of the web server:
 
 - `api.ts` - Loads API endpoints
-- `bundles.ts` - Loads webpack bundles
+- `bundles.ts` - Loads compiled React bundles
 - `static.ts` - Serves static files (images, CSS)
 - `ui.ts` - Loads UI routes
 - `errors.ts` - Sets up error handling

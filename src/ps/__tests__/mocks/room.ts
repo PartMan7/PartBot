@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { mock } from 'bun:test';
 
 import type { PSRoomTranslated, TranslatedText } from '@/i18n/types';
 import type { MockClient } from '@/ps/__tests__/mocks/client';
@@ -16,13 +16,13 @@ export function mockRoom(id: string, client: MockClient): MockRoom {
 		parent: client,
 		users: [] as string[],
 		title: id,
-		send: vi.fn((msg: TranslatedText) => {
+		send: mock((msg: TranslatedText) => {
 			sentMessages.push(msg);
 			return null;
 		}),
-		privateSend: vi.fn(() => null),
-		sendHTML: vi.fn(() => null),
-		pageHTML: vi.fn(() => null),
+		privateSend: mock(() => null),
+		sendHTML: mock(() => null),
+		pageHTML: mock(() => null),
 		sentMessages,
 	} as unknown as MockRoom;
 }
