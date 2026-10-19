@@ -32,16 +32,18 @@ export const command: PSCommand = {
 
 		const lookup = toId(arg);
 		const online = message.parent.getUser(lookup);
-		const lastSeenUser = await lastSeen(lookup);
-		const displayUser = online?.name ?? lastSeenUser?.name ?? lookup;
+		const seen = await lastSeen(lookup);
+		// trim rank
+		const displayUser = online?.name ?? seen?.name?.replace(/^./, '') ?? arg.trim();
 		if (online) return broadcast($T('COMMANDS.SEENS.ONLINE', { user: displayUser }));
-		const seen = lastSeenUser;
 		if (!seen) return broadcast($T('COMMANDS.SEENS.NEVER', { user: displayUser }));
 
 		const at = seen.at instanceof Date ? seen.at.getTime() : +seen.at;
 		const time = toHumanTime(Date.now() - at, undefined, $T);
-		const room = seen.seenIn.find(roomId => isDisclosableSeenRoom(roomId, message.parent, message));
-		if (room) broadcast($T('COMMANDS.SEENS.LAST_IN', { user: displayUser, room, time }));
-		else broadcast($T('COMMANDS.SEENS.LAST', { user: displayUser, time }));
+		const roomId = seen.seenIn.find(id => isDisclosableSeenRoom(id, message.parent, message));
+		if (roomId) {
+			const room = message.parent.getRoom(roomId)?.title ?? roomId;
+			broadcast($T('COMMANDS.SEENS.LAST_IN', { user: displayUser, room, time }));
+		} else broadcast($T('COMMANDS.SEENS.LAST', { user: displayUser, time }));
 	},
 };
