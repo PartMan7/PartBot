@@ -8,6 +8,7 @@ mock.module('@/cache/games', () => ({
 }));
 
 process.env.WEB_URL = 'https://partbot.partman.dev';
+process.env.PREFIX = ',';
 
 beforeEach(() => {
 	resetMockClientUsers();

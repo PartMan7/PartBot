@@ -17,7 +17,7 @@
 		"build:web": "bun run src/web/build.ts",
 		"tailwind": "bunx @tailwindcss/cli -i ./src/web/styles/tailwind.css -o ./src/web/react/compiled/styles.css",
 		"test:staged": "bun run lint && bun run typecheck",
-		"test": "bun run test:staged && bun test",
+		"test": "bun run test:staged && bun test --no-env-file",
 		"typecheck": "bash scripts/typecheck.sh"
 	},
 	"keywords": [],
@@ -30,7 +30,6 @@
 		"chokidar": "^3.5.3",
 		"cron": "^4.3.0",
 		"discord.js": "^14.11.0",
-		"dotenv": "^16.3.1",
 		"express": "^5.0.1",
 		"flat-cache": "^6.1.1",
 		"mongoose": "^8.12.1",
