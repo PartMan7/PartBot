@@ -2,10 +2,10 @@
 
 import _fsSync, { promises as _fs } from 'fs';
 import _path from 'path';
-import { pokedex } from 'ps-client/data';
 import { inspect } from 'util';
 
 import * as _cache from '@/cache';
+import { pokedex } from '@/ps/datacenters';
 import _Sentinel from '@/sentinel';
 import { ansiToHtml } from '@/utils/ansiToHtml';
 import { cachebust as _cachebust } from '@/utils/cachebust';

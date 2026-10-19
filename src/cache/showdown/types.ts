@@ -1,5 +1,8 @@
+import type { Datacenters } from 'ps-client/data';
+
 export enum ShowdownDataKeys {
 	RandomSetsGen9 = 'random-sets-gen-9',
+	PSDatacenters = 'ps-datacenters',
 }
 
 export type Gen9ShowdownSet = {
@@ -9,6 +12,7 @@ export type Gen9ShowdownSet = {
 	teraTypes: string[];
 };
 
-export interface ShowdownDataType extends Record<ShowdownDataKeys, unknown> {
+export type ShowdownDataType = {
 	[ShowdownDataKeys.RandomSetsGen9]: Record<string, { level: number; sets: Gen9ShowdownSet[] }>;
-}
+	[ShowdownDataKeys.PSDatacenters]: Partial<Datacenters>;
+};

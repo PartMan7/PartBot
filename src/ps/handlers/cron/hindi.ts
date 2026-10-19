@@ -1,4 +1,3 @@
-import { pokedex } from 'ps-client/data';
 import { uploadToPastie } from 'ps-client/tools';
 
 import { PSCommands, PSRoomConfigs } from '@/cache';
@@ -6,6 +5,7 @@ import { queryPoints, resetPoints } from '@/database/points';
 import { HINDI_LOGS } from '@/discord/constants/servers/hindi';
 import { getChannel } from '@/discord/loaders/channels';
 import { i18n } from '@/i18n';
+import { pokedex } from '@/ps/datacenters';
 import { TimeZone } from '@/ps/handlers/cron/constants';
 import { hasPoints } from '@/ps/handlers/cron/utils';
 import { Logger } from '@/utils/logger';

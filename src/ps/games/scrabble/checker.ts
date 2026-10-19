@@ -1,5 +1,4 @@
-import { abilities, items, moves, pokedex } from 'ps-client/data';
-
+import { abilities, items, moves, pokedex } from '@/ps/datacenters';
 import { Dictionaries, ScrabbleMods } from '@/ps/games/scrabble/constants';
 import { CRAZYMONS_SCORING, POKEMON_SCORING, ScrabbleModData } from '@/ps/games/scrabble/mods';
 
