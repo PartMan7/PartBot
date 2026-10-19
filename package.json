@@ -66,7 +66,6 @@
 		"husky": "^8.0.3",
 		"livereload": "^0.9.3",
 		"prettier": "^3.3.3",
-		"vite-tsconfig-paths": "^6.1.1",
 		"vitest": "^4.0.18"
 	},
 	"optionalDependencies": {
