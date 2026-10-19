@@ -84,7 +84,9 @@ export type NormalizedGame = Omit<GameModel, 'players' | 'log'> & { players: Rec
 
 export async function uploadGame(game: GameModel): Promise<GameModel | null> {
 	if (!IS_ENABLED.DB) return null;
-	return model.create(game);
+	const created = await model.create(game);
+	mergeScrabbleDexCacheFromGame(game);
+	return created;
 }
 
 // Hydrate logStrings into log objects
@@ -178,56 +180,109 @@ export async function getGamesChartData(room: string): Promise<GamesChartRespons
 	return result;
 }
 
+const SCRABBLE_DEX_MODS = [ScrabbleMods.CRAZYMONS, ScrabbleMods.POKEMON];
+
+type ScrabbleDexCache = {
+	entries: ScrabbleDexEntry[];
+	byUser: Map<string, ScrabbleDexEntry[]>;
+};
+
+let scrabbleDexCache: ScrabbleDexCache | null = null;
+
+type ScrabbleDexGameSource = {
+	id: string;
+	mod?: string | null | undefined;
+	players: Map<string, Player> | Record<string, Player>;
+	log: string[];
+	winCtx?: unknown;
+};
+
+function scrabbleDexPlayers(players: Map<string, Player> | Record<string, Player>): Record<string, Player> {
+	return players instanceof Map ? Object.fromEntries(players) : players;
+}
+
+function isScrabbleDexGame(game: { game?: string; mod?: string | null | undefined }): boolean {
+	return game.game === GamesList.Scrabble && !!game.mod && SCRABBLE_DEX_MODS.includes(game.mod as ScrabbleMods);
+}
+
+function scrabbleDexEntriesFromGame(game: ScrabbleDexGameSource): ScrabbleDexEntry[] {
+	if (!game.mod || !SCRABBLE_DEX_MODS.includes(game.mod as ScrabbleMods)) return [];
+	const players = scrabbleDexPlayers(game.players);
+	const baseCtx = { gameId: game.id, mod: game.mod };
+	const winCtx = game.winCtx as ScrabbleWinCtx | undefined;
+	const winners = winCtx?.type === 'win' ? [...winCtx.winnerIds] : [];
+	const logs = game.log.map<ScrabbleLog>(log => JSON.parse(log));
+	if (winCtx?.type === 'dq' || winCtx?.type === 'regular') {
+		const leftUsers = logs.filter(log => log.action === 'dq' || log.action === 'forfeit').map(log => log.turn);
+		if (winCtx.type === 'dq')
+			winners.push(
+				...Object.values(players)
+					.map(player => player.turn)
+					.filter(player => !leftUsers.includes(player))
+			);
+		else if (winCtx.type === 'regular' && logs.filter(log => log.action === 'play').length > 20) {
+			const points: Record<string, number> = {};
+			logs.forEach(log => {
+				if (log.action === 'play') {
+					points[log.turn] ??= 0;
+					points[log.turn] += log.ctx.points.total;
+				}
+			});
+			const scoredPlayers = Object.entries(points).filter(([player]) => !leftUsers.includes(player));
+			const maxPoints = Math.max(...scoredPlayers.map(([_player, score]) => score));
+			winners.push(...scoredPlayers.filter(([_player, score]) => score === maxPoints).map(([player]) => player));
+		}
+	}
+	return logs
+		.filterMap<ScrabbleDexEntry[]>(log => {
+			if (log.action !== 'play') return;
+			const words = Object.keys(log.ctx.words).map(toId).unique();
+			return words.filterMap<ScrabbleDexEntry>(word => {
+				if (!(word in pokedex)) return;
+				let mon = pokedex[word];
+				if (mon.baseSpecies) mon = pokedex[toId(mon.baseSpecies)];
+				if (mon.num <= 0) return;
+				return {
+					...baseCtx,
+					pokemon: word,
+					pokemonName: mon.name,
+					num: mon.num,
+					by: log.turn,
+					byName: players[log.turn]?.name ?? null,
+					at: log.time,
+					won: winners.includes(log.turn),
+				};
+			});
+		})
+		.flat();
+}
+
+function mergeScrabbleDexCache(entries: ScrabbleDexEntry[]) {
+	if (!scrabbleDexCache) return;
+	scrabbleDexCache.entries.push(...entries);
+	for (const entry of entries) {
+		const userEntries = scrabbleDexCache.byUser.get(entry.by);
+		if (userEntries) userEntries.push(entry);
+		else scrabbleDexCache.byUser.set(entry.by, [entry]);
+	}
+}
+
+function mergeScrabbleDexCacheFromGame(game: GameModel) {
+	if (!scrabbleDexCache || !isScrabbleDexGame(game)) return;
+	mergeScrabbleDexCache(scrabbleDexEntriesFromGame(game));
+}
+
 export async function getScrabbleDex(): Promise<ScrabbleDexEntry[] | null> {
 	if (!IS_ENABLED.DB) return null;
-	const scrabbleGames = await model.find({ game: GamesList.Scrabble, mod: [ScrabbleMods.CRAZYMONS, ScrabbleMods.POKEMON] }).lean();
-	return scrabbleGames.flatMap(game => {
-		const baseCtx = { gameId: game.id, mod: game.mod! };
-		const winCtx = game.winCtx as ScrabbleWinCtx | undefined;
-		const winners = winCtx?.type === 'win' ? winCtx.winnerIds : [];
-		const logs = game.log.map<ScrabbleLog>(log => JSON.parse(log));
-		if (winCtx?.type === 'dq' || winCtx?.type === 'regular') {
-			const leftUsers = logs.filter(log => log.action === 'dq' || log.action === 'forfeit').map(log => log.turn);
-			if (winCtx.type === 'dq')
-				winners.push(
-					...Object.values(game.players)
-						.map(player => player.turn)
-						.filter(player => !leftUsers.includes(player))
-				);
-			else if (winCtx.type === 'regular' && logs.filter(log => log.action === 'play').length > 20) {
-				const points: Record<string, number> = {};
-				logs.forEach(log => {
-					if (log.action === 'play') {
-						points[log.turn] ??= 0;
-						points[log.turn] += log.ctx.points.total;
-					}
-				});
-				const players = Object.entries(points).filter(([player]) => !leftUsers.includes(player));
-				const maxPoints = Math.max(...players.map(([_player, score]) => score));
-				winners.push(...players.filter(([_player, score]) => score === maxPoints).map(([player]) => player));
-			}
-		}
-		return logs
-			.filterMap<ScrabbleDexEntry[]>(log => {
-				if (log.action !== 'play') return;
-				const words = Object.keys(log.ctx.words).map(toId).unique();
-				return words.filterMap<ScrabbleDexEntry>(word => {
-					if (!(word in pokedex)) return;
-					let mon = pokedex[word];
-					if (mon.baseSpecies) mon = pokedex[toId(mon.baseSpecies)];
-					if (mon.num <= 0) return;
-					return {
-						...baseCtx,
-						pokemon: word,
-						pokemonName: mon.name,
-						num: mon.num,
-						by: log.turn,
-						byName: game.players[log.turn]?.name ?? null,
-						at: log.time,
-						won: winners.includes(log.turn),
-					};
-				});
-			})
-			.flat();
-	});
+	if (scrabbleDexCache) return scrabbleDexCache.entries;
+	const scrabbleGames = await model.find({ game: GamesList.Scrabble, mod: SCRABBLE_DEX_MODS }).lean();
+	const entries = scrabbleGames.flatMap(game => scrabbleDexEntriesFromGame(game));
+	const byUser = new Map<string, ScrabbleDexEntry[]>();
+	for (const entry of entries) {
+		const userEntries = byUser.get(entry.by);
+		if (userEntries) userEntries.push(entry);
+		else byUser.set(entry.by, [entry]);
+	}
+	scrabbleDexCache = { entries, byUser };
+	return entries;
 }
