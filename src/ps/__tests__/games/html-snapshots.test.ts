@@ -14,12 +14,17 @@ import type { BaseContext, CommonGame } from '@/ps/games/game';
 
 type GameConstructor = new (ctx: BaseContext) => CommonGame;
 
+function normalizeHtmlNewlines(html: string): string {
+	return html.replace(/\r\n/g, '\n');
+}
+
 async function expectHtmlFileSnapshot(html: string, snapshotPath: string): Promise<void> {
+	const normalized = normalizeHtmlNewlines(html);
 	if (process.env.UPDATE_SNAPSHOTS === '1') {
-		await writeFile(snapshotPath, html);
+		await writeFile(snapshotPath, normalized);
 	}
-	const expected = await readFile(snapshotPath, 'utf8');
-	expect(html).toBe(expected);
+	const expected = normalizeHtmlNewlines(await readFile(snapshotPath, 'utf8'));
+	expect(normalized).toBe(expected);
 }
 
 function htmlDocument(title: string, playerHTML: string, spectatorHTML: string): string {
