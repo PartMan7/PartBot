@@ -2,7 +2,8 @@
 	"name": "partbot",
 	"version": "3.0.0",
 	"description": "A chatbot for Pokémon Showdown",
-	"main": "src/index.js",
+	"main": "src/index.ts",
+	"packageManager": "bun@1.4.3",
 	"scripts": {
 		"debug": "./scripts/debug-games/start.sh",
 		"lint": "eslint src --ext .ts --ext .tsx",
@@ -12,25 +13,23 @@
 		"prettify": "prettier -w",
 		"prepare": "sh ./scripts/setup.sh",
 		"prestart": "bash ./scripts/prestart.sh",
-		"start": "ts-node --swc src/index.ts",
-		"tailwind": "npx @tailwindcss/cli -i ./src/web/styles/tailwind.css -o ./src/web/react/compiled/styles.css",
-		"test:staged": "npm run lint && npm run tsc",
-		"test": "npm run test:staged && vitest run",
-		"tsc": "tsc",
-		"webpack": "webpack -c src/web/webpack/webpack.config.ts"
+		"start": "bun run src/index.ts",
+		"build:web": "bun run src/web/build.ts",
+		"tailwind": "bunx @tailwindcss/cli -i ./src/web/styles/tailwind.css -o ./src/web/react/compiled/styles.css",
+		"test:staged": "bun run lint && bun run typecheck",
+		"test": "bun run test:staged && bun test --no-env-file",
+		"typecheck": "bash scripts/typecheck.sh"
 	},
 	"keywords": [],
 	"author": "PartMan7",
 	"license": "MIT",
 	"dependencies": {
 		"@js-temporal/polyfill": "^0.5.1",
-		"@swc/core": "^1.7.40",
 		"@tailwindcss/cli": "^4.0.8",
 		"chess.js": "^1.2.0",
 		"chokidar": "^3.5.3",
 		"cron": "^4.3.0",
 		"discord.js": "^14.11.0",
-		"dotenv": "^16.3.1",
 		"express": "^5.0.1",
 		"flat-cache": "^6.1.1",
 		"mongoose": "^8.12.1",
@@ -43,20 +42,15 @@
 		"rss-parser": "^3.13.0",
 		"sheets-parser": "^1.1.1",
 		"tailwindcss": "^4.0.8",
-		"ts-loader": "^9.5.2",
-		"ts-node": "^10.9.2",
-		"tsconfig-paths": "^4.2.0",
-		"typescript": "^5.1.6",
-		"webpack": "^5.98.0",
-		"webpack-cli": "^6.0.1"
+		"typescript": "^5.1.6"
 	},
 	"devDependencies": {
+		"@types/bun": "latest",
 		"@types/express": "^5.0.0",
 		"@types/livereload": "^0.9.5",
 		"@types/node": "^20.4.4",
 		"@types/react": "^18.2.48",
 		"@types/react-dom": "^18.2.18",
-		"@types/webpack": "^5.28.5",
 		"@typescript-eslint/eslint-plugin": "^6.2.0",
 		"@typescript-eslint/parser": "^6.2.0",
 		"eslint": "^8.45.0",
@@ -65,16 +59,14 @@
 		"eslint-plugin-import": "^2.31.0",
 		"husky": "^8.0.3",
 		"livereload": "^0.9.3",
-		"prettier": "^3.3.3",
-		"vitest": "^4.0.18"
+		"prettier": "^3.3.3"
 	},
 	"optionalDependencies": {
 		"@parcel/watcher-linux-x64-glibc": "^2.5.1",
-		"@swc/core-linux-x64-gnu": "^1.2.160",
 		"@tailwindcss/oxide-linux-x64-gnu": "^4.0.1",
 		"lightningcss-linux-x64-gnu": "^1.29.1"
 	},
 	"engines": {
-		"node": ">=24"
+		"bun": ">=1.4.3"
 	}
 }

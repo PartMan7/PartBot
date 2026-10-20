@@ -12,7 +12,7 @@ import {
 	TokenTypes,
 	VIEW_ACTION_TYPE,
 } from '@/ps/games/splendor/constants';
-import metadata from '@/ps/games/splendor/metadata.json';
+import metadata from '@/ps/games/splendor/metadata';
 import { render, renderLog } from '@/ps/games/splendor/render';
 import { ChatError } from '@/utils/chatError';
 import { toId } from '@/utils/toId';

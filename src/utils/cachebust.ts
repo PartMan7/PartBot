@@ -3,13 +3,21 @@ import path from 'path';
 
 import { emptyObject } from '@/utils/emptyObject';
 
+function resolveCacheKey(filepath: string): string | null {
+	try {
+		return require.resolve(filepath);
+	} catch {
+		return require.cache[filepath] ? filepath : null;
+	}
+}
+
 export function cachebust(_filepath: string): boolean {
-	const filepath = _filepath.startsWith('/') ? _filepath : require.resolve(_filepath);
+	const filepath = resolveCacheKey(_filepath);
+	if (!filepath) return false;
 	const cache = require.cache[filepath];
 	if (!cache) return false;
-	if (!filepath.endsWith('.json')) emptyObject(cache.exports);
-	cache.children.length = 0;
-	emptyObject(cache);
+	if (!filepath.endsWith('.json') && cache.exports) emptyObject(cache.exports);
+	if (Array.isArray(cache.children)) cache.children.length = 0;
 	delete require.cache[filepath];
 	return true;
 }

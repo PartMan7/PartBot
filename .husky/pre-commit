@@ -5,10 +5,10 @@ bash <<EOF
   set -e
   TO_PRETTIFY="$(git diff --diff-filter=ACMTUXB --name-only --staged | grep -E -e '\.[jt]sx?$' -e '\.md$' -e '\.html$' -e '\.json$' || :)"
   if [[ -n "\$TO_PRETTIFY" ]]; then
-    npm run prettify -- \$TO_PRETTIFY
+    bun run prettify -- \$TO_PRETTIFY
     git add -- \$TO_PRETTIFY
   fi
-  npm run test:staged
-  FAIL_ON_PENDING=true npm run notify-unpushed -- src/secrets
-  npm run secrets-check
+  bun run test:staged
+  FAIL_ON_PENDING=true bun run notify-unpushed -- src/secrets
+  bun run secrets-check
 EOF

@@ -8,14 +8,14 @@ docs.
 
 ## System Requirements and Setup
 
-PartBot requires Node.js v18+ (v16+ may work but v18+ is recommended) to run, and uses `npm` as the package manager.
+PartBot requires [Bun](https://bun.sh) v1.4.3+ to run.
 
 To install, clone this repository and install dependencies.
 
 ```bash
 $ git clone https://github.com/PartMan7/PartBot.git PartBot
 $ cd PartBot
-$ npm install
+$ bun install
 ```
 
 This will also run the `prepare` script, which installs Husky hooks and patches TypeScript.
@@ -35,11 +35,11 @@ the environment variables. The full list of supported env variables is below:
 
 ## Running
 
-You can start the chatbot using `npm start`.
+You can start the chatbot using `bun start`.
 
 ## Testing
 
-Currently, PartBot's tests are only a lint test (`npm run lint`) and TypeScript validity (`npm exec tsc`). These will
+Currently, PartBot's tests are a lint test (`bun run lint`), type checking (`bun run typecheck`), and `bun test`. These will
 automatically run on every pull request.
 
 ---

@@ -1,8 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
-
-vi.mock('@/cache/games', () => ({
-	gameCache: { set: vi.fn(), delete: vi.fn(), get: vi.fn(), getByGame: vi.fn(), clearOldBackups: vi.fn() },
-}));
+import { describe, expect, it } from 'bun:test';
 
 import { runGamePlayCommand } from '@/ps/__tests__/helpers/commands';
 import { createGame, getButtonActions } from '@/ps/__tests__/helpers/games';

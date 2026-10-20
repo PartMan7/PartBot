@@ -11,7 +11,7 @@ import { checkWord } from '@/ps/games/scrabble/checker';
 import { ScrabbleMods } from '@/ps/games/scrabble/constants';
 import { ScrabbleModData } from '@/ps/games/scrabble/mods';
 import { TOKEN_TYPE } from '@/ps/games/splendor/constants';
-import metadata from '@/ps/games/splendor/metadata.json';
+import metadata from '@/ps/games/splendor/metadata';
 import { ArtOnlyCard, PokemonCard, TrainerCard } from '@/ps/games/splendor/render';
 import { LB_STYLES } from '@/ps/other/leaderboardStyles';
 import { isUGOActive } from '@/ps/specialEvents';

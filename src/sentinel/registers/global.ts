@@ -8,7 +8,7 @@ export const GLOBAL_REGISTERS: Register[] = [
 		label: 'npm',
 		pattern: /package\.json$/,
 		reload: () => {
-			$('npm install', { cwd: fsPath('..'), stdio: 'inherit', encoding: 'utf8' });
+			$('bun install', { cwd: fsPath('..'), stdio: 'inherit', encoding: 'utf8' });
 		},
 	},
 ];

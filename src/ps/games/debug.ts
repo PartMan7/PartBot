@@ -1,6 +1,4 @@
 /* eslint-disable no-console -- This isn't part of the bot */
-import 'dotenv/config';
-
 import { watch } from 'chokidar';
 import { promises as fs } from 'fs';
 import { createServer } from 'livereload';
@@ -37,7 +35,7 @@ async function baseRenderTemplates(): Promise<void> {
 
 const renderTemplates = debounce(baseRenderTemplates, 100);
 
-if (require.main === module) {
+if (import.meta.main) {
 	const watcher = watch([path.join(debugDir, 'templates'), fsPath('ps', 'games')]);
 	watcher.on('all', async () => {
 		renderTemplates();

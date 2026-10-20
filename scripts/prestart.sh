@@ -4,8 +4,8 @@ set -a && source .env && set +a
 if [[ "$USE_WEB" = 'true' ]]
 then
   echo 'Running web setup in the background...'
-  npm run webpack &
-  npm run tailwind &
+  bun run build:web &
+  bun run tailwind &
 else
   echo 'Skipping web setup...'
 fi

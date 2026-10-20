@@ -1,1 +1,1 @@
-export * from 'utils/components/username';
+export * from '@/utils/components/username';
