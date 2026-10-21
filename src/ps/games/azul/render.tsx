@@ -36,7 +36,7 @@ const SS = '#8885';
 const B = '#8888';
 const M = '#8884';
 
-const ART_BASE = `${process.env.WEB_URL}/static/splendor/type/`;
+const ART_BASE = `${process.env.WEB_URL}/static/types/`;
 const FILL: Record<Tile, string> = Object.fromEntries(
 	TILES.map(tile => [tile, `url(${ART_BASE}${TILE_ART[tile]}) center/95% no-repeat ${TILE_COLORS[tile]}`])
 ) as Record<Tile, string>;

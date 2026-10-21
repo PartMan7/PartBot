@@ -27,7 +27,11 @@ function getArtUrl(
 	tag: 'img' | 'bg' | 'attr' = 'bg'
 ): string {
 	const routeType = type === 'pokemon' && tag !== 'attr' && isAprilFoolsActive() ? 'pokemon-afd' : type;
-	const baseURL = path.startsWith('http') ? path : `${process.env.WEB_URL}/static/splendor/${routeType}/${path}`;
+	const baseURL = path.startsWith('http')
+		? path
+		: type === 'type'
+			? `${process.env.WEB_URL}/static/types/${path}`
+			: `${process.env.WEB_URL}/static/splendor/${routeType}/${path}`;
 	return tag === 'bg' ? `url(${baseURL})` : baseURL;
 }
 

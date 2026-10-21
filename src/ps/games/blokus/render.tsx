@@ -48,7 +48,7 @@ function PieceMini({
 	const marker =
 		energy && refCell ? (
 			<img
-				src={`${process.env.WEB_URL}/static/splendor/type/${energy}.png`}
+				src={`${process.env.WEB_URL}/static/types/${energy}.png`}
 				width={size - 2}
 				height={size - 2}
 				style={{

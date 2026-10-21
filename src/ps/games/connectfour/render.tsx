@@ -21,7 +21,7 @@ function Column({ data }: { data: (Turn | null)[] }): ReactElement {
 						borderRadius: '50%',
 						margin: 3,
 						backgroundImage: cell
-							? `url(${process.env.WEB_URL}/static/splendor/type/${cell === 'Y' ? 'electric' : 'fire'}.png)`
+							? `url(${process.env.WEB_URL}/static/types/${cell === 'Y' ? 'electric' : 'fire'}.png)`
 							: `radial-gradient(${getColor(cell)} 50%, #333)`,
 						backgroundPosition: 'center',
 						backgroundRepeat: 'no-repeat',

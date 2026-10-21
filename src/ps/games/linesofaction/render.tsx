@@ -25,7 +25,7 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 							...pieceStyles,
 							border: '2px dashed #3366cc',
 							background: cell
-								? `url(${process.env.WEB_URL}/static/splendor/type/${cell === 'W' ? 'colorless' : 'dark'}.png) center/contain no-repeat`
+								? `url(${process.env.WEB_URL}/static/types/${cell === 'W' ? 'colorless' : 'dark'}.png) center/contain no-repeat`
 								: '#99c2ff',
 						}}
 					>
@@ -37,7 +37,7 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 						style={{
 							...pieceStyles,
 							border: selected ? '2px solid #3366cc' : 'none',
-							background: `url(${process.env.WEB_URL}/static/splendor/type/${cell === 'W' ? 'colorless' : 'dark'}.png) center/contain no-repeat`,
+							background: `url(${process.env.WEB_URL}/static/types/${cell === 'W' ? 'colorless' : 'dark'}.png) center/contain no-repeat`,
 						}}
 					>
 						{' '}
@@ -46,7 +46,7 @@ export function renderBoard(this: This, ctx: RenderCtx) {
 					<span
 						style={{
 							...pieceStyles,
-							background: `url(${process.env.WEB_URL}/static/splendor/type/${cell === 'W' ? 'colorless' : 'dark'}.png) center/contain no-repeat`,
+							background: `url(${process.env.WEB_URL}/static/types/${cell === 'W' ? 'colorless' : 'dark'}.png) center/contain no-repeat`,
 							border: '1px solid black',
 						}}
 					/>
