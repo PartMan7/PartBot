@@ -1,10 +1,9 @@
 import { psHSL } from '@/ps/datacenters';
 import { BaseGame } from '@/ps/games/game';
-import { TOKEN_COLORS } from '@/ps/games/snakesladders/constants';
 import { render } from '@/ps/games/snakesladders/render';
 import { isAprilFoolsActive } from '@/ps/specialEvents';
 import { HslToHex } from '@/utils/color';
-import { colorSampler } from '@/utils/colorSampler';
+import { typeColorSampler } from '@/utils/colorSampler';
 import { sample } from '@/utils/random';
 import { range } from '@/utils/range';
 
@@ -56,10 +55,10 @@ export class SnakesLadders extends BaseGame<State, RenderCtx> {
 			return { id: player.turn, color: HslToHex({ H, S, L, colorspace: 'hsla' }) };
 		});
 
-		const playerColorMappings = Object.fromEntries(colorSampler(playerColors, TOKEN_COLORS).map(({ id, assigned }) => [id, assigned]));
+		const playerTokens = Object.fromEntries(typeColorSampler(playerColors).map(({ id, assigned }) => [id, assigned]));
 
 		Object.values(this.players).forEach(
-			player => (this.state.board[player.id] = { pos: 0, name: player.name, color: playerColorMappings[player.turn] })
+			player => (this.state.board[player.id] = { pos: 0, name: player.name, token: playerTokens[player.turn] })
 		);
 		if (isAprilFoolsActive()) this.room.send('NOW PLAYING: STAKES AND ADDERS!' as NoTranslate);
 		return { success: true, data: null };

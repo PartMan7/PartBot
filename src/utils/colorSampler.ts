@@ -34,6 +34,8 @@ export function oklchDiff({ H: H1, C: C1, L: L1 }: Oklch, { H: H2, C: C2, L: L2 
 	return Math.hypot(chromaHue, dL);
 }
 
+export type TypeTokenStyle = { imageUrl: string; name: string; bgHex: Hex };
+
 type User = { id: string; color: Hex };
 
 function getPreferenceList(
@@ -114,7 +116,7 @@ export function colorSampler(
 	}));
 }
 
-export function typeColorSampler(users: User[]): (User & { assigned: { imageUrl: string; name: string; bgHex: Hex } })[] {
+export function typeColorSampler(users: User[]): (User & { assigned: TypeTokenStyle })[] {
 	const lookupTable = Object.fromEntries(Object.entries(TypeColors).map(([key, value]) => [value.hex, key])) as Record<
 		Hex,
 		keyof typeof TypeColors

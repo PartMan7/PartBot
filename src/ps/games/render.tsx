@@ -2,6 +2,7 @@ import { type BaseGame, getGame } from '@/ps/games/game';
 import { Button } from '@/utils/components/ps';
 
 import type { BaseState } from '@/ps/games/types';
+import type { TypeTokenStyle } from '@/utils/colorSampler';
 import type { CSSProperties, HTMLProps, ReactElement, ReactNode } from 'react';
 
 export function Small({ children }: { children: ReactNode }): ReactElement {
@@ -201,4 +202,30 @@ export function Dice({ value, style }: { value: number; style?: CSSProperties })
 			) : null}
 		</center>
 	);
+}
+
+export function TypeToken({
+	token,
+	size = 35,
+	style,
+	as = 'div',
+}: {
+	token: TypeTokenStyle;
+	size?: number;
+	style?: CSSProperties;
+	as?: 'div' | 'td';
+}): ReactElement {
+	const tokenStyle: CSSProperties = {
+		height: size,
+		width: size,
+		borderRadius: '50%',
+		backgroundColor: token.bgHex,
+		backgroundImage: `url(${token.imageUrl})`,
+		backgroundPosition: 'center',
+		backgroundRepeat: 'no-repeat',
+		backgroundSize: '80%',
+		...style,
+	};
+	if (as === 'td') return <td style={tokenStyle} />;
+	return <div style={{ display: 'inline-block', ...tokenStyle }} />;
 }

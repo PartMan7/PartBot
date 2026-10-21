@@ -1,43 +1,28 @@
 import { getGame } from '@/ps/games/game';
-import { Dice, Table } from '@/ps/games/render';
+import { Dice, Table, TypeToken } from '@/ps/games/render';
 import { createGrid } from '@/ps/games/utils';
 import { Username } from '@/utils/components';
 import { Button } from '@/utils/components/ps';
 
 import type { CellRenderer } from '@/ps/games/render';
 import type { RenderCtx } from '@/ps/games/snakesladders/types';
+import type { TypeTokenStyle } from '@/utils/colorSampler';
 import type { ReactElement } from 'react';
 
-function Player({ color, as: As = 'td' }: { color: string; as?: 'td' | 'div' }): ReactElement {
-	return (
-		<As
-			style={{
-				borderRadius: 100,
-				backgroundColor: color,
-				height: 15,
-				width: 15,
-				opacity: 0.8,
-				border: '1px solid #222',
-				display: As === 'div' ? 'inline-block' : undefined,
-			}}
-		/>
-	);
-}
-
-function Players({ players }: { players: { pos: number; color: string }[] }): ReactElement {
+function Players({ players }: { players: { pos: number; token: TypeTokenStyle }[] }): ReactElement {
 	return (
 		<table>
 			<tbody>
 				<tr>
 					{players.length === 1 ? <td style={{ width: 6 }} /> : null}
 					{players.slice(0, 2).map(player => (
-						<Player color={player.color} />
+						<TypeToken token={player.token} size={15} as="td" style={{ border: '1px solid white' }} />
 					))}
 				</tr>
 				{players.length > 2 ? (
 					<tr>
 						{players.slice(2).map(player => (
-							<Player color={player.color} />
+							<TypeToken token={player.token} size={15} as="td" style={{ border: '1px solid white' }} />
 						))}
 					</tr>
 				) : null}
@@ -99,7 +84,7 @@ export function render(ctx: RenderCtx): ReactElement {
 				.map(id => ctx.board[id])
 				.map(player => (
 					<>
-						<Player color={player.color} as="div" /> <Username name={player.name} clickable />
+						<TypeToken token={player.token} size={15} /> <Username name={player.name} clickable />
 					</>
 				))
 				.space(<br />)}

@@ -1,6 +1,7 @@
 import type { BaseRenderCtx } from '@/ps/games/types';
+import type { TypeTokenStyle } from '@/utils/colorSampler';
 
-export type Board = Record<string, { pos: number; color: string; name: string }>;
+export type Board = Record<string, { pos: number; token: TypeTokenStyle; name: string }>;
 
 export type State = {
 	turn: string;

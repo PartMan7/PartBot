@@ -1,40 +1,32 @@
 import { getGame } from '@/ps/games/game';
+import { TypeToken } from '@/ps/games/render';
 import { Button } from '@/utils/components/ps';
 import { repeat } from '@/utils/repeat';
 
-import type { DiscStyle, RenderCtx, Turn } from '@/ps/games/connectfour/types';
+import type { RenderCtx, Turn } from '@/ps/games/connectfour/types';
+import type { TypeTokenStyle } from '@/utils/colorSampler';
 import type { ReactElement } from 'react';
 
-function Column({ data, discs }: { data: (Turn | null)[]; discs: Record<Turn, DiscStyle> }): ReactElement {
+function Column({ data, discs }: { data: (Turn | null)[]; discs: Record<Turn, TypeTokenStyle> }): ReactElement {
 	return (
 		<>
-			{data.map(cell => (
-				<div
-					style={
-						cell
-							? {
-									height: 35,
-									width: 35,
-									borderRadius: '50%',
-									margin: 3,
-									backgroundColor: discs[cell].bgHex,
-									backgroundImage: `url(${discs[cell].imageUrl})`,
-									backgroundPosition: 'center',
-									backgroundRepeat: 'no-repeat',
-									backgroundSize: '80%',
-								}
-							: {
-									height: 35,
-									width: 35,
-									borderRadius: '50%',
-									margin: 3,
-									backgroundImage: 'radial-gradient(#111 50%, #333)',
-									backgroundPosition: 'center',
-									backgroundRepeat: 'no-repeat',
-								}
-					}
-				/>
-			))}
+			{data.map(cell =>
+				cell ? (
+					<TypeToken token={discs[cell]} size={35} style={{ margin: 3 }} />
+				) : (
+					<div
+						style={{
+							height: 35,
+							width: 35,
+							borderRadius: '50%',
+							margin: 3,
+							backgroundImage: 'radial-gradient(#111 50%, #333)',
+							backgroundPosition: 'center',
+							backgroundRepeat: 'no-repeat',
+						}}
+					/>
+				)
+			)}
 		</>
 	);
 }
