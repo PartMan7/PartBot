@@ -11,8 +11,8 @@ export const meta: Meta = {
 	players: 'many',
 
 	turns: {
-		Y: 'Yellow',
-		R: 'Red',
+		P1: 'P1',
+		P2: 'P2',
 	},
 
 	autostart: true,

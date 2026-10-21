@@ -115,12 +115,12 @@ describe('ConnectFour lifecycle', () => {
 	it('auto-starts when both sides are filled and renders without errors', () => {
 		const { room, creator } = setup('Alice');
 		const game = createGame(ConnectFour, connectfourMeta, room, creator);
-		game.addPlayer(mockUser('Alice'), 'Y');
-		game.addPlayer(mockUser('Bob'), 'R'); // auto-starts
+		game.addPlayer(mockUser('Alice'), 'P1');
+		game.addPlayer(mockUser('Bob'), 'P2'); // auto-starts
 		expect(game.started).toBe(true);
-		expect(game.turn).toBe('Y');
-		expect(() => jsxToHTML(game.render('Y'))).not.toThrow();
-		expect(() => jsxToHTML(game.render('R'))).not.toThrow();
+		expect(game.turn).toBe('P1');
+		expect(() => jsxToHTML(game.render('P1'))).not.toThrow();
+		expect(() => jsxToHTML(game.render('P2'))).not.toThrow();
 		expect(() => jsxToHTML(game.render(null))).not.toThrow();
 	});
 
@@ -129,7 +129,7 @@ describe('ConnectFour lifecycle', () => {
 		const game = createGame(ConnectFour, connectfourMeta, room, creator);
 		const res = game.addPlayer(mockUser('Alice'), '-');
 		expect(res.success).toBe(true);
-		if (res.success) expect(['Y', 'R']).toContain(res.data.as);
+		if (res.success) expect(['P1', 'P2']).toContain(res.data.as);
 	});
 });
 

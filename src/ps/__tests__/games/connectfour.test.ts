@@ -15,29 +15,37 @@ import { meta } from '@/ps/games/connectfour/meta';
 function setupGame() {
 	const room = mockRoom('boardgames', client);
 	const game = createGame(ConnectFour, meta, room, mockUser('Alice'));
-	const userY = mockUser('Yellow');
-	const userR = mockUser('Red');
-	game.addPlayer(userY, 'Y');
-	game.addPlayer(userR, 'R'); // auto-starts
-	return { game, room, userY, userR };
+	const userP1 = mockUser('Player One');
+	const userP2 = mockUser('Player Two');
+	game.addPlayer(userP1, 'P1');
+	game.addPlayer(userP2, 'P2'); // auto-starts
+	return { game, room, userP1, userP2 };
 }
 
 describe('ConnectFour playthrough', () => {
+	it('assigns distinct type discs from player colours on start', () => {
+		const { game } = setupGame();
+		expect(game.state.discs.P1.imageUrl).toContain('/static/types/');
+		expect(game.state.discs.P2.imageUrl).toContain('/static/types/');
+		expect(game.state.discs.P1.name).not.toBe(game.state.discs.P2.name);
+		expect(game.state.discs.P1.bgHex).not.toBe(game.state.discs.P2.bgHex);
+	});
+
 	/**
-	 * Yellow wins horizontally at the bottom row:
-	 * Y col 0, R col 4, Y col 1, R col 5, Y col 2, R col 6, Y col 3 → Y wins
+	 * P1 wins horizontally at the bottom row:
+	 * P1 col 0, P2 col 4, P1 col 1, P2 col 5, P1 col 2, P2 col 6, P1 col 3 → P1 wins
 	 */
 	it('plays a full game using only HTML button actions', async () => {
-		const { game, room, userY, userR } = setupGame();
+		const { game, room, userP1, userP2 } = setupGame();
 
-		const moves: Array<{ turn: 'Y' | 'R'; user: ReturnType<typeof mockUser>; col: string }> = [
-			{ turn: 'Y', user: userY, col: '0' },
-			{ turn: 'R', user: userR, col: '4' },
-			{ turn: 'Y', user: userY, col: '1' },
-			{ turn: 'R', user: userR, col: '5' },
-			{ turn: 'Y', user: userY, col: '2' },
-			{ turn: 'R', user: userR, col: '6' },
-			{ turn: 'Y', user: userY, col: '3' },
+		const moves: Array<{ turn: 'P1' | 'P2'; user: ReturnType<typeof mockUser>; col: string }> = [
+			{ turn: 'P1', user: userP1, col: '0' },
+			{ turn: 'P2', user: userP2, col: '4' },
+			{ turn: 'P1', user: userP1, col: '1' },
+			{ turn: 'P2', user: userP2, col: '5' },
+			{ turn: 'P1', user: userP1, col: '2' },
+			{ turn: 'P2', user: userP2, col: '6' },
+			{ turn: 'P1', user: userP1, col: '3' },
 		];
 
 		for (const { turn, user, col } of moves) {
@@ -55,25 +63,25 @@ describe('ConnectFour playthrough', () => {
 	});
 
 	it('renders the final state after game ends', async () => {
-		const { game, room, userY, userR } = setupGame();
-		await runGamePlayCommand(game, userY, room, '0');
-		await runGamePlayCommand(game, userR, room, '4');
-		await runGamePlayCommand(game, userY, room, '1');
-		await runGamePlayCommand(game, userR, room, '5');
-		await runGamePlayCommand(game, userY, room, '2');
-		await runGamePlayCommand(game, userR, room, '6');
-		await runGamePlayCommand(game, userY, room, '3');
+		const { game, room, userP1, userP2 } = setupGame();
+		await runGamePlayCommand(game, userP1, room, '0');
+		await runGamePlayCommand(game, userP2, room, '4');
+		await runGamePlayCommand(game, userP1, room, '1');
+		await runGamePlayCommand(game, userP2, room, '5');
+		await runGamePlayCommand(game, userP1, room, '2');
+		await runGamePlayCommand(game, userP2, room, '6');
+		await runGamePlayCommand(game, userP1, room, '3');
 
 		// After the game ends, both perspectives must still render without errors
-		expect(() => game.render('Y')).not.toThrow();
-		expect(() => game.render('R')).not.toThrow();
+		expect(() => game.render('P1')).not.toThrow();
+		expect(() => game.render('P2')).not.toThrow();
 		expect(() => game.render(null)).not.toThrow();
 	});
 
 	it('does not render clickable columns after a player forfeits', () => {
-		const { game, userY } = setupGame();
+		const { game, userP1 } = setupGame();
 
-		const result = game.removePlayer(userY);
+		const result = game.removePlayer(userP1);
 		if (!result.success) throw new Error(result.error);
 		result.data.cb?.();
 
@@ -81,16 +89,16 @@ describe('ConnectFour playthrough', () => {
 	});
 
 	it('allows both players to sub after moves have been played', async () => {
-		const { game, room, userY, userR } = setupGame();
-		const replacementY = mockUser('Replacement Yellow');
-		const replacementR = mockUser('Replacement Red');
+		const { game, room, userP1, userP2 } = setupGame();
+		const replacementP1 = mockUser('Replacement One');
+		const replacementP2 = mockUser('Replacement Two');
 
-		await runGamePlayCommand(game, userY, room, '0');
-		await runGamePlayCommand(game, userR, room, '1');
+		await runGamePlayCommand(game, userP1, room, '0');
+		await runGamePlayCommand(game, userP2, room, '1');
 
-		expect(game.replacePlayer('Y', asPsUser(replacementY)).success).toBe(true);
-		expect(game.replacePlayer('R', asPsUser(replacementR)).success).toBe(true);
-		expect(game.players.Y.id).toBe(replacementY.id);
-		expect(game.players.R.id).toBe(replacementR.id);
+		expect(game.replacePlayer('P1', asPsUser(replacementP1)).success).toBe(true);
+		expect(game.replacePlayer('P2', asPsUser(replacementP2)).success).toBe(true);
+		expect(game.players.P1.id).toBe(replacementP1.id);
+		expect(game.players.P2.id).toBe(replacementP2.id);
 	});
 });

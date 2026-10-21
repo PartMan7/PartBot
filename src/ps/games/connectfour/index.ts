@@ -1,16 +1,20 @@
 import { EmbedBuilder } from 'discord.js';
 
 import { WINNER_ICON } from '@/discord/constants/emotes';
+import { psHSL } from '@/ps/datacenters';
 import { render } from '@/ps/games/connectfour/render';
 import { BaseGame } from '@/ps/games/game';
 import { createGrid } from '@/ps/games/utils';
+import { HslToHex } from '@/utils/color';
+import { typeColorSampler } from '@/utils/colorSampler';
 import { repeat } from '@/utils/repeat';
 
 import type { TranslatedText } from '@/i18n/types';
 import type { Log } from '@/ps/games/connectfour/logs';
 import type { Board, RenderCtx, State, Turn, WinCtx } from '@/ps/games/connectfour/types';
 import type { BaseContext, GameUser } from '@/ps/games/game';
-import type { EndType } from '@/ps/games/types';
+import type { ActionResponse, EndType } from '@/ps/games/types';
+import type { Hex } from '@/utils/color';
 export { meta } from '@/ps/games/connectfour/meta';
 
 export class ConnectFour extends BaseGame<State, RenderCtx> {
@@ -23,6 +27,16 @@ export class ConnectFour extends BaseGame<State, RenderCtx> {
 
 		if (ctx.backup) return;
 		this.state.board = createGrid<Turn | null>(6, 7, () => null);
+	}
+
+	onStart(): ActionResponse {
+		const playerColors = this.turns.map(turn => {
+			const player = this.players[turn];
+			const [H, S, L] = psHSL(player.id).hsl;
+			return { id: turn, color: HslToHex({ H, S, L, colorspace: 'hsla' }) as Hex };
+		});
+		this.state.discs = Object.fromEntries(typeColorSampler(playerColors).map(({ id, assigned }) => [id, assigned])) as State['discs'];
+		return { success: true, data: null };
 	}
 
 	action(user: GameUser, ctx: string): void {
@@ -89,7 +103,7 @@ export class ConnectFour extends BaseGame<State, RenderCtx> {
 			return this.$T('GAME.ENDED', { game: this.meta.name, id: this.id });
 		}
 		if (this.winCtx?.type === 'draw') {
-			return this.$T('GAME.DRAW', { players: [this.players.Y.name, this.players.R.name].list(this.$T) });
+			return this.$T('GAME.DRAW', { players: [this.players.P1.name, this.players.P2.name].list(this.$T) });
 		}
 		if (this.winCtx && this.winCtx.type === 'win')
 			return this.$T('GAME.WON_AGAINST', {
@@ -115,7 +129,7 @@ export class ConnectFour extends BaseGame<State, RenderCtx> {
 				{
 					name: '\u200b',
 					value: this.state.board
-						.map(row => row.map(cell => (cell ? { R: ':red_circle:', Y: ':yellow_circle:' }[cell] : ':blue_circle:')).join(''))
+						.map(row => row.map(cell => (cell ? { P1: ':yellow_circle:', P2: ':red_circle:' }[cell] : ':blue_circle:')).join(''))
 						.join('\n'),
 				},
 			]);
@@ -127,6 +141,7 @@ export class ConnectFour extends BaseGame<State, RenderCtx> {
 		return {
 			board: this.state.board,
 			id: this.id,
+			discs: this.state.discs,
 		};
 	}
 }

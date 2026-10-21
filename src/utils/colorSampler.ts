@@ -1,13 +1,37 @@
 import '@/globals';
 
-import { HexToOklch, normalizeHue } from '@/utils/color';
+import { HexToOklch, StringToHex, normalizeHue } from '@/utils/color';
 
 import type { Hex, Oklch } from '@/utils/color';
 
-function oklchDiff({ H: H1, C: C1 }: Oklch, { H: H2, C: C2 }: Oklch): number {
-	if (!C1 || !C2) return 0;
-	const dH = Math.sin((((normalizeHue(H1) - normalizeHue(H2) + 360) / 2) * Math.PI) / 180);
-	return Math.abs(2 * Math.sqrt(C1 * C2) * dH);
+const TypeColors = {
+	Colorless: { hex: StringToHex('#D2D0CF')!, image: 'colorless.png', name: 'Colorless' },
+	Dark: { hex: StringToHex('#2E7077')!, image: 'dark.png', name: 'Dark' },
+	Dragon: { hex: StringToHex('#9B9E8C')!, image: 'dragon.png', name: 'Dragon' },
+	Electric: { hex: StringToHex('#FCD021')!, image: 'electric.png', name: 'Electric' },
+	Fairy: { hex: StringToHex('#D6457E')!, image: 'fairy.png', name: 'Fairy' },
+	Fighting: { hex: StringToHex('#B16232')!, image: 'fighting.png', name: 'Fighting' },
+	Fire: { hex: StringToHex('#D8223B')!, image: 'fire.png', name: 'Fire' },
+	Grass: { hex: StringToHex('#19A648')!, image: 'grass.png', name: 'Grass' },
+	Psychic: { hex: StringToHex('#957DAB')!, image: 'psychic.png', name: 'Psychic' },
+	Steel: { hex: StringToHex('#9B9E8C')!, image: 'steel.png', name: 'Steel' },
+	Water: { hex: StringToHex('#05A8D9')!, image: 'water.png', name: 'Water' },
+} satisfies Record<string, { hex: Hex; image: string; name: string }>;
+
+function imageUrl(imagePath: string): string {
+	return `${process.env.WEB_URL}/static/types/${imagePath}`;
+}
+
+const LIGHTNESS_PRIO = 1 / 4;
+
+export function oklchDiff({ H: H1, C: C1, L: L1 }: Oklch, { H: H2, C: C2, L: L2 }: Oklch): number {
+	const dL = LIGHTNESS_PRIO * Math.abs(L1 - L2);
+	let chromaHue = 0;
+	if (C1 && C2) {
+		const dH = Math.sin((((normalizeHue(H1) - normalizeHue(H2) + 360) / 2) * Math.PI) / 180);
+		chromaHue = Math.abs(2 * Math.sqrt(C1 * C2) * dH);
+	}
+	return Math.hypot(chromaHue, dL);
 }
 
 type User = { id: string; color: Hex };
@@ -87,5 +111,25 @@ export function colorSampler(
 		id: user.id,
 		color: user.color,
 		assigned: userMatches.get(user.id)!,
+	}));
+}
+
+export function typeColorSampler(users: User[]): (User & { assigned: { imageUrl: string; name: string; bgHex: Hex } })[] {
+	const lookupTable = Object.fromEntries(Object.entries(TypeColors).map(([key, value]) => [value.hex, key])) as Record<
+		Hex,
+		keyof typeof TypeColors
+	>;
+
+	const hexes = Object.values(TypeColors).map(type => type.hex);
+	const matches = colorSampler(users, hexes);
+
+	return matches.map(match => ({
+		id: match.id,
+		color: match.color,
+		assigned: {
+			imageUrl: imageUrl(TypeColors[lookupTable[match.assigned]].image),
+			name: TypeColors[lookupTable[match.assigned]].name,
+			bgHex: match.assigned,
+		},
 	}));
 }
