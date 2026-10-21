@@ -156,7 +156,7 @@ export class SnakesLadders extends BaseGame<State, RenderCtx> {
 			this.renderPage(
 				this.getRenderCtx(side, override),
 				side,
-				typeof override === 'number' ? { header: `${this.turn} rolled a ${this.state.lastRoll}...` } : undefined
+				typeof override === 'number' ? { header: `${this.players[this.turn!]?.name} rolled a ${this.state.lastRoll}...` } : undefined
 			)
 		);
 	}
