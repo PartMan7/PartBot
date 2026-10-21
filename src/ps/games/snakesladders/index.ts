@@ -133,7 +133,7 @@ export class SnakesLadders extends BaseGame<State, RenderCtx> {
 			if (type === 'dq') return this.$T('GAME.ENDED_AUTOMATICALLY', { game: this.meta.name, id: this.id });
 			return this.$T('GAME.ENDED', { game: this.meta.name, id: this.id });
 		}
-		return this.$T('GAME.WON', { winner: this.turn! });
+		return this.$T('GAME.WON', { winner: this.players[this.turn!].name });
 	}
 
 	renderFn = render;
