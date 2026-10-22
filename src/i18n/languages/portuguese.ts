@@ -372,7 +372,7 @@ export default {
 			HELP: 'Jogue um ovo quente em alguém. Se você tem o ovo, passe para outra pessoa antes de explodir.',
 			USER_NOT_IN_ROOM: 'Esse usuário não está na sala.',
 			TARGET_BUSY: 'Imagina jogar um ovo em alguém ocupado...',
-			TARGET_BOT: 'Imagina tentar jogar um ovo em um bot — que LOSER.',
+			TARGET_BOT: 'Imagina tentar jogar um ovo em um bot - que LOSER.',
 			EXPLODED: '[[ ]]**O ovo explodiu em {{holderName}}!**',
 			NOT_HOLDER: 'Você não tem o ovo.',
 			CANNOT_TOSS_SELF: 'Você não pode passar o ovo para si mesmo.',

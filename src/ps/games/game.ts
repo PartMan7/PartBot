@@ -81,9 +81,9 @@ export class BaseGame<State extends BaseState, RenderCtx extends BaseRenderCtx =
 	turn: State['turn'] | null = null;
 	turns: State['turn'][] = [];
 
-	/** Full game-scoped bot command prefix — routes to this specific game instance. */
+	/** Full game-scoped bot command prefix - routes to this specific game instance. */
 	msg: string;
-	/** Room-scoped bot command prefix — routes to the game type command handler in the room. */
+	/** Room-scoped bot command prefix - routes to the game type command handler in the room. */
 	simpleMsg: string;
 
 	animationFrames: ReactElement[] = [];

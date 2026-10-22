@@ -36,7 +36,7 @@ const PLAY_SUBCOMMANDS = new Set(['play', 'p', '!']);
 
 /**
  * Parses a rendered game page HTML and returns the game-specific action strings
- * from all "play" action buttons — the move portion after the game id in
+ * from all "play" action buttons - the move portion after the game id in
  * `,<gameid> play [id], [move]` (see `runGamePlayCommand`).
  *
  * A play button value has the shape:

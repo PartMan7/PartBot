@@ -7,7 +7,7 @@ export { asPsUser, createMockUser };
 export type MockUserRegisterOptions = MockUserOptions & {
 	/** Override the shared test client (rare). */
 	client?: typeof client;
-	/** When false, do not insert into `client.userPages` — use for isolated objects. */
+	/** When false, do not insert into `client.userPages` - use for isolated objects. */
 	register?: boolean;
 };
 

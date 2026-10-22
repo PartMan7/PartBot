@@ -47,7 +47,7 @@ async function selectAndMove(
 	await runGamePlayCommand(game, user, room, `move ${san}`);
 }
 
-describe("Chess playthrough — Scholar's Mate", () => {
+describe("Chess playthrough - Scholar's Mate", () => {
 	/**
 	 * Scholar's Mate: White wins on move 4.
 	 *   1. e4     e5

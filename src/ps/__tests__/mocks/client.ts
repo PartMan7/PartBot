@@ -5,7 +5,7 @@ import type { Client } from 'ps-client';
 
 export type { MockUser };
 
-/** @deprecated Use `MockUser` — page user and command author are the same shape now. */
+/** @deprecated Use `MockUser` - page user and command author are the same shape now. */
 export type MockPageUser = MockUser;
 
 export type MockClient = Pick<Client, 'status'> & {

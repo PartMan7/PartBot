@@ -374,7 +374,7 @@ export default {
 			HELP: 'Toss a hot egg at someone. If you have the egg, toss it to someone else before it detonates.',
 			USER_NOT_IN_ROOM: 'That user is not in the room.',
 			TARGET_BUSY: "Imagine egging someone who's busy...",
-			TARGET_BOT: 'Imagine trying to egg a bot — what a LOSER.',
+			TARGET_BOT: 'Imagine trying to egg a bot - what a LOSER.',
 			EXPLODED: '[[ ]]**The egg exploded on {{holderName}}!**',
 			NOT_HOLDER: 'You do not have the egg.',
 			CANNOT_TOSS_SELF: 'You cannot toss the egg to yourself.',

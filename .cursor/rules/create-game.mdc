@@ -43,11 +43,11 @@ Do **not** add UGO spotlight (`BOARD_GAMES_STRUCHNI_ORDER`) or a custom replay p
 ## Meta knobs
 
 - `players: 'many'` (default table games) or `'single'` (needs `abbr`; id is `#<abbr>-<userid>`).
-- `turns`: named sides (`B`/`W`). Omit for free-for-all — turns become player ids.
+- `turns`: named sides (`B`/`W`). Omit for free-for-all - turns become player ids.
 - `minSize` / `maxSize` when not exactly 2.
 - `autostart: true` starts when full; `false` needs staff `,start`.
 - `timer` / `pokeTimer`: `fromHumanTime(...)`. Single-player often has none.
-- `htp`: `{ goal, sections }` — required.
+- `htp`: `{ goal, sections }` - required.
 - `ugo`: copy a similar game or `null`. Don't invent new point tables.
 
 ## Button / form routing (easy to get wrong)
@@ -56,7 +56,7 @@ Do **not** add UGO spotlight (`BOARD_GAMES_STRUCHNI_ORDER`) or a custom replay p
 
 Spoof: `@#ID <subcommand> <rest>` → `<gameType> <subcommand> <id>, <rest>`.
 
-Only **`play`** (aliases `p`, `!`) calls `game.action(user, ctx, false)`. Everything after `play`/`!` is `ctx`. Other subcommands (`join`, `watch`, `audience`, `create`) are core commands — do not reuse those words as ctx verbs by putting them next to `this.msg` without `play`/`!`.
+Only **`play`** (aliases `p`, `!`) calls `game.action(user, ctx, false)`. Everything after `play`/`!` is `ctx`. Other subcommands (`join`, `watch`, `audience`, `create`) are core commands - do not reuse those words as ctx verbs by putting them next to `this.msg` without `play`/`!`.
 
 ```tsx
 // ✅ reaches action(); ctx is whatever follows play/!
@@ -70,36 +70,36 @@ value={`${this.msg} select ${i}-${j}`}
 value={`${this.msg} move ${from}-${to}`}
 ```
 
-`select` / `move` / `set` are **ctx verbs** parsed inside `action()`, not command names. Use `Button` / `Form` from `@/utils/components/ps`. Grid helper: `Table` from `@/ps/games/render` — skip it if the UI isn't a grid.
+`select` / `move` / `set` are **ctx verbs** parsed inside `action()`, not command names. Use `Button` / `Form` from `@/utils/components/ps`. Grid helper: `Table` from `@/ps/games/render` - skip it if the UI isn't a grid.
 
 ## UI (`render.tsx`)
 
-PS room HTML sits in a dark `#page` shell (`color: white`, `background: #000a`). Match existing grid games — copy Othello/Chess patterns, don't invent a palette.
+PS room HTML sits in a dark `#page` shell (`color: white`, `background: #000a`). Match existing grid games - copy Othello/Chess patterns, don't invent a palette.
 
-**Chrome defaults** — headers, trays, legend, pickers:
+**Chrome defaults** - headers, trays, legend, pickers:
 
 - `Button`: `background: none`, `color: inherit`. Dim headers: `color: gray`.
 - Borders only where they carry meaning. No `opacity` on text.
 - Do not copy another game's color constant block (`S`/`SS`/`B` from Azul, etc.) into every `render.tsx`.
 
-**Grid boards** — `Table` from `@/ps/games/render`; override default `margin: 20` when the board is the focal element. `labels={null}` when row/col headers don't help (large boards).
+**Grid boards** - `Table` from `@/ps/games/render`; override default `margin: 20` when the board is the focal element. `labels={null}` when row/col headers don't help (large boards).
 
-**One board, one square** — the cell grid is the board. No nested wrapper with its own border, padding, or rounded frame around the table. Scroll container: `overflow: auto` only.
+**One board, one square** - the cell grid is the board. No nested wrapper with its own border, padding, or rounded frame around the table. Scroll container: `overflow: auto` only.
 
-**Locked board theme** — sparingly, on the central board only when fixed colors improve readability:
+**Locked board theme** - sparingly, on the central board only when fixed colors improve readability:
 
 - Theme values local inside the board renderer (not file-level aliases).
 - Empty cells + subtle grid lines = low contrast (visual guides).
 - Interactive elements on the board (valid-move targets, clickable affordances) = higher contrast than the grid.
-- Trays, orientation pickers, and legend stay on inherited `#page` theme — not the locked board palette.
+- Trays, orientation pickers, and legend stay on inherited `#page` theme - not the locked board palette.
 
 **STYLES LIKE FLEX AND GRID DO NOT WORK ON PS. DO NOT TRY TO USE FLEXBOXES IN ANY WAY OR FORM.**
 
-**Valid-move hints** — dashed circles / outlines on target cells (Othello pattern), not filled ghost tiles over the board.
+**Valid-move hints** - dashed circles / outlines on target cells (Othello pattern), not filled ghost tiles over the board.
 
-**Option lists** (piece trays, orientation rows) — no bordered box around every item. Unselected: `border: none`. Selected: `outline` or similar, not a padded gray frame.
+**Option lists** (piece trays, orientation rows) - no bordered box around every item. Unselected: `border: none`. Selected: `outline` or similar, not a padded gray frame.
 
-**Multi-cell previews** — layout from actual cell coordinates (offset by min row/col so shapes don't clip). Markers (stars, labels) render inside the cell they refer to, not absolutely positioned outside the shape.
+**Multi-cell previews** - layout from actual cell coordinates (offset by min row/col so shapes don't clip). Markers (stars, labels) render inside the cell they refer to, not absolutely positioned outside the shape.
 
 ## HTML page size (hard cap + target)
 
@@ -111,24 +111,24 @@ Game `render()` output becomes a PS **page** via `user.pageHTML` (`src/ps/games/
 | **Target (must stay under)** | **~80% → ~79,600**                                        | headroom for worst-case UI states               |
 | Serialization                | `jsxToHTML` → `renderToStaticMarkup`, no minification yet | `src/utils/jsxToHTML.ts`                        |
 
-**Why 80%?** Inline styles repeat per element. A typical mid-game view (board + tray + valid-move buttons + orientation picker) is much heavier than an empty board. Blokus 20×20 hit **114k** before trim — board + full piece tray alone was **111k**.
+**Why 80%?** Inline styles repeat per element. A typical mid-game view (board + tray + valid-move buttons + orientation picker) is much heavier than an empty board. Blokus 20×20 hit **114k** before trim - board + full piece tray alone was **111k**.
 
 **Measure before you ship UI:**
 
-1. Point `src/ps/games/test.tsx` at your `render` with a **stress mock** — not an empty board. Include max realistic tray size, selected piece, orientation row, and a generous `validAnchors` / valid-move list.
-2. `npm run debug` — watcher logs `HTML N / 99500 (pct%)` (`src/ps/games/debug.ts`). Debug page shows `HTML {HTML_LENGTH} / {HTML_LIMIT}` (`scripts/debug-games/templates/page.html`).
+1. Point `src/ps/games/test.tsx` at your `render` with a **stress mock** - not an empty board. Include max realistic tray size, selected piece, orientation row, and a generous `validAnchors` / valid-move list.
+2. `npm run debug` - watcher logs `HTML N / 99500 (pct%)` (`src/ps/games/debug.ts`). Debug page shows `HTML {HTML_LENGTH} / {HTML_LIMIT}` (`scripts/debug-games/templates/page.html`).
 3. If over **80%**, shrink HTML before polishing pixels. Re-measure after every structural change.
 
 **Shrink HTML without ugly UI** (prefer these over shrinking the board or removing affordances):
 
-- **One element per grid cell** — content directly in `<td>`; no inner wrapper `div` for layout/flex when `margin: auto` or `text-align` on the cell suffices.
-- **Short color tokens** — `#2e3848` beats `rgba(232, 236, 237, 0.18)`; every cell repeats border/background strings.
-- **Local style objects** inside the board renderer (`td`, `dot`, …) — shared keys, not duplicated long literals in JSX.
-- **Skip decorative CSS** on cells — no `box-sizing`, `display:flex`, `overflow:hidden` unless the cell actually needs it.
-- **Option lists multiply cost** — each tray/orientation `Button` + mini-preview is hundreds of chars; keep preview markup lean (see trimmed `PieceMini` in `src/ps/games/blokus/render.tsx`).
-- **Valid-move buttons are expensive** — each anchor is a `<button>` with coordinates in `value`; unavoidable, so budget for them in the stress mock.
+- **One element per grid cell** - content directly in `<td>`; no inner wrapper `div` for layout/flex when `margin: auto` or `text-align` on the cell suffices.
+- **Short color tokens** - `#2e3848` beats `rgba(232, 236, 237, 0.18)`; every cell repeats border/background strings.
+- **Local style objects** inside the board renderer (`td`, `dot`, …) - shared keys, not duplicated long literals in JSX.
+- **Skip decorative CSS** on cells - no `box-sizing`, `display:flex`, `overflow:hidden` unless the cell actually needs it.
+- **Option lists multiply cost** - each tray/orientation `Button` + mini-preview is hundreds of chars; keep preview markup lean (see trimmed `PieceMini` in `src/ps/games/blokus/render.tsx`).
+- **Valid-move buttons are expensive** - each anchor is a `<button>` with coordinates in `value`; unavoidable, so budget for them in the stress mock.
 
-Do **not** rely on CSS classes or external stylesheets — game HTML is inline-only. Do **not** assume `jsxToHTML` minifies (TODO in source).
+Do **not** rely on CSS classes or external stylesheets - game HTML is inline-only. Do **not** assume `jsxToHTML` minifies (TODO in source).
 
 ## Class
 
@@ -137,7 +137,7 @@ Do **not** rely on CSS classes or external stylesheets — game HTML is inline-o
 - Persistable data goes in `this.state`. UI-only (`selected`, highlight lists) stays on the instance (not in `backupKeys`); pass into `RenderCtx` only for the viewer who needs it.
 - If player state is keyed by turn or user ID, implement `onReplacePlayer()` and migrate every keyed state entry when a player is substituted, including ownership IDs stored in boards, queues, or other nested state. The only state that should not be updated on a sub is 'logs'.
 - Keep stable turn-order data separate from mutable player IDs. Use it for rendering order, colors, resources, and other player identity mappings after substitutions.
-- `createGrid(rows, cols, fill)` when you need a 2D board — first size is rows.
+- `createGrid(rows, cols, fill)` when you need a 2D board - first size is rows.
 - `trySkipPlayer(turn)` → true to skip that side (no legal moves). Omit if every turn can always act.
 - Hidden info: `render(side)` gets that player's view; spectators get `side === null`.
 - `WinCtx`: use `Player` from `@/ps/games/types`. `exactOptionalPropertyTypes`: omit optional log fields instead of assigning `undefined`.
@@ -174,11 +174,11 @@ Do **not** rely on CSS classes or external stylesheets — game HTML is inline-o
 `src/ps/games/test.tsx` is the mock. `debug.ts` watches `src/ps/games` and writes HTML into `scripts/debug-games/live/`.
 
 1. Point `test.tsx` at the new `render` (Azul in that file is the N-player example).
-2. Build a **stress mock** — worst realistic `RenderCtx` (full tray, selection UI, many valid moves). Check HTML length (see **HTML page size** above); must be **under ~80%** of `MAX_PAGE_HTML_LENGTH`.
-3. `jsxToHTML(render.bind({ msg: 'test', simpleMsg: 'test' })(...))` — same path production uses.
-4. `npm run debug` — `http://localhost:8081`, live-reload 8082, Desktop/Mobile/Ruka widths. Console + page header show `HTML N / 99500`.
+2. Build a **stress mock** - worst realistic `RenderCtx` (full tray, selection UI, many valid moves). Check HTML length (see **HTML page size** above); must be **under ~80%** of `MAX_PAGE_HTML_LENGTH`.
+3. `jsxToHTML(render.bind({ msg: 'test', simpleMsg: 'test' })(...))` - same path production uses.
+4. `npm run debug` - `http://localhost:8081`, live-reload 8082, Desktop/Mobile/Ruka widths. Console + page header show `HTML N / 99500`.
 5. Clicks do not play; layout only.
 
-**Stale HTML is common.** The watcher may not refresh `scripts/debug-games/live/page.html` after render changes — hard refresh is not enough if the file itself is old. Regenerate manually (run `test()` + replace `{HTML}` in the template), then open `localhost:8081/page.html` in a browser. Do not assume layout is correct until you have seen the live page.
+**Stale HTML is common.** The watcher may not refresh `scripts/debug-games/live/page.html` after render changes - hard refresh is not enough if the file itself is old. Regenerate manually (run `test()` + replace `{HTML}` in the template), then open `localhost:8081/page.html` in a browser. Do not assume layout is correct until you have seen the live page.
 
 Do not commit leftover `test.tsx` pointed at a WIP game unless asked.

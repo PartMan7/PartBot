@@ -373,7 +373,7 @@ export default {
 			HELP: "Lancez un œuf chaud sur quelqu'un. Si vous avez l'œuf, passez-le à quelqu'un d'autre avant qu'il explose.",
 			USER_NOT_IN_ROOM: "Cet utilisateur n'est pas dans le salon.",
 			TARGET_BUSY: "Imaginez lancer un œuf sur quelqu'un qui est occupé...",
-			TARGET_BOT: 'Imagine essayer de lancer un œuf sur un bot — quel LOSER.',
+			TARGET_BOT: 'Imagine essayer de lancer un œuf sur un bot - quel LOSER.',
 			EXPLODED: "[[ ]]**L'œuf a explosé sur {{holderName}} !**",
 			NOT_HOLDER: "Vous n'avez pas l'œuf.",
 			CANNOT_TOSS_SELF: "Vous ne pouvez pas vous lancer l'œuf à vous-même.",
