@@ -24,18 +24,19 @@ function validateUser(message: PSMessageTranslated, targetId: string, $T: Transl
 	return lookup;
 }
 
-function eggFuseMs(): number {
+function eggFuseMs(alreadyPassed: boolean): number {
+	if (alreadyPassed) return sample([fromHumanTime('3 sec'), fromHumanTime('5 sec')]);
 	return sample([fromHumanTime('8 sec'), fromHumanTime('12 sec')]);
 }
 
-function scheduleDetonation(room: Room, holderName: string, previous?: Timer): Timer {
+function scheduleDetonation(room: Room, holderName: string, previous?: Timer, alreadyPassed = false): Timer {
 	previous?.cancel();
 	const timer = new Timer(() => {
 		if (PSEggs[room.id]?.timer !== timer) return;
 		delete PSEggs[room.id];
 		const $T = i18n(getLanguage(room));
 		room.send($T('COMMANDS.EGG.EXPLODED', { holderName }));
-	}, eggFuseMs());
+	}, eggFuseMs(alreadyPassed));
 	return timer;
 }
 
@@ -59,15 +60,18 @@ export const command: PSCommand = {
 			if (egg.holderId !== authorId) throw new ChatError($T('COMMANDS.EGG.NOT_HOLDER'));
 			if (targetId === authorId) throw new ChatError($T('COMMANDS.EGG.CANNOT_TOSS_SELF'));
 
-			const timer = scheduleDetonation(room, target.name, egg.timer);
-			PSEggs[room.id] = { holderId: targetId, holderName: target.name, timer };
+			egg.passed.add(authorId);
+			const alreadyPassed = egg.passed.has(targetId);
+			const timer = scheduleDetonation(room, target.name, egg.timer, alreadyPassed);
+			PSEggs[room.id] = { holderId: targetId, holderName: target.name, timer, passed: egg.passed };
 			return message.reply($T('COMMANDS.EGG.TOSSED_TO', { target: target.name }));
 		}
 
 		if (targetId === authorId) throw new ChatError($T('COMMANDS.EGG.CANNOT_EGG_SELF'));
 
-		const timer = scheduleDetonation(room, target.name);
-		PSEggs[room.id] = { holderId: targetId, holderName: target.name, timer };
+		const passed = new Set([authorId]);
+		const timer = scheduleDetonation(room, target.name, undefined, passed.has(targetId));
+		PSEggs[room.id] = { holderId: targetId, holderName: target.name, timer, passed };
 		return message.reply($T('COMMANDS.EGG.TOSSED_AT', { target: target.name, prefix }));
 	},
 };
