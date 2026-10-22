@@ -39,7 +39,8 @@ export const PSKuncInProgress: Partial<{ [key: string]: boolean }> = {};
 export const PSNonces: Partial<{ [key: string]: { callback: () => TranslatedText | void; perms?: Perms } }> = {};
 export const PSPointsNonce: Partial<{ [key: string]: Record<string, Record<string, number>> | null }> = {};
 export const PSActiveRepeats: Map<string, NodeJS.Timeout> = new Map();
-export const PSEggs: Partial<Record<string, { holderId: string; holderName: string; timer: Timer; passed: Set<string> }>> = {};
+export const PSEggs: Partial<Record<string, { holderId: string; holderName: string; timer: Timer; cycles: Record<string, number> }>> =
+	{};
 export const PSCommandCooldowns: Partial<Record<string, number>> = {};
 
 // Games

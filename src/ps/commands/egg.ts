@@ -24,19 +24,19 @@ function validateUser(message: PSMessageTranslated, targetId: string, $T: Transl
 	return lookup;
 }
 
-function eggFuseMs(alreadyPassed: boolean): number {
-	if (alreadyPassed) return sample([fromHumanTime('3 sec'), fromHumanTime('5 sec')]);
-	return sample([fromHumanTime('8 sec'), fromHumanTime('12 sec')]);
+function eggFuseMs(priorTossCycles: number): number {
+	const scale = Math.min(2 ** priorTossCycles, 8);
+	return sample([fromHumanTime('8 sec'), fromHumanTime('12 sec')]) / scale;
 }
 
-function scheduleDetonation(room: Room, holderName: string, previous?: Timer, alreadyPassed = false): Timer {
+function scheduleDetonation(room: Room, holderName: string, previous?: Timer, priorTossCycles = 0): Timer {
 	previous?.cancel();
 	const timer = new Timer(() => {
 		if (PSEggs[room.id]?.timer !== timer) return;
 		delete PSEggs[room.id];
 		const $T = i18n(getLanguage(room));
 		room.send($T('COMMANDS.EGG.EXPLODED', { holderName }));
-	}, eggFuseMs(alreadyPassed));
+	}, eggFuseMs(priorTossCycles));
 	return timer;
 }
 
@@ -60,18 +60,19 @@ export const command: PSCommand = {
 			if (egg.holderId !== authorId) throw new ChatError($T('COMMANDS.EGG.NOT_HOLDER'));
 			if (targetId === authorId) throw new ChatError($T('COMMANDS.EGG.CANNOT_TOSS_SELF'));
 
-			egg.passed.add(authorId);
-			const alreadyPassed = egg.passed.has(targetId);
-			const timer = scheduleDetonation(room, target.name, egg.timer, alreadyPassed);
-			PSEggs[room.id] = { holderId: targetId, holderName: target.name, timer, passed: egg.passed };
+			egg.cycles[authorId] ??= 0;
+			egg.cycles[authorId]++;
+			egg.holderId = targetId;
+			egg.holderName = target.name;
+
+			egg.timer = scheduleDetonation(room, target.name, egg.timer, egg.cycles[targetId]);
 			return message.reply($T('COMMANDS.EGG.TOSSED_TO', { target: target.name }));
 		}
 
 		if (targetId === authorId) throw new ChatError($T('COMMANDS.EGG.CANNOT_EGG_SELF'));
 
-		const passed = new Set([authorId]);
-		const timer = scheduleDetonation(room, target.name, undefined, passed.has(targetId));
-		PSEggs[room.id] = { holderId: targetId, holderName: target.name, timer, passed };
+		const timer = scheduleDetonation(room, target.name, undefined, 0);
+		PSEggs[room.id] = { holderId: targetId, holderName: target.name, timer, cycles: {} };
 		return message.reply($T('COMMANDS.EGG.TOSSED_AT', { target: target.name, prefix }));
 	},
 };
