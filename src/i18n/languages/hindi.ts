@@ -357,6 +357,19 @@ export default {
 			NO_GUESSERS: 'Kisi ne {{solution}} time par nahi guess kiya...',
 		},
 
+		EGG: {
+			HELP: 'Kisi par garam anda fenko. Agar anda tumhare paas hai, explode hone se pehle kisi aur ko pass karo.',
+			USER_NOT_IN_ROOM: 'Woh user room mein nahi hai.',
+			TARGET_BUSY: 'Busy user par anda fenkne ki socho...',
+			TARGET_BOT: 'Bot par anda fenkne ki sochra lol',
+			EXPLODED: '[[ ]]**{{holderName}} par anda explode ho gaya!**',
+			NOT_HOLDER: 'Tumhare paas anda nahi hai.',
+			CANNOT_TOSS_SELF: 'Tum anda apne upar nahi fenk sakte.',
+			CANNOT_EGG_SELF: 'Tum apne upar anda nahi fenk sakte.',
+			TOSSED_TO: '/me anda {{target}} ko fenkta hai! __(use ``{{prefix}}toss`` se kisi aur ko pass karo)__',
+			TOSSED_AT: '/me {{target}} par anda fenkta hai! __(use ``{{prefix}}toss`` se kisi aur ko pass karo)__',
+		},
+
 		AUTH: {
 			WHO_TO_PROMOTE: 'Kisko promote karna hai?',
 			CANNOT_CHANGE_RANK: '{{users}} ka rank nahi badal sakte.',

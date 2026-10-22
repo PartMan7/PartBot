@@ -369,6 +369,19 @@ export default {
 			NO_GUESSERS: "Personne n'a deviné {{solution}} à temps...",
 		},
 
+		EGG: {
+			HELP: "Lancez un œuf chaud sur quelqu'un. Si vous avez l'œuf, passez-le à quelqu'un d'autre avant qu'il explose.",
+			USER_NOT_IN_ROOM: "Cet utilisateur n'est pas dans le salon.",
+			TARGET_BUSY: "Imaginez lancer un œuf sur quelqu'un qui est occupé...",
+			TARGET_BOT: 'Imagine essayer de lancer un œuf sur un bot — quel LOSER.',
+			EXPLODED: "[[ ]]**L'œuf a explosé sur {{holderName}} !**",
+			NOT_HOLDER: "Vous n'avez pas l'œuf.",
+			CANNOT_TOSS_SELF: "Vous ne pouvez pas vous lancer l'œuf à vous-même.",
+			CANNOT_EGG_SELF: 'Vous ne pouvez pas vous lancer un œuf à vous-même.',
+			TOSSED_TO: "/me lance l'œuf à {{target}} ! __(utilisez ``{{prefix}}toss`` pour le passer à quelqu'un d'autre)__",
+			TOSSED_AT: "/me lance un œuf sur {{target}} ! __(utilisez ``{{prefix}}toss`` pour le passer à quelqu'un d'autre)__",
+		},
+
 		AUTH: {
 			WHO_TO_PROMOTE: 'Qui voulez-vous promouvoir ?',
 			CANNOT_CHANGE_RANK: 'Impossible de changer le rang pour {{users}}.',

@@ -368,6 +368,19 @@ export default {
 			NO_GUESSERS: 'Ninguém adivinhou {{solution}} a tempo...',
 		},
 
+		EGG: {
+			HELP: 'Jogue um ovo quente em alguém. Se você tem o ovo, passe para outra pessoa antes de explodir.',
+			USER_NOT_IN_ROOM: 'Esse usuário não está na sala.',
+			TARGET_BUSY: 'Imagina jogar um ovo em alguém ocupado...',
+			TARGET_BOT: 'Imagina tentar jogar um ovo em um bot — que LOSER.',
+			EXPLODED: '[[ ]]**O ovo explodiu em {{holderName}}!**',
+			NOT_HOLDER: 'Você não tem o ovo.',
+			CANNOT_TOSS_SELF: 'Você não pode passar o ovo para si mesmo.',
+			CANNOT_EGG_SELF: 'Você não pode jogar um ovo em si mesmo.',
+			TOSSED_TO: '/me joga o ovo para {{target}}! __(use ``{{prefix}}toss`` para passar para outra pessoa)__',
+			TOSSED_AT: '/me joga um ovo em {{target}}! __(use ``{{prefix}}toss`` para passar para outra pessoa)__',
+		},
+
 		AUTH: {
 			WHO_TO_PROMOTE: 'Quem você quer promover?',
 			CANNOT_CHANGE_RANK: 'Não é possível alterar o rank de {{users}}.',

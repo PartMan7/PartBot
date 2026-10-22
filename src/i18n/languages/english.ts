@@ -370,6 +370,19 @@ export default {
 			NO_GUESSERS: 'No one guessed {{solution}} in time...',
 		},
 
+		EGG: {
+			HELP: 'Toss a hot egg at someone. If you have the egg, toss it to someone else before it detonates.',
+			USER_NOT_IN_ROOM: 'That user is not in the room.',
+			TARGET_BUSY: "Imagine egging someone who's busy...",
+			TARGET_BOT: 'Imagine trying to egg a bot — what a LOSER.',
+			EXPLODED: '[[ ]]**The egg exploded on {{holderName}}!**',
+			NOT_HOLDER: 'You do not have the egg.',
+			CANNOT_TOSS_SELF: 'You cannot toss the egg to yourself.',
+			CANNOT_EGG_SELF: 'You cannot toss an egg at yourself.',
+			TOSSED_TO: '/me tosses the egg to {{target}}! __(use ``{{prefix}}toss`` to toss it to someone else)__',
+			TOSSED_AT: '/me tosses an egg at {{target}}! __(use ``{{prefix}}toss`` to toss it to someone else)__',
+		},
+
 		AUTH: {
 			WHO_TO_PROMOTE: 'Who do you want to promote?',
 			CANNOT_CHANGE_RANK: 'Cannot change rank for {{users}}.',
