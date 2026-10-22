@@ -40,6 +40,7 @@ export const PSNonces: Partial<{ [key: string]: { callback: () => TranslatedText
 export const PSPointsNonce: Partial<{ [key: string]: Record<string, Record<string, number>> | null }> = {};
 export const PSActiveRepeats: Map<string, NodeJS.Timeout> = new Map();
 export const PSEggs: Partial<Record<string, { holderId: string; holderName: string; timer: Timer; passed: Set<string> }>> = {};
+export const PSCommandCooldowns: Partial<Record<string, number>> = {};
 
 // Games
 export const PSGames: { [key in keyof Games]?: Record<string, CommonGame> } = {};

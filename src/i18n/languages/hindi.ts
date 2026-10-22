@@ -13,6 +13,7 @@ export default {
 	GOOD_LUCK: 'Good luck!',
 	CANCELLED: 'Yeh command radd kar di gayi thi.',
 	CMD_NOT_FOUND: 'Command nahi mili.',
+	COOLING_DOWN: 'Thoda ruko...',
 	CONFIRM: "Kya aap nishchit hain? Pushti ke liye 'confirm' likhein.",
 	NOT_CONFIRMED: 'Samay par confirmation nahi mili.',
 	INVALID_ALIAS: '{{aliasFor}} ke liye amaanya upnaam tha.',

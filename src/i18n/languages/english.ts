@@ -11,6 +11,7 @@ export default {
 	GOOD_LUCK: "G'luck!",
 	CANCELLED: 'This action was cancelled.',
 	CMD_NOT_FOUND: 'Command not found.',
+	COOLING_DOWN: 'Cooling down...',
 	CONFIRM: "Are you sure? Type 'confirm' to confirm.",
 	NOT_CONFIRMED: 'Did not receive confirmation in time.',
 	INVALID_ALIAS: 'Had an invalid alias for {{aliasFor}}.',

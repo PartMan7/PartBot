@@ -8,6 +8,7 @@ type Cascade = {
 	flags: NonNullable<PSCommand['flags']>;
 	perms: NonNullable<PSCommand['perms']>;
 	rooms: PSCommand['rooms'];
+	cooldown?: number | undefined;
 };
 
 export function parse(
@@ -51,6 +52,7 @@ export function parse(
 		flags: Object.assign({}, commandObj.flags ?? {}),
 		perms: commandObj.perms ?? 'regular',
 		rooms: commandObj.rooms,
+		cooldown: commandObj.cooldown,
 	};
 	while (command.length > 0 && commandObj) {
 		const next: PSCommandChild | undefined = commandObj.children?.[command[0]];
@@ -62,6 +64,7 @@ export function parse(
 		}
 		if (next.perms) cascade.perms = next.perms;
 		if (next.rooms) cascade.rooms = next.rooms;
+		if (next.cooldown !== undefined) cascade.cooldown = next.cooldown;
 		commandObj = next;
 		command.shift();
 	}

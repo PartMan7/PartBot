@@ -2,6 +2,7 @@ import { PSRoomConfigs } from '@/cache';
 import { isGlobalBot, prefix } from '@/config/ps';
 import { LanguageMap, i18n } from '@/i18n';
 import { getLanguage } from '@/i18n/language';
+import { checkCooldown, setCooldown } from '@/ps/handlers/commands/cooldown';
 import { LivePSStuff } from '@/sentinel/live';
 import { ChatError } from '@/utils/chatError';
 import { Logger } from '@/utils/logger';
@@ -122,6 +123,10 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 			throw new ChatError(conceal ?? $T('WRONG_ROOM'));
 		}
 
+		const cooldownScope = message.type === 'chat' ? message.target.id : 'pm';
+		const cooldownLookup = context.command.join('.');
+		if (cascade.cooldown) checkCooldown(message.author.id, cooldownScope, cooldownLookup, $T);
+
 		context.hasFeature = function (feature, room) {
 			if (message.type === 'pm') return null;
 			const roomConfig = PSRoomConfigs[room ?? message.target.id];
@@ -159,6 +164,7 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 			return commandHandler(message, { type: 'run', command: `${prefix}${command}`, bypassPerms: true, calledFrom, ctx });
 		};
 
+		if (cascade.cooldown) setCooldown(message.author.id, cooldownScope, cooldownLookup, cascade.cooldown);
 		return await commandObj.run({ ...context, message });
 	} catch (err) {
 		if (err instanceof Error) {

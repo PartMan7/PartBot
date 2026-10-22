@@ -151,6 +151,10 @@ export type PSCommand = {
 	 */
 	rooms?: string[];
 	/**
+	 * Minimum time between uses of this command, per user, in milliseconds.
+	 */
+	cooldown?: number;
+	/**
 	 * Static functions for use in both the command itself and external usages.
 	 * Root-level only.
 	 */

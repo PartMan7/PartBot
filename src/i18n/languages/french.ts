@@ -13,6 +13,7 @@ export default {
 	GOOD_LUCK: 'Bonne chance !',
 	CANCELLED: 'Cette action a été annulée.',
 	CMD_NOT_FOUND: 'Commande introuvable.',
+	COOLING_DOWN: 'Repose-toi un peu...',
 	CONFIRM: "Êtes-vous sûr ? Tapez 'confirm' pour confirmer.",
 	NOT_CONFIRMED: 'Confirmation non reçue à temps.',
 	INVALID_ALIAS: 'Alias invalide pour {{aliasFor}}.',
