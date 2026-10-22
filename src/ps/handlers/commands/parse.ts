@@ -9,6 +9,7 @@ type Cascade = {
 	perms: NonNullable<PSCommand['perms']>;
 	rooms: PSCommand['rooms'];
 	cooldown?: number | undefined;
+	skipCooldown?: PSCommand['skipCooldown'];
 };
 
 export function parse(
@@ -53,6 +54,7 @@ export function parse(
 		perms: commandObj.perms ?? 'regular',
 		rooms: commandObj.rooms,
 		cooldown: commandObj.cooldown,
+		skipCooldown: commandObj.skipCooldown,
 	};
 	while (command.length > 0 && commandObj) {
 		const next: PSCommandChild | undefined = commandObj.children?.[command[0]];
@@ -65,6 +67,7 @@ export function parse(
 		if (next.perms) cascade.perms = next.perms;
 		if (next.rooms) cascade.rooms = next.rooms;
 		if (next.cooldown !== undefined) cascade.cooldown = next.cooldown;
+		if (next.skipCooldown !== undefined) cascade.skipCooldown = next.skipCooldown;
 		commandObj = next;
 		command.shift();
 	}

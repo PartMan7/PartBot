@@ -3,7 +3,7 @@
 import type { PSMessageTranslated, TranslatedText, TranslationFn } from '@/i18n/types';
 import type { DiscInteraction } from '@/types/discord';
 import type { Perms } from '@/types/perms';
-import type { Feature } from '@/types/ps';
+import type { Feature, PSMessage } from '@/types/ps';
 import type { SlashCommandBuilder } from 'discord.js';
 import type { HTMLopts } from 'ps-client/classes/common';
 import type { ReactElement } from 'react';
@@ -154,6 +154,10 @@ export type PSCommand = {
 	 * Minimum time between uses of this command, per user, in milliseconds.
 	 */
 	cooldown?: number;
+	/**
+	 * When this returns true, cooldown check and set are skipped for this invocation.
+	 */
+	skipCooldown?: (message: PSMessage) => boolean;
 	/**
 	 * Static functions for use in both the command itself and external usages.
 	 * Root-level only.

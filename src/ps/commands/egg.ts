@@ -46,6 +46,10 @@ export const command: PSCommand = {
 	syntax: 'CMD user',
 	aliases: ['toss'],
 	categories: ['casual'],
+	cooldown: fromHumanTime('30 min'),
+	skipCooldown(message) {
+		return message.type === 'chat' && PSEggs[message.target.id] !== undefined;
+	},
 	async run({ message, arg, $T, checkPermissions }) {
 		const room = message.target;
 		const egg = PSEggs[room.id];

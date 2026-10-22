@@ -125,7 +125,8 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 
 		const cooldownScope = message.type === 'chat' ? message.target.id : 'pm';
 		const cooldownLookup = context.command.join('.');
-		if (cascade.cooldown) checkCooldown(message.author.id, cooldownScope, cooldownLookup, $T);
+		const skipCooldown = cascade.skipCooldown?.(message);
+		if (cascade.cooldown && !skipCooldown) checkCooldown(message.author.id, cooldownScope, cooldownLookup, $T);
 
 		context.hasFeature = function (feature, room) {
 			if (message.type === 'pm') return null;
@@ -164,7 +165,7 @@ export async function commandHandler(message: PSMessage, indirect: IndirectCtx |
 			return commandHandler(message, { type: 'run', command: `${prefix}${command}`, bypassPerms: true, calledFrom, ctx });
 		};
 
-		if (cascade.cooldown) setCooldown(message.author.id, cooldownScope, cooldownLookup, cascade.cooldown);
+		if (cascade.cooldown && !skipCooldown) setCooldown(message.author.id, cooldownScope, cooldownLookup, cascade.cooldown);
 		return await commandObj.run({ ...context, message });
 	} catch (err) {
 		if (err instanceof Error) {
