@@ -377,7 +377,7 @@ export default {
 			NOT_HOLDER: 'Você não tem o ovo.',
 			CANNOT_TOSS_SELF: 'Você não pode passar o ovo para si mesmo.',
 			CANNOT_EGG_SELF: 'Você não pode jogar um ovo em si mesmo.',
-			TOSSED_TO: '/me joga o ovo para {{target}}! __(use ``{{prefix}}toss`` para passar para outra pessoa)__',
+			TOSSED_TO: '/me joga o ovo para {{target}}!',
 			TOSSED_AT: '/me joga um ovo em {{target}}! __(use ``{{prefix}}toss`` para passar para outra pessoa)__',
 		},
 

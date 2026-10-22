@@ -366,7 +366,7 @@ export default {
 			NOT_HOLDER: 'Tumhare paas anda nahi hai.',
 			CANNOT_TOSS_SELF: 'Tum anda apne upar nahi fenk sakte.',
 			CANNOT_EGG_SELF: 'Tum apne upar anda nahi fenk sakte.',
-			TOSSED_TO: '/me anda {{target}} ko fenkta hai! __(use ``{{prefix}}toss`` se kisi aur ko pass karo)__',
+			TOSSED_TO: '/me anda {{target}} ko fenkta hai!',
 			TOSSED_AT: '/me {{target}} par anda fenkta hai! __(use ``{{prefix}}toss`` se kisi aur ko pass karo)__',
 		},
 

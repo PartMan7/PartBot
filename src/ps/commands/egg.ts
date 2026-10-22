@@ -61,7 +61,7 @@ export const command: PSCommand = {
 
 			const timer = scheduleDetonation(room, target.name, egg.timer);
 			PSEggs[room.id] = { holderId: targetId, holderName: target.name, timer };
-			return message.reply($T('COMMANDS.EGG.TOSSED_TO', { target: target.name, prefix }));
+			return message.reply($T('COMMANDS.EGG.TOSSED_TO', { target: target.name }));
 		}
 
 		if (targetId === authorId) throw new ChatError($T('COMMANDS.EGG.CANNOT_EGG_SELF'));

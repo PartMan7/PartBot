@@ -379,7 +379,7 @@ export default {
 			NOT_HOLDER: 'You do not have the egg.',
 			CANNOT_TOSS_SELF: 'You cannot toss the egg to yourself.',
 			CANNOT_EGG_SELF: 'You cannot toss an egg at yourself.',
-			TOSSED_TO: '/me tosses the egg to {{target}}! __(use ``{{prefix}}toss`` to toss it to someone else)__',
+			TOSSED_TO: '/me tosses the egg to {{target}}!',
 			TOSSED_AT: '/me tosses an egg at {{target}}! __(use ``{{prefix}}toss`` to toss it to someone else)__',
 		},
 
