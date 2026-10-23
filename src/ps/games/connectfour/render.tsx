@@ -12,7 +12,7 @@ function Column({ data, discs }: { data: (Turn | null)[]; discs: Record<Turn, Ty
 		<>
 			{data.map(cell =>
 				cell ? (
-					<TypeToken token={discs[cell]} size={35} style={{ margin: 3 }} />
+					<TypeToken token={discs[cell]} size={35} style={{ margin: 3, display: undefined }} />
 				) : (
 					<div
 						style={{
