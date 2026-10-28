@@ -21,6 +21,9 @@ function validateUser(message: PSMessageTranslated, targetId: string, $T: Transl
 	if (lookup.name.endsWith('@!') || lookup.status?.startsWith('!(')) throw new ChatError($T('COMMANDS.EGG.TARGET_BUSY'));
 	const roomUser = message.target.users.find(user => toId(user) === targetId);
 	if (lookup.group === '*' || roomUser?.startsWith('*')) throw new ChatError($T('COMMANDS.EGG.TARGET_BOT'));
+	if (lookup.group === '!' || roomUser?.startsWith('!') || lookup.group === '‽' || roomUser?.startsWith('‽')) {
+		throw new ChatError($T('COMMANDS.EGG.TARGET_CANNOT_REPLY'));
+	}
 	return lookup;
 }
 

@@ -374,6 +374,7 @@ export default {
 			USER_NOT_IN_ROOM: 'Esse usuário não está na sala.',
 			TARGET_BUSY: 'Imagina jogar um ovo em alguém ocupado...',
 			TARGET_BOT: 'Imagina tentar jogar um ovo em um bot - que LOSER.',
+			TARGET_CANNOT_REPLY: 'Dá pra não jogar ovo em quem não pode responder?',
 			EXPLODED: '[[ ]]**O ovo explodiu em {{holderName}}!**',
 			NOT_HOLDER: 'Você não tem o ovo.',
 			CANNOT_TOSS_SELF: 'Você não pode passar o ovo para si mesmo.',

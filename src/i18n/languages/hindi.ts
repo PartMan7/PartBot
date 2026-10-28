@@ -363,6 +363,7 @@ export default {
 			USER_NOT_IN_ROOM: 'Woh user room mein nahi hai.',
 			TARGET_BUSY: 'Busy user par anda fenkne ki socho...',
 			TARGET_BOT: 'Bot par anda fenkne ki sochra lol',
+			TARGET_CANNOT_REPLY: 'Jo reply nahi kar sakta uspe anda fenkna band karoge kya?',
 			EXPLODED: '[[ ]]**{{holderName}} par anda explode ho gaya!**',
 			NOT_HOLDER: 'Tumhare paas anda nahi hai.',
 			CANNOT_TOSS_SELF: 'Tum anda apne upar nahi fenk sakte.',

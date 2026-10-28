@@ -376,6 +376,7 @@ export default {
 			USER_NOT_IN_ROOM: 'That user is not in the room.',
 			TARGET_BUSY: "Imagine egging someone who's busy...",
 			TARGET_BOT: 'Imagine trying to egg a bot - what a LOSER.',
+			TARGET_CANNOT_REPLY: "Can you not egg someone who can't reply?",
 			EXPLODED: '[[ ]]**The egg exploded on {{holderName}}!**',
 			NOT_HOLDER: 'You do not have the egg.',
 			CANNOT_TOSS_SELF: 'You cannot toss the egg to yourself.',
