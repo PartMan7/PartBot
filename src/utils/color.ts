@@ -312,6 +312,8 @@ export function OklchToString({ L, C, H, a }: Oklch): OklchString {
 	return `oklch(${n(L)} ${n(C)} ${n(H)}${typeof a === 'number' ? ` ${n(a * 100)}%` : ''})` as OklchString;
 }
 
+// endregion Stringifiers
+
 export function generateOklchColors(types: string[], L: number, C: number): Record<string, string> {
 	const startHue = Math.random() * 360;
 	const step = types.length ? 360 / types.length : 0;
@@ -319,5 +321,3 @@ export function generateOklchColors(types: string[], L: number, C: number): Reco
 		types.map((type, i) => [type, OklchToString({ colorspace: 'oklch', L, C, H: normalizeHue(startHue + i * step) })])
 	);
 }
-
-// endregion Stringifiers

@@ -22,16 +22,12 @@ function imageUrl(imagePath: string): string {
 	return `${process.env.WEB_URL}/static/types/${imagePath}`;
 }
 
-const LIGHTNESS_PRIO = 1 / 4;
-
 export function oklchDiff({ H: H1, C: C1, L: L1 }: Oklch, { H: H2, C: C2, L: L2 }: Oklch): number {
-	const dL = LIGHTNESS_PRIO * Math.abs(L1 - L2);
-	let chromaHue = 0;
-	if (C1 && C2) {
-		const dH = Math.sin((((normalizeHue(H1) - normalizeHue(H2) + 360) / 2) * Math.PI) / 180);
-		chromaHue = Math.abs(2 * Math.sqrt(C1 * C2) * dH);
-	}
-	return Math.hypot(chromaHue, dL);
+	const dL = Math.abs(L1 - L2);
+	let dH = Math.abs(normalizeHue(H1) - normalizeHue(H2));
+	if (dH > 180) dH = 360 - dH;
+	const hueTerm = 2 * Math.sqrt(C1 * C2) * Math.sin((dH * Math.PI) / 360);
+	return Math.hypot(C1 - C2, hueTerm, dL);
 }
 
 export type TypeTokenStyle = { imageUrl: string; name: string; bgHex: Hex };
