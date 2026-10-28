@@ -5,12 +5,12 @@ import { colorSampler, oklchDiff, typeColorSampler } from '@/utils/colorSampler'
 
 import type { Oklch } from '@/utils/color';
 
-const LIGHTNESS_PRIO = 1 / 4;
-
-function chromaHueDistance(a: Oklch, b: Oklch): number {
-	if (!a.C || !b.C) return 0;
-	const dH = Math.sin((((normalizeHue(a.H) - normalizeHue(b.H) + 360) / 2) * Math.PI) / 180);
-	return Math.abs(2 * Math.sqrt(a.C * b.C) * dH);
+function expectedOklchDistance(a: Oklch, b: Oklch): number {
+	const dL = Math.abs(a.L - b.L);
+	let dH = Math.abs(normalizeHue(a.H) - normalizeHue(b.H));
+	if (dH > 180) dH = 360 - dH;
+	const hueTerm = 2 * Math.sqrt(a.C * b.C) * Math.sin((dH * Math.PI) / 360);
+	return Math.hypot(a.C - b.C, hueTerm, dL);
 }
 
 describe('oklchDiff', () => {
@@ -25,18 +25,16 @@ describe('oklchDiff', () => {
 		expect(oklchDiff(a, b)).toBe(oklchDiff(b, a));
 	});
 
-	it('combines chroma-hue and lightness with hypot', () => {
+	it('combines chroma, hue, and lightness with hypot', () => {
 		const a: Oklch = { L: 0.55, C: 0.18, H: 25, colorspace: 'oklch' };
 		const b: Oklch = { L: 0.75, C: 0.18, H: 85, colorspace: 'oklch' };
-		const chromaHue = chromaHueDistance(a, b);
-		const dL = LIGHTNESS_PRIO * Math.abs(a.L - b.L);
-		expect(oklchDiff(a, b)).toBeCloseTo(Math.hypot(chromaHue, dL));
+		expect(oklchDiff(a, b)).toBeCloseTo(expectedOklchDistance(a, b));
 	});
 
-	it('uses lightness only when either chroma is zero', () => {
+	it('includes chroma delta when either chroma is zero', () => {
 		const a: Oklch = { L: 0.4, C: 0, H: 0, colorspace: 'oklch' };
 		const b: Oklch = { L: 0.8, C: 0.12, H: 200, colorspace: 'oklch' };
-		expect(oklchDiff(a, b)).toBeCloseTo(LIGHTNESS_PRIO * Math.abs(a.L - b.L));
+		expect(oklchDiff(a, b)).toBeCloseTo(expectedOklchDistance(a, b));
 	});
 });
 
