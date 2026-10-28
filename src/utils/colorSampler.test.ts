@@ -1,17 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { HexToOklch, StringToHex, normalizeHue } from '@/utils/color';
+import { HexToOklch, StringToHex } from '@/utils/color';
 import { colorSampler, oklchDiff, typeColorSampler } from '@/utils/colorSampler';
 
 import type { Oklch } from '@/utils/color';
-
-function expectedOklchDistance(a: Oklch, b: Oklch): number {
-	const dL = Math.abs(a.L - b.L);
-	let dH = Math.abs(normalizeHue(a.H) - normalizeHue(b.H));
-	if (dH > 180) dH = 360 - dH;
-	const hueTerm = 2 * Math.sqrt(a.C * b.C) * Math.sin((dH * Math.PI) / 360);
-	return Math.hypot(a.C - b.C, hueTerm, dL);
-}
 
 describe('oklchDiff', () => {
 	it('is zero for identical colours', () => {
@@ -28,13 +20,13 @@ describe('oklchDiff', () => {
 	it('combines chroma, hue, and lightness with hypot', () => {
 		const a: Oklch = { L: 0.55, C: 0.18, H: 25, colorspace: 'oklch' };
 		const b: Oklch = { L: 0.75, C: 0.18, H: 85, colorspace: 'oklch' };
-		expect(oklchDiff(a, b)).toBeCloseTo(expectedOklchDistance(a, b));
+		expect(oklchDiff(a, b)).toBeCloseTo(Math.hypot(0, 0.18, 0.2));
 	});
 
 	it('includes chroma delta when either chroma is zero', () => {
 		const a: Oklch = { L: 0.4, C: 0, H: 0, colorspace: 'oklch' };
 		const b: Oklch = { L: 0.8, C: 0.12, H: 200, colorspace: 'oklch' };
-		expect(oklchDiff(a, b)).toBeCloseTo(expectedOklchDistance(a, b));
+		expect(oklchDiff(a, b)).toBeCloseTo(Math.hypot(0.12, 0.4));
 	});
 });
 
