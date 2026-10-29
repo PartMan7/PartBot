@@ -31,11 +31,14 @@ export const command: PSCommand = {
 		if (!arg || toId(arg) === message.author.userid) return message.privateReply($T('COMMANDS.SEENS.SELF'));
 
 		const lookup = toId(arg);
-		const online = message.parent.getUser(lookup);
+		const onlineName = message.parent.rooms
+			.values()
+			.flatMap(room => room.users)
+			.find(user => toId(user) === lookup);
 		const seen = await lastSeen(lookup);
 		// trim rank
-		const displayUser = online?.name ?? seen?.name?.replace(/^./, '') ?? arg.trim();
-		if (online) return broadcast($T('COMMANDS.SEENS.ONLINE', { user: displayUser }));
+		const displayUser = onlineName?.replace(/^./, '') ?? seen?.name?.replace(/^./, '') ?? arg.trim();
+		if (onlineName) return broadcast($T('COMMANDS.SEENS.ONLINE', { user: displayUser }));
 		if (!seen) return broadcast($T('COMMANDS.SEENS.NEVER', { user: displayUser }));
 
 		const at = seen.at instanceof Date ? seen.at.getTime() : +seen.at;
