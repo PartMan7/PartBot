@@ -8,7 +8,7 @@ import { sample } from '@/utils/random';
 import { Timer } from '@/utils/timer';
 import { toId } from '@/utils/toId';
 
-import type { PSMessageTranslated, TranslationFn } from '@/i18n/types';
+import type { NoTranslate, PSMessageTranslated, TranslationFn } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { Room, User } from 'ps-client';
 
@@ -78,6 +78,7 @@ export const command: PSCommand = {
 		}
 
 		if (targetId === authorId) throw new ChatError($T('COMMANDS.EGG.CANNOT_EGG_SELF'));
+		if (targetId === 'siegfried' && ['conwynaut'].includes(authorId)) throw new ChatError('Weeb.' as NoTranslate); // block da weebs
 
 		const timer = scheduleDetonation(room, target.name, undefined, 0);
 		PSEggs[room.id] = { holderId: targetId, holderName: target.name, timer, cycles: {} };
