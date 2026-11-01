@@ -16,17 +16,42 @@ function getNextPasteId(): string {
 }
 
 /**
- * Get _something_ uploaded. TODO: part.cx integration.
+ * Uploads to part.cx. Returns null if no real access token is configured.
+ */
+export async function uploadToPartCx(text: string, filename = 'paste.txt'): Promise<string | null> {
+	const token = process.env.PARTCX_ACCESS_TOKEN;
+	if (!token || token === 'partf_example_key_here') return null;
+
+	const body = new FormData();
+	body.set('file', new Blob([text], { type: 'text/plain' }), filename);
+	body.set('expiry', 'off');
+
+	const res = await fetch('https://part.cx/api/upload', { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body });
+	if (!res.ok) throw new Error(`part.cx upload failed: ${res.status}`);
+	const { content } = (await res.json()) as { content: { url: string } };
+	return content.url;
+}
+
+/**
+ * Get _something_ uploaded.
  */
 export async function upload(text: string): Promise<string> {
 	try {
 		return await uploadToPastie(text);
 	} catch (err) {
 		if (err instanceof Error) Logger.errorLog(err);
-		const localPaste = await paste(text);
-		if (!localPaste) throw new Error('Web is disabled!');
-		return localPaste;
 	}
+
+	try {
+		const partCx = await uploadToPartCx(text);
+		if (partCx) return partCx;
+	} catch (err) {
+		if (err instanceof Error) Logger.errorLog(err);
+	}
+
+	const localPaste = await paste(text);
+	if (!localPaste) throw new Error('Web is disabled!');
+	return localPaste;
 }
 
 /**
