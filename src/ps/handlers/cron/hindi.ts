@@ -1,5 +1,3 @@
-import { uploadToPastie } from 'ps-client/tools';
-
 import { PSCommands, PSRoomConfigs } from '@/cache';
 import { queryPoints, resetPoints } from '@/database/points';
 import { HINDI_LOGS } from '@/discord/constants/servers/hindi';
@@ -9,6 +7,7 @@ import { pokedex } from '@/ps/datacenters';
 import { TimeZone } from '@/ps/handlers/cron/constants';
 import { hasPoints } from '@/ps/handlers/cron/utils';
 import { Logger } from '@/utils/logger';
+import { upload } from '@/utils/paste';
 import { sample } from '@/utils/random';
 import { sleep } from '@/utils/sleep';
 
@@ -115,7 +114,7 @@ export function register(this: Client, Jobs: PSCronJobManager): void {
 
 		room.send(`/wall Congratulations to ${topUsers.map(u => u.name).list()} for topping this month's leaderboard!`);
 
-		const backupURL = await uploadToPastie(JSON.stringify(leaderboard, null, 2));
+		const backupURL = await upload(JSON.stringify(leaderboard, null, 2));
 		Logger.log(`Monthly leaderboard backup for hindi: ${backupURL}`);
 		room.send(`/modnote Monthly leaderboard backup: ${backupURL}`);
 

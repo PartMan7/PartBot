@@ -1,8 +1,10 @@
 import fs from 'fs/promises';
+import { uploadToPastie } from 'ps-client/tools';
 
 import { usePersistedCache } from '@/cache/persisted';
 import { IS_ENABLED } from '@/enabled';
 import { fsPath } from '@/utils/fsPath';
+import { Logger } from '@/utils/logger';
 
 const pasteIdCache = usePersistedCache('pasteId');
 function getNextPasteId(): string {
@@ -11,6 +13,20 @@ function getNextPasteId(): string {
 
 	const idNum = (newId * 722222227) % 36 ** 6;
 	return idNum.toString(36).padStart(6, '0');
+}
+
+/**
+ * Get _something_ uploaded. TODO: part.cx integration.
+ */
+export async function upload(text: string): Promise<string> {
+	try {
+		return await uploadToPastie(text);
+	} catch (err) {
+		if (err instanceof Error) Logger.errorLog(err);
+		const localPaste = await paste(text);
+		if (!localPaste) throw new Error('Web is disabled!');
+		return localPaste;
+	}
 }
 
 /**

@@ -1,9 +1,8 @@
-import { uploadToPastie } from 'ps-client/tools';
-
 import { PSRoomConfigs } from '@/cache';
 import { queryPoints, resetPoints } from '@/database/points';
 import { TimeZone } from '@/ps/handlers/cron/constants';
 import { Logger } from '@/utils/logger';
+import { upload } from '@/utils/paste';
 
 import type { PSCronJobManager } from '@/ps/handlers/cron/index';
 import type { Client } from 'ps-client';
@@ -26,13 +25,11 @@ export function register(this: Client, Jobs: PSCronJobManager): void {
 		const hasPoints = topScore.some(v => v > 0);
 		if (!hasPoints) return;
 
-		const topUsers = leaderboard.filter(user =>
-			roomConfig.priority.every((type, i) => user.points[type] === topScore[i])
-		);
+		const topUsers = leaderboard.filter(user => roomConfig.priority.every((type, i) => user.points[type] === topScore[i]));
 
 		room.send(`/wall Congratulations to ${topUsers.map(u => u.name).list()} for topping this month's leaderboard!`);
 
-		const backupURL = await uploadToPastie(JSON.stringify(leaderboard, null, 2));
+		const backupURL = await upload(JSON.stringify(leaderboard, null, 2));
 		Logger.log(`Monthly leaderboard backup for ${ROOM_ID}: ${backupURL}`);
 		room.send(`/modnote Monthly leaderboard backup: ${backupURL}`);
 

@@ -1,5 +1,3 @@
-import { uploadToPastie } from 'ps-client/tools';
-
 import { PSPointsNonce, PSRoomConfigs } from '@/cache';
 import { getAllUGOPoints } from '@/cache/ugo';
 import {
@@ -16,6 +14,7 @@ import { renderUGOBoardGamesLeaderboard } from '@/ps/commands/games/other';
 import { LB_COMMON_STYLES as COMMON_STYLES, LB_STYLES } from '@/ps/other/leaderboardStyles';
 import { ChatError } from '@/utils/chatError';
 import { Logger } from '@/utils/logger';
+import { upload } from '@/utils/paste';
 import { pluralize } from '@/utils/pluralize';
 import { toId } from '@/utils/toId';
 
@@ -327,7 +326,7 @@ export const command: PSCommand[] = [
 
 			const currentData = await queryPoints(message.target.id, roomPoints.priority, Infinity);
 			if (currentData?.length) {
-				const backupURL = await uploadToPastie(JSON.stringify(currentData, null, 2));
+				const backupURL = await upload(JSON.stringify(currentData, null, 2));
 				Logger.log(`Backup for ${message.target.id}, reset ${pointsToReset} by ${message.author.id}: ${backupURL}`);
 				message.target.send(`/modnote ${backupURL}`);
 			}

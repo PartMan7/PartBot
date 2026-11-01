@@ -1,11 +1,11 @@
 import { Temporal } from '@js-temporal/polyfill';
-import { uploadToPastie } from 'ps-client/tools';
 
 import { usePersistedCache } from '@/cache/persisted';
 import { TimeZone } from '@/ps/handlers/cron/constants';
 import { BG_STRUCHNI_MODIFIER, BOARD_GAMES_STRUCHNI_ORDER, UGO_2025_SPOTLIGHTS } from '@/ps/specialEvents/constants';
 import { Logger } from '@/utils/logger';
 import { mapValues } from '@/utils/map';
+import { upload } from '@/utils/paste';
 import { toId } from '@/utils/toId';
 
 import type { UGOBoardGames } from '@/ps/specialEvents/constants';
@@ -28,7 +28,7 @@ export function setUGOPlayed(game: UGOBoardGames, player: string, count: number 
 
 export async function resetUGOPlayed(): Promise<string> {
 	const backup = UGO_PLAYED.get();
-	const url = await uploadToPastie(JSON.stringify(backup));
+	const url = await upload(JSON.stringify(backup));
 	UGO_PLAYED.set({});
 	return url;
 }
@@ -79,7 +79,7 @@ export function addUGOPoints(this: Client, pointsData: Record<string, number>, g
 	});
 	UGO_POINTS.set(current);
 
-	uploadToPastie(JSON.stringify(commit, null, 2)).then(url => {
+	upload(JSON.stringify(commit, null, 2)).then(url => {
 		const command = `;setpointsfromjson boardgames, ${url}`;
 		if (process.env.NODE_ENV === 'development') Logger.log(command);
 		else this.addUser('UGO').send(command);
