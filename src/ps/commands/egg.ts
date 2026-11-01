@@ -50,6 +50,7 @@ export const command: PSCommand = {
 	aliases: ['toss'],
 	categories: ['casual'],
 	cooldown: fromHumanTime('30 min'),
+	rooms: ['boardgames'],
 	skipCooldown(message) {
 		return message.type === 'chat' && PSEggs[message.target.id] !== undefined;
 	},

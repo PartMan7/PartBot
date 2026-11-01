@@ -127,6 +127,7 @@ function SubCommands({
 
 	const validChildren = Object.values(command.children)
 		.filter(child => !child.perms || checkPermissions(child.perms))
+		.filter(child => !child.rooms || (room ? child.rooms.includes(room) : child.flags?.allowPMs))
 		.filter(child => !child.flags?.noDisplay);
 	if (validChildren.length === 0) return null;
 
@@ -201,6 +202,8 @@ export const command: PSCommand = {
 		const { command, context } = parsed;
 		const room = message.type === 'chat' ? message.target.id : undefined;
 		const closeEnough = context.args.length > 0 ? context.args.join('>') : null;
+		if (command.rooms && !(room ? command.rooms.includes(room) : command.flags?.allowPMs))
+			throw new ChatError($T('COMMANDS.HELP.COULD_NOT_FIND_COMMAND'));
 		if (command.perms && !checkPermissions(command.perms))
 			throw new ChatError($T(command.flags?.conceal ? 'COMMANDS.HELP.COULD_NOT_FIND_COMMAND' : 'ACCESS_DENIED'));
 

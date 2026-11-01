@@ -25,8 +25,11 @@ export const command: PSCommand = {
 		const spoofedMessage =
 			targetRoom && arg ? getSpoofMessage('', targetRoom.id, message.parent, { author: message.author }) : message;
 
+		const helpRoom = targetRoom?.id ?? (message.type === 'chat' ? message.target.id : undefined);
+
 		const visibleCommands = allCommands
 			.filter(command => !command.flags?.noDisplay)
+			.filter(command => !command.rooms || (helpRoom ? command.rooms.includes(helpRoom) : command.flags?.allowPMs))
 			.filter(command => {
 				try {
 					if (!command.perms) return true;
@@ -52,8 +55,6 @@ export const command: PSCommand = {
 			},
 			{ utility: [], points: [], game: [], casual: [] }
 		);
-
-		const helpRoom = targetRoom?.id ?? (message.type === 'chat' ? message.target.id : undefined);
 
 		message.replyHTML(
 			<div className="infobox">
