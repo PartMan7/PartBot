@@ -70,6 +70,18 @@ function rebaseFromStart(rows: ChartRow[], gameTypes: string[]): ChartRow[] {
 	});
 }
 
+const SMOOTH_RADIUS = 3;
+
+function movingAverage(rows: ChartRow[], gameTypes: string[]): ChartRow[] {
+	return rows.map((row, i) => {
+		const window = rows.slice(Math.max(0, i - SMOOTH_RADIUS), i + SMOOTH_RADIUS + 1);
+		const avg = (key: string) => window.reduce((sum, r) => sum + (r[key] as number), 0) / window.length;
+		const next: ChartRow = { date: row.date, total: avg('total') };
+		for (const type of gameTypes) next[type] = avg(type);
+		return next;
+	});
+}
+
 function maxInSlice(rows: ChartRow[], gameTypes: string[], includeTotal: boolean): number {
 	let max = 0;
 	for (const row of rows) {
@@ -83,6 +95,7 @@ export const GamesChart = memo(({ days, colors, room }: GamesChartResponse & { r
 	const [mode, setMode] = useState<ChartMode>('individual');
 	const [stacked, setStacked] = useState(true);
 	const [showTotal, setShowTotal] = useState(true);
+	const [smooth, setSmooth] = useState(true);
 	const [lineFilter, setLineFilter] = useState<'all' | string>('all');
 	const [brushRange, setBrushRange] = useState<[number, number] | null>(null);
 
@@ -92,7 +105,10 @@ export const GamesChart = memo(({ days, colors, room }: GamesChartResponse & { r
 		return mode === 'cumulative' ? toCumulative(rows, gameTypes) : rows;
 	}, [days, gameTypes, mode]);
 
-	useEffect(() => setBrushRange(null), [chartData]);
+	useEffect(() => setBrushRange(null), [days]);
+
+	const smoothed = smooth && mode === 'individual' && !stacked;
+	const plotData = useMemo(() => (smoothed ? movingAverage(chartData, gameTypes) : chartData), [smoothed, chartData, gameTypes]);
 
 	useEffect(() => {
 		if (lineFilter !== 'all' && !gameTypes.includes(lineFilter)) setLineFilter('all');
@@ -106,10 +122,10 @@ export const GamesChart = memo(({ days, colors, room }: GamesChartResponse & { r
 	const isZoomed = brushStart > 0 || brushEnd < fullEnd;
 
 	const visibleSlice = useMemo(() => {
-		const slice = chartData.slice(brushStart, brushEnd + 1);
+		const slice = plotData.slice(brushStart, brushEnd + 1);
 		if (mode === 'cumulative' && brushStart > 0) return rebaseFromStart(slice, gameTypes);
 		return slice;
-	}, [chartData, brushStart, brushEnd, mode, gameTypes]);
+	}, [plotData, brushStart, brushEnd, mode, gameTypes]);
 
 	const yMax = useMemo(() => {
 		if (stacked) return maxInSlice(visibleSlice, gameTypes, false);
@@ -134,6 +150,12 @@ export const GamesChart = memo(({ days, colors, room }: GamesChartResponse & { r
 					<input type="checkbox" checked={stacked} onChange={e => setStacked(e.target.checked)} />
 					Stacked
 				</label>
+				{!stacked && mode === 'individual' && (
+					<label className="flex items-center gap-2 m-2">
+						<input type="checkbox" checked={smooth} onChange={e => setSmooth(e.target.checked)} />
+						Smooth (7d)
+					</label>
+				)}
 				{!stacked && (
 					<label className="flex items-center gap-2 m-2">
 						<select className="m-0" value={lineFilter} onChange={e => setLineFilter(e.target.value)}>
@@ -179,7 +201,7 @@ export const GamesChart = memo(({ days, colors, room }: GamesChartResponse & { r
 							<LineChart data={visibleSlice} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
 								<CartesianGrid strokeDasharray="3 3" />
 								<XAxis dataKey="date" tickFormatter={formatDate} minTickGap={24} />
-								<YAxis allowDecimals={false} domain={[0, yMax || 1]} />
+								<YAxis allowDecimals={smoothed} domain={[0, yMax || 1]} />
 								<Tooltip labelFormatter={date => date as string} />
 								<Legend />
 								{gameTypes.map(type => (
@@ -191,7 +213,7 @@ export const GamesChart = memo(({ days, colors, room }: GamesChartResponse & { r
 							<AreaChart data={visibleSlice} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
 								<CartesianGrid strokeDasharray="3 3" />
 								<XAxis dataKey="date" tickFormatter={formatDate} minTickGap={24} />
-								<YAxis allowDecimals={false} domain={[0, yMax || 1]} />
+								<YAxis allowDecimals={smoothed} domain={[0, yMax || 1]} />
 								<Tooltip labelFormatter={date => date as string} />
 								<Legend />
 								<Area
