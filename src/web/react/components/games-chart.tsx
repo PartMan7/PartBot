@@ -72,12 +72,14 @@ function rebaseFromStart(rows: ChartRow[], gameTypes: string[]): ChartRow[] {
 
 const SMOOTH_RADIUS = 3;
 
-function movingAverage(rows: ChartRow[], gameTypes: string[]): ChartRow[] {
+const smoothKey = (key: string) => `${key}~smooth`;
+
+function withSmoothed(rows: ChartRow[], gameTypes: string[]): ChartRow[] {
 	return rows.map((row, i) => {
 		const window = rows.slice(Math.max(0, i - SMOOTH_RADIUS), i + SMOOTH_RADIUS + 1);
 		const avg = (key: string) => window.reduce((sum, r) => sum + (r[key] as number), 0) / window.length;
-		const next: ChartRow = { date: row.date, total: avg('total') };
-		for (const type of gameTypes) next[type] = avg(type);
+		const next: ChartRow = { ...row, [smoothKey('total')]: avg('total') };
+		for (const type of gameTypes) next[smoothKey(type)] = avg(type);
 		return next;
 	});
 }
@@ -108,7 +110,7 @@ export const GamesChart = memo(({ days, colors, room }: GamesChartResponse & { r
 	useEffect(() => setBrushRange(null), [days]);
 
 	const smoothed = smooth && mode === 'individual' && !stacked;
-	const plotData = useMemo(() => (smoothed ? movingAverage(chartData, gameTypes) : chartData), [smoothed, chartData, gameTypes]);
+	const plotData = useMemo(() => (smoothed ? withSmoothed(chartData, gameTypes) : chartData), [smoothed, chartData, gameTypes]);
 
 	useEffect(() => {
 		if (lineFilter !== 'all' && !gameTypes.includes(lineFilter)) setLineFilter('all');
@@ -201,29 +203,69 @@ export const GamesChart = memo(({ days, colors, room }: GamesChartResponse & { r
 							<LineChart data={visibleSlice} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
 								<CartesianGrid strokeDasharray="3 3" />
 								<XAxis dataKey="date" tickFormatter={formatDate} minTickGap={24} />
-								<YAxis allowDecimals={smoothed} domain={[0, yMax || 1]} />
+								<YAxis allowDecimals={false} domain={[0, yMax || 1]} />
 								<Tooltip labelFormatter={date => date as string} />
 								<Legend />
-								{gameTypes.map(type => (
-									<Line key={type} type="monotone" dataKey={type} stroke={colors[type]} dot={false} name={type} />
-								))}
-								{showTotal && <Line type="monotone" dataKey="total" stroke="#ef4444" strokeWidth={2} dot={false} name="total" />}
+								{[...gameTypes, ...(showTotal ? ['total'] : [])].flatMap(key => {
+									const color = key === 'total' ? '#ef4444' : colors[key];
+									const width = key === 'total' ? 2 : 1;
+									const raw = (
+										<Line key={key} type="monotone" dataKey={key} stroke={color} strokeWidth={width} dot={false} name={key} />
+									);
+									if (!smoothed) return [raw];
+									return [
+										<Line
+											key={smoothKey(key)}
+											type="monotone"
+											dataKey={smoothKey(key)}
+											stroke={color}
+											strokeWidth={width}
+											dot={false}
+											name={key}
+											tooltipType="none"
+										/>,
+										<Line
+											key={key}
+											type="monotone"
+											dataKey={key}
+											stroke={color}
+											strokeOpacity={0}
+											dot={false}
+											activeDot={false}
+											name={key}
+											legendType="none"
+										/>,
+									];
+								})}
 							</LineChart>
 						) : (
 							<AreaChart data={visibleSlice} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>
 								<CartesianGrid strokeDasharray="3 3" />
 								<XAxis dataKey="date" tickFormatter={formatDate} minTickGap={24} />
-								<YAxis allowDecimals={smoothed} domain={[0, yMax || 1]} />
+								<YAxis allowDecimals={false} domain={[0, yMax || 1]} />
 								<Tooltip labelFormatter={date => date as string} />
 								<Legend />
 								<Area
 									type="monotone"
-									dataKey={lineFilter}
+									dataKey={smoothed ? smoothKey(lineFilter) : lineFilter}
 									stroke={colors[lineFilter]}
 									fill={colors[lineFilter]}
 									fillOpacity={1}
 									name={lineFilter}
+									tooltipType={smoothed ? 'none' : undefined}
 								/>
+								{smoothed && (
+									<Area
+										type="monotone"
+										dataKey={lineFilter}
+										stroke={colors[lineFilter]}
+										strokeOpacity={0}
+										fillOpacity={0}
+										activeDot={false}
+										name={lineFilter}
+										legendType="none"
+									/>
+								)}
 							</AreaChart>
 						)}
 					</ResponsiveContainer>
