@@ -34,12 +34,9 @@ function baseCheckPermissions(perm: Exclude<Perms, symbol>, command: string[] | 
 	const isAdmin = admins.includes(message.author.userid);
 	if (isAdmin) return true;
 	if (perm === 'trusted') {
-		if (
-			baseCheckPermissions(['global', 'voice'], command, message) ||
-			(!!message.author.rooms && Object.entries(message.author.rooms).some(isPublicStaff))
-		) {
-			return true;
-		}
+		const globalVoice = baseCheckPermissions(['global', 'voice'], command, message);
+		const publicStaff = !!message.author.rooms && Object.entries(message.author.rooms).some(isPublicStaff);
+		return globalVoice || publicStaff;
 	}
 	// Other overrides are applied only on rank and [scope, rank], not functions
 	switch (typeof perm) {
