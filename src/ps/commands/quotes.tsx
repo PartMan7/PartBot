@@ -146,7 +146,7 @@ function FormatQuoteLine({ line, style, psUsernameTag }: { line: string; style?:
 			<div
 				className="chat chatmessage-partbot"
 				style={style ?? { padding: '3px 0' }}
-				dangerouslySetInnerHTML={{ __html: `<small>${escapeHTML(rawMatch[1] ?? '')}</small>` + formatText(rawMatch[2]) }}
+				dangerouslySetInnerHTML={{ __html: `<small class="gray">${escapeHTML(rawMatch[1] ?? '')}</small>` + formatText(rawMatch[2]) }}
 			/>
 		);
 
