@@ -290,7 +290,7 @@ function MultiQuotes({
 	);
 }
 
-export const command: PSCommand = {
+const quotesCommand: PSCommand = {
 	name: 'quotes',
 	aliases: ['q', 'quote'],
 	flags: { allowPMs: true },
@@ -308,8 +308,8 @@ export const command: PSCommand = {
 			help: null,
 			flags: { noDisplay: true },
 			syntax: 'CMD',
-			async run({ run }) {
-				return run('help quotes');
+			async run({ run, originalCommand }) {
+				return run(`help ${originalCommand}`);
 			},
 		},
 		random: {
@@ -346,13 +346,15 @@ export const command: PSCommand = {
 			name: 'add',
 			aliases: ['new', 'a', 'n'],
 			perms: 'driver',
-			flags: { allowPMs: false },
+			flags: { allowPMs: true },
 			help:
 				'Adds the given quote. ``\\n`` works as a newline, and ``/me`` syntax can be formatted via ' +
 				'wrapping the username in ``[]`` (eg: ``[14:20:21] • #PartMan hugs Hydro`` would be formatted ' +
 				'as ``[14:20:21] • #[PartMan] hugs Hydro``).',
 			syntax: 'CMD [new quote]',
-			async run({ message, arg, broadcastHTML, $T }) {
+			async run({ message, arg, broadcastHTML, room: givenRoom, $T }) {
+				if (message.type === 'pm' && !givenRoom) throw new ChatError($T('ROOM_ONLY_COMMAND'));
+				const room = (givenRoom as string | undefined) ?? message.target.id;
 				const parsedQuote = parseQuote(arg);
 				const addedBy = message.author.name;
 				const at = Temporal.Now.plainDateISO('UTC').toLocaleString('en-GB');
@@ -360,8 +362,8 @@ export const command: PSCommand = {
 				const rendered = jsxToHTML(<FormatQuote quote={parsedQuote} addedBy={addedBy} dateAdded={at} />);
 
 				if (rendered.length > MAX_QUOTE_LENGTH) throw new ChatError($T('COMMANDS.QUOTES.TOO_LONG'));
-				await addQuote(parsedQuote, message.target.id, addedBy);
-				const { length } = await getAllQuotes(message.target.id);
+				await addQuote(parsedQuote, room, addedBy);
+				const { length } = await getAllQuotes(room);
 				broadcastHTML(
 					<>
 						<hr />
@@ -527,13 +529,14 @@ export const command: PSCommand = {
 		delete: {
 			name: 'delete',
 			aliases: ['d', 'x', 'remove'],
-			flags: { allowPMs: false },
+			flags: { allowPMs: true },
 			perms: 'driver',
 			help: 'Deletes the given quote. Accepts either an index or a lookup term (``z`` deletes the last).',
 			syntax: 'CMD [index/term]',
-			async run({ message, arg, broadcast, broadcastHTML, $T }) {
+			async run({ message, arg, broadcast, broadcastHTML, room: givenRoom, $T }) {
+				if (message.type === 'pm' && !givenRoom) throw new ChatError($T('ROOM_ONLY_COMMAND'));
 				if (!arg) throw new ChatError($T('COMMANDS.QUOTES.PROVIDE_INDEX_OR_TERM'));
-				const room = message.target.id;
+				const room = (givenRoom as string | undefined) ?? message.target.id;
 				const quotes = await getAllQuotes(room);
 				if (!quotes.length) return broadcast($T('COMMANDS.QUOTES.NO_QUOTES_FOUND'));
 
@@ -584,7 +587,7 @@ export const command: PSCommand = {
 						throw new ChatError($T('NOT_CONFIRMED'));
 					});
 
-				Logger.deepLog(toDelete, `deleted by ${message.author.name} in ${message.target.title}`);
+				Logger.deepLog(toDelete, `deleted by ${message.author.name} in ${message.target.title ?? room}`);
 				await deleteQuoteByIndex(indexToDelete, toDelete, room);
 				message.reply($T('COMMANDS.QUOTES.DELETED'));
 			},
@@ -610,7 +613,7 @@ export const command: PSCommand = {
 		},
 	},
 	async run({ message, arg, run, room: givenRoom, broadcastHTML, $T }) {
-		if (!arg) return run('quote random');
+		if (!arg) return run('quote random', { room: givenRoom });
 
 		const room: string = await getRoom(givenRoom, message, $T);
 
@@ -641,3 +644,18 @@ export const command: PSCommand = {
 		return run(`quote random ${arg}`, { room });
 	},
 };
+
+const pqCommand: PSCommand = {
+	name: 'personalquote',
+	help: 'A user-level quotes module (see the quotes command for more info).',
+	syntax: 'CMD [quote subcommand]',
+	perms: 'trusted',
+	aliases: ['pq', 'personalquotes'],
+	flags: { pmOnly: true },
+	categories: ['utility'],
+	async run({ message, arg, unsafeRun }) {
+		return unsafeRun(`quote ${arg}`, { room: `personal-${message.author.id}` });
+	},
+};
+
+export const command: PSCommand[] = [quotesCommand, pqCommand];
