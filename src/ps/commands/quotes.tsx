@@ -659,3 +659,49 @@ const pqCommand: PSCommand = {
 };
 
 export const command: PSCommand[] = [quotesCommand, pqCommand];
+
+const GRAY = 'color:#888;font-weight:normal;font-size:8pt';
+const EM = 'style="font-style:normal;padding:0 4px 0 3px"';
+
+function quoteLineToHTML(line: string): string {
+	const row = (inner: string) => `<div style="padding:3px 0;font-size:9pt">${inner}</div>`;
+
+	const chatMatch = line.match(chatRegEx);
+	if (chatMatch) {
+		const msg = formatText(' ' + chatMatch[4]);
+		const body = chatMatch[4].startsWith('>') ? `<span style="color:#187902">${msg}</span>` : msg;
+		return row(
+			`<small style="${GRAY}">${escapeHTML((chatMatch[1] ?? '') + chatMatch[2])}</small>` +
+				`${jsxToHTML(<UsernameCustom name={`${chatMatch[3]}:`} />)}<em ${EM}>${body}</em>`
+		);
+	}
+
+	const meMatch = line.match(meRegEx);
+	if (meMatch) {
+		return row(
+			`<small style="${GRAY}">${escapeHTML(meMatch[1] ?? '')}</small>${jsxToHTML(<UsernameCustom name={meMatch[3]}>• </UsernameCustom>)}` +
+				`<em ${EM}><small style="${GRAY}">` +
+				`${escapeHTML(meMatch[2])}</small>${jsxToHTML(<UsernameCustom name={meMatch[3]}>{meMatch[3].slice(1, -1)}</UsernameCustom>)}` +
+				`${formatText(' ' + meMatch[4])}</em>`
+		);
+	}
+
+	if (jnlRegEx.test(line)) return row(`<small style="color:#555;font-size:8pt">${escapeHTML(line)}</small>`);
+
+	const rawMatch = line.match(rawRegEx);
+	return rawMatch ? row(`<small style="${GRAY}">${escapeHTML(rawMatch[1] ?? '')}</small>${formatText(rawMatch[2])}`) : '';
+}
+
+function formatQuote(quote: QuoteModel): string {
+	const lines = quote.quote.split('\n').map(quoteLineToHTML);
+	const body =
+		lines.length > 5
+			? `<details><summary>${lines.slice(0, 3).join('')}</summary>${lines.slice(3).join('')}</details>`
+			: lines.join('');
+	return body;
+}
+
+export function hydrateQuote(quote: QuoteModel | null): (QuoteModel & { html: string }) | null {
+	if (!quote) return null;
+	return { ...quote, html: formatQuote(quote) };
+}
