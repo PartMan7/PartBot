@@ -18,7 +18,12 @@ export const command: PSCommand = {
 			originalCommand: [originalCommand],
 			$T,
 		} = context;
-		const res = await evaluate(arg, originalCommand === 'exec' ? 'ABBR_OUTPUT' : 'COLOR_OUTPUT_HTML', { message, context });
+
+		const code = arg.trim();
+		const isShellCommand = /^\$(?!T)/.test(code);
+		const outputMode = originalCommand === 'exec' ? 'ABBR_OUTPUT' : isShellCommand ? 'SHELL_OUTPUT' : 'COLOR_OUTPUT_HTML';
+
+		const res = await evaluate(arg, outputMode, { message, context });
 		if (originalCommand !== 'exec') {
 			let outputHTML = res.output;
 			if (outputHTML.length > MAX_CHAT_HTML_LENGTH) {
@@ -30,8 +35,9 @@ export const command: PSCommand = {
 				}
 				outputHTML = `${trimmedOutput.join('')} ...`;
 			}
+			const Wrapper = isShellCommand ? 'pre' : 'div';
 			const WrappedHTML = (
-				<div
+				<Wrapper
 					style={{ overflow: 'auto', maxHeight: '40vh', marginTop: originalCommand === 'eval' ? 20 : undefined }}
 					dangerouslySetInnerHTML={{ __html: outputHTML }}
 				/>

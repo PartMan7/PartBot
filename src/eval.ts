@@ -42,26 +42,31 @@ const E: Record<string, unknown> = {};
 // Storing in context for eval()
 const _evalContext = [cache, cachebust, fs, fsSync, fsPath, path, toId, $, Sentinel, E, jsxToHTML, paste, Dex, PS, Discord];
 
-export type EvalModes = 'COLOR_OUTPUT_HTML' | 'COLOR_OUTPUT_ANSI' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
+export type EvalModes = 'COLOR_OUTPUT_HTML' | 'COLOR_OUTPUT_ANSI' | 'SHELL_OUTPUT' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
 export type EvalOutput = {
 	success: boolean;
 	output: string;
 };
 
+function HTMLify(value: unknown): string {
+	return String(value)
+		.replace(/\t/g, '&nbsp;'.repeat(4)) // Fill out tabs
+		.replace(/ (?= |$)/g, '&nbsp;') // Fill out multi-spaces
+		.replace(/\n/g, '<br/>'); // Fill out newlines
+}
+
 export function formatValue(value: unknown, mode: EvalModes): string {
 	switch (mode) {
+		case 'SHELL_OUTPUT': {
+			return HTMLify(value);
+		}
 		case 'COLOR_OUTPUT_ANSI':
 		case 'COLOR_OUTPUT_HTML':
 		case 'FULL_OUTPUT': {
 			const color = mode === 'COLOR_OUTPUT_HTML' || mode === 'COLOR_OUTPUT_ANSI';
 			// TODO Stringify functions and render with syntax highlighting
 			const inspection = inspect(value, { depth: 2, colors: color, numericSeparator: true });
-			return mode === 'COLOR_OUTPUT_HTML'
-				? ansiToHtml(inspection)
-						.replace(/\t/g, '&nbsp;'.repeat(4)) // Fill out tabs
-						.replace(/ (?= |$)/g, '&nbsp;') // Fill out multi-spaces
-						.replace(/\n/g, '<br/>') // Fill out newlines
-				: inspection;
+			return mode === 'COLOR_OUTPUT_HTML' ? HTMLify(ansiToHtml(inspection)) : inspection;
 		}
 		case 'ABBR_OUTPUT': {
 			if (value instanceof Error) return value.message;
