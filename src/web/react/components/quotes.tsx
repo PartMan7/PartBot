@@ -24,7 +24,7 @@ const quoteStyle: CSSProperties = {
 	border: '2px double white',
 	borderRadius: 7,
 	padding: 10,
-	background: 'rgba(0,0,0,.7)',
+	background: 'rgba(0,0,0,.8)',
 	margin: 10,
 	wordWrap: 'break-word',
 };
@@ -48,6 +48,7 @@ const linkStyle: CSSProperties = {
 export function Quotes({ quotes, room, random }: { quotes: QuoteResponse[]; room: string; random: boolean }): ReactElement {
 	return (
 		<div style={pageStyle}>
+			<link rel="stylesheet" href="/api/quotes/styles.css" />
 			<div style={scrollStyle}>
 				<p style={{ margin: '0 10px 10px' }}>
 					{random ? (
