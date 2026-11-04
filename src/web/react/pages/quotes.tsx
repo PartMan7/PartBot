@@ -11,7 +11,7 @@ const root = createRoot(container);
 const parts = window.location.pathname.split('/').filter(Boolean);
 const random = parts.at(-1) === 'random';
 const room = random ? parts.at(-2)! : parts.at(-1)!;
-fetch(`/api/quotes/${room}${random ? '/random' : ''}`)
+fetch(`/api/quotes/${room}${random ? `/random${window.location.search}` : ''}`)
 	.then(res => {
 		if (!res.ok) throw new Error(`Failed to load quotes (${res.status})`);
 		return res.json();

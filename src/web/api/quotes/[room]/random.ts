@@ -11,5 +11,8 @@ export const handler: RequestHandler = async (req, res) => {
 	const { room } = req.params as { room: string };
 	const quotes = await getAllQuotes(room);
 	if (!quotes.length) throw new WebError(404);
-	res.json(hydrateQuote(quotes.random()));
+	const indexed = quotes.map((quote, i) => ({ ...quote, index: i + 1 }));
+	const last = Number(req.query.last);
+	const choices = indexed.filter(({ index }) => index !== last);
+	res.json(hydrateQuote((choices.length ? choices : indexed).random()));
 };

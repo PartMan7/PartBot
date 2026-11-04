@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactElement } from 'react';
 
-export type QuoteResponse = { html: string };
+export type QuoteResponse = { html: string; index?: number };
 
 const pageStyle: CSSProperties = {
 	backgroundImage: "url('https://play.pokemonshowdown.com/fx/client-bg-shaymin.jpg')",
@@ -53,7 +53,7 @@ export function Quotes({ quotes, room, random }: { quotes: QuoteResponse[]; room
 				<p style={{ margin: '0 10px 10px' }}>
 					{random ? (
 						<>
-							<a style={linkStyle} href={`/quotes/${room}/random`}>
+							<a style={linkStyle} href={`/quotes/${room}/random?last=${quotes[0].index}`}>
 								Another one
 							</a>{' '}
 							·{' '}
@@ -69,7 +69,7 @@ export function Quotes({ quotes, room, random }: { quotes: QuoteResponse[]; room
 				</p>
 				{quotes.map((quote, i) => (
 					<div key={i}>
-						{!random && <span style={numStyle}>{i + 1})</span>}
+						<span style={numStyle}>{quote.index ?? i + 1})</span>
 						<div style={quoteStyle} dangerouslySetInnerHTML={{ __html: quote.html }} />
 						{i < quotes.length - 1 && <hr />}
 					</div>
