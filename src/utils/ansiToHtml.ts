@@ -3,6 +3,8 @@ import { escapeHTML } from 'ps-client/tools';
 const bold = Object.entries({
 	'\x1B[1m': '<b>',
 	'\x1B[22m': '</b>',
+	'\x1B[4m': '<u>',
+	'\x1B[24m': '</u>',
 });
 
 const colours = Object.entries({
