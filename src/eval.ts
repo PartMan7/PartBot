@@ -5,6 +5,8 @@ import _path from 'path';
 import { inspect } from 'util';
 
 import * as _cache from '@/cache';
+import Discord from '@/discord';
+import PS from '@/ps';
 import { pokedex } from '@/ps/datacenters';
 import _Sentinel from '@/sentinel';
 import { ansiToHtml } from '@/utils/ansiToHtml';
@@ -38,7 +40,7 @@ const Dex = pokedex;
 const E: Record<string, unknown> = {};
 
 // Storing in context for eval()
-const _evalContext = [cache, cachebust, fs, fsSync, fsPath, path, toId, $, Sentinel, E, jsxToHTML, paste, Dex];
+const _evalContext = [cache, cachebust, fs, fsSync, fsPath, path, toId, $, Sentinel, E, jsxToHTML, paste, Dex, PS, Discord];
 
 export type EvalModes = 'COLOR_OUTPUT_HTML' | 'COLOR_OUTPUT_ANSI' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
 export type EvalOutput = {
@@ -117,7 +119,7 @@ export async function evaluate(
 ): Promise<EvalOutput> {
 	let success: boolean, value: unknown;
 	try {
-		const res = await (() => {
+		const res = await (async () => {
 			const { message, context } = passedContext;
 			const { log, deepLog, errorLog } = Logger;
 			// Storing in context for eval()
