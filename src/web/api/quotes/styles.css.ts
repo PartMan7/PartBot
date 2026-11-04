@@ -1,3 +1,4 @@
+import type { APIRoute } from '@/types/web';
 import type { RequestHandler } from 'express';
 
 const css = `
@@ -58,6 +59,8 @@ const css = `
 	}
 }
 `;
+
+export const headers = [['Access-Control-Allow-Origin', '*']] satisfies APIRoute['headers'];
 
 export const handler: RequestHandler = (_req, res) => {
 	res.type('css').send(css);

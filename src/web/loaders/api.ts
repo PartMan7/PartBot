@@ -13,7 +13,10 @@ export default async function init(app: Application): Promise<void> {
 	await Promise.all(
 		Object.entries(routes).map(async ([urlPath, filepath]) => {
 			const route: APIRoute = await import(filepath);
-			router[route.verb ?? 'get'](urlPath, route.handler);
+			router[route.verb ?? 'get'](urlPath, (req, res, next) => {
+				route.headers?.forEach(([name, value]) => res.setHeader(name, value));
+				return route.handler(req, res, next);
+			});
 		})
 	);
 

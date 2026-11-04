@@ -11,6 +11,7 @@ export type UIRouteHandler = (
 export type APIRoute = {
 	handler: (req: Request, res: Response, next: NextFunction) => void;
 	verb?: 'get' | 'post';
+	headers?: [name: string, value: string][];
 };
 
 export type UIRoute = {

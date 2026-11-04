@@ -16,7 +16,6 @@ const app = express();
 
 app.use(urlencoded({ extended: true }));
 app.use(json());
-
 let server: Promise<Server> | null = null;
 
 if (IS_ENABLED.WEB) {
