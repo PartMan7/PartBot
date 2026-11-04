@@ -93,22 +93,39 @@ function parseQuote(quote: string): string {
 		.join('\n');
 }
 
-function FormatQuoteLine({ line, style, psUsernameTag }: { line: string; style?: CSSProperties; psUsernameTag?: boolean }): ReactNode {
+function FormatQuoteLine({
+	line,
+	style,
+	psUsernameTag,
+	embeddable,
+}: {
+	line: string;
+	style?: CSSProperties;
+	psUsernameTag?: boolean;
+	embeddable?: boolean | undefined;
+}): ReactNode {
+	const cls = (name: string) => (embeddable ? undefined : name);
+	const rowStyle: CSSProperties = { ...(style ?? { padding: '3px 0' }), ...(embeddable && { fontSize: '9pt' }) };
+	const grayStyle: CSSProperties | undefined = embeddable ? { color: '#888', fontWeight: 'normal', fontSize: '8pt' } : undefined;
+	const emStyle: CSSProperties | undefined = embeddable ? { fontStyle: 'normal', padding: '0 4px 0 3px' } : undefined;
 	const chatMatch = line.match(chatRegEx);
 	if (chatMatch) {
 		const chatMessage = formatText(' ' + chatMatch[4]);
 		return (
-			<div className="chat chatmessage-a" style={style ?? { padding: '3px 0' }}>
-				<small className="gray">
+			<div className={cls('chat chatmessage-a')} style={rowStyle}>
+				<small className={cls('gray')} style={grayStyle}>
 					{chatMatch[1]}
 					{chatMatch[2]}
 				</small>
-				<span className="username">
+				<span className={cls('username')}>
 					{psUsernameTag ? <UsernamePS name={`${chatMatch[3]}:`} /> : <UsernameCustom name={`${chatMatch[3]}:`} />}
 				</span>
 				<em
+					style={emStyle}
 					dangerouslySetInnerHTML={{
-						__html: chatMatch[4].startsWith('>') ? `<span class="greentext">${chatMessage}</span>` : chatMessage,
+						__html: chatMatch[4].startsWith('>')
+							? `<span ${embeddable ? 'style="color:#187902"' : 'class="greentext"'}>${chatMessage}</span>`
+							: chatMessage,
 					}}
 				/>
 			</div>
@@ -118,12 +135,16 @@ function FormatQuoteLine({ line, style, psUsernameTag }: { line: string; style?:
 	const meMatch = line.match(meRegEx);
 	if (meMatch)
 		return (
-			<div className={`chat chatmessage-${toId(meMatch[3])}`} style={style ?? { padding: '3px 0' }}>
-				<small className="gray">{meMatch[1]}</small>
+			<div className={cls(`chat chatmessage-${toId(meMatch[3])}`)} style={rowStyle}>
+				<small className={cls('gray')} style={grayStyle}>
+					{meMatch[1]}
+				</small>
 				<UsernameCustom name={meMatch[3]}>• </UsernameCustom>
-				<em>
-					<small className="gray">{meMatch[2]}</small>
-					<span className="username">{meMatch[3].slice(1, -1)}</span>
+				<em style={emStyle}>
+					<small className={cls('gray')} style={grayStyle}>
+						{meMatch[2]}
+					</small>
+					<span className={cls('username')}>{meMatch[3].slice(1, -1)}</span>
 					<i dangerouslySetInnerHTML={{ __html: formatText(' ' + meMatch[4]) }} />
 				</em>
 			</div>
@@ -132,8 +153,8 @@ function FormatQuoteLine({ line, style, psUsernameTag }: { line: string; style?:
 	const jnlMatch = line.match(jnlRegEx);
 	if (jnlMatch)
 		return (
-			<div className="message" style={style ?? { padding: '3px 0' }}>
-				<small style={{ color: '#555555' }}>
+			<div className={cls('message')} style={rowStyle}>
+				<small style={{ color: '#888' }}>
 					{jnlMatch[0]}
 					<br />
 				</small>
@@ -144,9 +165,15 @@ function FormatQuoteLine({ line, style, psUsernameTag }: { line: string; style?:
 	if (rawMatch)
 		return (
 			<div
-				className="chat chatmessage-partbot"
-				style={style ?? { padding: '3px 0' }}
-				dangerouslySetInnerHTML={{ __html: `<small class="gray">${escapeHTML(rawMatch[1] ?? '')}</small>` + formatText(rawMatch[2]) }}
+				className={cls('chat chatmessage-partbot')}
+				style={rowStyle}
+				dangerouslySetInnerHTML={{
+					__html:
+						`<small ${embeddable ? 'style="color:#888;font-weight:normal;font-size:8pt"' : 'class="gray"'}>` +
+						escapeHTML(rawMatch[1] ?? '') +
+						`</small>` +
+						formatText(rawMatch[2]),
+				}}
 			/>
 		);
 
@@ -156,12 +183,15 @@ function FormatQuoteLine({ line, style, psUsernameTag }: { line: string; style?:
 function FormatQuote({
 	quote,
 	psUsernameTag = true,
+	embeddable,
 	header,
 	addedBy,
 	dateAdded,
 }: {
 	quote: string;
 	psUsernameTag?: boolean;
+	/** Whether to use inline styles instead of CSS classes */
+	embeddable?: boolean;
 	addedBy?: string;
 	dateAdded?: string;
 	header?: ReactNode;
@@ -173,23 +203,24 @@ function FormatQuote({
 			<div style={{ opacity: 0.78 }}>{header}</div>
 			<div style={{ marginLeft: 12 }}>
 				{quoteLines.length > 5 ? (
-					<details className="readmore">
+					<details className={embeddable ? undefined : 'readmore'}>
 						<summary>
 							{quoteLines.slice(0, 2).map(line => (
-								<FormatQuoteLine line={line} psUsernameTag={psUsernameTag} />
+								<FormatQuoteLine line={line} psUsernameTag={psUsernameTag} embeddable={embeddable} />
 							))}
 							<FormatQuoteLine
 								line={quoteLines[2]}
 								psUsernameTag={psUsernameTag}
+								embeddable={embeddable}
 								style={{ padding: '3px 0', display: 'inline-block' }}
 							/>
 						</summary>
 						{quoteLines.slice(3).map(line => (
-							<FormatQuoteLine line={line} psUsernameTag={psUsernameTag} />
+							<FormatQuoteLine line={line} psUsernameTag={psUsernameTag} embeddable={embeddable} />
 						))}
 					</details>
 				) : (
-					quoteLines.map(line => <FormatQuoteLine line={line} psUsernameTag={psUsernameTag} />)
+					quoteLines.map(line => <FormatQuoteLine line={line} psUsernameTag={psUsernameTag} embeddable={embeddable} />)
 				)}
 			</div>
 			{addedBy && dateAdded && (
@@ -660,48 +691,7 @@ const pqCommand: PSCommand = {
 
 export const command: PSCommand[] = [quotesCommand, pqCommand];
 
-const GRAY = 'color:#888;font-weight:normal;font-size:8pt';
-const EM = 'style="font-style:normal;padding:0 4px 0 3px"';
-
-function quoteLineToHTML(line: string): string {
-	const row = (inner: string) => `<div style="padding:3px 0;font-size:9pt">${inner}</div>`;
-
-	const chatMatch = line.match(chatRegEx);
-	if (chatMatch) {
-		const msg = formatText(' ' + chatMatch[4]);
-		const body = chatMatch[4].startsWith('>') ? `<span style="color:#187902">${msg}</span>` : msg;
-		return row(
-			`<small style="${GRAY}">${escapeHTML((chatMatch[1] ?? '') + chatMatch[2])}</small>` +
-				`${jsxToHTML(<UsernameCustom name={`${chatMatch[3]}:`} />)}<em ${EM}>${body}</em>`
-		);
-	}
-
-	const meMatch = line.match(meRegEx);
-	if (meMatch) {
-		return row(
-			`<small style="${GRAY}">${escapeHTML(meMatch[1] ?? '')}</small>${jsxToHTML(<UsernameCustom name={meMatch[3]}>• </UsernameCustom>)}` +
-				`<em ${EM}><small style="${GRAY}">` +
-				`${escapeHTML(meMatch[2])}</small>${jsxToHTML(<UsernameCustom name={meMatch[3]}>{meMatch[3].slice(1, -1)}</UsernameCustom>)}` +
-				`${formatText(' ' + meMatch[4])}</em>`
-		);
-	}
-
-	if (jnlRegEx.test(line)) return row(`<small style="color:#555;font-size:8pt">${escapeHTML(line)}</small>`);
-
-	const rawMatch = line.match(rawRegEx);
-	return rawMatch ? row(`<small style="${GRAY}">${escapeHTML(rawMatch[1] ?? '')}</small>${formatText(rawMatch[2])}`) : '';
-}
-
-function formatQuote(quote: QuoteModel): string {
-	const lines = quote.quote.split('\n').map(quoteLineToHTML);
-	const body =
-		lines.length > 5
-			? `<details><summary>${lines.slice(0, 3).join('')}</summary>${lines.slice(3).join('')}</details>`
-			: lines.join('');
-	return body;
-}
-
 export function hydrateQuote(quote: QuoteModel | null): (QuoteModel & { html: string }) | null {
 	if (!quote) return null;
-	return { ...quote, html: formatQuote(quote) };
+	return { ...quote, html: jsxToHTML(<FormatQuote quote={quote.quote} psUsernameTag={false} embeddable />) };
 }
