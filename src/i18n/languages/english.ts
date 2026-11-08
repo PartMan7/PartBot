@@ -339,6 +339,7 @@ export default {
 
 		QUOTES: {
 			TOO_LONG: 'Quote is too long.',
+			PROVIDE_QUOTE: 'Please provide a quote.',
 			PROVIDE_SEARCH: 'Please provide a search term.',
 			INVALID_PAGE: 'Invalid page number.',
 			COUNT_SINGULAR: 'There is {{count}} quote in this room.',

@@ -326,6 +326,7 @@ export default {
 
 		QUOTES: {
 			TOO_LONG: 'Quote bahut lamba hai.',
+			PROVIDE_QUOTE: 'Quote dijiye.',
 			PROVIDE_SEARCH: 'Search term dijiye.',
 			INVALID_PAGE: 'Galat page number.',
 			COUNT_SINGULAR: 'Is room mein {{count}} quote hai.',

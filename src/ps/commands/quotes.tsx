@@ -77,7 +77,7 @@ function searchQuotes(quotes: IndexedQuoteModel[], arg: string): IndexedQuoteMod
 }
 
 function parseQuote(quote: string): string {
-	const lines = quote.trim().split(/ {3}|\\n|\n/);
+	const lines = quote.trim().split(/ {3}|\\n ?|\n/);
 	const foundNames = lines
 		.map(line => line.match(chatRegEx)?.[3])
 		.filter((name): name is string => !!name)
@@ -358,6 +358,7 @@ const quotesCommand: PSCommand = {
 			async run({ message, arg, broadcastHTML, room: givenRoom, $T }) {
 				if (message.type === 'pm' && !givenRoom) throw new ChatError($T('ROOM_ONLY_COMMAND'));
 				const room = (givenRoom as string | undefined) ?? message.target.id;
+				if (!arg) throw new ChatError($T('COMMANDS.QUOTES.PROVIDE_QUOTE'));
 				const parsedQuote = parseQuote(arg);
 				const addedBy = message.author.name;
 				const at = Temporal.Now.plainDateISO('UTC').toLocaleString('en-GB');

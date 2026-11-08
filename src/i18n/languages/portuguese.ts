@@ -337,6 +337,7 @@ export default {
 
 		QUOTES: {
 			TOO_LONG: 'A citação é muito longa.',
+			PROVIDE_QUOTE: 'Por favor, forneça uma citação.',
 			PROVIDE_SEARCH: 'Por favor, forneça um termo de busca.',
 			INVALID_PAGE: 'Número de página inválido.',
 			COUNT_SINGULAR: 'Há {{count}} citação nesta sala.',
