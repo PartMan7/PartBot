@@ -2,6 +2,7 @@ import { PSEggs } from '@/cache';
 import { prefix } from '@/config/ps';
 import { i18n } from '@/i18n';
 import { getLanguage } from '@/i18n/language';
+import getSecretFunction from '@/secrets/functions';
 import { ChatError } from '@/utils/chatError';
 import { fromHumanTime } from '@/utils/humanTime';
 import { sample } from '@/utils/random';
@@ -11,6 +12,8 @@ import { toId } from '@/utils/toId';
 import type { NoTranslate, PSMessageTranslated, TranslationFn } from '@/i18n/types';
 import type { PSCommand } from '@/types/chat';
 import type { Room, User } from 'ps-client';
+
+const getHiddenEggRooms = getSecretFunction('getHiddenEggRooms', () => []);
 
 function validateUser(message: PSMessageTranslated, targetId: string, $T: TranslationFn): User {
 	if (!targetId) throw new ChatError($T('INVALID_ARGUMENTS'));
@@ -50,7 +53,7 @@ export const command: PSCommand = {
 	aliases: ['toss'],
 	categories: ['casual'],
 	cooldown: fromHumanTime('30 min'),
-	rooms: ['boardgames'],
+	rooms: ['boardgames', ...getHiddenEggRooms()],
 	skipCooldown(message) {
 		return message.type === 'chat' && PSEggs[message.target.id] !== undefined;
 	},
