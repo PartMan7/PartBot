@@ -1,6 +1,7 @@
 import type { Perms } from '@/types/perms';
 
 export const GROUPED_PERMS = {
+	[Symbol.for('games.1p')]: 'regular',
 	[Symbol.for('games.create')]: 'whitelist',
 	[Symbol.for('games.manage')]: 'driver',
 

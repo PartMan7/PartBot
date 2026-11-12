@@ -264,7 +264,7 @@ export const command: PSCommand[] = Object.entries(Games).map(([_gameId, Game]):
 				aliases: ['new', 'n'],
 				help: 'Creates a new game.',
 				syntax: 'CMD [mods?]',
-				perms: Game.meta.players === 'single' ? 'regular' : Symbol.for('games.create'),
+				perms: Game.meta.players === 'single' ? Symbol.for('games.1p') : Symbol.for('games.create'),
 				async run({ message, args, $T }) {
 					if (message.type === 'pm') throw new ChatError($T('GAME.NO_DMS'));
 					if (Game.meta.players === 'single') {
