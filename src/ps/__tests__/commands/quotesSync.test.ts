@@ -1,3 +1,4 @@
+import { Client } from 'ps-client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { PSRoomConfigs } from '@/cache';
@@ -9,7 +10,7 @@ import { otherHandler } from '@/ps/handlers/other';
 import {
 	htmlToPSQuote,
 	isPSQuoteAddMessage,
-	pageHtmlHandler,
+	packetHandler,
 	parsePSQuotesHTML,
 	parsePSTimestamp,
 	syncRoomQuotes,
@@ -20,8 +21,12 @@ import { jsxToHTML } from '@/utils/jsxToHTML';
 import type { NoTranslate } from '@/i18n/types';
 import type { PSCommandContext } from '@/types/chat';
 import type { PSMessage } from '@/types/ps';
-import type { Client } from 'ps-client';
 import type { ReactElement } from 'react';
+
+function emitPSPagePacket(client: Client, room: string, lines: string[]): void {
+	const frame = `a${JSON.stringify([`>${room}\n${lines.join('\n')}`])}`;
+	packetHandler.call(client, 'in', frame);
+}
 
 function createFakePSClient() {
 	const sent: string[] = [];
@@ -108,7 +113,7 @@ describe('PS quotes sync integration', () => {
 			'<div class="infobox">#2: [14:25:00] • #Part Man hugs Hydro<br /><hr />' +
 			'<small>Added by hydro on 2025-10-31 02:25:00pm</small></div>' +
 			'</div>';
-		pageHtmlHandler.call(client, 'view-quotes-boardgames', pageHtml, false);
+		emitPSPagePacket(client, 'view-quotes-boardgames', ['|init|html', '|title|[Quotes]', `|pagehtml|${pageHtml}`]);
 
 		const result = await syncPromise;
 		expect(sent).toContain('|/leave view-quotes-boardgames');
@@ -116,6 +121,34 @@ describe('PS quotes sync integration', () => {
 		expect(replaceSpy.mock.calls[0][0]).toBe('boardgames');
 		expect(replaceSpy.mock.calls[0][1][1].quote).toBe('[14:25:00] • #[Part Man] hugs Hydro');
 		expect(result).toEqual([]);
+	});
+
+	it('works through a real ps-client Client with scrollback disabled and rejects on noinit', async () => {
+		const replaceSpy = vi.spyOn(QuotesDB, 'replaceRoomQuotes').mockResolvedValue([]);
+		const psClient = new Client({ username: 'PartBot', rooms: [], handle: null as unknown as false });
+		psClient.rooms = new Map();
+		psClient.users = new Map();
+		const sent: string[] = [];
+		vi.spyOn(psClient, 'send').mockImplementation((raw: string) => {
+			sent.push(raw);
+		});
+		psClient.on('packet', (dir, data) => packetHandler.call(psClient, dir, data));
+
+		const syncPromise = syncRoomQuotes(psClient, 'boardgames');
+		const frame = `a${JSON.stringify([
+			'>view-quotes-boardgames\n|init|html\n|title|[Quotes]\n|pagehtml|<div class="pad"><h2>This room has no quotes.</h2></div>',
+		])}`;
+		psClient.emit('packet', 'in', frame);
+		(psClient as unknown as { receive: (msg: string) => void }).receive(frame);
+
+		await syncPromise;
+		expect(replaceSpy).toHaveBeenCalledWith('boardgames', []);
+		expect(sent).toContain('|/join view-quotes-boardgames');
+		expect(sent).toContain('|/leave view-quotes-boardgames');
+
+		const failPromise = syncRoomQuotes(psClient, 'secretroom');
+		emitPSPagePacket(psClient, 'view-quotes-secretroom', ['|noinit|nonexistent|']);
+		await expect(failPromise).rejects.toThrow(/Unable to open view-quotes-secretroom/);
 	});
 
 	it('detects PS quote-added messages and triggers sync only when quoteSync is enabled', () => {
@@ -142,7 +175,7 @@ describe('PS quotes sync integration', () => {
 		expect(sent).toEqual(['|/join view-quotes-boardgames']);
 
 		// Complete pending waiter so it doesn't linger
-		pageHtmlHandler.call(client, 'view-quotes-boardgames', '<div class="pad"><h2>This room has no quotes.</h2></div>', false);
+		emitPSPagePacket(client, 'view-quotes-boardgames', ['|pagehtml|<div class="pad"><h2>This room has no quotes.</h2></div>']);
 	});
 
 	it('blocks direct quote add in quoteSync rooms and sends an HTML button to add on PS', async () => {
@@ -224,13 +257,11 @@ describe('PS quotes sync integration', () => {
 		]);
 
 		const runPromise = quoteCmd.children!.sync.run(ctx);
-		pageHtmlHandler.call(
-			client,
-			'view-quotes-boardgames',
-			'<div class="pad"><h2>Quotes for Board Games (1):</h2><div class="infobox">#1: test<br /><hr />' +
+		emitPSPagePacket(client, 'view-quotes-boardgames', [
+			'|init|html',
+			'|pagehtml|<div class="pad"><h2>Quotes for Board Games (1):</h2><div class="infobox">#1: test<br /><hr />' +
 				'<small>Added by partman on 2025-10-31 02:20:21pm</small></div></div>',
-			false
-		);
+		]);
 		await runPromise;
 
 		expect(replies).toEqual([mockT('COMMANDS.QUOTES.SYNCED_SINGULAR', { count: 1 })]);

@@ -24,7 +24,7 @@ PS.on('name', registerEvent(PS, 'nickHandler'));
 PS.on('leave', registerEvent(PS, 'leaveHandler'));
 PS.on('notify', registerEvent(PS, 'notifyHandler'));
 PS.on('raw', registerEvent(PS, 'rawHandler'));
-PS.on('pagehtml', registerEvent(PS, 'pageHtmlHandler'));
+PS.on('packet', registerEvent(PS, 'packetHandler'));
 PS.on('tournament', registerEvent(PS, 'tourHandler'));
 
 PS.on('chatError', (room, error) => Logger.log(`${room}: ${error}`));

@@ -139,8 +139,7 @@ export function isPSQuoteAddMessage(content: string): boolean {
 	return PS_QUOTE_EVENT_REGEX.test(content.trim());
 }
 
-export function pageHtmlHandler(this: Client, room: string, html: string, isIntro: boolean): void {
-	if (isIntro) return;
+function resolvePageWaiters(client: Client, room: string, html: string): void {
 	const waiters = pendingPageWaiters.get(room);
 	if (!waiters?.length) return;
 	pendingPageWaiters.delete(room);
@@ -148,7 +147,46 @@ export function pageHtmlHandler(this: Client, room: string, html: string, isIntr
 		clearTimeout(waiter.timer);
 		waiter.resolve(html);
 	}
-	this.send(`|/leave ${room}`);
+	client.send(`|/leave ${room}`);
+}
+
+function rejectPageWaiters(room: string, err: Error): void {
+	const waiters = pendingPageWaiters.get(room);
+	if (!waiters?.length) return;
+	pendingPageWaiters.delete(room);
+	for (const waiter of waiters) {
+		clearTimeout(waiter.timer);
+		waiter.reject(err);
+	}
+}
+
+export function packetHandler(this: Client, direction: 'in' | 'out', data: string): void {
+	if (direction !== 'in' || pendingPageWaiters.size === 0 || !data.startsWith('a')) return;
+	let chunks: unknown;
+	try {
+		chunks = JSON.parse(data.slice(1));
+	} catch {
+		return;
+	}
+	if (!Array.isArray(chunks)) return;
+
+	for (const chunk of chunks) {
+		if (typeof chunk !== 'string' || !chunk) continue;
+		const lines = chunk.split('\n');
+		const room = lines[0]?.startsWith('>') ? lines.shift()!.slice(1) || 'lobby' : 'lobby';
+		if (!pendingPageWaiters.has(room)) continue;
+
+		for (const line of lines) {
+			if (line.startsWith('|pagehtml|')) {
+				resolvePageWaiters(this, room, line.slice('|pagehtml|'.length));
+				break;
+			}
+			if (line.startsWith('|noinit|')) {
+				rejectPageWaiters(room, new Error(`Unable to open ${room}: ${line.slice('|noinit|'.length)}`));
+				break;
+			}
+		}
+	}
 }
 
 function requestQuotesPage(client: Client, roomId: string): Promise<string> {
