@@ -34,6 +34,11 @@ const getCommand = (baseCmd: string, message: PSMessage, room: string) => {
 const jnlRegEx = /^(?:.*? (?:joined|left)(?:; )?){1,2}$/;
 const rawRegEx = /^(\[(?:\d{2}:){1,2}\d{2}] )?(.*)$/;
 
+function resolveTargetRoom(givenRoom: unknown, message: PSMessage, $T: TranslationFn): string {
+	if (message.type === 'pm' && !givenRoom) throw new ChatError($T('ROOM_ONLY_COMMAND'));
+	return (givenRoom as string | undefined) ?? message.target.id;
+}
+
 async function getRoom(givenRoom: unknown, message: PSMessage, $T: TranslationFn): Promise<string> {
 	if (typeof givenRoom === 'string') return givenRoom;
 	if (message.type === 'chat') return message.target.roomid;
@@ -335,8 +340,7 @@ const quotesCommand: PSCommand = {
 				'as ``[14:20:21] • #[PartMan] hugs Hydro``).',
 			syntax: 'CMD [new quote]',
 			async run({ message, arg, broadcastHTML, room: givenRoom, $T }) {
-				if (message.type === 'pm' && !givenRoom) throw new ChatError($T('ROOM_ONLY_COMMAND'));
-				const room = (givenRoom as string | undefined) ?? message.target.id;
+				const room = resolveTargetRoom(givenRoom, message, $T);
 				if (!arg) throw new ChatError($T('COMMANDS.QUOTES.PROVIDE_QUOTE'));
 				if (PSRoomConfigs[room]?.quoteSync) {
 					const psQuote = arg.trim().replace(/\r?\n|\\n ?/g, ' ');
@@ -529,9 +533,8 @@ const quotesCommand: PSCommand = {
 			help: 'Deletes the given quote. Accepts either an index or a lookup term (``z`` deletes the last).',
 			syntax: 'CMD [index/term]',
 			async run({ message, arg, broadcast, broadcastHTML, room: givenRoom, $T }) {
-				if (message.type === 'pm' && !givenRoom) throw new ChatError($T('ROOM_ONLY_COMMAND'));
+				const room = resolveTargetRoom(givenRoom, message, $T);
 				if (!arg) throw new ChatError($T('COMMANDS.QUOTES.PROVIDE_INDEX_OR_TERM'));
-				const room = (givenRoom as string | undefined) ?? message.target.id;
 				const quotes = await getAllQuotes(room);
 				if (!quotes.length) return broadcast($T('COMMANDS.QUOTES.NO_QUOTES_FOUND'));
 
@@ -614,8 +617,7 @@ const quotesCommand: PSCommand = {
 			help: 'Syncs the room quotes with Pokémon Showdown.',
 			syntax: 'CMD',
 			async run({ message, room: givenRoom, $T }) {
-				if (message.type === 'pm' && !givenRoom) throw new ChatError($T('ROOM_ONLY_COMMAND'));
-				const room = (givenRoom as string | undefined) ?? message.target.id;
+				const room = resolveTargetRoom(givenRoom, message, $T);
 				if (!PSRoomConfigs[room]?.quoteSync) throw new ChatError($T('COMMANDS.QUOTES.SYNC_NOT_ENABLED'));
 				const synced = await syncRoomQuotes(message.parent, room);
 				message.reply(

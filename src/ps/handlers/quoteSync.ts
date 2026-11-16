@@ -53,6 +53,17 @@ export function parseQuote(quote: string, extraNames: string[] = []): string {
 		.join('\n');
 }
 
+const HTML_FORMAT_REPLACEMENTS: Array<[RegExp, string]> = [
+	[/<b>([\s\S]*?)<\/b>/gi, '**$1**'],
+	[/<i>([\s\S]*?)<\/i>/gi, '__$1__'],
+	[/<s>([\s\S]*?)<\/s>/gi, '~~$1~~'],
+	[/<sup>([\s\S]*?)<\/sup>/gi, '^^$1^^'],
+	[/<sub>([\s\S]*?)<\/sub>/gi, '\\\\$1\\\\'],
+	[/<code>([\s\S]*?)<\/code>/gi, '``$1``'],
+	[/<span class="spoiler(?:-shown)?">([\s\S]*?)<\/span>/gi, '||$1||'],
+	[/<span class="greentext">([\s\S]*?)<\/span>/gi, '$1'],
+];
+
 export function htmlToPSQuote(rawHtml: string): string {
 	let text = rawHtml
 		.replace(/<br\s*\/?>/gi, '\n')
@@ -78,15 +89,9 @@ export function htmlToPSQuote(rawHtml: string): string {
 	let prev: string;
 	do {
 		prev = text;
-		text = text
-			.replace(/<b>([\s\S]*?)<\/b>/gi, '**$1**')
-			.replace(/<i>([\s\S]*?)<\/i>/gi, '__$1__')
-			.replace(/<s>([\s\S]*?)<\/s>/gi, '~~$1~~')
-			.replace(/<sup>([\s\S]*?)<\/sup>/gi, '^^$1^^')
-			.replace(/<sub>([\s\S]*?)<\/sub>/gi, '\\\\$1\\\\')
-			.replace(/<code>([\s\S]*?)<\/code>/gi, '``$1``')
-			.replace(/<span class="spoiler(?:-shown)?">([\s\S]*?)<\/span>/gi, '||$1||')
-			.replace(/<span class="greentext">([\s\S]*?)<\/span>/gi, '$1');
+		for (const [pattern, replacement] of HTML_FORMAT_REPLACEMENTS) {
+			text = text.replace(pattern, replacement);
+		}
 	} while (text !== prev);
 
 	text = text.replace(/<\/?(?:tt|strong|small|u|span)(?: [^>]*)?>/gi, '');
@@ -139,25 +144,15 @@ export function isPSQuoteAddMessage(content: string): boolean {
 	return PS_QUOTE_EVENT_REGEX.test(content.trim());
 }
 
-function resolvePageWaiters(client: Client, room: string, html: string): void {
+function settlePageWaiters(room: string, settle: (waiter: PageWaiter) => void): boolean {
 	const waiters = pendingPageWaiters.get(room);
-	if (!waiters?.length) return;
+	if (!waiters?.length) return false;
 	pendingPageWaiters.delete(room);
 	for (const waiter of waiters) {
 		clearTimeout(waiter.timer);
-		waiter.resolve(html);
+		settle(waiter);
 	}
-	client.send(`|/leave ${room}`);
-}
-
-function rejectPageWaiters(room: string, err: Error): void {
-	const waiters = pendingPageWaiters.get(room);
-	if (!waiters?.length) return;
-	pendingPageWaiters.delete(room);
-	for (const waiter of waiters) {
-		clearTimeout(waiter.timer);
-		waiter.reject(err);
-	}
+	return true;
 }
 
 export function packetHandler(this: Client, direction: 'in' | 'out', data: string): void {
@@ -178,11 +173,13 @@ export function packetHandler(this: Client, direction: 'in' | 'out', data: strin
 
 		for (const line of lines) {
 			if (line.startsWith('|pagehtml|')) {
-				resolvePageWaiters(this, room, line.slice('|pagehtml|'.length));
+				if (settlePageWaiters(room, waiter => waiter.resolve(line.slice('|pagehtml|'.length)))) {
+					this.send(`|/leave ${room}`);
+				}
 				break;
 			}
 			if (line.startsWith('|noinit|')) {
-				rejectPageWaiters(room, new Error(`Unable to open ${room}: ${line.slice('|noinit|'.length)}`));
+				settlePageWaiters(room, waiter => waiter.reject(new Error(`Unable to open ${room}: ${line.slice('|noinit|'.length)}`)));
 				break;
 			}
 		}
