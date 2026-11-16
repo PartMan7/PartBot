@@ -1,10 +1,11 @@
 import { Temporal } from '@js-temporal/polyfill';
 import { escapeHTML, formatText, toRoomID } from 'ps-client/tools';
 
-import { PSQuoteRoomPrefs } from '@/cache';
+import { PSQuoteRoomPrefs, PSRoomConfigs } from '@/cache';
 import { isGlobalBot, prefix } from '@/config/ps';
 import { type Model as QuoteModel, addQuote, deleteQuoteByIndex, getAllQuotes, quoteToTerms } from '@/database/quotes';
 import { MAX_CHAT_HTML_LENGTH } from '@/ps/constants';
+import { chatRegEx, meRegEx, parseQuote, syncRoomQuotes } from '@/ps/handlers/quoteSync';
 import { ChatError } from '@/utils/chatError';
 import { Username as UsernameCustom } from '@/utils/components';
 import { Button, Username as UsernamePS } from '@/utils/components/ps';
@@ -12,7 +13,6 @@ import { fromHumanTime } from '@/utils/humanTime';
 import { jsxToHTML } from '@/utils/jsxToHTML';
 import { Logger } from '@/utils/logger';
 import { pluralize } from '@/utils/pluralize';
-import { escapeRegEx } from '@/utils/regexEscape';
 import { toId } from '@/utils/toId';
 
 import type { TranslationFn } from '@/i18n/types';
@@ -31,10 +31,6 @@ const getCommand = (baseCmd: string, message: PSMessage, room: string) => {
 	return `/msgroom ${message.target.roomid},${content}`;
 };
 
-const ranks = ['★', '☆', '^', '⛵', 'ᗢ', '+', '%', '§', '@', '*', '#', '&', '~', '$', '-'].join('');
-const chatRegEx = new RegExp(`^(\\[(?:\\d{2}:){1,2}\\d{2}] )?([${ranks}]?)([a-zA-Z0-9][^:]{0,25}?): (.*)$`);
-const meRegEx = new RegExp(`^(\\[(?:\\d{2}:){1,2}\\d{2}] )?• ([${ranks}]?)(\\[[a-zA-Z0-9][^\\]]{0,25}]) (.*)$`);
-const rawMeRegEx = new RegExp(`^((?:\\[(?:\\d{2}:){1,2}\\d{2}] )?• [${ranks}]?)([a-zA-Z0-9]\\S{0,25})( .*)$`);
 const jnlRegEx = /^(?:.*? (?:joined|left)(?:; )?){1,2}$/;
 const rawRegEx = /^(\[(?:\d{2}:){1,2}\d{2}] )?(.*)$/;
 
@@ -74,23 +70,6 @@ function searchQuotes(quotes: IndexedQuoteModel[], arg: string): IndexedQuoteMod
 	const max = Math.max(...weights.map(({ weight }) => weight));
 	if (max === 0) return [];
 	return weights.filter(({ weight }) => weight === max).map(({ quote, index }) => [index, quote]);
-}
-
-function parseQuote(quote: string): string {
-	const lines = quote.trim().split(/ {3}|\\n ?|\n/);
-	const foundNames = lines
-		.map(line => line.match(chatRegEx)?.[3])
-		.filter((name): name is string => !!name)
-		.unique();
-	const reformatRegExes = foundNames.map(name => {
-		return new RegExp(`^((?:\\[(?:\\d{2}:){1,2}\\d{2}] )?• [${ranks}]?)(${escapeRegEx(name)})( .*)$`, 'i');
-	});
-	return lines
-		.map(line => {
-			// Wrap unspecified /me syntax with a [] if the same username is found elsewhere
-			return reformatRegExes.reduce((acc, regEx) => acc.replace(regEx, `$1[$2]$3`), line).replace(rawMeRegEx, '$1[$2]$3');
-		})
-		.join('\n');
 }
 
 function FormatQuoteLine({ line, style, psUsernameTag }: { line: string; style?: CSSProperties; psUsernameTag?: boolean }): ReactNode {
@@ -359,6 +338,18 @@ const quotesCommand: PSCommand = {
 				if (message.type === 'pm' && !givenRoom) throw new ChatError($T('ROOM_ONLY_COMMAND'));
 				const room = (givenRoom as string | undefined) ?? message.target.id;
 				if (!arg) throw new ChatError($T('COMMANDS.QUOTES.PROVIDE_QUOTE'));
+				if (PSRoomConfigs[room]?.quoteSync) {
+					const psQuote = arg.trim().replace(/\r?\n|\\n ?/g, ' ');
+					const addCommand =
+						message.type === 'pm' || room !== message.target.id ? `/msgroom ${room},/addquote ${psQuote}` : `/addquote ${psQuote}`;
+					message.replyHTML(
+						<>
+							<p>{$T('COMMANDS.QUOTES.SYNC_ADD_ON_PS')}</p>
+							<Button value={addCommand}>{$T('COMMANDS.QUOTES.ADD_ON_PS_BUTTON')}</Button>
+						</>
+					);
+					throw new ChatError($T('COMMANDS.QUOTES.SYNC_ADD_ON_PS'));
+				}
 				const parsedQuote = parseQuote(arg);
 				const addedBy = message.author.name;
 				const at = Temporal.Now.plainDateISO('UTC').toLocaleString('en-GB');
@@ -613,6 +604,25 @@ const quotesCommand: PSCommand = {
 				const roomId = toRoomID(targetRoom);
 
 				return run(`quote ${subcommand}`, { room: roomId });
+			},
+		},
+		sync: {
+			name: 'sync',
+			aliases: ['s'],
+			perms: 'driver',
+			flags: { allowPMs: true },
+			help: 'Syncs the room quotes with Pokémon Showdown.',
+			syntax: 'CMD',
+			async run({ message, room: givenRoom, $T }) {
+				if (message.type === 'pm' && !givenRoom) throw new ChatError($T('ROOM_ONLY_COMMAND'));
+				const room = (givenRoom as string | undefined) ?? message.target.id;
+				if (!PSRoomConfigs[room]?.quoteSync) throw new ChatError($T('COMMANDS.QUOTES.SYNC_NOT_ENABLED'));
+				const synced = await syncRoomQuotes(message.parent, room);
+				message.reply(
+					$T(synced.length === 1 ? 'COMMANDS.QUOTES.SYNCED_SINGULAR' : 'COMMANDS.QUOTES.SYNCED_PLURAL', {
+						count: synced.length,
+					})
+				);
 			},
 		},
 	},

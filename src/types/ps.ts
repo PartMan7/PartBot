@@ -33,6 +33,7 @@ export type PSRoomConfig = {
 	aliases?: string[] | null;
 	private?: true | null;
 	ignore?: true | null;
+	quoteSync?: true | null;
 	features?: Feature[] | null;
 	// You can put both commands (eg: `quote.add`) or group perms (eg: `games.create`) here.
 	permissions?: {

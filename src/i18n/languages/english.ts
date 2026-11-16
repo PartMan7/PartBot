@@ -355,6 +355,11 @@ export default {
 			NO_QUOTES_FOUND: 'No quotes found.',
 			NO_QUOTES_FOUND_MATCHING: 'No quotes found matching "{{search}}".',
 			WHICH_ROOM: 'Which room are you looking for a quote in? Reply with the name.',
+			SYNC_NOT_ENABLED: 'Quote sync is not enabled for this room.',
+			SYNC_ADD_ON_PS: 'Quote sync is enabled in this room. Please add quotes directly on Showdown instead.',
+			ADD_ON_PS_BUTTON: 'Add quote to PS',
+			SYNCED_SINGULAR: 'Synced {{count}} quote from PS.',
+			SYNCED_PLURAL: 'Synced {{count}} quotes from PS.',
 		},
 
 		MODNOTE: {
