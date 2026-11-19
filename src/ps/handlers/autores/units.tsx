@@ -26,7 +26,7 @@ export type UnitFormat = {
 	data: UnitCluster;
 };
 
-// `base` converts to meters (length) or kilograms (weight).
+// `base` converts to meters (length), kilograms (weight), or liters (volume).
 type UnitInfo = { singular: string; plural: string; base?: number };
 
 const unitInfo: Record<string, UnitInfo> = {
@@ -41,6 +41,10 @@ const unitInfo: Record<string, UnitInfo> = {
 	kg: { singular: 'kilogram', plural: 'kilograms', base: 1 },
 	g: { singular: 'gram', plural: 'grams', base: 0.001 },
 	oz: { singular: 'ounce', plural: 'ounces', base: 0.028349523125 },
+	mL: { singular: 'mL', plural: 'mL', base: 0.001 },
+	L: { singular: 'liter', plural: 'liters', base: 1 },
+	gal: { singular: 'gallon', plural: 'gallons', base: 3.785411784 },
+	'fl oz': { singular: 'fl oz', plural: 'fl oz', base: 0.0295735295625 },
 	C: { singular: '°C', plural: '°C' },
 	F: { singular: '°F', plural: '°F' },
 };
@@ -117,6 +121,34 @@ const unitDefinitions: UnitDef[] = [
 		system: 'imperial',
 		expressions: ['oz'],
 		regex: /\b(\d{1,5}(?:[\.,]\d{1,5})?) ?(?:oz|ounces?)\b/gi,
+	},
+	{
+		id: 'milliliters',
+		type: 'volume',
+		system: 'metric',
+		expressions: ['mL'],
+		regex: /\b(\d{1,5}(?:[\.,]\d{1,5})?) ?ml\b/gi,
+	},
+	{
+		id: 'liters',
+		type: 'volume',
+		system: 'metric',
+		expressions: ['L'],
+		regex: /\b(\d{1,5}(?:[\.,]\d{1,5})?) ?(?:l|liters?|litres?)\b/gi,
+	},
+	{
+		id: 'gallons',
+		type: 'volume',
+		system: 'imperial',
+		expressions: ['gal'],
+		regex: /\b(\d{1,5}(?:[\.,]\d{1,5})?) ?(?:gal|gallons?)\b/gi,
+	},
+	{
+		id: 'fluid-ounces',
+		type: 'volume',
+		system: 'imperial',
+		expressions: ['fl oz'],
+		regex: /\b(\d{1,5}(?:[\.,]\d{1,5})?) ?(?:fl\.? ?oz|fluid ounces?)\b/gi,
 	},
 	{
 		id: 'celsius',
@@ -206,9 +238,17 @@ export function formatUnits(clusters: UnitCluster[], targetSystem: UnitSystem | 
 				? base < 2
 					? ['cm', base * 100]
 					: ['m', base]
-				: def.system === 'imperial'
-					? ['kg', base]
-					: ['lb', base / unitInfo.lb.base!];
+				: def.type === 'volume'
+					? def.system === 'metric'
+						? base < unitInfo.gal.base!
+							? ['fl oz', base / unitInfo['fl oz'].base!]
+							: ['gal', base / unitInfo.gal.base!]
+						: base < 1
+							? ['mL', base * 1000]
+							: ['L', base]
+					: def.system === 'imperial'
+						? ['kg', base]
+						: ['lb', base / unitInfo.lb.base!];
 		const rounded = round2(value);
 		return {
 			full: `~${rounded} ${unitName(unit, rounded)}`,
