@@ -10,7 +10,7 @@ import PS from '@/ps';
 import { pokedex } from '@/ps/datacenters';
 import _Sentinel from '@/sentinel';
 import { ansiToHtml } from '@/utils/ansiToHtml';
-import { cachebust as _cachebust } from '@/utils/cachebust';
+import { cachebust as _cachebust, cachebustDir as _cachebustDir } from '@/utils/cachebust';
 import { $ as _$ } from '@/utils/child_process';
 import { fsPath as _fsPath } from '@/utils/fsPath';
 import { jsxToHTML as _jsxToHTML } from '@/utils/jsxToHTML';
@@ -25,6 +25,7 @@ import type { Interaction } from 'discord.js';
 // Exporting into side variables for eval lookup
 const cache = _cache;
 const cachebust = _cachebust;
+const cachebustDir = _cachebustDir;
 const fs = _fs;
 const fsSync = _fsSync;
 const fsPath = _fsPath;
@@ -40,7 +41,24 @@ const Dex = pokedex;
 const E: Record<string, unknown> = {};
 
 // Storing in context for eval()
-const _evalContext = [cache, cachebust, fs, fsSync, fsPath, path, toId, $, Sentinel, E, jsxToHTML, paste, Dex, PS, Discord];
+const _evalContext = [
+	cache,
+	cachebust,
+	cachebustDir,
+	fs,
+	fsSync,
+	fsPath,
+	path,
+	toId,
+	$,
+	Sentinel,
+	E,
+	jsxToHTML,
+	paste,
+	Dex,
+	PS,
+	Discord,
+];
 
 export type EvalModes = 'COLOR_OUTPUT_HTML' | 'COLOR_OUTPUT_ANSI' | 'SHELL_OUTPUT' | 'FULL_OUTPUT' | 'ABBR_OUTPUT' | 'NO_OUTPUT';
 export type EvalOutput = {
