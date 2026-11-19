@@ -1,11 +1,14 @@
 import { PSNoPrefixHelp } from '@/cache';
 import { owner, prefix, username } from '@/config/ps';
 import { formatUnits, parseUnits } from '@/ps/handlers/autores/units';
+import getSecretFunction from '@/secrets/functions';
 import { fromHumanTime } from '@/utils/humanTime';
 import { sample } from '@/utils/random';
 import { toId } from '@/utils/toId';
 
 import type { PSMessage } from '@/types/ps';
+
+const getHiddenUnitConversionRooms = getSecretFunction('getHiddenUnitConversionRooms', () => []);
 
 export function autoResHandler(message: PSMessage) {
 	if (message.isIntro) return;
@@ -35,7 +38,7 @@ export function autoResHandler(message: PSMessage) {
 	}
 
 	if (message.type === 'chat') {
-		if (message.target.id === 'botdevelopment') {
+		if (['healthfitness', ...getHiddenUnitConversionRooms()].includes(message.target.id)) {
 			const clusters = parseUnits(message.content);
 			if (clusters.length) {
 				const converted = formatUnits(clusters);
