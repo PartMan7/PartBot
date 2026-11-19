@@ -23,4 +23,29 @@
 
 ---
 
+### units.tsx (feet-inches)
+
+```regexfree
+\b
+(?:
+  # feet, optional inches
+  (?:
+    (\d{1,5}(?:[\.,]\d{1,5})?)
+    (?:\ ?f(?:eet|oot|t)|(?<!(?:^|\s)'[^']*)'(?![a-z]))
+    (?:
+      (?:(?:\ and|\ &|,)?)\ ?
+      ((?:\d{1,5}(?:[\.,]\d{1,5})?))
+      (?:\ ?inch(?:es)?|in|"|)
+    )?
+  |
+    # inches only
+    ((?:\d{1,5}(?:[\.,]\d{1,5})?))
+    (?:\ ?inch(?:es)?|in|")
+  )
+)
+(?:\b|\ |$)
+```
+
+---
+
 Shoutouts to [RegExFree](https://zarel.github.io/regexfree/)!
