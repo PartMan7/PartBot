@@ -63,6 +63,18 @@ describe('formatUnits', () => {
 		]);
 	});
 
+	it('converts metric length of a mile or more to miles', () => {
+		expect(formatUnits([{ index: 0, units: [{ count: 2, unit: 'km', formatted: '2 kilometers' }] }])).toMatchObject([
+			{ full: '~1.24 miles', short: '~1.24 mi' },
+		]);
+	});
+
+	it('converts imperial length of a mile or more to kilometers', () => {
+		expect(formatUnits([{ index: 0, units: [{ count: 1.242, unit: 'mi', formatted: '1.242 miles' }] }])).toMatchObject([
+			{ full: '~2 kilometers', short: '~2 km' },
+		]);
+	});
+
 	it('converts small imperial length to centimeters', () => {
 		expect(formatUnits([{ index: 2, units: [{ count: 1, unit: 'ft', formatted: '1 foot' }] }])).toMatchObject([
 			{ full: '~30.48 centimeters', short: '~30.48 cm' },

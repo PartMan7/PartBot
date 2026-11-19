@@ -215,7 +215,7 @@ export function formatUnits(clusters: UnitCluster[], targetSystem: UnitSystem | 
 
 		const base = units.reduce((sum, { count, unit }) => sum + count * unitInfo[unit].base!, 0);
 
-		if (def.type === 'length' && def.system === 'metric') {
+		if (def.type === 'length' && def.system === 'metric' && base < unitInfo.mi.base!) {
 			const inches = Math.round(base / unitInfo.in.base!);
 			const feet = Math.floor(inches / 12);
 			const rest = inches % 12;
@@ -235,9 +235,13 @@ export function formatUnits(clusters: UnitCluster[], targetSystem: UnitSystem | 
 
 		const [unit, value] =
 			def.type === 'length'
-				? base < 2
-					? ['cm', base * 100]
-					: ['m', base]
+				? def.system === 'metric'
+					? ['mi', base / unitInfo.mi.base!]
+					: base < 2
+						? ['cm', base * 100]
+						: base < 1000
+							? ['m', base]
+							: ['km', base / 1000]
 				: def.type === 'volume'
 					? def.system === 'metric'
 						? base < unitInfo.gal.base!
