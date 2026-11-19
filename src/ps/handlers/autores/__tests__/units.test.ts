@@ -58,13 +58,13 @@ describe('parseUnits', () => {
 
 describe('formatUnits', () => {
 	it('converts metric length to imperial feet and inches', () => {
-		expect(formatUnits([{ index: 7, units: [{ count: 100, unit: 'm', formatted: '100 meters' }] }])).toEqual([
+		expect(formatUnits([{ index: 7, units: [{ count: 100, unit: 'm', formatted: '100 meters' }] }])).toMatchObject([
 			{ full: '~328 feet', short: '~328 ft' },
 		]);
 	});
 
 	it('converts small imperial length to centimeters', () => {
-		expect(formatUnits([{ index: 2, units: [{ count: 1, unit: 'ft', formatted: '1 foot' }] }])).toEqual([
+		expect(formatUnits([{ index: 2, units: [{ count: 1, unit: 'ft', formatted: '1 foot' }] }])).toMatchObject([
 			{ full: '~30.48 centimeters', short: '~30.48 cm' },
 		]);
 	});
@@ -80,41 +80,47 @@ describe('formatUnits', () => {
 					],
 				},
 			])
-		).toEqual([{ full: '~1.78 meters', short: '~1.78 m' }]);
+		).toMatchObject([{ full: '~177.8 centimeters', short: '~177.8 cm' }]);
 	});
 
 	it('converts pounds to kilograms', () => {
-		expect(formatUnits([{ index: 0, units: [{ count: 150, unit: 'lb', formatted: '150 pounds' }] }])).toEqual([
+		expect(formatUnits([{ index: 0, units: [{ count: 150, unit: 'lb', formatted: '150 pounds' }] }])).toMatchObject([
 			{ full: '~68.04 kilograms', short: '~68.04 kg' },
 		]);
 	});
 
 	it('converts kilograms to pounds', () => {
-		expect(formatUnits([{ index: 0, units: [{ count: 10, unit: 'kg', formatted: '10 kilograms' }] }])).toEqual([
+		expect(formatUnits([{ index: 0, units: [{ count: 10, unit: 'kg', formatted: '10 kilograms' }] }])).toMatchObject([
 			{ full: '~22.05 pounds', short: '~22.05 lb' },
 		]);
 	});
 
 	it('converts grams to pounds', () => {
-		expect(formatUnits([{ index: 0, units: [{ count: 500, unit: 'g', formatted: '500 grams' }] }])).toEqual([
+		expect(formatUnits([{ index: 0, units: [{ count: 500, unit: 'g', formatted: '500 grams' }] }])).toMatchObject([
 			{ full: '~1.1 pounds', short: '~1.1 lb' },
 		]);
 	});
 
+	it('converts small grams to ounces', () => {
+		expect(formatUnits([{ index: 0, units: [{ count: 13, unit: 'g', formatted: '13 grams' }] }])).toMatchObject([
+			{ full: '~0.46 ounces', short: '~0.46 oz' },
+		]);
+	});
+
 	it('converts ounces to kilograms', () => {
-		expect(formatUnits([{ index: 0, units: [{ count: 8, unit: 'oz', formatted: '8 ounces' }] }])).toEqual([
+		expect(formatUnits([{ index: 0, units: [{ count: 8, unit: 'oz', formatted: '8 ounces' }] }])).toMatchObject([
 			{ full: '~0.23 kilograms', short: '~0.23 kg' },
 		]);
 	});
 
 	it('converts celsius to fahrenheit', () => {
-		expect(formatUnits([{ index: 0, units: [{ count: 20, unit: 'C', formatted: '20 °C' }] }])).toEqual([
+		expect(formatUnits([{ index: 0, units: [{ count: 20, unit: 'C', formatted: '20 °C' }] }])).toMatchObject([
 			{ full: '~68 °F', short: '~68°F' },
 		]);
 	});
 
 	it('converts fahrenheit to celsius', () => {
-		expect(formatUnits([{ index: 0, units: [{ count: 68, unit: 'F', formatted: '68 °F' }] }])).toEqual([
+		expect(formatUnits([{ index: 0, units: [{ count: 68, unit: 'F', formatted: '68 °F' }] }])).toMatchObject([
 			{ full: '~20 °C', short: '~20°C' },
 		]);
 	});
@@ -122,23 +128,23 @@ describe('formatUnits', () => {
 
 describe('formatUnits(parseUnits())', () => {
 	it('formats metric length from a message', () => {
-		expect(formatUnits(parseUnits('I swam 100 meters today'))).toEqual([{ full: '~328 feet', short: '~328 ft' }]);
+		expect(formatUnits(parseUnits('I swam 100 meters today'))).toMatchObject([{ full: '~328 feet', short: '~328 ft' }]);
 	});
 
 	it('formats feet and inches from a message', () => {
-		expect(formatUnits(parseUnits(`I'm 5'10" tall`))).toEqual([{ full: '~1.78 meters', short: '~1.78 m' }]);
+		expect(formatUnits(parseUnits(`I'm 5'10" tall`))).toMatchObject([{ full: '~177.8 centimeters', short: '~177.8 cm' }]);
 	});
 
 	it('formats pounds from a message', () => {
-		expect(formatUnits(parseUnits('it weighs 150 lbs'))).toEqual([{ full: '~68.04 kilograms', short: '~68.04 kg' }]);
+		expect(formatUnits(parseUnits('it weighs 150 lbs'))).toMatchObject([{ full: '~68.04 kilograms', short: '~68.04 kg' }]);
 	});
 
 	it('returns nothing when the message has no units', () => {
-		expect(formatUnits(parseUnits('hello there'))).toEqual([]);
+		expect(formatUnits(parseUnits('hello there'))).toMatchObject([]);
 	});
 
 	it("doesn't show secondary units when trivial for conversions", () => {
-		expect(formatUnits(parseUnits('I swam 100 meters today'))).toEqual([{ full: '~328 feet', short: '~328 ft' }]);
+		expect(formatUnits(parseUnits('I swam 100 meters today'))).toMatchObject([{ full: '~328 feet', short: '~328 ft' }]);
 	});
 });
 

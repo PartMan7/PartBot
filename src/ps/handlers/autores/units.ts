@@ -248,7 +248,9 @@ export function formatUnits(clusters: UnitCluster[], targetSystem: UnitSystem | 
 							: ['L', base]
 					: def.system === 'imperial'
 						? ['kg', base]
-						: ['lb', base / unitInfo.lb.base!];
+						: base < unitInfo.lb.base! / 2
+							? ['oz', base / unitInfo.oz.base!]
+							: ['lb', base / unitInfo.lb.base!];
 		const rounded = round2(value);
 		return {
 			full: `~${rounded} ${unitName(unit, rounded)}`,
