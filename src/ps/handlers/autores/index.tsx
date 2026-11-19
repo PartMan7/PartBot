@@ -1,5 +1,6 @@
 import { PSNoPrefixHelp } from '@/cache';
 import { owner, prefix, username } from '@/config/ps';
+import { formatUnits, parseUnits } from '@/ps/handlers/autores/units';
 import { fromHumanTime } from '@/utils/humanTime';
 import { sample } from '@/utils/random';
 import { toId } from '@/utils/toId';
@@ -34,6 +35,24 @@ export function autoResHandler(message: PSMessage) {
 	}
 
 	if (message.type === 'chat') {
+		if (message.target.id === 'botdevelopment') {
+			const clusters = parseUnits(message.content);
+			if (clusters.length) {
+				const converted = formatUnits(clusters);
+				message.target.sendHTML(
+					<>
+						{converted
+							.map(({ short }, i) => (
+								<small>
+									{clusters[i].units.map(u => u.formatted).join(' ')} = {short}
+								</small>
+							))
+							.space(' | ')}
+					</>
+				);
+			}
+		}
+
 		if (['lunarnewyear'].includes(message.target.id)) {
 			const HONSE_REGEX = /(\w*)horse(\w*)/i;
 			if (HONSE_REGEX.test(message.content) && sample('5%')) {
