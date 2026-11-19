@@ -371,6 +371,8 @@ export default {
 			CANNOT_EGG_SELF: 'Tum apne upar anda nahi fenk sakte.',
 			TOSSED_TO: '/me anda {{target}} ko fenkta hai!',
 			TOSSED_AT: '/me {{target}} par anda fenkta hai! __(use ``{{prefix}}toss`` se kisi aur ko pass karo)__',
+			EGG_IN_PLAY: 'Is room mein pehle se anda hai. Pass karne ke liye {{prefix}}toss use karo.',
+			NO_EGG_TO_TOSS: 'Fenkne ke liye koi anda nahi hai. {{prefix}}egg se ek shuru karo.',
 		},
 
 		AUTH: {

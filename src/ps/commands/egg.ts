@@ -46,28 +46,48 @@ function scheduleDetonation(room: Room, holderName: string, previous?: Timer, pr
 	return timer;
 }
 
-export const command: PSCommand = {
-	name: 'egg',
-	help: 'Toss a hot egg at someone. If you have the egg, toss it to someone else before it detonates.',
-	syntax: 'CMD user',
-	aliases: ['toss'],
-	categories: ['casual'],
-	cooldown: fromHumanTime('30 min'),
-	rooms: ['boardgames', ...getHiddenEggRooms()],
-	skipCooldown(message) {
-		return message.type === 'chat' && PSEggs[message.target.id] !== undefined;
+const rooms = ['boardgames', ...getHiddenEggRooms()];
+
+export const command: PSCommand[] = [
+	{
+		name: 'egg',
+		help: 'Start a hot egg by tossing it at someone. Use toss to pass it along before it detonates.',
+		syntax: 'CMD user',
+		categories: ['casual'],
+		cooldown: fromHumanTime('30 min'),
+		rooms,
+		async run({ message, arg, $T, checkPermissions }) {
+			const room = message.target;
+			if (PSEggs[room.id]) throw new ChatError($T('COMMANDS.EGG.EGG_IN_PLAY', { prefix }));
+			if (!checkPermissions('whitelist')) throw new ChatError($T('ACCESS_DENIED'));
+
+			const targetId = toId(arg);
+			const authorId = message.author.id;
+			const target = validateUser(message, targetId, $T);
+
+			if (targetId === authorId) throw new ChatError($T('COMMANDS.EGG.CANNOT_EGG_SELF'));
+			if (targetId === 'siegfried' && ['conwynaut'].includes(authorId)) throw new ChatError('Weeb.' as NoTranslate); // block da weebs
+
+			const timer = scheduleDetonation(room, target.name, undefined, 0);
+			PSEggs[room.id] = { holderId: targetId, holderName: target.name, timer, cycles: {} };
+			return message.reply($T('COMMANDS.EGG.TOSSED_AT', { target: target.name, prefix }));
+		},
 	},
-	async run({ message, arg, $T, checkPermissions }) {
-		const room = message.target;
-		const egg = PSEggs[room.id];
+	{
+		name: 'toss',
+		help: 'Toss the hot egg you hold to someone else before it detonates.',
+		syntax: 'CMD user',
+		categories: ['casual'],
+		rooms,
+		async run({ message, arg, $T }) {
+			const room = message.target;
+			const egg = PSEggs[room.id];
+			if (!egg) throw new ChatError($T('COMMANDS.EGG.NO_EGG_TO_TOSS', { prefix }));
 
-		if (!egg && !checkPermissions('whitelist')) throw new ChatError($T('ACCESS_DENIED'));
+			const targetId = toId(arg);
+			const authorId = message.author.id;
+			const target = validateUser(message, targetId, $T);
 
-		const targetId = toId(arg);
-		const authorId = message.author.id;
-		const target = validateUser(message, targetId, $T);
-
-		if (egg) {
 			if (egg.holderId !== authorId) throw new ChatError($T('COMMANDS.EGG.NOT_HOLDER'));
 			if (targetId === authorId) throw new ChatError($T('COMMANDS.EGG.CANNOT_TOSS_SELF'));
 
@@ -78,13 +98,6 @@ export const command: PSCommand = {
 
 			egg.timer = scheduleDetonation(room, target.name, egg.timer, egg.cycles[targetId]);
 			return message.reply($T('COMMANDS.EGG.TOSSED_TO', { target: target.name }));
-		}
-
-		if (targetId === authorId) throw new ChatError($T('COMMANDS.EGG.CANNOT_EGG_SELF'));
-		if (targetId === 'siegfried' && ['conwynaut'].includes(authorId)) throw new ChatError('Weeb.' as NoTranslate); // block da weebs
-
-		const timer = scheduleDetonation(room, target.name, undefined, 0);
-		PSEggs[room.id] = { holderId: targetId, holderName: target.name, timer, cycles: {} };
-		return message.reply($T('COMMANDS.EGG.TOSSED_AT', { target: target.name, prefix }));
+		},
 	},
-};
+];

@@ -384,6 +384,8 @@ export default {
 			CANNOT_EGG_SELF: 'You cannot toss an egg at yourself.',
 			TOSSED_TO: '/me tosses the egg to {{target}}!',
 			TOSSED_AT: '/me tosses an egg at {{target}}! __(use ``{{prefix}}toss`` to toss it to someone else)__',
+			EGG_IN_PLAY: 'There is already an egg in this room. Use {{prefix}}toss to pass it.',
+			NO_EGG_TO_TOSS: 'There is no egg to toss. Start one with {{prefix}}egg.',
 		},
 
 		AUTH: {

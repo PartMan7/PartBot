@@ -383,6 +383,8 @@ export default {
 			CANNOT_EGG_SELF: 'Vous ne pouvez pas vous lancer un œuf à vous-même.',
 			TOSSED_TO: "/me lance l'œuf à {{target}} !",
 			TOSSED_AT: "/me lance un œuf sur {{target}} ! __(utilisez ``{{prefix}}toss`` pour le passer à quelqu'un d'autre)__",
+			EGG_IN_PLAY: 'Il y a déjà un œuf dans cette salle. Utilisez {{prefix}}toss pour le passer.',
+			NO_EGG_TO_TOSS: "Il n'y a pas d'œuf à lancer. Commencez-en un avec {{prefix}}egg.",
 		},
 
 		AUTH: {

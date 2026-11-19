@@ -382,6 +382,8 @@ export default {
 			CANNOT_EGG_SELF: 'Você não pode jogar um ovo em si mesmo.',
 			TOSSED_TO: '/me joga o ovo para {{target}}!',
 			TOSSED_AT: '/me joga um ovo em {{target}}! __(use ``{{prefix}}toss`` para passar para outra pessoa)__',
+			EGG_IN_PLAY: 'Já há um ovo nesta sala. Use {{prefix}}toss para passá-lo.',
+			NO_EGG_TO_TOSS: 'Não há ovo para jogar. Comece um com {{prefix}}egg.',
 		},
 
 		AUTH: {
