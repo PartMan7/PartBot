@@ -81,6 +81,27 @@ export async function deleteQuoteByIndex(index: number, quote: Model, room: stri
 	return toDelete.toObject();
 }
 
+export async function replaceRoomQuotes(room: string, quotes: Array<Pick<Model, 'quote' | 'addedBy' | 'at'>>): Promise<Model[]> {
+	if (!IS_ENABLED.DB) return [];
+	let prevAt = 0;
+	const docs: Model[] = quotes.map(entry => {
+		const rawTime = entry.at.getTime();
+		const time = rawTime > prevAt ? rawTime : prevAt + 1;
+		prevAt = time;
+		return {
+			quote: entry.quote,
+			rawText: quoteToTerms(entry.quote),
+			room,
+			addedBy: entry.addedBy,
+			addedById: toId(entry.addedBy),
+			at: new Date(time),
+		};
+	});
+	await model.deleteMany({ room });
+	if (docs.length > 0) await model.insertMany(docs);
+	return docs;
+}
+
 export async function searchQuotes(
 	room: string,
 	filter: Partial<Omit<Model, 'room' | 'quote' | 'rawText'>> & {

@@ -11,6 +11,7 @@ import { joinRoomHandler } from '@/ps/handlers/joinRooms';
 import { joinHandler, leaveHandler, nickHandler } from '@/ps/handlers/joins';
 import { notifyHandler } from '@/ps/handlers/notifications';
 import { otherHandler } from '@/ps/handlers/other';
+import { packetHandler } from '@/ps/handlers/quoteSync';
 import { rawHandler } from '@/ps/handlers/raw';
 import { tourHandler } from '@/ps/handlers/tours';
 
@@ -37,6 +38,7 @@ export const LivePSHandlers = {
 	nickHandler,
 	notifyHandler,
 	otherHandler,
+	packetHandler,
 	rawHandler,
 	tourHandler,
 };
