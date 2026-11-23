@@ -169,6 +169,10 @@ describe('parseUnits ambiguous stuff', () => {
 		expect(parseUnits(`And he said 'my favorite number is 9'`)).toEqual([]);
 	});
 
+	it('does not parse quoted numerals as inches', () => {
+		expect(parseUnits(`the message for "5" was placed next to the translation that says it's "7", and vice versa`)).toEqual([]);
+	});
+
 	it('does not parse 9 in as inches when a space separates them', () => {
 		expect(parseUnits('He put 9 in the pile')).toEqual([]);
 	});
