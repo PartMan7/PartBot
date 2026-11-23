@@ -44,11 +44,11 @@ describe('parseUnits', () => {
 	});
 
 	it('parses celsius', () => {
-		expect(parseUnits('It is 20 C today')).toEqual([{ index: 6, units: [{ count: 20, unit: 'C', formatted: '20 °C' }] }]);
+		expect(parseUnits('It is 20 C today')).toEqual([{ index: 6, units: [{ count: 20, unit: 'C', formatted: '20°C' }] }]);
 	});
 
 	it('parses negative fahrenheit with degree sign', () => {
-		expect(parseUnits('It is -5°F today')).toEqual([{ index: 6, units: [{ count: -5, unit: 'F', formatted: '-5 °F' }] }]);
+		expect(parseUnits('It is -5°F today')).toEqual([{ index: 6, units: [{ count: -5, unit: 'F', formatted: '-5°F' }] }]);
 	});
 
 	it('does not parse lowercase c as celsius', () => {
@@ -126,13 +126,13 @@ describe('formatUnits', () => {
 	});
 
 	it('converts celsius to fahrenheit', () => {
-		expect(formatUnits([{ index: 0, units: [{ count: 20, unit: 'C', formatted: '20 °C' }] }])).toMatchObject([
+		expect(formatUnits([{ index: 0, units: [{ count: 20, unit: 'C', formatted: '20°C' }] }])).toMatchObject([
 			{ full: '~68 °F', short: '~68°F' },
 		]);
 	});
 
 	it('converts fahrenheit to celsius', () => {
-		expect(formatUnits([{ index: 0, units: [{ count: 68, unit: 'F', formatted: '68 °F' }] }])).toMatchObject([
+		expect(formatUnits([{ index: 0, units: [{ count: 68, unit: 'F', formatted: '68°F' }] }])).toMatchObject([
 			{ full: '~20 °C', short: '~20°C' },
 		]);
 	});

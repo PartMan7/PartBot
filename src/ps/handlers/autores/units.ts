@@ -171,14 +171,14 @@ const round2 = (n: number) => Math.round(n * 100) / 100;
 
 export function parseUnits(message: string): UnitCluster[] {
 	return unitDefinitions
-		.flatMap(({ regex, expressions: unitKeys }) =>
+		.flatMap(({ regex, expressions: unitKeys, type }) =>
 			[...message.matchAll(regex)].map(match => ({
 				index: match.index!,
 				units: unitKeys.flatMap((unit, i) => {
 					const captured = match[i + 1];
 					if (!captured) return [];
 					const count = Number(captured.replace(',', '.'));
-					return [{ count, unit, formatted: `${count} ${unitName(unit, count)}` }];
+					return [{ count, unit, formatted: `${count}${type === 'temperature' ? '' : ' '}${unitName(unit, count)}` }];
 				}),
 			}))
 		)
