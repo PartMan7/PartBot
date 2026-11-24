@@ -29,7 +29,7 @@
 								"fire": { "type": "number" },
 								"water": { "type": "number" },
 								"grass": { "type": "number" },
-								"colorless": { "type": "number" },
+								"normal": { "type": "number" },
 								"dark": { "type": "number" }
 							},
 							"minProperties": 1,
@@ -44,7 +44,7 @@
 					},
 					"patternProperties": {
 						"^type$": {
-							"enum": ["fire", "water", "grass", "colorless", "dark"]
+							"enum": ["fire", "water", "grass", "normal", "dark"]
 						}
 					},
 					"required": ["id", "name", "tier", "type", "points", "cost", "art"]
@@ -68,7 +68,7 @@
 								"fire": { "type": "number" },
 								"water": { "type": "number" },
 								"grass": { "type": "number" },
-								"colorless": { "type": "number" },
+								"normal": { "type": "number" },
 								"dark": { "type": "number" }
 							},
 							"minProperties": 2,
@@ -91,7 +91,7 @@
 		"types": {
 			"type": "object",
 			"patternProperties": {
-				"^(colorless|dark|fire|grass|water|dragon)$": {
+				"^(normal|dark|fire|grass|water|dragon)$": {
 					"type": "object",
 					"properties": {
 						"name": {
@@ -112,7 +112,7 @@
 					"required": ["name", "art", "startCount"]
 				}
 			},
-			"required": ["colorless", "dark", "fire", "grass", "water", "dragon"]
+			"required": ["normal", "dark", "fire", "grass", "water", "dragon"]
 		},
 		"artists": {
 			"type": "object",

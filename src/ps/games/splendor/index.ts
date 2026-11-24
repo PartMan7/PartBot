@@ -424,7 +424,7 @@ export class Splendor extends BaseGame<State, RenderCtx> {
 	}
 
 	/**
-	 * @example this.parseTokens('colorless 1'); // { colorless: 1... }
+	 * @example this.parseTokens('normal 1'); // { normal: 1... }
 	 */
 	parseTokens(input: string, allowDragon?: boolean): TokenCount {
 		const tokens = Object.fromEntries(AllTokenTypes.map(type => [type, 0])) as TokenCount;

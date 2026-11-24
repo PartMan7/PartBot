@@ -5,7 +5,7 @@
 			"id": "aipom",
 			"name": "Aipom",
 			"tier": 1,
-			"type": "colorless",
+			"type": "normal",
 			"points": 0,
 			"cost": {
 				"water": 3
@@ -19,7 +19,7 @@
 			"type": "fire",
 			"points": 2,
 			"cost": {
-				"colorless": 3,
+				"normal": 3,
 				"dark": 5
 			},
 			"art": "alcremie.png",
@@ -32,7 +32,7 @@
 			"type": "water",
 			"points": 4,
 			"cost": {
-				"colorless": 6,
+				"normal": 6,
 				"dark": 3,
 				"water": 3
 			},
@@ -42,7 +42,7 @@
 			"id": "audino",
 			"name": "Audino",
 			"tier": 2,
-			"type": "colorless",
+			"type": "normal",
 			"points": 2,
 			"cost": {
 				"fire": 5
@@ -66,10 +66,10 @@
 			"id": "blissey",
 			"name": "Blissey",
 			"tier": 3,
-			"type": "colorless",
+			"type": "normal",
 			"points": 5,
 			"cost": {
-				"colorless": 3,
+				"normal": 3,
 				"dark": 7
 			},
 			"art": "blissey.png"
@@ -81,7 +81,7 @@
 			"type": "grass",
 			"points": 0,
 			"cost": {
-				"colorless": 1,
+				"normal": 1,
 				"dark": 1,
 				"fire": 1,
 				"water": 1
@@ -95,7 +95,7 @@
 			"type": "dark",
 			"points": 0,
 			"cost": {
-				"colorless": 1,
+				"normal": 1,
 				"fire": 1,
 				"grass": 1,
 				"water": 1
@@ -109,7 +109,7 @@
 			"type": "grass",
 			"points": 0,
 			"cost": {
-				"colorless": 1,
+				"normal": 1,
 				"dark": 2,
 				"fire": 1,
 				"water": 1
@@ -146,10 +146,10 @@
 			"id": "chansey",
 			"name": "Chansey",
 			"tier": 2,
-			"type": "colorless",
+			"type": "normal",
 			"points": 3,
 			"cost": {
-				"colorless": 6
+				"normal": 6
 			},
 			"art": "chansey.png"
 		},
@@ -171,7 +171,7 @@
 			"type": "fire",
 			"points": 0,
 			"cost": {
-				"colorless": 2,
+				"normal": 2,
 				"dark": 1,
 				"grass": 1,
 				"water": 1
@@ -182,7 +182,7 @@
 			"id": "cinccino",
 			"name": "Cinccino",
 			"tier": 2,
-			"type": "colorless",
+			"type": "normal",
 			"points": 2,
 			"cost": {
 				"dark": 2,
@@ -199,7 +199,7 @@
 			"type": "fire",
 			"points": 0,
 			"cost": {
-				"colorless": 3
+				"normal": 3
 			},
 			"art": "cleffa.png",
 			"attr": "audiino"
@@ -224,7 +224,7 @@
 			"type": "dark",
 			"points": 3,
 			"cost": {
-				"colorless": 3,
+				"normal": 3,
 				"fire": 3,
 				"grass": 5,
 				"water": 3
@@ -239,7 +239,7 @@
 			"type": "fire",
 			"points": 2,
 			"cost": {
-				"colorless": 1,
+				"normal": 1,
 				"grass": 2,
 				"water": 4
 			},
@@ -252,7 +252,7 @@
 			"type": "grass",
 			"points": 0,
 			"cost": {
-				"colorless": 2,
+				"normal": 2,
 				"water": 1
 			},
 			"art": "dewpider.png"
@@ -272,7 +272,7 @@
 			"id": "drampa",
 			"name": "Drampa",
 			"tier": 2,
-			"type": "colorless",
+			"type": "normal",
 			"points": 2,
 			"cost": {
 				"dark": 3,
@@ -284,7 +284,7 @@
 			"id": "eevee",
 			"name": "Eevee",
 			"tier": 1,
-			"type": "colorless",
+			"type": "normal",
 			"points": 0,
 			"cost": {
 				"dark": 1,
@@ -362,7 +362,7 @@
 			"type": "water",
 			"points": 0,
 			"cost": {
-				"colorless": 1,
+				"normal": 1,
 				"dark": 1,
 				"fire": 1,
 				"grass": 1
@@ -376,7 +376,7 @@
 			"type": "water",
 			"points": 2,
 			"cost": {
-				"colorless": 5,
+				"normal": 5,
 				"water": 3
 			},
 			"art": "glaceon.png"
@@ -437,7 +437,7 @@
 			"type": "dark",
 			"points": 2,
 			"cost": {
-				"colorless": 5
+				"normal": 5
 			},
 			"art": "heracross.png"
 		},
@@ -459,7 +459,7 @@
 			"type": "grass",
 			"points": 2,
 			"cost": {
-				"colorless": 4,
+				"normal": 4,
 				"dark": 1,
 				"water": 2
 			},
@@ -469,10 +469,10 @@
 			"id": "kangaskhan",
 			"name": "Kangaskhan",
 			"tier": 3,
-			"type": "colorless",
+			"type": "normal",
 			"points": 4,
 			"cost": {
-				"colorless": 3,
+				"normal": 3,
 				"dark": 6,
 				"fire": 3
 			},
@@ -482,7 +482,7 @@
 			"id": "klang",
 			"name": "Klang",
 			"tier": 2,
-			"type": "colorless",
+			"type": "normal",
 			"points": 1,
 			"cost": {
 				"dark": 2,
@@ -495,7 +495,7 @@
 			"id": "klink",
 			"name": "Klink",
 			"tier": 1,
-			"type": "colorless",
+			"type": "normal",
 			"points": 0,
 			"cost": {
 				"dark": 1,
@@ -508,7 +508,7 @@
 			"id": "klinklang",
 			"name": "Klinklang",
 			"tier": 3,
-			"type": "colorless",
+			"type": "normal",
 			"points": 4,
 			"cost": {
 				"dark": 7
@@ -546,7 +546,7 @@
 			"type": "fire",
 			"points": 0,
 			"cost": {
-				"colorless": 2,
+				"normal": 2,
 				"dark": 2,
 				"grass": 1
 			},
@@ -572,7 +572,7 @@
 			"type": "fire",
 			"points": 0,
 			"cost": {
-				"colorless": 1,
+				"normal": 1,
 				"dark": 3,
 				"fire": 1
 			},
@@ -585,7 +585,7 @@
 			"type": "fire",
 			"points": 1,
 			"cost": {
-				"colorless": 4
+				"normal": 4
 			},
 			"art": "litwick.png",
 			"attr": "audiino"
@@ -597,7 +597,7 @@
 			"type": "fire",
 			"points": 0,
 			"cost": {
-				"colorless": 1,
+				"normal": 1,
 				"dark": 1,
 				"grass": 1,
 				"water": 1
@@ -611,7 +611,7 @@
 			"type": "water",
 			"points": 0,
 			"cost": {
-				"colorless": 1,
+				"normal": 1,
 				"dark": 1,
 				"fire": 2,
 				"grass": 1
@@ -625,7 +625,7 @@
 			"type": "water",
 			"points": 2,
 			"cost": {
-				"colorless": 2,
+				"normal": 2,
 				"dark": 4,
 				"fire": 1
 			},
@@ -661,7 +661,7 @@
 			"id": "minccino",
 			"name": "Minccino",
 			"tier": 1,
-			"type": "colorless",
+			"type": "normal",
 			"points": 1,
 			"cost": {
 				"grass": 4
@@ -675,7 +675,7 @@
 			"type": "dark",
 			"points": 0,
 			"cost": {
-				"colorless": 1,
+				"normal": 1,
 				"fire": 1,
 				"grass": 1,
 				"water": 2
@@ -702,7 +702,7 @@
 			"type": "dark",
 			"points": 0,
 			"cost": {
-				"colorless": 2,
+				"normal": 2,
 				"grass": 2
 			},
 			"art": "murkrow.png"
@@ -726,7 +726,7 @@
 			"type": "grass",
 			"points": 0,
 			"cost": {
-				"colorless": 1,
+				"normal": 1,
 				"grass": 1,
 				"water": 3
 			},
@@ -739,7 +739,7 @@
 			"type": "dark",
 			"points": 1,
 			"cost": {
-				"colorless": 3,
+				"normal": 3,
 				"grass": 2,
 				"water": 2
 			},
@@ -764,7 +764,7 @@
 			"type": "water",
 			"points": 0,
 			"cost": {
-				"colorless": 1,
+				"normal": 1,
 				"dark": 2
 			},
 			"art": "pichu.png"
@@ -776,7 +776,7 @@
 			"type": "dark",
 			"points": 0,
 			"cost": {
-				"colorless": 2,
+				"normal": 2,
 				"fire": 1,
 				"water": 2
 			},
@@ -786,10 +786,10 @@
 			"id": "porygon",
 			"name": "Porygon",
 			"tier": 1,
-			"type": "colorless",
+			"type": "normal",
 			"points": 0,
 			"cost": {
-				"colorless": 3,
+				"normal": 3,
 				"dark": 1,
 				"water": 1
 			},
@@ -799,10 +799,10 @@
 			"id": "porygon2",
 			"name": "Porygon2",
 			"tier": 2,
-			"type": "colorless",
+			"type": "normal",
 			"points": 1,
 			"cost": {
-				"colorless": 2,
+				"normal": 2,
 				"fire": 3,
 				"water": 3
 			},
@@ -812,7 +812,7 @@
 			"id": "porygonz",
 			"name": "Porygon-Z",
 			"tier": 3,
-			"type": "colorless",
+			"type": "normal",
 			"points": 3,
 			"cost": {
 				"dark": 3,
@@ -829,7 +829,7 @@
 			"type": "water",
 			"points": 4,
 			"cost": {
-				"colorless": 7
+				"normal": 7
 			},
 			"art": "primarina.png"
 		},
@@ -840,7 +840,7 @@
 			"type": "dark",
 			"points": 1,
 			"cost": {
-				"colorless": 3,
+				"normal": 3,
 				"dark": 2,
 				"grass": 3
 			},
@@ -853,7 +853,7 @@
 			"type": "grass",
 			"points": 4,
 			"cost": {
-				"colorless": 3,
+				"normal": 3,
 				"grass": 3,
 				"water": 6
 			},
@@ -866,7 +866,7 @@
 			"type": "fire",
 			"points": 3,
 			"cost": {
-				"colorless": 3,
+				"normal": 3,
 				"dark": 3,
 				"grass": 3,
 				"water": 5
@@ -880,7 +880,7 @@
 			"type": "fire",
 			"points": 0,
 			"cost": {
-				"colorless": 2,
+				"normal": 2,
 				"fire": 2
 			},
 			"art": "scorbunny.png",
@@ -893,7 +893,7 @@
 			"type": "grass",
 			"points": 1,
 			"cost": {
-				"colorless": 3,
+				"normal": 3,
 				"fire": 3,
 				"grass": 2
 			},
@@ -904,7 +904,7 @@
 			"id": "sentret",
 			"name": "Sentret",
 			"tier": 1,
-			"type": "colorless",
+			"type": "normal",
 			"points": 0,
 			"cost": {
 				"dark": 2,
@@ -919,7 +919,7 @@
 			"type": "water",
 			"points": 3,
 			"cost": {
-				"colorless": 3,
+				"normal": 3,
 				"dark": 5,
 				"fire": 3,
 				"grass": 3
@@ -933,7 +933,7 @@
 			"type": "grass",
 			"points": 3,
 			"cost": {
-				"colorless": 5,
+				"normal": 5,
 				"dark": 3,
 				"fire": 3,
 				"water": 3
@@ -975,7 +975,7 @@
 			"type": "water",
 			"points": 0,
 			"cost": {
-				"colorless": 1,
+				"normal": 1,
 				"fire": 2,
 				"grass": 2
 			},
@@ -985,7 +985,7 @@
 			"id": "stufful",
 			"name": "Stufful",
 			"tier": 1,
-			"type": "colorless",
+			"type": "normal",
 			"points": 0,
 			"cost": {
 				"dark": 1,
@@ -1000,7 +1000,7 @@
 			"type": "grass",
 			"points": 1,
 			"cost": {
-				"colorless": 2,
+				"normal": 2,
 				"dark": 2,
 				"water": 3
 			},
@@ -1014,7 +1014,7 @@
 			"type": "fire",
 			"points": 1,
 			"cost": {
-				"colorless": 2,
+				"normal": 2,
 				"dark": 3,
 				"fire": 2
 			},
@@ -1038,7 +1038,7 @@
 			"type": "water",
 			"points": 5,
 			"cost": {
-				"colorless": 7,
+				"normal": 7,
 				"water": 3
 			},
 			"art": "tapufini.png"
@@ -1059,7 +1059,7 @@
 			"id": "togepi",
 			"name": "Togepi",
 			"tier": 1,
-			"type": "colorless",
+			"type": "normal",
 			"points": 0,
 			"cost": {
 				"dark": 1,
@@ -1182,7 +1182,7 @@
 			"points": 3,
 			"types": {
 				"water": 3,
-				"colorless": 3,
+				"normal": 3,
 				"dark": 3
 			},
 			"art": "glacia.png"
@@ -1193,7 +1193,7 @@
 			"points": 3,
 			"types": {
 				"dark": 3,
-				"colorless": 3,
+				"normal": 3,
 				"fire": 3
 			},
 			"art": "grimsley.png"
@@ -1213,7 +1213,7 @@
 			"name": "Larry",
 			"points": 3,
 			"types": {
-				"colorless": 4,
+				"normal": 4,
 				"dark": 4
 			},
 			"art": "larry.png"
@@ -1235,7 +1235,7 @@
 			"points": 3,
 			"types": {
 				"water": 3,
-				"colorless": 3,
+				"normal": 3,
 				"grass": 3
 			},
 			"art": "siebold.png"
@@ -1252,10 +1252,10 @@
 		}
 	},
 	"types": {
-		"colorless": {
-			"id": "colorless",
-			"name": "Colorless",
-			"art": "colorless.png",
+		"normal": {
+			"id": "normal",
+			"name": "normal",
+			"art": "normal.png",
 			"startCount": [4, 5, 7]
 		},
 		"dark": {

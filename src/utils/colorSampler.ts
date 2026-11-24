@@ -5,17 +5,24 @@ import { HexToOklch, StringToHex, normalizeHue } from '@/utils/color';
 import type { Hex, Oklch } from '@/utils/color';
 
 const TypeColors = {
-	Colorless: { hex: StringToHex('#D2D0CF')!, image: 'colorless.png', name: 'Colorless' },
-	Dark: { hex: StringToHex('#2E7077')!, image: 'dark.png', name: 'Dark' },
-	Dragon: { hex: StringToHex('#9B9E8C')!, image: 'dragon.png', name: 'Dragon' },
-	Electric: { hex: StringToHex('#FCD021')!, image: 'electric.png', name: 'Electric' },
-	Fairy: { hex: StringToHex('#D6457E')!, image: 'fairy.png', name: 'Fairy' },
-	Fighting: { hex: StringToHex('#B16232')!, image: 'fighting.png', name: 'Fighting' },
-	Fire: { hex: StringToHex('#D8223B')!, image: 'fire.png', name: 'Fire' },
-	Grass: { hex: StringToHex('#19A648')!, image: 'grass.png', name: 'Grass' },
-	Psychic: { hex: StringToHex('#957DAB')!, image: 'psychic.png', name: 'Psychic' },
-	Steel: { hex: StringToHex('#9B9E8C')!, image: 'steel.png', name: 'Steel' },
-	Water: { hex: StringToHex('#05A8D9')!, image: 'water.png', name: 'Water' },
+	Bug: { hex: StringToHex('#669136')!, image: 'bug.png', name: 'Bug' },
+	Dark: { hex: StringToHex('#473E58')!, image: 'dark.png', name: 'Dark' },
+	Dragon: { hex: StringToHex('#3342A7')!, image: 'dragon.png', name: 'Dragon' },
+	Electric: { hex: StringToHex('#BF8A3B')!, image: 'electric.png', name: 'Electric' },
+	Fairy: { hex: StringToHex('#AC629D')!, image: 'fairy.png', name: 'Fairy' },
+	Fighting: { hex: StringToHex('#B85526')!, image: 'fighting.png', name: 'Fighting' },
+	Fire: { hex: StringToHex('#AC311C')!, image: 'fire.png', name: 'Fire' },
+	Flying: { hex: StringToHex('#4C70BD')!, image: 'flying.png', name: 'Flying' },
+	Ghost: { hex: StringToHex('#4B2F77')!, image: 'ghost.png', name: 'Ghost' },
+	Grass: { hex: StringToHex('#3C8728')!, image: 'grass.png', name: 'Grass' },
+	Ground: { hex: StringToHex('#8B512D')!, image: 'ground.png', name: 'Ground' },
+	Ice: { hex: StringToHex('#3E8798')!, image: 'ice.png', name: 'Ice' },
+	Normal: { hex: StringToHex('#83867E')!, image: 'normal.png', name: 'Normal' },
+	Poison: { hex: StringToHex('#663880')!, image: 'poison.png', name: 'Poison' },
+	Psychic: { hex: StringToHex('#AB3654')!, image: 'psychic.png', name: 'Psychic' },
+	Rock: { hex: StringToHex('#726632')!, image: 'rock.png', name: 'Rock' },
+	Steel: { hex: StringToHex('#3A6480')!, image: 'steel.png', name: 'Steel' },
+	Water: { hex: StringToHex('#285CA3')!, image: 'water.png', name: 'Water' },
 } satisfies Record<string, { hex: Hex; image: string; name: string }>;
 
 function imageUrl(imagePath: string): string {

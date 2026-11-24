@@ -36,7 +36,7 @@ function getArtUrl(
 }
 
 const TOKEN_COLOURS: Record<TOKEN_TYPE, string> = {
-	[TOKEN_TYPE.COLORLESS]: '#dddddd',
+	[TOKEN_TYPE.NORMAL]: '#dddddd',
 	[TOKEN_TYPE.DARK]: '#444444',
 	[TOKEN_TYPE.DRAGON]: '#eebe4e',
 	[TOKEN_TYPE.FIRE]: '#fe3e4e',

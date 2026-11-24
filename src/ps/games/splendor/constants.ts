@@ -1,5 +1,5 @@
 export enum TOKEN_TYPE {
-	COLORLESS = 'colorless',
+	NORMAL = 'normal',
 	DARK = 'dark',
 	FIRE = 'fire',
 	GRASS = 'grass',
@@ -7,7 +7,7 @@ export enum TOKEN_TYPE {
 	DRAGON = 'dragon',
 }
 
-export const TokenTypes = [TOKEN_TYPE.COLORLESS, TOKEN_TYPE.DARK, TOKEN_TYPE.FIRE, TOKEN_TYPE.GRASS, TOKEN_TYPE.WATER];
+export const TokenTypes = [TOKEN_TYPE.NORMAL, TOKEN_TYPE.DARK, TOKEN_TYPE.FIRE, TOKEN_TYPE.GRASS, TOKEN_TYPE.WATER];
 export const AllTokenTypes = [...TokenTypes, TOKEN_TYPE.DRAGON];
 
 export enum ACTIONS {

@@ -18,7 +18,7 @@ function renderBoard(ctx: RenderCtx) {
 					<span
 						style={{
 							...roundStyles,
-							background: `url(${process.env.WEB_URL}/static/types/${cell === 'W' ? 'colorless' : 'dark'}.png) center/contain no-repeat`,
+							background: `url(${process.env.WEB_URL}/static/types/${cell === 'W' ? 'normal' : 'dark'}.png) center/contain no-repeat`,
 						}}
 					/>
 				) : action ? (
