@@ -37,7 +37,7 @@ export function autoResHandler(message: PSMessage) {
 		return message.reply(helpMessage);
 	}
 
-	if (message.type === 'chat') {
+	if (message.type === 'chat' && !message.content.startsWith(prefix) && !message.content.startsWith('/raw')) {
 		if (['healthfitness', ...getHiddenUnitConversionRooms()].includes(message.target.id)) {
 			const clusters = parseUnits(message.content);
 			if (clusters.length) {
